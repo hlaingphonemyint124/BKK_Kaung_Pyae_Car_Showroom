@@ -1,0 +1,151 @@
+.easyRentalSection{
+background:#f5f5f5;
+padding:50px 16px;
+text-align:center;
+font-family: "Inter", sans-serif;
+}
+
+.easyRentalHeader h2{
+font-size:28px;
+font-weight:700;
+margin-bottom:6px;
+}
+
+.easyRentalHeader p{
+color:#777;
+font-size:14px;
+margin-bottom:28px;
+}
+
+/* CARD */
+
+.easyCard{
+background:white;
+max-width:520px;
+margin:auto;
+border-radius:14px;
+padding:22px;
+box-shadow:0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* STEP ROW */
+
+.stepsRow{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:24px;
+flex-wrap:wrap;
+}
+
+.stepBox{
+background:#eee;
+padding:10px 12px;
+border-radius:10px;
+display:flex;
+flex-direction:column;
+align-items:center;
+font-size:12px;
+color:#555;
+min-width:60px;
+}
+
+.stepBox strong{
+font-size:16px;
+}
+
+.stepBox.active{
+background:#ff3b3b;
+color:white;
+}
+
+/* RENTAL BUTTON */
+
+.rentalBtn{
+margin-left:auto;
+background:#ff3b3b;
+border:none;
+color:white;
+padding:10px 18px;
+border-radius:999px;
+font-size:14px;
+cursor:pointer;
+font-weight:500;
+box-shadow:0 4px 10px rgba(255,59,59,0.4);
+}
+
+.rentalBtn:hover{
+transform:translateY(-2px);
+}
+
+/* LOGIN AREA */
+
+.loginArea{
+border-top:1px solid #eee;
+padding-top:18px;
+}
+
+.loginArea h4{
+font-size:16px;
+font-weight:600;
+margin-bottom:6px;
+}
+
+.loginArea p{
+font-size:13px;
+color:#777;
+margin-bottom:16px;
+}
+
+/* SIGNUP BUTTON */
+
+.signupBtn{
+background:white;
+border:1.5px solid #ccc;
+padding:10px 22px;
+border-radius:999px;
+font-size:13px;
+cursor:pointer;
+}
+
+.signupBtn:hover{
+border-color:#ff3b3b;
+color:#ff3b3b;
+}
+
+/* NEXT STEP */
+
+.nextStep{
+margin-top:14px;
+font-size:13px;
+color:#ff3b3b;
+cursor:pointer;
+}
+
+/* FOOTER */
+
+.easyFooter{
+margin-top:14px;
+font-size:12px;
+color:#777;
+}
+
+/* RESPONSIVE */
+
+@media (max-width:480px){
+
+.stepsRow{
+justify-content:center;
+}
+
+.rentalBtn{
+width:100%;
+margin-left:0;
+margin-top:10px;
+}
+
+.easyCard{
+padding:18px;
+}
+
+}

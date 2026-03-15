@@ -1,0 +1,282 @@
+/* ============================= */
+/* SECTION */
+/* ============================= */
+
+.carTypes{
+padding:110px 20px;
+background:#ffffff;
+text-align:center;
+}
+
+/* ============================= */
+/* HEADER */
+/* ============================= */
+
+.typesHeader{
+
+max-width:1200px;
+margin:0 auto 40px;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+}
+
+.typesHeader h3{
+font-size:32px;
+font-weight:600;
+color:#111827;
+}
+
+/* view all */
+
+.viewAll{
+font-size:14px;
+color:#6b7280;
+cursor:pointer;
+transition:.25s;
+}
+
+.viewAll:hover{
+color:#ef4444;
+}
+
+/* ============================= */
+/* GRID */
+/* ============================= */
+
+.typesGrid{
+
+max-width:900px;
+margin:auto;
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:24px;
+
+margin-bottom:35px;
+
+}
+
+/* ============================= */
+/* CARD */
+/* ============================= */
+
+.typeCard{
+
+background:white;
+
+padding:30px 20px;
+
+border-radius:18px;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+cursor:pointer;
+
+border:1px solid #eef0f4;
+
+transition:all .25s ease;
+
+}
+
+/* hover */
+
+.typeCard:hover{
+
+transform:translateY(-6px);
+
+box-shadow:
+0 20px 40px rgba(0,0,0,0.08),
+0 6px 20px rgba(0,0,0,0.05);
+
+}
+
+/* ============================= */
+/* ICON CONTAINER */
+/* ============================= */
+
+.typeIcon{
+
+width:60px;
+height:60px;
+
+border-radius:14px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:#f3f4f6;
+
+margin-bottom:12px;
+
+transition:.25s;
+
+}
+
+/* PNG IMAGE */
+
+.typeIcon img{
+
+width:38px;
+height:38px;
+
+object-fit:contain;
+
+transition:.25s;
+
+}
+
+/* hover */
+
+.typeCard:hover .typeIcon{
+background:#ef4444;
+}
+
+.typeCard:hover .typeIcon img{
+transform:scale(1.1);
+}
+
+/* ============================= */
+/* TEXT */
+/* ============================= */
+
+.typeCard p{
+
+font-size:15px;
+font-weight:500;
+
+color:#374151;
+
+}
+
+/* ============================= */
+/* NOTE */
+/* ============================= */
+
+.typesNote{
+
+margin-top:10px;
+
+font-size:14px;
+
+color:#6b7280;
+
+}
+
+/* ============================= */
+/* BUTTON */
+/* ============================= */
+
+.shopBtn{
+
+margin-top:18px;
+
+background:#ef4444;
+color:white;
+
+border:none;
+
+padding:12px 26px;
+
+border-radius:30px;
+
+font-size:14px;
+font-weight:500;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+.shopBtn:hover{
+background:#dc2626;
+transform:translateY(-2px);
+box-shadow:0 12px 30px rgba(0,0,0,0.15);
+}
+
+/* ============================= */
+/* TABLET */
+/* ============================= */
+
+@media (max-width:900px){
+
+.typesGrid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.typesHeader h3{
+font-size:26px;
+}
+
+}
+
+/* ============================= */
+/* MOBILE */
+/* ============================= */
+
+@media (max-width:600px){
+
+.carTypes{
+padding:80px 16px;
+}
+
+.typesHeader{
+flex-direction:column;
+gap:8px;
+}
+
+.typesGrid{
+grid-template-columns:repeat(2,1fr);
+gap:16px;
+}
+
+.typeCard{
+padding:20px 14px;
+}
+
+.typeIcon{
+width:50px;
+height:50px;
+}
+
+.typeIcon img{
+width:30px;
+height:30px;
+}
+
+.typeIcon{
+
+width:60px;
+height:60px;
+
+border-radius:14px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:#f3f4f6;
+
+font-size:28px;
+color:#ef4444;
+
+margin-bottom:12px;
+
+transition:.25s;
+
+}
+
+.typeCard:hover .typeIcon{
+background:#ef4444;
+color:white;
+transform:scale(1.08);
+}
+
+}

@@ -1,0 +1,116 @@
+.testimonials{
+padding:70px 20px 40px;
+background:#efefef;
+text-align:center;
+}
+
+/* title */
+
+.testimonial-title{
+font-size:26px;
+font-weight:800;
+margin-bottom:30px;
+color:#111;
+line-height:1.2;
+}
+
+/* card */
+
+.testimonial-card{
+display:flex;
+gap:12px;
+align-items:flex-start;
+
+background:#6b6b6b;
+color:white;
+
+padding:14px;
+border-radius:18px;
+
+max-width:350px;
+margin:12px auto;
+
+box-shadow:0 6px 14px rgba(0,0,0,0.18);
+}
+
+/* avatar block */
+
+.testimonial-avatar{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+/* avatar */
+
+.avatar{
+width:48px;
+height:48px;
+border-radius:50%;
+background:#d9d9d9;
+}
+
+/* small red label */
+
+.avatar-tag{
+margin-top:4px;
+font-size:9px;
+background:#e11d2e;
+padding:2px 6px;
+border-radius:4px;
+}
+
+/* content */
+
+.testimonial-content{
+flex:1;
+text-align:left;
+}
+
+/* header */
+
+.testimonial-header{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+margin-bottom:4px;
+}
+
+.name{
+font-size:13px;
+font-weight:700;
+}
+
+.car{
+font-size:11px;
+color:#d6d6d6;
+}
+
+/* stars */
+
+.stars{
+color:#e11d2e;
+font-size:12px;
+letter-spacing:2px;
+}
+
+/* text */
+
+.text{
+font-size:11px;
+line-height:1.35;
+color:#f1f1f1;
+margin-top:4px;
+}
+
+/* footer */
+
+.testimonial-footer{
+margin-top:14px;
+font-size:11px;
+color:#666;
+max-width:340px;
+margin-left:auto;
+margin-right:auto;
+line-height:1.4;
+}

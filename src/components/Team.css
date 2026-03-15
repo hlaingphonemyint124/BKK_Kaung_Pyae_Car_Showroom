@@ -1,0 +1,137 @@
+.team{
+padding:80px 20px;
+background:#f6f7f9;
+text-align:center;
+}
+
+/* title */
+
+.team-title{
+font-size:28px;
+font-weight:700;
+margin-bottom:40px;
+color:#1f2937;
+}
+
+/* CEO */
+
+.ceo{
+margin-bottom:50px;
+}
+
+.ceo-avatar{
+width:160px;
+height:160px;
+background:#e5e7eb;
+border-radius:50%;
+margin:auto;
+}
+
+.ceo-name{
+margin-top:14px;
+font-weight:700;
+font-size:16px;
+}
+
+.ceo-role{
+font-size:13px;
+color:#6b7280;
+}
+
+/* GRID */
+
+.team-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:40px;
+max-width:800px;
+margin:auto;
+}
+
+.member{
+text-align:center;
+}
+
+.avatar{
+width:120px;
+height:120px;
+background:#e5e7eb;
+border-radius:50%;
+margin:auto;
+}
+
+.member-name{
+margin-top:12px;
+font-size:14px;
+font-weight:600;
+}
+
+.member-role{
+font-size:12px;
+color:#6b7280;
+}
+
+/* dots */
+
+.dots{
+margin-top:35px;
+}
+
+.dot{
+width:7px;
+height:7px;
+background:#d1d5db;
+border-radius:50%;
+display:inline-block;
+margin:0 4px;
+}
+
+.dot.active{
+background:#111;
+}
+
+/* contact */
+
+.contact-team{
+margin-top:16px;
+font-size:13px;
+color:#ff3b3b;
+cursor:pointer;
+}
+
+/* MOBILE */
+
+@media (max-width:600px){
+
+.team-grid{
+grid-template-columns:repeat(2,1fr);
+gap:30px;
+}
+
+.avatar{
+width:100px;
+height:100px;
+}
+
+}
+
+/* TABLET */
+
+@media (min-width:768px){
+
+.team-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+/* DESKTOP */
+
+@media (min-width:1024px){
+
+.team-grid{
+grid-template-columns:repeat(4,1fr);
+max-width:900px;
+}
+
+}

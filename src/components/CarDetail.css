@@ -1,0 +1,133 @@
+.carDetail{
+background:#f2f2f2;
+max-width:500px;
+margin:auto;
+font-family:sans-serif;
+}
+
+.carHero img{
+width:100%;
+height:auto;
+}
+
+.carContent{
+padding:22px;
+}
+
+.carTitle{
+font-size:26px;
+font-weight:700;
+margin-bottom:6px;
+}
+
+.carPrice{
+color:#e60000;
+font-weight:700;
+font-size:20px;
+margin-bottom:20px;
+}
+
+
+/* SPEC GRID */
+
+.specGrid{
+display:grid;
+grid-template-columns:1fr 1px 1fr 1px 1fr;
+row-gap:20px;
+align-items:center;
+margin-bottom:25px;
+}
+
+.divider{
+background:#ccc;
+height:30px;
+width:1px;
+}
+
+.specItem{
+text-align:center;
+}
+
+.specIcon{
+font-size:26px;
+margin-bottom:6px;
+}
+
+.specItem p{
+margin:0;
+font-size:14px;
+color:#666;
+}
+
+
+/* INFO ROW */
+
+.infoRow{
+display:flex;
+justify-content:space-between;
+padding:14px 0;
+border-bottom:1px solid #ccc;
+font-size:16px;
+}
+
+.highlight{
+color:#e60000;
+}
+
+
+/* DOC TABLE */
+
+.docHeader{
+background:#666;
+color:white;
+text-align:center;
+padding:10px;
+margin-top:20px;
+font-weight:600;
+}
+
+.docTable{
+border:1px solid #ccc;
+}
+
+.docRow{
+display:grid;
+grid-template-columns:1fr 1fr;
+height:50px;
+border-bottom:1px solid #ccc;
+}
+
+.docRow div{
+border-right:1px solid #ccc;
+}
+
+.docRow div:last-child{
+border-right:none;
+}
+
+
+/* CONTACT */
+
+.contactSection{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-top:30px;
+gap:20px;
+}
+
+.contactBtn{
+background:#e60000;
+color:white;
+border:none;
+padding:14px 26px;
+border-radius:30px;
+font-weight:600;
+cursor:pointer;
+box-shadow:0 6px 15px rgba(0,0,0,0.25);
+transition:.25s;
+}
+
+.contactBtn:hover{
+transform:translateY(-2px);
+}
