@@ -2,13 +2,18 @@
 GLOBAL
 =============================== */
 
+/* LIGHT MODE */
+
 :root{
 --red:#e60000;
 --red-dark:#c40000;
---dark:#0f172a;
---muted:#6b7280;
+
 --bg:#f3f4f6;
 --card:#ffffff;
+--text:#0f172a;
+--muted:#6b7280;
+
+--section:#f6f6f6;
 }
 
 *{
@@ -24,9 +29,10 @@ height:100%;
 body{
 font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto;
 background:var(--bg);
-color:var(--dark);
+color:var(--text);
 line-height:1.6;
 -webkit-font-smoothing:antialiased;
+transition:0.3s;
 }
 
 .container{
@@ -41,6 +47,64 @@ padding:55px 0;
 
 h1,h2,h3,h4{
 font-weight:700;
+}
+
+/* =================================
+DARK MODE (RED THEME)
+================================= */
+
+body.dark{
+
+--bg:#0b0b0b;
+--card:#121212;
+--text:#ffffff;
+--muted:#9ca3af;
+
+--section:linear-gradient(180deg,#0b0b0b,#1a0000);
+
+background:#0b0b0b;
+color:#ffffff;
+
+}
+
+/* cards */
+
+body.dark .brandCard,
+body.dark .typeCard,
+body.dark .deal__card,
+body.dark .easyCard,
+body.dark .testimonial,
+body.dark .team-member,
+body.dark .why-card{
+
+background:#111;
+color:#fff;
+border:1px solid rgba(255,0,0,0.15);
+
+}
+
+/* sections */
+
+body.dark .brandsSection,
+body.dark .carTypes{
+background:linear-gradient(180deg,#0b0b0b,#1a0000);
+}
+
+/* footer */
+
+body.dark .site-footer{
+background:#050505;
+}
+
+/* buttons glow */
+
+body.dark .btn,
+body.dark .shopBtn,
+body.dark .rentalBtn{
+
+background:linear-gradient(180deg,#ff2a2a,#a80000);
+box-shadow:0 6px 20px rgba(255,0,0,0.35);
+
 }
 
 /* ===============================
@@ -222,7 +286,30 @@ margin-top:20px;
 color:#ff3b3b;
 font-weight:600;
 }
+.theme-btn{
+border:none;
+background:transparent;
+font-size:18px;
+cursor:pointer;
+margin-left:10px;
+}
 
+/* Dark Mode */
+
+body.dark{
+background:#111;
+color:#fff;
+}
+
+body.dark .site-header{
+background:#111;
+border-bottom:1px solid #333;
+}
+
+body.dark .sideMenu{
+background:#1a1a1a;
+color:#fff;
+}
 
 /* RESPONSIVE */
 
