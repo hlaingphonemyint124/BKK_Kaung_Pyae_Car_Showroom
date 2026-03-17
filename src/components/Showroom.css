@@ -219,3 +219,109 @@ cursor:pointer;
 .detail:hover{
 color:#000;
 }
+
+/* ========================= */
+/* DARK MODE SHOWROOM THEME */
+/* ========================= */
+
+body.dark .showroom{
+background:linear-gradient(180deg,#000000,#1a0000,#3b0000,#7a0000);
+color:white;
+}
+
+/* titles */
+
+body.dark .title{
+color:#ff2b2b;
+}
+
+body.dark .subtitle{
+color:#ccc;
+}
+
+/* filter bar */
+
+body.dark .filterBar{
+background:#2b0000;
+border:1px solid #600000;
+}
+
+body.dark .filterItem{
+color:#fff;
+}
+
+body.dark .filterBtn:hover{
+background:#3a0000;
+}
+
+/* dropdown */
+
+body.dark .dropdown{
+background:#1a0000;
+border:1px solid #500000;
+}
+
+body.dark .dropdownItem{
+color:#fff;
+border-bottom:1px solid #300000;
+}
+
+body.dark .dropdownItem:hover{
+background:#400000;
+}
+
+/* tabs */
+
+body.dark .tabs span{
+color:#bbb;
+}
+
+body.dark .activeTab{
+color:#ff2b2b;
+border-bottom:3px solid #ff2b2b;
+}
+
+/* car card */
+
+body.dark .carCard{
+background:#140000;
+box-shadow:0 10px 30px rgba(0,0,0,0.7);
+border:1px solid #330000;
+}
+
+body.dark .carCard:hover{
+transform:translateY(-4px) scale(1.02);
+}
+
+/* card body */
+
+body.dark .cardBody h3{
+color:white;
+}
+
+body.dark .desc{
+color:#aaa;
+}
+
+/* specs */
+
+body.dark .gear{
+background:#330000;
+color:white;
+}
+
+/* price */
+
+body.dark .price{
+color:#ff2b2b;
+}
+
+/* detail */
+
+body.dark .detail{
+color:#ccc;
+}
+
+body.dark .detail:hover{
+color:white;
+}

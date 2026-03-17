@@ -131,3 +131,81 @@ transition:.25s;
 .contactBtn:hover{
 transform:translateY(-2px);
 }
+
+/* ============================= */
+/* DARK MODE - CAR DETAIL PAGE */
+/* ============================= */
+
+body.dark .carDetail{
+background:linear-gradient(
+180deg,
+#000000 0%,
+#1a0000 25%,
+#520000 60%,
+#a30000 100%
+);
+color:white;
+}
+
+/* title */
+
+body.dark .carDetail .carTitle{
+color:white;
+}
+
+/* price */
+
+body.dark .carDetail .carPrice{
+color:#ff2b2b;
+}
+
+/* specs */
+
+body.dark .carDetail .specItem p{
+color:#ddd;
+}
+
+body.dark .carDetail .divider{
+background:#550000;
+}
+
+/* info rows */
+
+body.dark .carDetail .infoRow{
+border-bottom:1px solid #500000;
+color:white;
+}
+
+body.dark .carDetail .highlight{
+color:#ff2b2b;
+font-weight:700;
+}
+
+/* document table */
+
+body.dark .carDetail .docHeader{
+background:#8b0000;
+}
+
+body.dark .carDetail .docTable{
+border:1px solid #500000;
+}
+
+body.dark .carDetail .docRow{
+border-bottom:1px solid #500000;
+}
+
+body.dark .carDetail .docRow div{
+border-right:1px solid #500000;
+}
+
+/* contact button */
+
+body.dark .carDetail .contactBtn{
+background:linear-gradient(90deg,#ff0000,#b80000);
+box-shadow:0 6px 20px rgba(0,0,0,0.6);
+}
+
+body.dark .carDetail .contactBtn:hover{
+transform:translateY(-3px) scale(1.03);
+}
