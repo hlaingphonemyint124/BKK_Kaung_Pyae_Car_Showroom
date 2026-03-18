@@ -136,9 +136,9 @@ className={`sideMenu ${menu ? "show" : ""}`}
 
 <div className="avatar">👤</div>
 
-<div className="profileName">
-Kyaw Kyaw
-</div>
+<Link to="/login" className="menuItem loginMenuItem">
+  Log In / Sign Up 
+</Link>
 
 <div className="arrow">→</div>
 

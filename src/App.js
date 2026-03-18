@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 import Header from "./components/Header";
 import Hero from "./components/Hero";
@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 
 import Showroom from "./components/Showroom";
 import CarDetail from "./components/CarDetail";
+import LoginPage from "./pages/LoginPage";
 
 function Home() {
   return (
@@ -31,27 +32,32 @@ function Home() {
   );
 }
 
+function AppLayout() {
+  const location = useLocation();
+
+  const hideLayout =
+    location.pathname === "/login" || location.pathname === "/signup";
+
+  return (
+    <>
+      {!hideLayout && <Header />}
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/showroom" element={<Showroom />} />
+        <Route path="/car/:id" element={<CarDetail />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+
+      {!hideLayout && <Footer />}
+    </>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
-
-      <Header />
-
-      <Routes>
-
-        {/* HOME */}
-        <Route path="/" element={<Home />} />
-
-        {/* SHOWROOM */}
-        <Route path="/showroom" element={<Showroom />} />
-
-        {/* CAR DETAIL */}
-        <Route path="/car/:id" element={<CarDetail />} />
-
-      </Routes>
-
-      <Footer />
-
+      <AppLayout />
     </BrowserRouter>
   );
 }
