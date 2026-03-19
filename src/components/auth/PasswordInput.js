@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import "./AuthStyles.css";
 
 function PasswordInput({ label, placeholder, value, onChange }) {
@@ -20,7 +21,7 @@ function PasswordInput({ label, placeholder, value, onChange }) {
           className="eye-button"
           onClick={() => setShowPassword(!showPassword)}
         >
-          {showPassword ? "🙈" : "👁"}
+          {showPassword ? <FiEyeOff /> : <FiEye />}
         </button>
       </div>
     </div>
