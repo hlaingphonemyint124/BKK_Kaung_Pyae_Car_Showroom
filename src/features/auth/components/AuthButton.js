@@ -1,5 +1,5 @@
 import React from "react";
-import "./AuthStyles.css";
+import "../styles/AuthStyles.css";
 
 function AuthButton({ text, onClick, type = "button" }) {
   return (

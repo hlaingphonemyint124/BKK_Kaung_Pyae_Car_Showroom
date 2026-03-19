@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import "./AuthStyles.css";
+import "../styles/AuthStyles.css";
 
 function PasswordInput({ label, placeholder, value, onChange }) {
   const [showPassword, setShowPassword] = useState(false);

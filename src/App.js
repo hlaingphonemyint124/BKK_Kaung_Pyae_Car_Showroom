@@ -14,8 +14,8 @@ import Footer from "./components/Footer";
 
 import Showroom from "./components/Showroom";
 import CarDetail from "./components/CarDetail";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
+import LoginPage from "./features/auth/pages/LoginPage";
+import SignupPage from "./features/auth/pages/SignupPage";
 
 function Home() {
   return (

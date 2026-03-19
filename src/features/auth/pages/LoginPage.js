@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AuthInput from "../components/auth/AuthInput";
-import PasswordInput from "../components/auth/PasswordInput";
-import AuthButton from "../components/auth/AuthButton";
-import "../components/auth/AuthStyles.css";
+import "../styles/AuthStyles.css";
+import AuthHeader from "../components/AuthHeader";
+import AuthInput from "../components/AuthInput";
+import PasswordInput from "../components/PasswordInput";
+import AuthButton from "../components/AuthButton";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
