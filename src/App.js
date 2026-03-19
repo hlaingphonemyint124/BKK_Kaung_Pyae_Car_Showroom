@@ -15,6 +15,7 @@ import Footer from "./components/Footer";
 import Showroom from "./components/Showroom";
 import CarDetail from "./components/CarDetail";
 import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
 function Home() {
   return (
@@ -47,6 +48,7 @@ function AppLayout() {
         <Route path="/showroom" element={<Showroom />} />
         <Route path="/car/:id" element={<CarDetail />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
       </Routes>
 
       {!hideLayout && <Footer />}

@@ -24,7 +24,10 @@ function LoginPage() {
       <div className="auth-book">
         <div className="auth-book-left">
           <div className="auth-brand-content">
-            <h1>BKK Kaung Pyae</h1>
+            <h1>
+              BKK <br className="desktop-break" />
+              Kaung Pyae
+            </h1>
             <p>Car showroom and Rental Service</p>
             <div className="auth-brand-line"></div>
             
