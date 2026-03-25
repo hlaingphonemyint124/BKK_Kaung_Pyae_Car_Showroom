@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 import Header from "./components/Header";
 import Hero from "./components/Hero";
@@ -14,8 +14,12 @@ import Footer from "./components/Footer";
 
 import Showroom from "./components/Showroom";
 import CarDetail from "./components/CarDetail";
+
 import ContactPage from "./features/user/pages/ContactPage";
 import ProfilePage from "./features/user/pages/ProfilePage";
+import LoginPage from "./features/auth/pages/LoginPage";
+import SignupPage from "./features/auth/pages/SignupPage";
+
 
 function Home() {
   return (
@@ -33,10 +37,15 @@ function Home() {
   );
 }
 
-function App() {
+function AppLayout() {
+  const location = useLocation();
+
+  const hideLayout =
+    location.pathname === "/login" || location.pathname === "/signup";
+
   return (
-    <BrowserRouter>
-      <Header />
+    <>
+      {!hideLayout && <Header />}
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -44,9 +53,19 @@ function App() {
         <Route path="/car/:id" element={<CarDetail />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
       </Routes>
 
-      <Footer />
+      {!hideLayout && <Footer />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppLayout />
     </BrowserRouter>
   );
 }
