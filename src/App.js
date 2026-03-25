@@ -14,6 +14,8 @@ import Footer from "./components/Footer";
 
 import Showroom from "./components/Showroom";
 import CarDetail from "./components/CarDetail";
+import ContactPage from "./features/user/pages/ContactPage";
+import ProfilePage from "./features/user/pages/ProfilePage";
 
 function Home() {
   return (
@@ -34,24 +36,17 @@ function Home() {
 function App() {
   return (
     <BrowserRouter>
-
       <Header />
 
       <Routes>
-
-        {/* HOME */}
         <Route path="/" element={<Home />} />
-
-        {/* SHOWROOM */}
         <Route path="/showroom" element={<Showroom />} />
-
-        {/* CAR DETAIL */}
         <Route path="/car/:id" element={<CarDetail />} />
-
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
 
       <Footer />
-
     </BrowserRouter>
   );
 }
