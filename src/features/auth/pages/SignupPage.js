@@ -60,6 +60,7 @@ function SignupPage() {
 
           <PasswordInput
             label="Password"
+            name="password"
             placeholder="Enter Your Password Here"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -67,6 +68,7 @@ function SignupPage() {
 
           <PasswordInput
             label="Confirm Password"
+            name="confirmPassword"
             placeholder="Re-enter Your Password Here"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
