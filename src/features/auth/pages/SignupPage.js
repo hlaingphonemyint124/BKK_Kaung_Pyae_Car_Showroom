@@ -7,83 +7,136 @@ import PasswordInput from "../components/PasswordInput";
 import AuthButton from "../components/AuthButton";
 
 function SignupPage() {
-  const [username, setUsername] = useState("");
-  const [emailOrPhone, setEmailOrPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  const handleSignup = (e) => {
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  // Email regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const validateField = (name, value) => {
+    let error = "";
+
+    if (name === "username") {
+      if (!value.trim()) error = "Username is required";
+      else if (value.length < 3)
+        error = "Username must be at least 3 characters";
+    }
+
+    if (name === "email") {
+      if (!value.trim()) error = "Email is required";
+      else if (!emailRegex.test(value))
+        error = "Invalid email format";
+    }
+
+    if (name === "password") {
+      if (!value) error = "Password is required";
+      else if (value.length < 6)
+        error = "Password must be at least 6 characters";
+    }
+
+    if (name === "confirmPassword") {
+      if (!value) error = "Please confirm your password";
+      else if (value !== form.password)
+        error = "Passwords do not match";
+    }
+
+    return error;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // real-time validation
+    const error = validateField(name, value);
+    setErrors((prev) => ({
+      ...prev,
+      [name]: error,
+    }));
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!username || !emailOrPhone || !password || !confirmPassword) {
-      alert("Please fill all fields.");
-      return;
-    }
+    let newErrors = {};
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-
-    console.log({
-      username,
-      emailOrPhone,
-      password,
-      confirmPassword,
+    Object.keys(form).forEach((key) => {
+      const error = validateField(key, form[key]);
+      if (error) newErrors[key] = error;
     });
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
+    setLoading(true);
+
+    setTimeout(() => {
+      console.log(form);
+      setLoading(false);
+      alert("Signup successful (fake)");
+    }, 1000);
   };
 
   return (
     <AuthHeader>
       <div className="auth-body">
-        <button type="button" className="google-signin-btn">
-          <span className="google-icon">G</span>
-          Sign up with Google
-        </button>
-
-        <div className="auth-or">Or</div>
-
-        <form onSubmit={handleSignup}>
+        <form onSubmit={handleSubmit}>
           <AuthInput
             label="Username"
-            placeholder="Enter Your Username Here"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            name="username"
+            placeholder="Enter username"
+            value={form.username}
+            onChange={handleChange}
+            error={errors.username}
           />
 
           <AuthInput
-            label="Email / Phone"
-            placeholder="Enter Your Email or Phone Here"
-            value={emailOrPhone}
-            onChange={(e) => setEmailOrPhone(e.target.value)}
+            label="Email"
+            name="email"
+            placeholder="Enter email"
+            value={form.email}
+            onChange={handleChange}
+            error={errors.email}
           />
 
           <PasswordInput
             label="Password"
             name="password"
-            placeholder="Enter Your Password Here"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter password"
+            value={form.password}
+            onChange={handleChange}
+            error={errors.password}
           />
 
           <PasswordInput
             label="Confirm Password"
             name="confirmPassword"
-            placeholder="Re-enter Your Password Here"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm password"
+            value={form.confirmPassword}
+            onChange={handleChange}
+            error={errors.confirmPassword}
           />
 
-          <AuthButton text="Create Account" type="submit" />
+          <AuthButton
+            text={loading ? "Creating..." : "Create Account"}
+            type="submit"
+          />
         </form>
 
-        <div className="auth-policy-text">
-          Agree to <Link to="/">Privacy Policy</Link> and{" "}
-          <Link to="/">Terms & Conditions</Link>.
-        </div>
-
-        <div className="auth-link-bottom signup-login-link">
-          Already have an Account? <Link to="/login">Log In Here</Link>
+        <div className="auth-link-bottom">
+          Already have an Account? <Link to="/login">Log In</Link>
         </div>
       </div>
     </AuthHeader>

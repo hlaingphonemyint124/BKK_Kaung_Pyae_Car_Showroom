@@ -144,6 +144,31 @@
   background: transparent;
 }
 
+.auth-message {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.input-error {
+  border: 1px solid #d93025;
+}
+
+.input-error-text {
+  color: #d93025;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.error-message {
+  color: #d93025;
+}
+
+.success-message {
+  color: #188038;
+}
+
 .remember-row {
   display: flex;
   align-items: center;
