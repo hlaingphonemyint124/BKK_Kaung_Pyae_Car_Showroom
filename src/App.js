@@ -17,6 +17,11 @@ import CarDetail from "./components/CarDetail";
 import LoginPage from "./features/auth/pages/LoginPage";
 import SignupPage from "./features/auth/pages/SignupPage";
 
+import AdminBuyPage from "./features/admin/pages/AdminBuyPage";
+import AdminRentalPage from "./features/admin/pages/AdminRentalPage";
+import AdminBuyDetailPage from "./features/admin/pages/AdminBuyDetailPage";
+import AdminRentalDetailPage from "./features/admin/pages/AdminRentalDetailPage";
+
 function Home() {
   return (
     <>
@@ -49,6 +54,10 @@ function AppLayout() {
         <Route path="/car/:id" element={<CarDetail />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/admin/buy" element={<AdminBuyPage />} />
+        <Route path="/admin/rental" element={<AdminRentalPage />} />
+        <Route path="/admin/buy/:id" element={<AdminBuyDetailPage />} />
+        <Route path="/admin/rental/:id" element={<AdminRentalDetailPage />} />
       </Routes>
 
       {!hideLayout && <Footer />}

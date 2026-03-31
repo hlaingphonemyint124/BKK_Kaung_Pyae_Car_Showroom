@@ -1,0 +1,44 @@
+.admin-topbar {
+  background: #fff;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-title {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.admin-hero {
+  padding: 14px;
+}
+
+.admin-hero h2 {
+  color: red;
+  font-size: 16px;
+}
+
+.admin-filter {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  background: #eee;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+.admin-tab {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.admin-tab.active {
+  color: red;
+  border-bottom: 2px solid red;
+}
