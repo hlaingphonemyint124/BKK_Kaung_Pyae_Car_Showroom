@@ -1,13 +1,12 @@
 import React from "react";
 import "./AboutUs.css";
 
-export default function AboutUs() {
+export default function AboutUs({ theme = "dark" }) {
   return (
-    <section className="about">
+    <section className={`about ${theme}`}>
 
       <h2 className="about-title">About Us</h2>
 
-      {/* WHO WE ARE */}
       <div className="about-block">
         <h4 className="about-heading">Who We Are?</h4>
 
@@ -26,14 +25,13 @@ export default function AboutUs() {
         </p>
       </div>
 
-      {/* WHAT WE DO */}
       <div className="about-block">
         <h4 className="about-heading">What We Do</h4>
 
         <ul className="about-list">
           <li>Car rental for daily, weekly, and long-term use</li>
           <li>Car sales with carefully selected models</li>
-          <li>Flexible vehicle financing to help customers own their car</li>
+          <li>Flexible vehicle financing</li>
           <li>Easy booking with transparent pricing</li>
         </ul>
 
@@ -43,7 +41,6 @@ export default function AboutUs() {
         </p>
       </div>
 
-      {/* VALUES */}
       <div className="about-block">
         <h4 className="about-heading">Our Values</h4>
 

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 import Header from "./components/Header";
 import Hero from "./components/Hero";
@@ -16,6 +17,8 @@ import Showroom from "./components/Showroom";
 import CarDetail from "./components/CarDetail";
 import LoginPage from "./features/auth/pages/LoginPage";
 import SignupPage from "./features/auth/pages/SignupPage";
+
+/* ========================= */
 
 function Home() {
   return (
@@ -56,7 +59,15 @@ function AppLayout() {
   );
 }
 
+/* ========================= */
+
 function App() {
+
+  // 🔥 FORCE DARK MODE (WORKING)
+  useEffect(() => {
+    document.body.className = "dark";
+  }, []);
+
   return (
     <BrowserRouter>
       <AppLayout />

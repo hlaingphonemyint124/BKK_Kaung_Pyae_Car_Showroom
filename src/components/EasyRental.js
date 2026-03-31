@@ -14,19 +14,23 @@ export default function EasyRental() {
 
         <div className="stepsRow">
 
-          <div className="stepBox active">
-            <span>Step</span>
-            <strong>1</strong>
-          </div>
+          <div className="stepsGroup">
 
-          <div className="stepBox">
-            <span>Step</span>
-            <strong>2</strong>
-          </div>
+            <div className="stepBox active">
+              <span>Step</span>
+              <strong>1</strong>
+            </div>
 
-          <div className="stepBox">
-            <span>Step</span>
-            <strong>3</strong>
+            <div className="stepBox">
+              <span>Step</span>
+              <strong>2</strong>
+            </div>
+
+            <div className="stepBox">
+              <span>Step</span>
+              <strong>3</strong>
+            </div>
+
           </div>
 
           <button className="rentalBtn">
@@ -35,6 +39,7 @@ export default function EasyRental() {
 
         </div>
 
+        <div className="divider"></div>
 
         <div className="loginArea">
 
@@ -47,6 +52,10 @@ export default function EasyRental() {
           <button className="signupBtn">
             Click here to sign up
           </button>
+
+          <div className="loginHint">
+            If you already logged in, you can continue to next step.
+          </div>
 
           <div className="nextStep">
             Next step →

@@ -54,12 +54,20 @@ export default function Testimonials() {
 
           </div>
 
+          
         </div>
       ))}
+
+      <div className="testimonial-dots">
+  <span className="active"></span>
+  <span></span>
+  <span></span>
+</div>
 
       <p className="testimonial-footer">
         • Premium car rental and showroom service built on trust, quality, and simplicity.
       </p>
+
 
     </section>
   );
