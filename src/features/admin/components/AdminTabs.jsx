@@ -1,30 +1,37 @@
-import React from "react";
-
 function AdminTabs({ activeTab, setActiveTab }) {
   return (
-    <div className="admin-tabs">
-      <div
-        className={`admin-tab ${activeTab === "all" ? "active" : ""}`}
+    <div className="admin-tabs-bar">
+      <button
+        type="button"
+        className={`admin-tabs-bar__item ${
+          activeTab === "all" ? "admin-tabs-bar__item--active" : ""
+        }`}
         onClick={() => setActiveTab("all")}
       >
         All
-      </div>
+      </button>
 
-      <div
-        className={`admin-tab ${activeTab === "new" ? "active" : ""}`}
-        onClick={() => setActiveTab("new")}
+      <button
+        type="button"
+        className={`admin-tabs-bar__item ${
+          activeTab === "new-arrivals" ? "admin-tabs-bar__item--active" : ""
+        }`}
+        onClick={() => setActiveTab("new-arrivals")}
       >
         New Arrivals
-      </div>
+      </button>
 
-      <div
-        className={`admin-tab ${activeTab === "best" ? "active" : ""}`}
-        onClick={() => setActiveTab("best")}
+      <button
+        type="button"
+        className={`admin-tabs-bar__item ${
+          activeTab === "popular-brands" ? "admin-tabs-bar__item--active" : ""
+        }`}
+        onClick={() => setActiveTab("popular-brands")}
       >
-        Best Seller
-      </div>
+        Popular Brands
+      </button>
     </div>
   );
 }
 
-export default AdminTabs;       
+export default AdminTabs;

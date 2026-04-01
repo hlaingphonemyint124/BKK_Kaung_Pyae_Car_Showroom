@@ -1,60 +1,79 @@
-import React, { useState } from "react";
-import AdminMobileShell from "../components/AdminMobileShell";
-import AdminTopBar from "../components/AdminTopBar";
-import AdminFilterBar from "../components/AdminFilterBar";
-import AdminTabs from "../components/AdminTabs";
-
+import { useState } from "react";
+import "../styles/admin.css";
 import AddCarCard from "../components/AddCarCard";
 import AdminCarCard from "../components/AdminCarCard";
-import AdminEditMenu from "../components/AdminEditMenu";
-
+import AdminFilterBar from "../components/AdminFilterBar";
+import AdminTabs from "../components/AdminTabs";
 import cars from "../data/mockAdminCars";
 
 function AdminBuyPage() {
-  const [selectedCar, setSelectedCar] = useState(null);
+  const [activeCardId, setActiveCardId] = useState(null);
   const [activeTab, setActiveTab] = useState("all");
 
+  const buyCars = cars.filter((car) => car.type === "buy");
+
+  const handleAddCar = () => {
+    console.log("Add car");
+  };
+
+  const handleToggleMenu = (carId) => {
+    setActiveCardId((prev) => (prev === carId ? null : carId));
+  };
+
+  const handleCloseMenu = () => {
+    setActiveCardId(null);
+  };
+
+  const handleEdit = (car) => {
+    console.log("Edit", car);
+    handleCloseMenu();
+  };
+
+  const handleClear = (car) => {
+    console.log("Clear", car);
+    handleCloseMenu();
+  };
+
+  const handleAddMostRented = (car) => {
+    console.log("Most rented", car);
+    handleCloseMenu();
+  };
+
+  const handleNotAvailable = (car) => {
+    console.log("Not available", car);
+    handleCloseMenu();
+  };
+
   return (
-    <AdminMobileShell>
-
-      {/* TOP BAR */}
-      <AdminTopBar />
-
-      {/* HERO TEXT */}
-      <div className="admin-hero">
-        <h2>Fast, Simple and Easy.</h2>
-        <p>Shop Online. Pickup Today.</p>
+    <div className="admin-page-section">
+      <div className="admin-hero-block">
+        <h1 className="admin-hero-block__title">Fast, Simple and Easy.</h1>
+        <p className="admin-hero-block__subtitle">
+          Shop Online. Pickup Today. It’s Fast, Simple and Easy.
+        </p>
       </div>
 
-      {/* FILTER */}
       <AdminFilterBar />
-
-      {/* TABS */}
       <AdminTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {/* GRID */}
       <div className="admin-grid">
-        <AddCarCard onAdd={() => alert("Add car")} />
+        <AddCarCard onClick={handleAddCar} />
 
-        {cars.map((car) => (
+        {buyCars.map((car) => (
           <AdminCarCard
             key={car.id}
             car={car}
-            onClick={setSelectedCar}
+            isActive={activeCardId === car.id}
+            onToggleMenu={() => handleToggleMenu(car.id)}
+            onCloseMenu={handleCloseMenu}
+            onEdit={() => handleEdit(car)}
+            onClear={() => handleClear(car)}
+            onAddMostRented={() => handleAddMostRented(car)}
+            onNotAvailable={() => handleNotAvailable(car)}
           />
         ))}
       </div>
-
-      {/* POPUP */}
-      {selectedCar && (
-        <AdminEditMenu
-          onClose={() => setSelectedCar(null)}
-          onEdit={() => alert("Edit " + selectedCar.name)}
-          onDelete={() => alert("Delete " + selectedCar.name)}
-        />
-      )}
-
-    </AdminMobileShell>
+    </div>
   );
 }
 

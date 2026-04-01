@@ -1,31 +1,32 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/AuthStyles.css";
 import AuthHeader from "../components/AuthHeader";
 import AuthInput from "../components/AuthInput";
 import PasswordInput from "../components/PasswordInput";
 import AuthButton from "../components/AuthButton";
+import { loginUser, getCurrentUser } from "../services/authService";
 
 function LoginPage() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // email format regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  // validate each field
   const validateField = (name, value) => {
     let error = "";
 
     if (name === "email") {
       if (!value.trim()) error = "Email is required";
-      else if (!emailRegex.test(value))
-        error = "Invalid email format";
+      else if (!emailRegex.test(value)) error = "Invalid email format";
     }
 
     if (name === "password") {
@@ -37,7 +38,18 @@ function LoginPage() {
     return error;
   };
 
-  // handle typing
+  const validateForm = () => {
+    const newErrors = {};
+
+    Object.keys(form).forEach((key) => {
+      const error = validateField(key, form[key]);
+      if (error) newErrors[key] = error;
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -46,37 +58,55 @@ function LoginPage() {
       [name]: value,
     }));
 
-    // real-time validation
     const error = validateField(name, value);
 
     setErrors((prev) => ({
       ...prev,
       [name]: error,
     }));
+
+    if (serverError) setServerError("");
   };
 
-  // handle submit
-  const handleLogin = (e) => {
+  // ✅ REAL LOGIN (will work when backend is running)
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    let newErrors = {};
-
-    Object.keys(form).forEach((key) => {
-      const error = validateField(key, form[key]);
-      if (error) newErrors[key] = error;
-    });
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length > 0) return;
+    if (!validateForm()) return;
 
     setLoading(true);
+    setServerError("");
 
-    setTimeout(() => {
-      console.log(form);
+    try {
+      await loginUser({
+        email: form.email,
+        password: form.password,
+      });
+
+      const currentUser = await getCurrentUser();
+      console.log("Current user:", currentUser);
+
+      const role = currentUser.role || currentUser.user?.role;
+
+      if (role === "admin" || role === "employee") {
+        navigate("/admin/buy");
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      setServerError(
+        error.response?.data?.message ||
+          error.message ||
+          "Login failed. Please try again."
+      );
+    } finally {
       setLoading(false);
-      alert("Login successful (fake)");
-    }, 1000);
+    }
+  };
+
+  // ✅ DEV BUTTON (temporary)
+  const handleDevAdminLogin = () => {
+    navigate("/admin/buy");
   };
 
   return (
@@ -101,12 +131,36 @@ function LoginPage() {
             error={errors.password}
           />
 
+          {serverError && (
+            <p style={{ color: "red", marginTop: "8px", marginBottom: "8px" }}>
+              {serverError}
+            </p>
+          )}
+
+          {/* 🔴 REAL LOGIN BUTTON */}
           <AuthButton
             text={loading ? "Logging In..." : "Log In"}
             type="submit"
             disabled={loading}
           />
         </form>
+
+        {/* 🟡 DEV BUTTON */}
+        <button
+          type="button"
+          onClick={handleDevAdminLogin}
+          style={{
+            marginTop: "12px",
+            width: "100%",
+            padding: "12px",
+            borderRadius: "999px",
+            border: "1px solid #ccc",
+            background: "#f5f5f5",
+            cursor: "pointer",
+          }}
+        >
+          Enter Admin Demo
+        </button>
 
         <div className="auth-link-center">
           Forgot password? <Link to="/">Click Here</Link>
