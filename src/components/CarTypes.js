@@ -30,30 +30,39 @@ View all →
 
 </div>
 
+<div className="typesWrapper">
 
-<div className="typesGrid">
+  <div className="typesGrid">
+    {types.map((type,index)=>(
+      
+    <div 
+    className="typeCard" 
+    key={type.name}
+    >
 
-{types.map((type)=>(
-  
-<div className="typeCard" key={type.name}>
+      <div className="typeIcon">
+      {type.icon}
+      </div>
 
-<div className="typeIcon">
-{type.icon}
+      <p>{type.name}</p>
+
+    </div>
+
+    ))}
+  </div>
+
+  {/* dots */}
+  <div className="sliderDots">
+    {Array.from({ length: Math.ceil(types.length / 4) }).map((_, i) => (
+      <span key={i}></span>
+    ))}
+  </div>
+
 </div>
-
-<p>{type.name}</p>
-
-</div>
-
-))}
-
-</div>
-
 
 <p className="typesNote">
 +100 cars are ready to be yours
 </p>
-
 
 <button className="shopBtn">
 View on Shop →

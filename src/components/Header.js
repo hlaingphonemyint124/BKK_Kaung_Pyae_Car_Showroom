@@ -5,50 +5,35 @@ export default function Header(){
 
 const [menu,setMenu] = useState(false);
 const [darkMode,setDarkMode] = useState(false);
+const [langOpen,setLangOpen] = useState(false);
+const [language,setLanguage] = useState("EN");
 
 const menuRef = useRef(null);
+const langRef = useRef(null);
 
-
-/* ===============================
-LOAD SAVED THEME
-=============================== */
+/* LOAD THEME */
 
 useEffect(()=>{
-
 const savedTheme = localStorage.getItem("theme");
-
 if(savedTheme === "dark"){
 setDarkMode(true);
 document.body.classList.add("dark");
 }
-
 },[]);
 
-
-/* ===============================
-TOGGLE DARK MODE
-=============================== */
+/* DARK MODE */
 
 useEffect(()=>{
-
 if(darkMode){
-
 document.body.classList.add("dark");
 localStorage.setItem("theme","dark");
-
 }else{
-
 document.body.classList.remove("dark");
 localStorage.setItem("theme","light");
-
 }
-
 },[darkMode]);
 
-
-/* ===============================
-CLOSE MENU OUTSIDE CLICK
-=============================== */
+/* CLOSE OUTSIDE CLICK */
 
 useEffect(()=>{
 
@@ -58,18 +43,27 @@ if(menuRef.current && !menuRef.current.contains(e.target)){
 setMenu(false);
 }
 
+if(langRef.current && !langRef.current.contains(e.target)){
+setLangOpen(false);
+}
+
 }
 
 document.addEventListener("mousedown",handleClickOutside);
-document.addEventListener("touchstart",handleClickOutside);
-
-return ()=>{
-document.removeEventListener("mousedown",handleClickOutside);
-document.removeEventListener("touchstart",handleClickOutside);
-};
+return ()=> document.removeEventListener("mousedown",handleClickOutside);
 
 },[]);
 
+
+/* LANGUAGE DATA */
+
+const languages = [
+{code:"EN",flag:"https://flagcdn.com/w20/gb.png"},
+{code:"MM",flag:"https://flagcdn.com/w20/mm.png"},
+{code:"TH",flag:"https://flagcdn.com/w20/th.png"}
+];
+
+const currentLang = languages.find(l=>l.code===language);
 
 return(
 
@@ -77,12 +71,14 @@ return(
 
 <div className="site-header__inner">
 
+
+
 {/* LOGO */}
 
-<div className="site-logo">
+<Link to="/" className="site-logo">
 <div>BKK Kaung Pyae</div>
 <span>Auto</span>
-</div>
+</Link>
 
 
 {/* RIGHT NAV */}
@@ -91,13 +87,42 @@ return(
 
 {/* LANGUAGE */}
 
-<button className="lang-btn">
-EN
-<img src="https://flagcdn.com/w20/gb.png" alt="" />
+<div className="lang-wrapper" ref={langRef}>
+
+<button
+className="lang-btn"
+onClick={()=>setLangOpen(!langOpen)}
+>
+<span>{currentLang.code}</span>
+<img src={currentLang.flag} alt="flag"/>
 </button>
 
+{langOpen && (
 
-{/* DARK MODE BUTTON */}
+<div className="lang-dropdown">
+
+{languages.map((lang)=>(
+<div
+key={lang.code}
+className="lang-item"
+onClick={()=>{
+setLanguage(lang.code);
+setLangOpen(false);
+}}
+>
+<span>{lang.code}</span>
+<img src={lang.flag} alt="flag"/>
+</div>
+))}
+
+</div>
+
+)}
+
+</div>
+
+
+{/* DARK MODE */}
 
 <button
 className="theme-btn"
@@ -123,9 +148,7 @@ onClick={()=>setMenu(!menu)}
 </div>
 
 
-{/* ===============================
-SIDE MENU
-=============================== */}
+{/* SIDE MENU */}
 
 <div
 ref={menuRef}
@@ -137,7 +160,7 @@ className={`sideMenu ${menu ? "show" : ""}`}
 <div className="avatar">👤</div>
 
 <Link to="/login" className="menuItem loginMenuItem">
-  Log In / Sign Up 
+Log In / Sign Up
 </Link>
 
 <div className="arrow">→</div>
@@ -147,13 +170,9 @@ className={`sideMenu ${menu ? "show" : ""}`}
 <div className="divider"></div>
 
 <Link to="/" className="menuItem">Home Page <span>→</span></Link>
-
 <Link to="/showroom" className="menuItem">Shop the cars <span>→</span></Link>
-
 <Link to="/showroom" className="menuItem">Car Rental <span>→</span></Link>
-
 <Link to="/contact" className="menuItem">Contact Us <span>→</span></Link>
-
 <Link to="/help" className="menuItem">Need Help? <span>→</span></Link>
 
 <div className="logout">Log Out</div>

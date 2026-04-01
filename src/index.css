@@ -286,6 +286,85 @@ body.dark .sideMenu{
   color:#fff;
 }
 
+/* ===============================
+LANGUAGE DROPDOWN
+=============================== */
+
+.lang-wrapper{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+
+/* dropdown container */
+
+.lang-dropdown{
+  position:absolute;
+  top:34px;
+  right:0;
+
+  width:120px;
+
+  background:#2a2a2a;
+  border-radius:6px;
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+
+  overflow:hidden;
+
+  animation:dropdownFade 0.18s ease;
+}
+
+/* dropdown item */
+
+.lang-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:10px 12px;
+
+  color:white;
+  font-size:14px;
+
+  cursor:pointer;
+  transition:background 0.2s;
+}
+
+/* divider */
+
+.lang-item:not(:last-child){
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+/* flag */
+
+.lang-item img{
+  width:20px;
+  height:14px;
+  object-fit:cover;
+  border-radius:2px;
+}
+
+/* hover */
+
+.lang-item:hover{
+  background:#3a3a3a;
+}
+
+/* animation */
+
+@keyframes dropdownFade{
+  from{
+    opacity:0;
+    transform:translateY(-6px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
 
 /* DIVIDER */
 
@@ -961,12 +1040,4 @@ max-width:280px;
 
 @media (max-width:480px){
 
-/* ===============================
-FINAL LIGHT MODE FIX (GLOBAL)
-=============================== */
-
-body:not(.dark){
-  background:#ffffff !important;
-  color:#0f172a !important;
-}
 }
