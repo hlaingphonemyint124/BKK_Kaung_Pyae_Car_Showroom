@@ -13,16 +13,16 @@ return <div style={{padding:"40px"}}>Car not found</div>;
 
 return(
 
+<div className="carDetailWrapper"> {/* ✅ NEW WRAPPER */}
+
 <div className="carDetail">
 
 {/* IMAGE */}
-
 <div className="carHero">
 <img src={car.img} alt={car.name}/>
 </div>
 
 {/* CONTENT */}
-
 <div className="carContent">
 
 <h1 className="carTitle">
@@ -33,9 +33,7 @@ return(
 {car.price}
 </div>
 
-
 {/* SPEC GRID */}
-
 <div className="specGrid">
 
 <div className="specItem">
@@ -78,9 +76,7 @@ return(
 
 </div>
 
-
 {/* INFO ROWS */}
-
 <div className="infoRow">
 <span>Mileage</span>
 <span className="highlight">120,000 km</span>
@@ -96,40 +92,32 @@ return(
 <span className="highlight">Ready to transfer</span>
 </div>
 
-
 {/* DOCUMENT TABLE */}
-
 <div className="docHeader">
 Car Document Infomation
 </div>
 
 <div className="docTable">
-
 {[1,2,3,4,5,6].map((row)=>(
 <div key={row} className="docRow">
 <div></div>
 <div></div>
 </div>
 ))}
-
 </div>
 
-
 {/* CONTACT SELLER */}
-
 <div className="contactSection">
-
 <p>• Do you interested in this car ?</p>
-
 <button className="contactBtn">
 Contact Seller →
 </button>
-
 </div>
 
 </div>
-
 </div>
+
+</div> /* ✅ wrapper end */
 
 )
 }

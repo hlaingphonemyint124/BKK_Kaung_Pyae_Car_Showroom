@@ -2,18 +2,18 @@ import React from "react";
 import "./Team.css";
 
 const ceo = {
-  name: "Mr. Kaung Pyae",
+  name: "Mr. Kaung Pyae Lwin",
   role: "CEO"
 };
 
 const members = [
-  { name: "Ms. Hsu Phyo", role: "Customer Support" },
+  { name: "Ms. Hsu Phyo", role: "Customer support" },
   { name: "Mr. Kyaw Kyaw", role: "Manager" },
-  { name: "Mr. Myo Kyaw", role: "Customer Support" },
-  { name: "Ms. Thae Thae", role: "Customer Support" }
+  { name: "Mr. Myo Kyaw", role: "Customer support" },
+  { name: "Ms. Thae Thae", role: "Customer support" }
 ];
 
-export default function Team(){
+export default function Team() {
   return (
     <section className="team">
 
@@ -26,9 +26,9 @@ export default function Team(){
         <p className="ceo-role">{ceo.role}</p>
       </div>
 
-      {/* Team Grid */}
+      {/* Members */}
       <div className="team-grid">
-        {members.map((m,i)=>(
+        {members.map((m, i) => (
           <div className="member" key={i}>
             <div className="avatar"></div>
             <h5 className="member-name">{m.name}</h5>
@@ -44,10 +44,8 @@ export default function Team(){
         <span className="dot"></span>
       </div>
 
-      <div className="contact-team">
-        Contact our team →
-      </div>
+      <p className="contact-team">Contact our team →</p>
 
     </section>
-  )
+  );
 }
