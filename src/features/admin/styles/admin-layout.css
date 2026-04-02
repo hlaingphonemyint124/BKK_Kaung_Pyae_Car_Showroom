@@ -1,6 +1,6 @@
 .admin-page-section {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 16px;
   box-sizing: border-box;
@@ -42,11 +42,11 @@
 }
 
 .admin-filterbar {
-  width: 100%;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
   display: flex;
   align-items: center;
   background: #6f6f6f;
-  border-radius: 2px;
   overflow: hidden;
   box-sizing: border-box;
 }
