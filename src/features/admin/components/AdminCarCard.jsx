@@ -8,8 +8,11 @@ function AdminCarCard({
   onCloseMenu,
   onEdit,
   onClear,
-  onAddMostRented,
-  onNotAvailable,
+  thirdActionLabel,
+  thirdActionHandler,
+  fourthActionLabel,
+  fourthActionHandler,
+  showUnavailableOverlay = true,
 }) {
   const imageSrc = car.image || car.images?.[0];
 
@@ -22,16 +25,19 @@ function AdminCarCard({
           className="admin-product-card__image"
         />
 
+        {/* Badge */}
         <div className="admin-product-card__badge">
           {car.type === "buy" ? "Sale" : "Rent"}
         </div>
 
-        {!car.status?.isAvailable && (
+        {/* Optional unavailable overlay */}
+        {showUnavailableOverlay && !car.status?.isAvailable && (
           <div className="admin-product-card__unavailable">
-            Sorry! Not Available for now
+            Not Available
           </div>
         )}
 
+        {/* Menu */}
         {isActive && (
           <div
             className="admin-product-card__menu-overlay"
@@ -41,38 +47,23 @@ function AdminCarCard({
               onClose={onCloseMenu}
               onEdit={onEdit}
               onClear={onClear}
-              onAddMostRented={onAddMostRented}
-              onNotAvailable={onNotAvailable}
+              thirdActionLabel={thirdActionLabel}
+              thirdActionHandler={thirdActionHandler}
+              fourthActionLabel={fourthActionLabel}
+              fourthActionHandler={fourthActionHandler}
             />
           </div>
         )}
       </div>
 
+      {/* Body */}
       <div className="admin-product-card__body">
-        <h3 className="admin-product-card__title">{car.brand || car.name}</h3>
+        <h3 className="admin-product-card__title">{car.name}</h3>
 
         <p className="admin-product-card__meta">
-          {car.specs?.fuel || "Petrol"},{" "}
-          {car.specs?.drive || "2WD"},{" "}
-          {car.specs?.doors || "2c"},{" "}
-          {car.specs?.seats || 4} seaters....
+          {car.specs?.fuel || "Petrol"}, {car.specs?.drive || "2WD"},{" "}
+          {car.specs?.doors || "2c"}, {car.specs?.seats || 4} seaters
         </p>
-
-        <div className="admin-product-card__features">
-          <div className="admin-product-card__feature">
-            <div className="admin-product-card__feature-icon">🔌</div>
-            <div className="admin-product-card__feature-text">
-              {car.specs?.power || "EV"}
-            </div>
-          </div>
-
-          <div className="admin-product-card__feature">
-            <div className="admin-product-card__feature-icon">H</div>
-            <div className="admin-product-card__feature-text">
-              {car.specs?.transmission || "Auto"}
-            </div>
-          </div>
-        </div>
 
         <div className="admin-product-card__bottom">
           <div className="admin-product-card__price">
@@ -81,11 +72,7 @@ function AdminCarCard({
               : `${car.rental?.pricePerDay?.toLocaleString()} THB/day`}
           </div>
 
-          <button
-            type="button"
-            className="admin-product-card__detail"
-            onClick={onEdit}
-          >
+          <button className="admin-product-card__detail">
             view detail →
           </button>
         </div>

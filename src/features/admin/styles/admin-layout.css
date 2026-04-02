@@ -2,7 +2,8 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .admin-page-header {
@@ -18,8 +19,8 @@
 
 .admin-grid {
   display: grid;
-  grid-template-columns: repeat(1, minmax(260px, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
 
 .admin-hero-block {
@@ -41,12 +42,13 @@
 }
 
 .admin-filterbar {
-  margin: 0 24px;
-  background: #6b6b6b;
+  width: 100%;
   display: flex;
   align-items: center;
+  background: #6f6f6f;
   border-radius: 2px;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .admin-filterbar__item {
@@ -102,12 +104,19 @@
 
 @media (min-width: 768px) {
   .admin-grid {
-    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+   .admin-filterbar__item {
+    min-height: 54px;
+    font-size: 14px;
   }
 }
 
 @media (min-width: 1200px) {
   .admin-grid {
-    grid-template-columns: repeat(3, minmax(300px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
   }
 }

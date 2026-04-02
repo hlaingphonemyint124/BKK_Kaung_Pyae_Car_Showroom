@@ -1,25 +1,33 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import "../styles/admin.css";
 import AddCarCard from "../components/AddCarCard";
 import AdminCarCard from "../components/AdminCarCard";
-import useAdminCars from "../hooks/useAdminCars";
+import AdminFilterBar from "../components/AdminFilterBar";
+import AdminTabs from "../components/AdminTabs";
+import cars from "../data/mockAdminCars";
 
 function AdminRentalPage() {
-  const navigate = useNavigate();
+  const [activeCardId, setActiveCardId] = useState(null);
+  const [activeTab, setActiveTab] = useState("all");
 
-  const {
-    filteredCars,
-    activeTab,
-    setActiveTab,
-    activeCardId,
-    setActiveCardId,
-    clearCar,
-    toggleMostRented,
-    toggleAvailable,
-  } = useAdminCars("rental");
+  let rentalCars = cars.filter((car) => car.type === "rental");
 
-  const handleAddClick = () => {
-    console.log("Open add rental form");
+  if (activeTab === "most-rented") {
+    rentalCars = rentalCars.filter((car) => car.status?.isMostRented);
+  }
+
+  if (activeTab === "not-available") {
+    rentalCars = rentalCars.filter((car) => !car.status?.isAvailable);
+  }
+
+  const tabs = [
+    { label: "All", value: "all" },
+    { label: "Most Rented", value: "most-rented" },
+    { label: "Not Available", value: "not-available" },
+  ];
+
+  const handleAddCar = () => {
+    console.log("Add new rental car");
   };
 
   const handleToggleMenu = (carId) => {
@@ -31,75 +39,45 @@ function AdminRentalPage() {
   };
 
   const handleEdit = (car) => {
-    navigate(`/admin/rental/${car.id}`);
+    console.log("Edit rental car:", car);
     handleCloseMenu();
   };
 
   const handleClear = (car) => {
-    clearCar(car.id);
+    console.log("Clear rental car:", car);
     handleCloseMenu();
   };
 
   const handleAddMostRented = (car) => {
-    toggleMostRented(car.id);
+    console.log("Add to Most Rented:", car);
     handleCloseMenu();
   };
 
-  const handleNotAvailable = (car) => {
-    toggleAvailable(car.id);
+  const handleAddNotAvailable = (car) => {
+    console.log("Add to Not Available Now:", car);
     handleCloseMenu();
   };
 
   return (
     <div className="admin-page-section">
-      <div className="admin-page-header">
-        <h2 className="admin-page-title">Admin Rental Cars</h2>
-        <p className="admin-page-subtitle">
-          Manage rental listings, update status, and edit car details.
+      <div className="admin-hero-block">
+        <h1 className="admin-hero-block__title">Fast, Simple and Easy.</h1>
+        <p className="admin-hero-block__subtitle">
+          Shop Online. Pickup Today. It’s Fast, Simple and Easy.
         </p>
       </div>
 
-      <div className="admin-toolbar">
-        <div className="admin-filter-bar">
-          <div className="admin-filter-bar__item">Filter</div>
-          <div className="admin-filter-bar__item">Rental</div>
-          <div className="admin-filter-bar__item">Search</div>
-        </div>
-
-        <div className="admin-tabs">
-          <div
-            className={`admin-tabs__item ${
-              activeTab === "all" ? "admin-tabs__item--active" : ""
-            }`}
-            onClick={() => setActiveTab("all")}
-          >
-            All
-          </div>
-
-          <div
-            className={`admin-tabs__item ${
-              activeTab === "most-rented" ? "admin-tabs__item--active" : ""
-            }`}
-            onClick={() => setActiveTab("most-rented")}
-          >
-            Most Rented
-          </div>
-
-          <div
-            className={`admin-tabs__item ${
-              activeTab === "not-available" ? "admin-tabs__item--active" : ""
-            }`}
-            onClick={() => setActiveTab("not-available")}
-          >
-            Not Available
-          </div>
-        </div>
-      </div>
+      <AdminFilterBar mode="Rental" />
+      <AdminTabs
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        tabs={tabs}
+      />
 
       <div className="admin-grid">
-        <AddCarCard onClick={handleAddClick} />
+        <AddCarCard onClick={handleAddCar} />
 
-        {filteredCars.map((car) => (
+        {rentalCars.map((car) => (
           <AdminCarCard
             key={car.id}
             car={car}
@@ -108,8 +86,11 @@ function AdminRentalPage() {
             onCloseMenu={handleCloseMenu}
             onEdit={() => handleEdit(car)}
             onClear={() => handleClear(car)}
-            onAddMostRented={() => handleAddMostRented(car)}
-            onNotAvailable={() => handleNotAvailable(car)}
+            thirdActionLabel="Add to Most Rented"
+            thirdActionHandler={() => handleAddMostRented(car)}
+            fourthActionLabel="Add to Not Available Now"
+            fourthActionHandler={() => handleAddNotAvailable(car)}
+            showUnavailableOverlay={true}
           />
         ))}
       </div>

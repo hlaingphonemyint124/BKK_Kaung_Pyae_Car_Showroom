@@ -10,10 +10,24 @@ function AdminBuyPage() {
   const [activeCardId, setActiveCardId] = useState(null);
   const [activeTab, setActiveTab] = useState("all");
 
-  const buyCars = cars.filter((car) => car.type === "buy");
+  let buyCars = cars.filter((car) => car.type === "buy");
+
+  if (activeTab === "new-arrivals") {
+    buyCars = buyCars.filter((car) => car.status?.isNewArrival);
+  }
+
+  if (activeTab === "best-seller") {
+    buyCars = buyCars.filter((car) => car.status?.isBestSeller);
+  }
+
+  const tabs = [
+    { label: "All", value: "all" },
+    { label: "New Arrivals", value: "new-arrivals" },
+    { label: "Popular Brands", value: "best-seller" },
+  ];
 
   const handleAddCar = () => {
-    console.log("Add car");
+    console.log("Add new buy car");
   };
 
   const handleToggleMenu = (carId) => {
@@ -25,22 +39,22 @@ function AdminBuyPage() {
   };
 
   const handleEdit = (car) => {
-    console.log("Edit", car);
+    console.log("Edit buy car:", car);
     handleCloseMenu();
   };
 
   const handleClear = (car) => {
-    console.log("Clear", car);
+    console.log("Clear buy car:", car);
     handleCloseMenu();
   };
 
-  const handleAddMostRented = (car) => {
-    console.log("Most rented", car);
+  const handleAddNewArrivals = (car) => {
+    console.log("Add to New Arrivals:", car);
     handleCloseMenu();
   };
 
-  const handleNotAvailable = (car) => {
-    console.log("Not available", car);
+  const handleAddBestSeller = (car) => {
+    console.log("Add to Best Seller:", car);
     handleCloseMenu();
   };
 
@@ -53,8 +67,12 @@ function AdminBuyPage() {
         </p>
       </div>
 
-      <AdminFilterBar />
-      <AdminTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      <AdminFilterBar mode="Buy" />
+      <AdminTabs
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        tabs={tabs}
+      />
 
       <div className="admin-grid">
         <AddCarCard onClick={handleAddCar} />
@@ -68,8 +86,11 @@ function AdminBuyPage() {
             onCloseMenu={handleCloseMenu}
             onEdit={() => handleEdit(car)}
             onClear={() => handleClear(car)}
-            onAddMostRented={() => handleAddMostRented(car)}
-            onNotAvailable={() => handleNotAvailable(car)}
+            thirdActionLabel="Add to New Arrivals"
+            thirdActionHandler={() => handleAddNewArrivals(car)}
+            fourthActionLabel="Add to Best Seller"
+            fourthActionHandler={() => handleAddBestSeller(car)}
+            showUnavailableOverlay={false}
           />
         ))}
       </div>
