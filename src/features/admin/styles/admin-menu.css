@@ -1,28 +1,126 @@
-.admin-menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.admin-menu {
+/* menu layer inside clicked card */
+.admin-product-card__menu-overlay {
   position: absolute;
-  right: 20px;
-  top: 100px;
-  background: #111;
-  color: white;
-  border-radius: 10px;
-  padding: 12px;
-  width: 160px;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(235, 235, 235, 0.14);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-.admin-menu-item {
-  padding: 10px;
-  border-bottom: 1px solid #333;
+.admin-card-menu-panel {
+  position: relative;
+  width: 100%;
+  max-width: 220px;
+  background: rgba(47, 46, 46, 0.78);
+  border-radius: 14px;
+  padding: 12px 12px 14px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
+  color: #fff;
+}
+
+.admin-card-menu-panel__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.admin-card-menu-panel__header--no-title {
+  justify-content: flex-end;
+}
+
+.admin-card-menu-panel__close {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  color: #111;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
 }
+.admin-card-menu-panel__top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 14px;
+  padding-right: 10px;
+}
 
-.admin-menu-item:last-child {
-  border-bottom: none;
+.admin-card-menu-panel__icon-action {
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-card-menu-panel__icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.admin-card-menu-panel__icon-box--edit {
+  background: #28d20f;
+}
+
+.admin-card-menu-panel__icon-box--clear {
+  background: #f11212;
+}
+
+.admin-card-menu-panel__divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.admin-card-menu-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-card-menu-panel__item {
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.admin-card-menu-panel__item-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  flex-shrink: 0;
 }

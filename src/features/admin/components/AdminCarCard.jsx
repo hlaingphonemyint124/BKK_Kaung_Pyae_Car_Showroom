@@ -18,6 +18,8 @@ function AdminCarCard({
 
   return (
     <div className="admin-product-card">
+      
+      {/* Image */}
       <div className="admin-product-card__image-wrap" onClick={onToggleMenu}>
         <img
           src={imageSrc}
@@ -34,24 +36,6 @@ function AdminCarCard({
         {showUnavailableOverlay && !car.status?.isAvailable && (
           <div className="admin-product-card__unavailable">
             Not Available
-          </div>
-        )}
-
-        {/* Menu */}
-        {isActive && (
-          <div
-            className="admin-product-card__menu-overlay"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <AdminCardMenu
-              onClose={onCloseMenu}
-              onEdit={onEdit}
-              onClear={onClear}
-              thirdActionLabel={thirdActionLabel}
-              thirdActionHandler={thirdActionHandler}
-              fourthActionLabel={fourthActionLabel}
-              fourthActionHandler={fourthActionHandler}
-            />
           </div>
         )}
       </div>
@@ -77,6 +61,25 @@ function AdminCarCard({
           </button>
         </div>
       </div>
+
+      {/* ✅ FULL CARD OVERLAY MENU (FIXED POSITION) */}
+      {isActive && (
+        <div
+          className="admin-product-card__menu-overlay"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <AdminCardMenu
+            onClose={onCloseMenu}
+            onEdit={onEdit}
+            onClear={onClear}
+            thirdActionLabel={thirdActionLabel}
+            thirdActionHandler={thirdActionHandler}
+            fourthActionLabel={fourthActionLabel}
+            fourthActionHandler={fourthActionHandler}
+            fourthActionIcon="＋"
+          />
+        </div>
+      )}
     </div>
   );
 }

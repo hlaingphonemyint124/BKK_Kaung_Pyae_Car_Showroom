@@ -24,7 +24,7 @@
 }
 
 .admin-hero-block {
-  padding: 20px 24px 14px;
+  padding: 0px 24px 14px;
 }
 
 .admin-hero-block__title {
@@ -72,7 +72,7 @@
 .admin-tabs-bar {
   display: flex;
   gap: 36px;
-  padding: 14px 24px 18px;
+  padding: 14px 24px 24px;
   align-items: center;
 }
 

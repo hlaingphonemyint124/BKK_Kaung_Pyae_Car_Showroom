@@ -1,6 +1,7 @@
 import React from "react";
 
 function AdminCardMenu({
+  title = "",
   onClose,
   onEdit,
   onClear,
@@ -8,41 +9,50 @@ function AdminCardMenu({
   thirdActionHandler,
   fourthActionLabel,
   fourthActionHandler,
+  fourthActionIcon = "＋",
 }) {
   return (
-    <div className="admin-card-menu">
-      <button className="admin-card-menu__close" onClick={onClose}>
-        ×
-      </button>
+    <div className="admin-card-menu-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="admin-card-menu-panel__header admin-card-menu-panel__header--no-title">
+        <button className="admin-card-menu-panel__close" onClick={onClose}>
+          ×
+        </button>
+      </div>
 
-      {/* Top Actions */}
-      <div className="admin-card-menu__top">
-        <button className="admin-card-menu__icon-action" onClick={onEdit}>
-          <div className="admin-card-menu__icon-box admin-card-menu__icon-box--edit">
+      <div className="admin-card-menu-panel__top">
+        <button className="admin-card-menu-panel__icon-action" onClick={onEdit}>
+          <div className="admin-card-menu-panel__icon-box admin-card-menu-panel__icon-box--edit">
             ✎
           </div>
           <span>Edit</span>
         </button>
 
-        <div className="admin-card-menu__divider" />
+        <div className="admin-card-menu-panel__divider" />
 
-        <button className="admin-card-menu__icon-action" onClick={onClear}>
-          <div className="admin-card-menu__icon-box admin-card-menu__icon-box--clear">
+        <button className="admin-card-menu-panel__icon-action" onClick={onClear}>
+          <div className="admin-card-menu-panel__icon-box admin-card-menu-panel__icon-box--clear">
             🗑
           </div>
           <span>Clear</span>
         </button>
       </div>
 
-      {/* Bottom Actions */}
-      <div className="admin-card-menu__list">
-        <button className="admin-card-menu__item" onClick={thirdActionHandler}>
-          <span className="admin-card-menu__plus">＋</span>
+      <div className="admin-card-menu-panel__list">
+        <button
+          className="admin-card-menu-panel__item"
+          onClick={thirdActionHandler}
+        >
+          <span className="admin-card-menu-panel__item-icon">＋</span>
           <span>{thirdActionLabel}</span>
         </button>
 
-        <button className="admin-card-menu__item" onClick={fourthActionHandler}>
-          <span className="admin-card-menu__plus">＋</span>
+        <button
+          className="admin-card-menu-panel__item"
+          onClick={fourthActionHandler}
+        >
+          <span className="admin-card-menu-panel__item-icon">
+            {fourthActionIcon}
+          </span>
           <span>{fourthActionLabel}</span>
         </button>
       </div>
