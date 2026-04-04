@@ -24,7 +24,14 @@ function AdminBuyDetailPage() {
       model: "",
       documents: "",
     },
-    documentLines: ["", "", "", "", ""],
+    documentLines: [
+      { key: "Owner Name", value: "" },
+      { key: "Registration Number", value: "" },
+      { key: "Plate Number", value: "" },
+      { key: "Transfer Status", value: "" },
+      { key: "Tax Paid Until", value: "" },
+      { key: "Insurance Status", value: "" },
+    ],
   });
 
   const updateField = (field, value) => {
@@ -49,40 +56,74 @@ function AdminBuyDetailPage() {
     console.log("SAVE BUY CAR", form);
   };
 
+  const handleDocumentChange = (index, updatedLine) => {
+    const newLines = [...form.documentLines];
+    newLines[index] = updatedLine;
+
+    setForm((prev) => ({
+      ...prev,
+      documentLines: newLines,
+    }));
+  };
+
+  const handleAddRow = () => {
+    setForm((prev) => ({
+      ...prev,
+      documentLines: [...prev.documentLines, { key: "", value: "" }],
+    }));
+  };
+
+  const handleDeleteRow = (index) => {
+    const newLines = form.documentLines.filter((_, i) => i !== index);
+
+    setForm((prev) => ({
+      ...prev,
+      documentLines: newLines,
+    }));
+  };
+
   return (
     <div className="admin-detail-page">
+      <div className="admin-detail-page__left">
+        <div className="admin-detail-panel">
+          <AdminImageUploader
+            image={form.image}
+            onChange={(img) => updateField("image", img)}
+          />
+        </div>
 
-      {/* IMAGE */}
-      <AdminImageUploader
-        image={form.image}
-        onChange={(img) => updateField("image", img)}
-      />
+        <div className="admin-detail-panel">
+          <h3 className="admin-section-title">Car Info</h3>
+          <AdminDetailHero
+            name={form.name}
+            price={form.price}
+            onChange={updateField}
+          />
+        </div>
 
-      {/* TITLE + PRICE */}
-      <AdminDetailHero
-        name={form.name}
-        price={form.price}
-        onChange={updateField}
-      />
+        <div className="admin-detail-panel">
+          <SpecGrid specs={form.specs} onChange={updateSpecs} />
+        </div>
+      </div>
 
-      {/* SPECS */}
-      <SpecGrid specs={form.specs} onChange={updateSpecs} />
+      <div className="admin-detail-page__right">
+        <div className="admin-detail-panel">
+          <InfoRows info={form.info} onChange={updateInfo} />
+        </div>
 
-      {/* INFO ROWS */}
-      <InfoRows info={form.info} onChange={updateInfo} />
+        <div className="admin-detail-panel">
+          <DocumentSection
+            lines={form.documentLines}
+            onChange={handleDocumentChange}
+            onAddRow={handleAddRow}
+            onDeleteRow={handleDeleteRow}
+          />
+        </div>
 
-      {/* DOCUMENT */}
-      <DocumentSection
-        lines={form.documentLines}
-        onChange={(index, value) => {
-          const newLines = [...form.documentLines];
-          newLines[index] = value;
-          updateField("documentLines", newLines);
-        }}
-      />
-
-      {/* BUTTON */}
-      <ConfirmBar onClick={handleSubmit} label="Save Buy Car" />
+        <div className="admin-detail-panel admin-detail-panel--action">
+          <ConfirmBar onClick={handleSubmit} label="Save Buy Car" />
+        </div>
+      </div>
     </div>
   );
 }
