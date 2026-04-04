@@ -1,8 +1,18 @@
-function ConfirmBar({ label = "Confirm", onClick }) {
+function ConfirmBar({
+  onClick,
+  label = "Save",
+  note = "",
+}) {
   return (
-    <div className="admin-confirm-bar">
-      <button className="admin-confirm-btn" onClick={onClick}>
-        {label} →
+    <div className="admin-confirm-wrap">
+      {note && <p className="admin-confirm-wrap__note">{note}</p>}
+
+      <button
+        type="button"
+        className="admin-confirm"
+        onClick={onClick}
+      >
+        {label}
       </button>
     </div>
   );

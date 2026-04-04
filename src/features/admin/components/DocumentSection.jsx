@@ -1,18 +1,22 @@
-function DocumentSection({ title = "Car Document Information", rows = 8 }) {
+function DocumentSection({ lines = [], onChange, title = "Car Document Information" }) {
   return (
-    <>
-      <div className="admin-section-button">
-        <button className="admin-section-button__inner">{title}</button>
-      </div>
+    <div className="admin-document-section">
+      <div className="admin-document-section__header">{title}</div>
 
-      <div className="admin-line-table">
-        <div className="admin-line-table__box">
-          {Array.from({ length: rows }).map((_, index) => (
-            <div key={index} className="admin-line-table__row" />
-          ))}
-        </div>
+      <div className="admin-document-section__table">
+        {lines.map((line, index) => (
+          <div key={index} className="admin-document-section__row">
+            <div className="admin-document-section__cell admin-document-section__cell--left" />
+            <input
+              className="admin-document-section__cell admin-document-section__input"
+              value={line}
+              placeholder=""
+              onChange={(e) => onChange(index, e.target.value)}
+            />
+          </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 }
 

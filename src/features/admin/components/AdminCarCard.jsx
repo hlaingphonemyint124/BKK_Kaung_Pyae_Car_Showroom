@@ -7,6 +7,7 @@ function AdminCarCard({
   onToggleMenu,
   onCloseMenu,
   onEdit,
+  onViewDetail,
   onClear,
   thirdActionLabel,
   thirdActionHandler,
@@ -56,7 +57,11 @@ function AdminCarCard({
               : `${car.rental?.pricePerDay?.toLocaleString()} THB/day`}
           </div>
 
-          <button className="admin-product-card__detail">
+          <button
+            className="admin-product-card__detail"
+            type="button"
+            onClick={onViewDetail}
+          >
             view detail →
           </button>
         </div>

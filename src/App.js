@@ -56,7 +56,10 @@ function AppLayout() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/admin/buy" element={<AdminBuyPage />} />
         <Route path="/admin/rental" element={<AdminRentalPage />} />
+        <Route path="/admin/buy/new" element={<AdminBuyDetailPage />} />
         <Route path="/admin/buy/:id" element={<AdminBuyDetailPage />} />
+
+        <Route path="/admin/rental/new" element={<AdminRentalDetailPage />} />
         <Route path="/admin/rental/:id" element={<AdminRentalDetailPage />} />
       </Routes>
 

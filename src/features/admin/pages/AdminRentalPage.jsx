@@ -1,24 +1,24 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
 import AddCarCard from "../components/AddCarCard";
 import AdminCarCard from "../components/AdminCarCard";
 import AdminFilterBar from "../components/AdminFilterBar";
 import AdminTabs from "../components/AdminTabs";
-import cars from "../data/mockAdminCars";
+import useAdminCars from "../hooks/useAdminCars";
 
 function AdminRentalPage() {
-  const [activeCardId, setActiveCardId] = useState(null);
-  const [activeTab, setActiveTab] = useState("all");
+  const navigate = useNavigate();
 
-  let rentalCars = cars.filter((car) => car.type === "rental");
-
-  if (activeTab === "most-rented") {
-    rentalCars = rentalCars.filter((car) => car.status?.isMostRented);
-  }
-
-  if (activeTab === "not-available") {
-    rentalCars = rentalCars.filter((car) => !car.status?.isAvailable);
-  }
+  const {
+    filteredCars,
+    activeCardId,
+    setActiveCardId,
+    activeTab,
+    setActiveTab,
+    clearCar,
+    markMostRented,
+    markNotAvailable,
+  } = useAdminCars("rental");
 
   const tabs = [
     { label: "All", value: "all" },
@@ -27,7 +27,7 @@ function AdminRentalPage() {
   ];
 
   const handleAddCar = () => {
-    console.log("Add new rental car");
+    navigate("/admin/rental/new");
   };
 
   const handleToggleMenu = (carId) => {
@@ -39,22 +39,26 @@ function AdminRentalPage() {
   };
 
   const handleEdit = (car) => {
-    console.log("Edit rental car:", car);
+    navigate(`/admin/rental/${car.id}`);
     handleCloseMenu();
   };
 
+  const handleViewDetail = (car) => {
+    navigate(`/admin/rental/${car.id}`);
+  };
+
   const handleClear = (car) => {
-    console.log("Clear rental car:", car);
+    clearCar(car.id);
     handleCloseMenu();
   };
 
   const handleAddMostRented = (car) => {
-    console.log("Add to Most Rented:", car);
+    markMostRented(car.id);
     handleCloseMenu();
   };
 
   const handleAddNotAvailable = (car) => {
-    console.log("Add to Not Available Now:", car);
+    markNotAvailable(car.id);
     handleCloseMenu();
   };
 
@@ -77,7 +81,7 @@ function AdminRentalPage() {
       <div className="admin-grid">
         <AddCarCard onClick={handleAddCar} />
 
-        {rentalCars.map((car) => (
+        {filteredCars.map((car) => (
           <AdminCarCard
             key={car.id}
             car={car}
@@ -85,6 +89,7 @@ function AdminRentalPage() {
             onToggleMenu={() => handleToggleMenu(car.id)}
             onCloseMenu={handleCloseMenu}
             onEdit={() => handleEdit(car)}
+            onViewDetail={() => handleViewDetail(car)}
             onClear={() => handleClear(car)}
             thirdActionLabel="Add to Most Rented"
             thirdActionHandler={() => handleAddMostRented(car)}

@@ -1,24 +1,24 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
 import AddCarCard from "../components/AddCarCard";
 import AdminCarCard from "../components/AdminCarCard";
 import AdminFilterBar from "../components/AdminFilterBar";
 import AdminTabs from "../components/AdminTabs";
-import cars from "../data/mockAdminCars";
+import useAdminCars from "../hooks/useAdminCars";
 
 function AdminBuyPage() {
-  const [activeCardId, setActiveCardId] = useState(null);
-  const [activeTab, setActiveTab] = useState("all");
+  const navigate = useNavigate();
 
-  let buyCars = cars.filter((car) => car.type === "buy");
-
-  if (activeTab === "new-arrivals") {
-    buyCars = buyCars.filter((car) => car.status?.isNewArrival);
-  }
-
-  if (activeTab === "best-seller") {
-    buyCars = buyCars.filter((car) => car.status?.isBestSeller);
-  }
+  const {
+    filteredCars,
+    activeCardId,
+    setActiveCardId,
+    activeTab,
+    setActiveTab,
+    clearCar,
+    markNewArrival,
+    markBestSeller,
+  } = useAdminCars("buy");
 
   const tabs = [
     { label: "All", value: "all" },
@@ -27,7 +27,7 @@ function AdminBuyPage() {
   ];
 
   const handleAddCar = () => {
-    console.log("Add new buy car");
+    navigate("/admin/buy/new");
   };
 
   const handleToggleMenu = (carId) => {
@@ -39,22 +39,26 @@ function AdminBuyPage() {
   };
 
   const handleEdit = (car) => {
-    console.log("Edit buy car:", car);
+    navigate(`/admin/buy/${car.id}`);
     handleCloseMenu();
   };
 
+  const handleViewDetail = (car) => {
+    navigate(`/admin/buy/${car.id}`);
+  };
+
   const handleClear = (car) => {
-    console.log("Clear buy car:", car);
+    clearCar(car.id);
     handleCloseMenu();
   };
 
   const handleAddNewArrivals = (car) => {
-    console.log("Add to New Arrivals:", car);
+    markNewArrival(car.id);
     handleCloseMenu();
   };
 
   const handleAddBestSeller = (car) => {
-    console.log("Add to Best Seller:", car);
+    markBestSeller(car.id);
     handleCloseMenu();
   };
 
@@ -77,7 +81,7 @@ function AdminBuyPage() {
       <div className="admin-grid">
         <AddCarCard onClick={handleAddCar} />
 
-        {buyCars.map((car) => (
+        {filteredCars.map((car) => (
           <AdminCarCard
             key={car.id}
             car={car}
@@ -85,6 +89,7 @@ function AdminBuyPage() {
             onToggleMenu={() => handleToggleMenu(car.id)}
             onCloseMenu={handleCloseMenu}
             onEdit={() => handleEdit(car)}
+            onViewDetail={() => handleViewDetail(car)}
             onClear={() => handleClear(car)}
             thirdActionLabel="Add to New Arrivals"
             thirdActionHandler={() => handleAddNewArrivals(car)}

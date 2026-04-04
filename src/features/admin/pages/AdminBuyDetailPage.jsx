@@ -1,123 +1,88 @@
-import { useParams } from "react-router-dom";
-import "../styles/admin.css";
-import mockAdminCars from "../data/mockAdminCars";
+import { useState } from "react";
+import AdminImageUploader from "../components/AdminImageUploader";
+import AdminDetailHero from "../components/AdminDetailHero";
 import SpecGrid from "../components/SpecGrid";
+import InfoRows from "../components/InfoRows";
 import DocumentSection from "../components/DocumentSection";
 import ConfirmBar from "../components/ConfirmBar";
 
 function AdminBuyDetailPage() {
-  const { id } = useParams();
-  const car = mockAdminCars.find((item) => item.id === id);
+  const [form, setForm] = useState({
+    name: "",
+    price: "",
+    image: null,
+    specs: {
+      fuel: "",
+      transmission: "",
+      color: "",
+      engine: "",
+      drive: "",
+      seats: "",
+    },
+    info: {
+      mileage: "",
+      model: "",
+      documents: "",
+    },
+    documentLines: ["", "", "", "", ""],
+  });
 
-  if (!car) return <div>Car not found</div>;
+  const updateField = (field, value) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
 
-  const specs = [
-    { icon: "⛽", label: "Fuel", value: car.specs.fuel },
-    { icon: "📅", label: "Year", value: car.year },
-    { icon: "🎨", label: "Color", value: car.specs.color },
-    { icon: "🏷", label: "Plate", value: car.specs.plate },
-    { icon: "⚙", label: "MPG", value: car.specs.mpg },
-    { icon: "👥", label: "Seats", value: `${car.specs.seats} Seats` },
-  ];
+  const updateSpecs = (key, value) => {
+    setForm((prev) => ({
+      ...prev,
+      specs: { ...prev.specs, [key]: value },
+    }));
+  };
+
+  const updateInfo = (key, value) => {
+    setForm((prev) => ({
+      ...prev,
+      info: { ...prev.info, [key]: value },
+    }));
+  };
+
+  const handleSubmit = () => {
+    console.log("SAVE BUY CAR", form);
+  };
 
   return (
-    <div className="admin-page">
-      <div className="admin-mobile-shell">
-        <div className="admin-header-bar">
-          <div className="admin-brand">
-            <div className="admin-brand__title">
-              BKK Kaung Pyae
-              <br />
-              Auto
-            </div>
-            <div className="admin-top-icons">
-              <span>EN</span>
-              <span>↔</span>
-              <span>☰</span>
-            </div>
-          </div>
-        </div>
+    <div className="admin-detail-page">
 
-        <div className="admin-detail-image">
-          <img src={car.image || car.images?.[0]} alt={car.name} />
-          <button className="admin-detail-edit-btn">✎</button>
-        </div>
+      {/* IMAGE */}
+      <AdminImageUploader
+        image={form.image}
+        onChange={(img) => updateField("image", img)}
+      />
 
-        <div className="admin-detail-dots">
-          <span className="admin-detail-dot admin-detail-dot--active" />
-          <span className="admin-detail-dot" />
-          <span className="admin-detail-dot" />
-          <span className="admin-detail-dot" />
-          <span className="admin-detail-dot" />
-          <span className="admin-detail-dot" />
-        </div>
+      {/* TITLE + PRICE */}
+      <AdminDetailHero
+        name={form.name}
+        price={form.price}
+        onChange={updateField}
+      />
 
-        <div className="admin-info-group">
-          <div className="admin-info-box">
-            <div className="admin-info-box__label">Name</div>
-            <div className="admin-info-box__value">{car.year} {car.name} Type R</div>
-          </div>
+      {/* SPECS */}
+      <SpecGrid specs={form.specs} onChange={updateSpecs} />
 
-          <div className="admin-info-box">
-            <div className="admin-info-box__label">Price</div>
-            <div className="admin-price-box">
-              <div className="admin-info-box__value">
-                {car.buy?.price?.toLocaleString()}
-              </div>
-              <div className="admin-price-unit">{car.buy?.currency}</div>
-            </div>
-          </div>
-        </div>
+      {/* INFO ROWS */}
+      <InfoRows info={form.info} onChange={updateInfo} />
 
-        <SpecGrid specs={specs} />
+      {/* DOCUMENT */}
+      <DocumentSection
+        lines={form.documentLines}
+        onChange={(index, value) => {
+          const newLines = [...form.documentLines];
+          newLines[index] = value;
+          updateField("documentLines", newLines);
+        }}
+      />
 
-        <div className="admin-line-row">
-          <div className="admin-line-row__label">Mileage</div>
-          <div className="admin-line-row__value">{car.mileage?.toLocaleString()} km</div>
-        </div>
-
-        <div className="admin-line-row">
-          <div className="admin-line-row__label">Model</div>
-          <div className="admin-line-row__value">{car.year}</div>
-        </div>
-
-        <div className="admin-line-row">
-          <div className="admin-line-row__label">Documents</div>
-          <div className="admin-line-row__value">{car.buy?.documents}</div>
-        </div>
-
-        <DocumentSection title="Car Document Information" rows={8} />
-
-        <ConfirmBar label="Confirm" onClick={() => console.log("Confirm buy detail")} />
-
-        <div className="admin-footer">
-          <h3 className="admin-footer__title">BKK Kaung Pyae</h3>
-          <div className="admin-footer__sub">
-            Monday - Sunday <span>9am - 5pm</span>
-          </div>
-
-          <div className="admin-footer__section">
-            <div className="admin-footer__label">Contact Us</div>
-            <div className="admin-footer__row">
-              <div className="admin-footer__left">
-                <div>📞 +95 9 XXX XXX</div>
-                <div>✉ support@example.com</div>
-              </div>
-              <div className="admin-footer__right">
-                <span>🟢</span>
-                <span>📍</span>
-                <span>🔵</span>
-                <span>🟣</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="admin-footer__bottom">
-            <span>BKK Kaung Pyae Co.Ltd</span>
-            <span>Support ©</span>
-          </div>
-        </div>
-      </div>
+      {/* BUTTON */}
+      <ConfirmBar onClick={handleSubmit} label="Save Buy Car" />
     </div>
   );
 }

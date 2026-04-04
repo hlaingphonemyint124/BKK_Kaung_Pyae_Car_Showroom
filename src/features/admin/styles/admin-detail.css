@@ -45,3 +45,25 @@
   text-align: center;
   cursor: pointer;
 }
+
+.admin-detail-form {
+  display: grid;
+  gap: 12px;
+  max-width: 700px;
+}
+
+.admin-detail-form input,
+.admin-detail-form button {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.admin-detail-form button {
+  background: #ef2b2d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}

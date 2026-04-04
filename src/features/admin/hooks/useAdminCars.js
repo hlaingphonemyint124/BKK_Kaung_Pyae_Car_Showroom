@@ -4,11 +4,18 @@ import mockAdminCars from "../data/mockAdminCars";
 function useAdminCars(type) {
   const [cars, setCars] = useState(mockAdminCars);
   const [activeTab, setActiveTab] = useState("all");
-  const [selectedCar, setSelectedCar] = useState(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeCardId, setActiveCardId] = useState(null);
 
   const filteredCars = useMemo(() => {
     const typedCars = cars.filter((car) => car.type === type);
+
+    if (activeTab === "new-arrivals") {
+      return typedCars.filter((car) => car.status?.isNewArrival);
+    }
+
+    if (activeTab === "best-seller") {
+      return typedCars.filter((car) => car.status?.isBestSeller);
+    }
 
     if (activeTab === "most-rented") {
       return typedCars.filter((car) => car.status?.isMostRented);
@@ -21,22 +28,12 @@ function useAdminCars(type) {
     return typedCars;
   }, [cars, type, activeTab]);
 
-  const openMenu = (car) => {
-    setSelectedCar(car);
-    setIsMenuOpen(true);
-  };
-
-  const closeMenu = () => {
-    setSelectedCar(null);
-    setIsMenuOpen(false);
-  };
-
   const clearCar = (id) => {
     setCars((prev) => prev.filter((car) => car.id !== id));
-    closeMenu();
+    setActiveCardId(null);
   };
 
-  const toggleMostRented = (id) => {
+  const markNewArrival = (id) => {
     setCars((prev) =>
       prev.map((car) =>
         car.id === id
@@ -44,16 +41,16 @@ function useAdminCars(type) {
               ...car,
               status: {
                 ...car.status,
-                isMostRented: !car.status?.isMostRented,
+                isNewArrival: true,
               },
             }
           : car
       )
     );
-    closeMenu();
+    setActiveCardId(null);
   };
 
-  const toggleAvailable = (id) => {
+  const markBestSeller = (id) => {
     setCars((prev) =>
       prev.map((car) =>
         car.id === id
@@ -61,13 +58,47 @@ function useAdminCars(type) {
               ...car,
               status: {
                 ...car.status,
-                isAvailable: !car.status?.isAvailable,
+                isBestSeller: true,
               },
             }
           : car
       )
     );
-    closeMenu();
+    setActiveCardId(null);
+  };
+
+  const markMostRented = (id) => {
+    setCars((prev) =>
+      prev.map((car) =>
+        car.id === id
+          ? {
+              ...car,
+              status: {
+                ...car.status,
+                isMostRented: true,
+              },
+            }
+          : car
+      )
+    );
+    setActiveCardId(null);
+  };
+
+  const markNotAvailable = (id) => {
+    setCars((prev) =>
+      prev.map((car) =>
+        car.id === id
+          ? {
+              ...car,
+              status: {
+                ...car.status,
+                isAvailable: false,
+              },
+            }
+          : car
+      )
+    );
+    setActiveCardId(null);
   };
 
   return {
@@ -75,13 +106,13 @@ function useAdminCars(type) {
     filteredCars,
     activeTab,
     setActiveTab,
-    selectedCar,
-    isMenuOpen,
-    openMenu,
-    closeMenu,
+    activeCardId,
+    setActiveCardId,
     clearCar,
-    toggleMostRented,
-    toggleAvailable,
+    markNewArrival,
+    markBestSeller,
+    markMostRented,
+    markNotAvailable,
   };
 }
 
