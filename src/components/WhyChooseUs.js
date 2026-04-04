@@ -18,7 +18,7 @@ export default function WhyChooseUs() {
         </div>
 
         <div className="whyItem">
-          <img src="/images/WhyChooseUs/WCU3.jpg" alt="" />
+          <img src="/images/WhyChooseUs/WCU3.webp" alt="" />
           <div className="whyOverlay right">
             <h4>Transparent Pricing</h4>
             <p>Clear price with no hidden fees — what you see is what you pay.</p>
@@ -26,7 +26,7 @@ export default function WhyChooseUs() {
         </div>
 
         <div className="whyItem">
-          <img src="/images/WhyChooseUs/WCU2.jpg" alt="" />
+          <img src="/images/WhyChooseUs/WCU2.webp" alt="" />
           <div className="whyOverlay left">
             <h4>Fast & Easy Booking</h4>
             <p>Rent in minutes with flexible rental options and quick support.</p>

@@ -1,119 +1,139 @@
 /* ── Fonts ─────────────────────────────────────────────────────────────────── */
 /* Add to index.html: Cormorant Garamond + Outfit from Google Fonts */
 
-/* ── Light Mode Variables (default) ───────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════════
+   LIGHT MODE — Liquid Glass / White
+══════════════════════════════════════════════════════════════════════════════ */
 :root {
-  --gold:         #ff4444;
-  --gold-dim:     rgba(255,42,42,0.5);
-  --gold-glow:    rgba(255, 42, 42, 0.10);
-  --bg:           #0d0d0d;
-  --bg-card:      #161616;
-  --bg-card-2:    #1a1a1a;
-  --border:       rgba(255,255,255,0.06);
-  --border-soft:  rgba(255,255,255,0.05);
-  --text-primary: #f0ece4;
-  --text-muted:   #7a7672;
-  --font-display: 'Cormorant Garamond', serif;
-  --font-body:    'Outfit', sans-serif;
-  --shadow-card:  0 4px 24px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.04) inset;
-  --shadow-hover: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(255,42,42,0.08), 0 1px 0 rgba(255,255,255,0.06) inset;
-  --rule-color:   rgba(255,255,255,0.07);
-  --eyebrow-color:#ff4444;
-  --price-color:  #ff4444;
-  --noise-opacity: 0.02;
-  --ambient-1:    rgba(232,40,30,0.10);
-  --ambient-2:    rgba(232,40,30,0.05);
-  --ambient-3:    rgba(232,40,30,0.03);
-  --spotlight-bg: rgba(255,42,42,0.06);
-  --img-glow:     rgba(255,42,42,0.15);
-  --btn-fill:     linear-gradient(135deg, #ff2a2a, #c0392b);
-  --btn-shadow:   rgba(255,42,42,0.4);
-  --corner-color: #ff4444;
-  --hover-border: rgba(255,42,42,0.3);
+  --bg:            #ffffff;
+  --bg-fade:       #ffffff;
+  --bg-card:       rgba(255, 255, 255, 0.55);
+  --bg-card-hover: rgba(255, 255, 255, 0.80);
+  --border-soft:   rgba(255, 255, 255, 0.70);
+  --border-hover:  rgba(255, 42, 42, 0.35);
+  --text-primary:  #0f0f10;
+  --text-muted:    #8a8a9a;
+  --price-color:   #e8281e;
+  --eyebrow-color: #e8281e;
+  --accent:        #e8281e;
+  --accent-dim:    #c0392b;
+  --accent-glow:   rgba(232, 40, 30, 0.18);
+  --rule-color:    rgba(0, 0, 0, 0.07);
+  --noise-opacity: 0;
+  --shadow-card:
+    0 8px 32px rgba(0,0,0,0.08),
+    0 2px 8px rgba(0,0,0,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  --shadow-hover:
+    0 24px 60px rgba(0,0,0,0.13),
+    0 8px 24px rgba(232,40,30,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.95);
+  --font-display:  'Cormorant Garamond', serif;
+  --font-body:     'Outfit', sans-serif;
 }
 
-/* ── Dark Mode Variables ───────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════════
+   DARK MODE — Red & Black
+══════════════════════════════════════════════════════════════════════════════ */
 body.dark {
-  --gold:         #c8a96e;
-  --gold-dim:     #9a7d4a;
-  --gold-glow:    rgba(200, 169, 110, 0.18);
-  --bg:           #0a0a0c;
-  --bg-card:      #111114;
-  --bg-card-2:    #16161a;
-  --border:       rgba(200, 169, 110, 0.12);
-  --border-soft:  rgba(255,255,255,0.05);
-  --text-primary: #f0ece4;
-  --text-muted:   #7a7672;
-  --shadow-card:  0 4px 24px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.04) inset;
-  --shadow-hover: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(200,169,110,0.08), 0 1px 0 rgba(255,255,255,0.06) inset;
-  --rule-color:   rgba(200,169,110,0.12);
-  --eyebrow-color:#c8a96e;
-  --price-color:  #c8a96e;
-  --noise-opacity: 0.025;
-  --ambient-1:    rgba(192,57,43,0.12);
-  --ambient-2:    rgba(200,169,110,0.09);
-  --ambient-3:    rgba(200,169,110,0.06);
-  --spotlight-bg: rgba(200,169,110,0.07);
-  --img-glow:     rgba(200,169,110,0.15);
-  --btn-fill:     linear-gradient(135deg, #9a7d4a, #c8a96e);
-  --btn-shadow:   rgba(200,169,110,0.25);
-  --corner-color: #c8a96e;
-  --hover-border: rgba(200,169,110,0.25);
+  --bg:            #0a0a0a;
+  --bg-fade:       #0a0a0a;
+  --bg-card:       #111111;
+  --bg-card-hover: #161616;
+  --border-soft:   rgba(255, 255, 255, 0.04);
+  --border-hover:  rgba(220, 38, 38, 0.45);
+  --text-primary:  #f0ece4;
+  --text-muted:    #6b6b74;
+  --price-color:   #ff4444;
+  --eyebrow-color: #ff4444;
+  --accent:        #ff2a2a;
+  --accent-dim:    rgba(255, 42, 42, 0.45);
+  --accent-glow:   rgba(255, 42, 42, 0.20);
+  --rule-color:    rgba(255, 42, 42, 0.10);
+  --noise-opacity: 0.022;
+  --shadow-card:
+    0 4px 24px rgba(0,0,0,0.5),
+    0 1px 0 rgba(255,255,255,0.03) inset;
+  --shadow-hover:
+    0 30px 70px rgba(0,0,0,0.6),
+    0 0 50px rgba(255,42,42,0.12),
+    0 1px 0 rgba(255,255,255,0.04) inset;
+  --font-display:  'Cormorant Garamond', serif;
+  --font-body:     'Outfit', sans-serif;
 }
 
-/* ── Section ───────────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════════
+   SECTION
+══════════════════════════════════════════════════════════════════════════════ */
 .deals {
   position: relative;
-  padding: 120px 20px 100px;
+  padding: 120px 20px 140px;
   background: var(--bg);
   text-align: center;
   overflow: hidden;
   font-family: var(--font-body);
-  transition: background 0.3s ease;
+  transition: background 0.4s ease;
 }
 
-/* Black fade bottom edge into next section */
+/* ── Light mode background — clean white with subtle red tint top ── */
+.deals::before {
+  content: '';
+  position: absolute;
+  top: -300px; left: 50%;
+  transform: translateX(-50%);
+  width: 900px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,40,30,0.05), transparent 65%);
+  pointer-events: none;
+  filter: blur(60px);
+  transition: opacity 0.4s ease;
+}
+
+/* ── Dark mode background — deep red-black radial ── */
+body.dark .deals::before {
+  background: radial-gradient(circle, rgba(200,20,20,0.18), transparent 65%);
+}
+
+/* Bottom fade into next section */
 .deals::after {
   content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: linear-gradient(to bottom, transparent, #0d0d0d);
+  bottom: 0; left: 0; right: 0;
+  height: 220px;
+  background: linear-gradient(to bottom, transparent, var(--bg-fade));
   pointer-events: none;
   z-index: 2;
 }
 
-body.dark .deals::after {
-  background: linear-gradient(to bottom, transparent, #0a0a0c);
-}
-
-/* Ambient glows */
+/* Ambient side glows — dark mode only */
 .deals-ambient {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(120px);
+  filter: blur(130px);
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
+body.dark .deals-ambient { opacity: 1; }
+
 .deals-ambient--1 {
-  width: 600px; height: 600px;
-  top: -200px; left: 50%;
+  width: 500px; height: 500px;
+  top: -150px; left: 50%;
   transform: translateX(-50%);
-  background: radial-gradient(circle, var(--ambient-1), transparent 70%);
+  background: radial-gradient(circle, rgba(200,20,20,0.20), transparent 70%);
 }
 .deals-ambient--2 {
-  width: 400px; height: 400px;
-  bottom: -100px; left: -100px;
-  background: radial-gradient(circle, var(--ambient-2), transparent 70%);
+  width: 350px; height: 350px;
+  bottom: -80px; left: -80px;
+  background: radial-gradient(circle, rgba(180,10,10,0.12), transparent 70%);
 }
 .deals-ambient--3 {
-  width: 300px; height: 300px;
-  top: 30%; right: -80px;
-  background: radial-gradient(circle, var(--ambient-3), transparent 70%);
+  width: 280px; height: 280px;
+  top: 40%; right: -60px;
+  background: radial-gradient(circle, rgba(200,20,20,0.08), transparent 70%);
 }
 
-/* Noise */
+/* Noise grain — dark mode only */
 .deals-noise {
   position: absolute;
   inset: 0;
@@ -123,7 +143,9 @@ body.dark .deals::after {
   background-size: 200px;
 }
 
-/* ── Header ────────────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════════════════════════════════════ */
 .deals-header {
   position: relative;
   z-index: 1;
@@ -137,7 +159,7 @@ body.dark .deals::after {
   font-family: var(--font-body);
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--eyebrow-color);
   margin-bottom: 18px;
@@ -169,7 +191,9 @@ body.dark .deals::after {
   margin: 0;
 }
 
-/* ── Tabs ──────────────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════════
+   TABS
+══════════════════════════════════════════════════════════════════════════════ */
 .deal-tabs {
   display: flex;
   justify-content: center;
@@ -183,8 +207,6 @@ body.dark .deals::after {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: transparent;
-  border: 1px solid var(--border-soft);
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 500;
@@ -196,37 +218,45 @@ body.dark .deals::after {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+
+  /* Light: glass pill */
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(0,0,0,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
-.deal-tabs button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--gold-glow);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+body.dark .deal-tabs button {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.05);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
 }
 
-.deal-tabs button:hover { border-color: var(--gold); color: var(--gold); }
-.deal-tabs button:hover::before { opacity: 1; }
+.deal-tabs button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 
-/* Default active (light/dark-bg mode) — red glow */
+/* Active — red gradient both modes */
 .deal-tabs button.active {
   background: linear-gradient(135deg, #ff2a2a, #c0392b);
   color: white;
   border-color: transparent;
   box-shadow:
-    0 0 20px rgba(255,42,42,0.5),
-    0 0 40px rgba(255,42,42,0.25),
-    0 8px 24px rgba(232,40,30,0.3);
+    0 0 20px rgba(255,42,42,0.45),
+    0 0 40px rgba(255,42,42,0.20),
+    0 6px 20px rgba(200,30,30,0.30);
 }
 
-/* Dark mode (gold) active override */
 body.dark .deal-tabs button.active {
-  background: rgba(200,169,110,0.08);
-  color: var(--gold);
-  border-color: var(--gold);
-  box-shadow: 0 0 24px rgba(200,169,110,0.12), inset 0 0 20px rgba(200,169,110,0.04);
+  background: linear-gradient(135deg, #cc1a1a, #8b0000);
+  box-shadow:
+    0 0 24px rgba(255,42,42,0.55),
+    0 0 50px rgba(255,42,42,0.25),
+    0 8px 24px rgba(0,0,0,0.4);
 }
 
 .tab-dot {
@@ -236,7 +266,9 @@ body.dark .deal-tabs button.active {
   opacity: 0.6;
 }
 
-/* ── Slider ────────────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════════
+   SLIDER
+══════════════════════════════════════════════════════════════════════════════ */
 .slider {
   overflow-x: auto;
   scroll-behavior: smooth;
@@ -248,56 +280,108 @@ body.dark .deal-tabs button.active {
 
 .slide-track {
   display: flex;
-  gap: 28px;
+  gap: 24px;
   width: max-content;
   padding: 10px 40px;
 }
 
-/* ── Card ──────────────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════════
+   CARD — LIQUID GLASS (light) / DARK (dark)
+══════════════════════════════════════════════════════════════════════════════ */
 .car-card { width: 300px; flex-shrink: 0; }
 
 .card-inner {
   position: relative;
-  background: linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-2) 100%);
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 28px 24px 24px;
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow-card);
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   overflow: hidden;
+
+  /* ── Liquid Glass (light mode) ── */
+  background: var(--bg-card);
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border: 1px solid rgba(255,255,255,0.65);
+  box-shadow: var(--shadow-card);
+}
+
+/* Inner glass shine line */
+.card-inner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 12px; right: 12px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  pointer-events: none;
+  border-radius: 100%;
+}
+
+/* Dark mode card */
+body.dark .card-inner {
+  background: linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-hover) 100%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-card);
+}
+
+body.dark .card-inner::before {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
 }
 
 .card-inner:hover {
-  border-color: var(--hover-border);
+  border-color: var(--border-hover);
   box-shadow: var(--shadow-hover);
   transform: translateY(-10px);
+}
+
+/* Light hover: stronger glass */
+.card-inner:hover {
+  background: var(--bg-card-hover);
+}
+
+body.dark .card-inner:hover {
+  background: linear-gradient(145deg, #161616, #1c1c1c);
 }
 
 /* Corner accents */
 .card-corner {
   position: absolute;
-  width: 18px; height: 18px;
+  width: 16px; height: 16px;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.4s ease;
 }
 .card-inner:hover .card-corner { opacity: 1; }
-.card-corner--tl { top: 12px; left: 12px; border-top: 1px solid var(--corner-color); border-left: 1px solid var(--corner-color); }
-.card-corner--br { bottom: 12px; right: 12px; border-bottom: 1px solid var(--corner-color); border-right: 1px solid var(--corner-color); }
+.card-corner--tl {
+  top: 12px; left: 12px;
+  border-top: 1px solid var(--accent);
+  border-left: 1px solid var(--accent);
+}
+.card-corner--br {
+  bottom: 12px; right: 12px;
+  border-bottom: 1px solid var(--accent);
+  border-right: 1px solid var(--accent);
+}
 
-/* Spotlight */
+/* Spotlight glow */
 .spotlight {
   position: absolute;
   top: -80%; left: -50%;
   width: 200%; height: 200%;
-  background: radial-gradient(circle, var(--spotlight-bg), transparent 60%);
+  background: radial-gradient(circle, rgba(232,40,30,0.06), transparent 60%);
   opacity: 0;
   transition: opacity 0.6s ease;
   pointer-events: none;
 }
+body.dark .spotlight {
+  background: radial-gradient(circle, rgba(255,30,30,0.09), transparent 60%);
+}
 .card-inner:hover .spotlight { opacity: 1; }
 
-/* Image */
+/* ══════════════════════════════════════════════════════════════════════════════
+   CARD IMAGE
+══════════════════════════════════════════════════════════════════════════════ */
 .card-img-wrap {
   position: relative;
   width: 100%; height: 165px;
@@ -312,38 +396,52 @@ body.dark .deal-tabs button.active {
   width: 80%; height: 40%;
   bottom: -10px; left: 50%;
   transform: translateX(-50%);
-  background: radial-gradient(ellipse, var(--img-glow), transparent 70%);
+  background: radial-gradient(ellipse, rgba(232,40,30,0.15), transparent 70%);
   filter: blur(18px);
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
 }
+body.dark .card-img-glow {
+  background: radial-gradient(ellipse, rgba(255,30,30,0.20), transparent 70%);
+}
 .card-inner:hover .card-img-glow { opacity: 1; }
 
+/* Light mode — normal image */
 .card-img-wrap img {
   width: 100%; height: 100%;
   object-fit: contain;
-  mix-blend-mode: luminosity;
-  filter: brightness(0.95) contrast(1.05);
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease, mix-blend-mode 0.4s ease;
+  mix-blend-mode: normal;
+  filter: none;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
   position: relative;
   z-index: 1;
 }
 
 .card-inner:hover .card-img-wrap img {
   transform: scale(1.1) translateY(-6px);
-  mix-blend-mode: normal;
-  filter: brightness(1.05) contrast(1.05) drop-shadow(0 16px 24px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 12px 20px rgba(0,0,0,0.10));
 }
 
-/* Rule */
+/* Dark mode — blend white backgrounds out */
+body.dark .card-img-wrap img {
+  mix-blend-mode: luminosity;
+  filter: brightness(0.92) contrast(1.05);
+}
+body.dark .card-inner:hover .card-img-wrap img {
+  mix-blend-mode: normal;
+  filter: brightness(1.05) contrast(1.05) drop-shadow(0 16px 28px rgba(0,0,0,0.55));
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   CARD INFO
+══════════════════════════════════════════════════════════════════════════════ */
 .card-rule {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--rule-color), transparent);
   margin-bottom: 18px;
 }
 
-/* Info */
 .car-info h3 {
   font-family: var(--font-display);
   font-size: 21px;
@@ -362,18 +460,17 @@ body.dark .deal-tabs button.active {
   margin: 0 0 20px;
 }
 
-/* ── Shop Now Button ───────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════════
+   SHOP NOW BUTTON
+══════════════════════════════════════════════════════════════════════════════ */
 .rent-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   width: 100%;
-  background: transparent;
-  color: #ff4444;
-  border: 1px solid rgba(255,42,42,0.3);
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 500;
@@ -383,20 +480,30 @@ body.dark .deal-tabs button.active {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 10px rgba(255,42,42,0.1), inset 0 0 10px rgba(255,42,42,0.03);
+
+  /* Light: glass button */
+  background: rgba(255,255,255,0.45);
+  border: 1px solid rgba(232,40,30,0.25);
+  color: #e8281e;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
 body.dark .rent-btn {
-  color: #ff2a2a;
-  border-color: #ff2a2a;
-  box-shadow: none;
+  background: transparent;
+  border: 1px solid rgba(255,42,42,0.25);
+  color: #ff4444;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 0 10px rgba(255,42,42,0.08), inset 0 0 10px rgba(255,42,42,0.03);
 }
 
 .rent-btn::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--btn-fill);
+  background: linear-gradient(135deg, #ff2a2a, #c0392b);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -405,15 +512,16 @@ body.dark .rent-btn {
   border-color: #ff2a2a;
   color: white;
   box-shadow:
-    0 0 20px rgba(255,42,42,0.45),
-    0 0 40px rgba(255,42,42,0.2),
-    0 8px 24px rgba(0,0,0,0.3);
+    0 0 20px rgba(255,42,42,0.40),
+    0 0 40px rgba(255,42,42,0.18),
+    0 8px 24px rgba(0,0,0,0.15);
 }
 
 body.dark .rent-btn:hover {
-  border-color: #ff2a2a;
-  color: white;
-  box-shadow: 0 8px 24px var(--btn-shadow);
+  box-shadow:
+    0 0 24px rgba(255,42,42,0.50),
+    0 0 48px rgba(255,42,42,0.22),
+    0 8px 24px rgba(0,0,0,0.4);
 }
 
 .rent-btn:hover::before { opacity: 1; }
@@ -422,14 +530,15 @@ body.dark .rent-btn:hover {
   position: relative;
   z-index: 1;
 }
-
 .btn-arrow {
   font-size: 16px;
   transition: transform 0.3s ease;
 }
 .rent-btn:hover .btn-arrow { transform: translateX(4px); }
 
-/* ── CTA Button ────────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════════
+   VIEW FULL COLLECTION BUTTON
+══════════════════════════════════════════════════════════════════════════════ */
 .deals-cta {
   margin-top: 60px;
   position: relative;
@@ -437,9 +546,6 @@ body.dark .rent-btn:hover {
 }
 
 .view-shop {
-  background: transparent;
-  color: #ff4444;
-  border: 1px solid rgba(255,42,42,0.5);
   padding: 16px 48px;
   border-radius: 4px;
   font-family: var(--font-body);
@@ -451,22 +557,34 @@ body.dark .rent-btn:hover {
   transition: all 0.35s ease;
   position: relative;
   overflow: hidden;
+
+  /* Light: glass CTA */
+  background: rgba(255,255,255,0.50);
+  border: 1px solid rgba(232,40,30,0.35);
+  color: #e8281e;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   box-shadow:
-    0 0 16px rgba(255,42,42,0.2),
-    inset 0 0 16px rgba(255,42,42,0.05);
+    0 4px 16px rgba(0,0,0,0.07),
+    inset 0 1px 0 rgba(255,255,255,0.85);
 }
 
 body.dark .view-shop {
-  color: #ff2a2a;
-  border-color: #ff2a2a;
-  box-shadow: none;
+  background: transparent;
+  border: 1px solid rgba(255,42,42,0.40);
+  color: #ff4444;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow:
+    0 0 18px rgba(255,42,42,0.18),
+    inset 0 0 18px rgba(255,42,42,0.04);
 }
 
 .view-shop::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--btn-fill);
+  background: linear-gradient(135deg, #ff2a2a, #c0392b);
   opacity: 0;
   transition: opacity 0.35s ease;
 }
@@ -476,32 +594,33 @@ body.dark .view-shop {
   color: white;
   letter-spacing: 0.2em;
   box-shadow:
-    0 0 30px rgba(255,42,42,0.55),
-    0 0 60px rgba(255,42,42,0.25),
-    0 8px 32px rgba(0,0,0,0.4);
+    0 0 28px rgba(255,42,42,0.40),
+    0 0 55px rgba(255,42,42,0.18),
+    0 8px 28px rgba(0,0,0,0.12);
 }
 
 body.dark .view-shop:hover {
-  border-color: #ff2a2a;
-  color:#ff2a2a;
-  box-shadow: 0 0 40px rgba(200,169,110,0.15), 0 8px 32px rgba(0,0,0,0.3);
+  box-shadow:
+    0 0 32px rgba(255,42,42,0.55),
+    0 0 64px rgba(255,42,42,0.25),
+    0 8px 32px rgba(0,0,0,0.5);
 }
 
 .view-shop:hover::before { opacity: 1; }
 
-body.dark .view-shop:hover::before { opacity: 0; }
-
-/* ── Responsive ────────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 1024px) { .car-card { width: 265px; } }
 
 @media (max-width: 768px) {
-  .deals { padding: 80px 16px 72px; }
+  .deals { padding: 80px 16px 120px; }
   .deals-title { font-size: 40px; }
-  .car-card { width: 230px; }
-  .card-img-wrap { height: 130px; }
+  .car-card { width: 240px; }
+  .card-img-wrap { height: 135px; }
 }
 
 @media (max-width: 480px) {
-  .car-card { width: 210px; }
+  .car-card { width: 215px; }
   .deal-tabs { flex-direction: column; align-items: center; }
 }
