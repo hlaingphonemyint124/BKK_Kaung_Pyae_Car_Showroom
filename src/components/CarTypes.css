@@ -1,192 +1,290 @@
-/* ============================= */
-/* SECTION */
-/* ============================= */
-
-.carTypes{
-padding:110px 20px;
-background:#ffffff;
-text-align:center;
+/* ==============================
+   BASE (Light Mode)
+   ============================== */
+.carTypes {
+  padding: 16px;
+  background: #f5f5f5;
+  transition: background 0.3s;
 }
 
-/* ============================= */
-/* HEADER */
-/* ============================= */
-
-.typesHeader{
-max-width:1000px;
-margin:0 auto 40px;
-
-display:flex;
-align-items:center;
-justify-content:space-between;
+.typesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
 }
 
-.typesHeader h3{
-font-size:32px;
-font-weight:600;
-color:#111827;
+.typesHeader h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  color: #111111;
 }
 
-/* view all */
-
-.viewAll{
-font-size:14px;
-color:#6b7280;
-cursor:pointer;
-transition:.25s;
+.viewAll {
+  font-size: 12px;
+  color: #e53e3e;
+  cursor: pointer;
+  font-weight: 500;
 }
 
-.viewAll:hover{
-color:#ef4444;
+.sliderContainer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-/* ============================= */
-/* SLIDER */
-/* ============================= */
-
-.typesWrapper{
-overflow:hidden;
-max-width:1000px;
-margin:auto;
+.sliderWrapper {
+  overflow: hidden;
+  flex: 1;
+  cursor: grab;
+  user-select: none;
 }
 
-.typesGrid{
-display:flex;
-gap:24px;
-overflow-x:auto;
-scroll-snap-type:x mandatory;
-scroll-behavior:smooth;
-padding-bottom:10px;
+.sliderWrapper:active {
+  cursor: grabbing;
 }
 
-/* hide scrollbar */
-.typesGrid::-webkit-scrollbar{
-display:none;
+.slides {
+  display: flex;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
 }
 
-/* 4 cards per view ALWAYS */
-.typeCard{
-min-width:calc((100% - 72px) / 4);
-scroll-snap-align:start;
-
-background:white;
-padding:30px 20px;
-border-radius:18px;
-
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-
-cursor:pointer;
-
-border:1px solid #eef0f4;
-transition:all .25s ease;
+.slide {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  min-width: 100%;
+  padding: 4px 2px;
 }
 
-/* hover */
+/* ---- Card — NO border ---- */
+.typeCard {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 6px 12px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid transparent;        /* invisible by default */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
 
-.typeCard:hover{
-transform:translateY(-6px);
-box-shadow:
-0 20px 40px rgba(0,0,0,0.08),
-0 6px 20px rgba(0,0,0,0.05);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
-/* ============================= */
-/* ICON */
-/* ============================= */
-
-.typeIcon{
-width:60px;
-height:60px;
-border-radius:14px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-background:#f3f4f6;
-font-size:28px;
-color:#ef4444;
-
-margin-bottom:12px;
-
-transition:.25s;
+.typeCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-.typeCard:hover .typeIcon{
-background:#ef4444;
-color:white;
-transform:scale(1.08);
+.typeCard:active {
+  transform: scale(0.95);
 }
 
-/* ============================= */
-/* TEXT */
-/* ============================= */
-
-.typeCard p{
-font-size:15px;
-font-weight:500;
-color:#374151;
+.typeCard--selected {
+  background: #fff5f5;
+  border-color: #e53e3e;
+  box-shadow: 0 4px 16px rgba(229, 62, 62, 0.2);
 }
 
-/* ============================= */
-/* DOTS */
-/* ============================= */
-
-.sliderDots{
-display:flex;
-justify-content:center;
-gap:8px;
-margin-top:12px;
+.typeCard--selected:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(229, 62, 62, 0.25);
 }
 
-.sliderDots span{
-width:8px;
-height:8px;
-border-radius:50%;
-background:#d1d5db;
+/* ---- Icon box ---- */
+.typeIcon {
+  font-size: 22px;
+  color: #e53e3e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  flex-shrink: 0;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.sliderDots span:first-child{
-background:#ef4444;
+.typeIcon--selected {
+  background: #e53e3e;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(229, 62, 62, 0.4);
 }
 
-/* ============================= */
-/* NOTE */
-/* ============================= */
-
-.typesNote{
-margin-top:10px;
-font-size:14px;
-color:#6b7280;
+/* ---- Label — force dark in light mode ---- */
+.typeLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: #111111 !important;     /* force visible on white card */
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  transition: color 0.2s ease;
 }
 
-/* ============================= */
-/* BUTTON */
-/* ============================= */
-
-.shopBtn{
-margin-top:18px;
-background:#ef4444;
-color:white;
-
-border:none;
-padding:12px 26px;
-
-border-radius:30px;
-
-font-size:14px;
-font-weight:500;
-
-cursor:pointer;
-
-transition:.25s;
+.typeCard--selected .typeLabel {
+  color: #e53e3e !important;
 }
 
-.shopBtn:hover{
-background:#dc2626;
-transform:translateY(-2px);
-box-shadow:0 12px 30px rgba(0,0,0,0.15);
+/* ---- Arrow buttons ---- */
+.arrowBtn {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  border: 1.5px solid #e0e0e0;
+  background: #ffffff;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 11px;
+  transition: background 0.2s, color 0.2s, opacity 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+
+.arrowBtn:hover:not(:disabled) {
+  background: #e53e3e;
+  color: #ffffff;
+  border-color: #e53e3e;
+}
+
+.arrowBtn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+/* ---- Dots ---- */
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #cccccc;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.dot.active {
+  background: #e53e3e;
+  transform: scale(1.2);
+}
+
+/* ---- Note & Button ---- */
+.typesNote {
+  font-size: 11px;
+  color: #888;
+  margin: 12px 0 8px;
+  text-align: center;
+}
+
+.shopBtn {
+  background: #e53e3e;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  letter-spacing: 0.3px;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.shopBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.shopBtn:active {
+  opacity: 0.85;
+  transform: scale(0.98);
+}
+/* ==============================
+   DARK MODE — class-based toggle
+   ============================== */
+body.dark .carTypes {
+  background: #000000 !important;
+}
+
+body.dark .typesHeader h3 {
+  color: #ffffff !important;
+}
+
+body.dark .typeCard {
+  background: #1c1c1c !important;
+  border-color: transparent !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark .typeCard:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark .typeCard--selected {
+  background: #1c1c1c !important;
+  border-color: #e53e3e !important;
+  box-shadow: 0 4px 16px rgba(229, 62, 62, 0.25) !important;
+}
+
+body.dark .typeIcon {
+  background: #2a2a2a !important;
+  color: #e53e3e !important;
+}
+
+body.dark .typeIcon--selected {
+  background: #e53e3e !important;
+  color: #ffffff !important;
+}
+
+body.dark .typeLabel {
+  color: #ffffff !important;
+}
+
+body.dark .typeCard--selected .typeLabel {
+  color: #ff6b6b !important;
+}
+
+body.dark .arrowBtn {
+  background: #1c1c1c !important;
+  color: #ffffff !important;
+  border-color: #333333 !important;
+}
+
+body.dark .arrowBtn:hover:not(:disabled) {
+  background: #e53e3e !important;
+  border-color: #e53e3e !important;
+  color: #ffffff !important;
+}
+
+body.dark .dot {
+  background: #444444 !important;
+}
+
+body.dark .dot.active {
+  background: #e53e3e !important;
+}
+
+body.dark .typesNote {
+  color: #888888 !important;
 }

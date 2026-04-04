@@ -1,210 +1,310 @@
-/* =========================
-   DEFAULT = DARK MODE
-========================= */
+/* ================================
+   WHY CHOOSE US
+================================ */
 
 .whySection {
-  padding: 80px 0;
-  background: linear-gradient(to bottom, #000000, #7a0000, #000000);
+  padding: 50px 0 40px;
+  background: linear-gradient(to bottom, #0a0a0a 0%, #6b0000 45%, #0a0a0a 100%);
 }
 
 .whyTitle {
   text-align: center;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 700;
-  color: #fff;
-  margin-bottom: 40px;
+  color: #ffffff;
+  margin: 0 0 28px 0;
+}
+
+/* ── GRID: stacked, no gap, full width ── */
+.whyGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── EACH STRIP: full-bleed, no radius ── */
+.whyItem {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.whyItem img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.7);
+  display: block;
+}
+
+/* ── TEXT OVERLAY BASE ── */
+.whyOverlay {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 58%;
+  padding: 0 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Items 1 & 3: text LEFT, gradient fades right */
+.left {
+  left: 0;
+  right: auto;
+  text-align: left;
+  align-items: flex-start;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.90) 0%,
+    rgba(0, 0, 0, 0.70) 50%,
+    rgba(0, 0, 0, 0.00) 100%
+  );
+}
+
+/* Item 2: text RIGHT, gradient fades left */
+.right {
+  right: 0;
+  left: auto;
+  text-align: right;
+  align-items: flex-end;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.90) 0%,
+    rgba(0, 0, 0, 0.70) 50%,
+    rgba(0, 0, 0, 0.00) 100%
+  );
+}
+
+.whyOverlay h4 {
+  color: #ff2222;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.whyOverlay p {
+  color: #e0e0e0;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 220px;
+}
+
+/* right-side paragraph aligns to edge */
+.right p {
+  text-align: right;
+}
+
+/* ── BUTTON ROW ── */
+.whyAction {
+  text-align: center;
+  padding: 32px 20px 16px;
+}
+
+.rentBtn {
+  background: linear-gradient(to right, #ff0000, #aa0000);
+  color: #ffffff;
+  padding: 13px 32px;
+  border-radius: 30px;
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(255, 0, 0, 0.55);
+  letter-spacing: 0.3px;
+}
+
+.whyFeatures {
+  margin-top: 12px;
+  color: #aaaaaa;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+}
+
+/* ================================
+   WHY CHOOSE US — DEFAULT = LIGHT
+================================ */
+
+.whySection {
+  padding: 50px 0 40px;
+  background: #f2f4f6;
+}
+
+.whyTitle {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111111;
+  margin: 0 0 28px 0;
 }
 
 .whyGrid {
   display: flex;
   flex-direction: column;
+  gap: 18px;
+  padding: 0 18px;
 }
 
 .whyItem {
   position: relative;
-  height: 280px;
+  width: 100%;
+  height: 200px;
   overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .whyItem img {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   object-fit: cover;
   filter: brightness(0.85);
+  display: block;
 }
 
-/* DARK OVERLAY */
 .whyOverlay {
   position: absolute;
   top: 0;
   height: 100%;
-  width: 55%;
-  padding: 40px;
+  width: 58%;
+  padding: 0 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 6px;
 }
 
 .left {
-  left: 0;
-  background: linear-gradient(to right, rgba(0,0,0,0.95), transparent);
+  left: 0; right: auto;
+  text-align: left;
+  align-items: flex-start;
+  background: linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.60) 55%, transparent 100%);
 }
 
 .right {
-  right: 0;
+  right: 0; left: auto;
   text-align: right;
   align-items: flex-end;
-  background: linear-gradient(to left, rgba(0,0,0,0.95), transparent);
+  background: linear-gradient(to left, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.60) 55%, transparent 100%);
 }
 
 .whyOverlay h4 {
-  color: #ff2d2d;
-  font-size: 20px;
+  color: #ff2222;
+  font-size: 16px;
   font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
 }
 
 .whyOverlay p {
-  color: #e0e0e0;
-  font-size: 14px;
-  max-width: 260px;
+  color: #e8e8e8;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 220px;
 }
 
-/* BUTTON */
+.right p { text-align: right; }
+
 .whyAction {
   text-align: center;
-  padding: 50px 20px 20px;
+  padding: 32px 20px 16px;
 }
 
 .rentBtn {
-  background: linear-gradient(to right, #ff0000, #b30000);
-  color: #fff;
-  padding: 16px 40px;
-  border-radius: 40px;
+  background: linear-gradient(to right, #ff0000, #aa0000);
+  color: #ffffff;
+  padding: 13px 32px;
+  border-radius: 30px;
   border: none;
-  font-weight: 600;
-  box-shadow: 0 8px 25px rgba(255, 0, 0, 0.6);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(255, 0, 0, 0.40);
+  letter-spacing: 0.3px;
 }
 
 .whyFeatures {
   margin-top: 12px;
-  color: #ccc;
-  font-size: 13px;
+  color: #666666;
+  font-size: 12px;
+  letter-spacing: 0.2px;
 }
 
-/* =========================
-   LIGHT MODE (PIXEL PERFECT)
-========================= */
+/* ================================
+   DARK MODE (body.dark)
+================================ */
 
-body.light .whySection {
-  background: #f3f4f6;
-  padding: 80px 0;
+body.dark .whySection {
+  background: linear-gradient(to bottom, #0a0a0a 0%, #6b0000 45%, #0a0a0a 100%);
 }
 
-body.light .whyTitle {
-  color: #111;
-  margin-bottom: 50px;
+body.dark .whyTitle {
+  color: #ffffff;
 }
 
-/* GRID SPACING */
-body.light .whyGrid {
-  gap: 25px;
-  align-items: center;
+body.dark .whyGrid {
+  gap: 18px;        /* ← was 0, now matches light mode */
+  padding: 0 18px;  /* ← was 0, now matches light mode */
 }
 
-/* CARD STYLE */
-body.light .whyItem {
-  width: 90%;
-  max-width: 900px;
-  height: 260px;
-  margin: 0 auto;
-  border-radius: 18px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  position: relative;
+body.dark .whyItem {
+  border-radius: 16px;  /* ← was 0, now matches light mode */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
-/* IMAGE CLEAN */
-body.light .whyItem img {
-  filter: brightness(1);
-  transition: transform 0.5s ease;
+body.dark .whyItem img {
+  filter: brightness(0.7);
 }
 
-/* HOVER ZOOM (LIKE MODERN UI) */
-body.light .whyItem:hover img {
-  transform: scale(1.05);
+body.dark .whyOverlay {
+  width: 58%;
+  padding: 0 24px;
 }
 
-/* 🔥 IMPORTANT: REMOVE LEFT/RIGHT COMPLETELY */
-body.light .whyOverlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-
-  padding: 20px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-
-  /* BOTTOM FADE GRADIENT */
-  background: linear-gradient(
-    to top,
-    rgba(0,0,0,0.75),
-    rgba(0,0,0,0.0)
-  );
+body.dark .left {
+  background: linear-gradient(to right, rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.70) 50%, transparent 100%);
 }
 
-/* FORCE SAME ALIGNMENT */
-body.light .left,
-body.light .right {
-  left: 0;
-  right: 0;
-  text-align: left;
-  align-items: flex-start;
+body.dark .right {
+  background: linear-gradient(to left, rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.70) 50%, transparent 100%);
 }
 
-/* TEXT STYLE */
-body.light .whyOverlay h4 {
-  color: #ff2d2d;
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 6px;
+body.dark .whyOverlay p {
+  color: #e0e0e0;
 }
 
-body.light .whyOverlay p {
-  color: #f5f5f5;
-  font-size: 13px;
-  line-height: 1.4;
-  max-width: 300px;
+body.dark .rentBtn {
+  box-shadow: 0 6px 22px rgba(255, 0, 0, 0.55);
 }
 
-/* BUTTON */
-body.light .rentBtn {
-  background: linear-gradient(to right, #ff0000, #b30000);
-  box-shadow: 0 8px 20px rgba(255,0,0,0.35);
-  transform: scale(1.05);
+body.dark .whyFeatures {
+  color: #aaaaaa;
 }
 
-/* FEATURES TEXT */
-body.light .whyFeatures {
-  color: #666;
-}
+/* ================================
+   MOBILE
+================================ */
 
-/* MOBILE */
 @media (max-width: 768px) {
+  .whyItem { height: 170px; }
+  .whyOverlay { width: 65%; padding: 0 18px; }
+  .whyOverlay h4 { font-size: 14px; }
+  .whyOverlay p { font-size: 11px; }
 
-  .whyItem {
-    height: 240px;
-  }
+  body.dark .whyGrid { padding: 0; }
+  body.dark .whyItem { height: 170px; }
 
-  .whyOverlay {
-    padding: 15px;
-  }
-
-  body.light .whyItem {
-    margin: 10px;
-  }
+  body.light .whyGrid { padding: 0 12px; }
+  body.light .whyItem { height: 170px; }
 }

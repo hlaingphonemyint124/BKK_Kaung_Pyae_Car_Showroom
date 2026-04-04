@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 import Header from "./components/Header";
 import Hero from "./components/Hero";
@@ -20,7 +20,10 @@ import SignupPage from "./features/auth/pages/SignupPage";
 
 /* ========================= */
 
+export const ThemeContext = createContext();
+
 function Home() {
+  const { theme } = useContext(ThemeContext);
   return (
     <>
       <Hero />
@@ -30,7 +33,7 @@ function Home() {
       <EasyRental />
       <Testimonials />
       <WhyChooseUs />
-      <AboutUs />
+      <AboutUs theme={theme} />
       <Team />
     </>
   );
@@ -62,16 +65,14 @@ function AppLayout() {
 /* ========================= */
 
 function App() {
-
-  // 🔥 FORCE DARK MODE (WORKING)
-  useEffect(() => {
-    document.body.className = "dark";
-  }, []);
+  const [theme, setTheme] = useState("light"); // 👈 change to "dark" to default dark
 
   return (
-    <BrowserRouter>
-      <AppLayout />
-    </BrowserRouter>
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      <BrowserRouter>
+        <AppLayout />
+      </BrowserRouter>
+    </ThemeContext.Provider>
   );
 }
 

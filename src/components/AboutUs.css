@@ -1,130 +1,104 @@
-/* THEME VARIABLES */
 :root {
-  --primary: #ff2b2b;
+  --primary: #e82222;
 }
 
-/* MAIN SECTION */
 .about {
-  padding: 70px 20px;
-  text-align: center;
-  transition: 0.3s ease;
+  padding: 50px 20px;
+  font-family: sans-serif;
 }
 
-/* ✅ LIGHT MODE (PURE WHITE) */
 .about.light {
   background: #ffffff;
   color: #111;
 }
 
-/* ✅ DARK MODE (PURE BLACK) */
 .about.dark {
   background: #000000;
   color: #ffffff;
 }
 
-/* TITLE */
 .about-title {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
-  margin-bottom: 40px;
+  text-align: center;
+  margin: 0 0 36px;
 }
 
-/* BLOCK */
+/* ✅ Fix: title color per theme */
+.about.dark .about-title { color: #ffffff; }
+.about.light .about-title { color: #111111; }
+
 .about-block {
   text-align: left;
-  margin-bottom: 40px;
   max-width: 850px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 32px;
 }
 
-/* HEADINGS */
 .about-heading {
   color: var(--primary);
+  font-size: 15px;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin: 0 0 10px;
 }
 
-/* TEXT */
 .about-block p {
-  font-size: 14px;
-  line-height: 1.7;
-  margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 1.75;
+  margin: 0 0 8px;
 }
 
-/* LIGHT TEXT */
-.about.light .about-block p {
-  color: #444;
-}
+.about.dark .about-block p { color: #cccccc; }
+.about.light .about-block p { color: #444444; }
 
-/* DARK TEXT */
-.about.dark .about-block p {
-  color: #dddddd;
-}
-
-/* LIST */
 .about-list {
   padding-left: 18px;
-  margin-bottom: 14px;
+  margin: 0 0 10px;
 }
 
 .about-list li {
-  font-size: 14px;
-  margin-bottom: 6px;
+  font-size: 13px;
+  line-height: 1.75;
+  margin-bottom: 4px;
 }
 
-/* HIGHLIGHT TEXT */
+.about.dark .about-list li { color: #cccccc; }
+.about.light .about-list li { color: #444444; }
+
 .about-highlight {
   color: var(--primary);
   font-size: 13px;
-  margin-top: 10px;
+  margin: 8px 0 0;
 }
 
-/* VALUES */
 .values {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-top: 15px;
+  margin-top: 14px;
 }
 
-/* VALUE CARD */
 .value-card {
   flex: 1;
-  min-width: 120px;
-
-  padding: 14px;
+  min-width: 110px;
+  padding: 14px 10px;
   text-align: center;
-
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: #fff;
-
-  border-radius: 10px;
-
-  background: linear-gradient(180deg, #b30000, #4d0000);
-
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.5),
-    inset 0 1px 2px rgba(255, 255, 255, 0.2);
-
-  transition: 0.25s;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #b30000 0%, #4d0000 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5),
+              inset 0 1px 1px rgba(255, 255, 255, 0.15);
 }
 
-.value-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 12px 25px rgba(0, 0, 0, 0.8),
-    0 0 10px rgba(255, 0, 0, 0.6);
+/* ✅ Fix: lighter shadow in light mode so cards don't look muddy */
+.about.light .value-card {
+  background: linear-gradient(180deg, #e82222 0%, #a00000 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+              inset 0 1px 1px rgba(255, 255, 255, 0.2);
 }
 
-/* MOBILE */
 @media (max-width: 600px) {
-  .values {
-    justify-content: center;
-  }
-
-  .value-card {
-    flex: 1 1 45%;
-  }
+  .values { justify-content: center; }
+  .value-card { flex: 1 1 45%; }
 }
