@@ -1,26 +1,52 @@
-function AdminFilterBar({ mode = "Buy" }) {
+import React from "react";
+import { FaChevronDown, FaSearch, FaExchangeAlt } from "react-icons/fa";
+import "../styles/admin.css";
+
+function AdminFilterBar({
+  mode,
+  onFilterClick,
+  onModeClick,
+  onSearchClick,
+  isFilterOpen,
+  isSearchOpen,
+}) {
+  const nextMode = mode === "Buy" ? "Rental" : "Buy";
+
   return (
-    <div className="admin-filterbar-wrap">
-      <div className="admin-filterbar">
-        <div className="admin-filterbar__item">
-          <span>Filter</span>
-          <span>⌄</span>
-        </div>
+    <div className="admin-filterbar">
+      <button
+        type="button"
+        className={`admin-filterbar__item ${
+          isFilterOpen ? "admin-filterbar__item--active" : ""
+        }`}
+        onClick={onFilterClick}
+      >
+        <span>Filter</span>
+        <FaChevronDown size={11} />
+      </button>
 
-        <div className="admin-filterbar__divider" />
+      <button
+        type="button"
+        className="admin-filterbar__item admin-filterbar__item--mode"
+        onClick={onModeClick}
+      >
+        <span>{mode}</span>
+        <FaExchangeAlt size={11} />
+        <span className="admin-filterbar__mode-hint">
+          Switch to {nextMode}
+        </span>
+      </button>
 
-        <div className="admin-filterbar__item">
-          <span>{mode}</span>
-          <span>⌄</span>
-        </div>
-
-        <div className="admin-filterbar__divider" />
-
-        <div className="admin-filterbar__item">
-          <span>Search</span>
-          <span>⌕</span>
-        </div>
-      </div>
+      <button
+        type="button"
+        className={`admin-filterbar__item ${
+          isSearchOpen ? "admin-filterbar__item--active" : ""
+        }`}
+        onClick={onSearchClick}
+      >
+        <span>Search</span>
+        <FaSearch size={11} />
+      </button>
     </div>
   );
 }

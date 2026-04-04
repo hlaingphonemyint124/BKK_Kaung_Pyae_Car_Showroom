@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AdminImageUploader from "../components/AdminImageUploader";
+import AdminMediaUploader from "../components/AdminMediaUploader";
 import AdminDetailHero from "../components/AdminDetailHero";
 import SpecGrid from "../components/SpecGrid";
 import InfoRows from "../components/InfoRows";
@@ -10,7 +10,7 @@ function AdminBuyDetailPage() {
   const [form, setForm] = useState({
     name: "",
     price: "",
-    image: null,
+    media: [],
     specs: {
       fuel: "",
       transmission: "",
@@ -53,6 +53,18 @@ function AdminBuyDetailPage() {
   };
 
   const handleSubmit = () => {
+    if (form.media.length === 0) {
+      alert("Please upload media.");
+      return;
+    }
+
+    const hasVideo = form.media.some((item) => item.type === "video");
+
+    if (!hasVideo) {
+      alert("Please upload at least one video.");
+      return;
+    }
+
     console.log("SAVE BUY CAR", form);
   };
 
@@ -86,9 +98,9 @@ function AdminBuyDetailPage() {
     <div className="admin-detail-page">
       <div className="admin-detail-page__left">
         <div className="admin-detail-panel">
-          <AdminImageUploader
-            image={form.image}
-            onChange={(img) => updateField("image", img)}
+          <AdminMediaUploader
+            media={form.media}
+            onChange={(newMedia) => updateField("media", newMedia)}
           />
         </div>
 
