@@ -34,6 +34,7 @@ function PasswordInput({
         <button
           type="button"
           className="eye-button"
+          aria-label={showPassword ? "Hide password" : "Show password"}
           onClick={() => setShowPassword((prev) => !prev)}
         >
           {showPassword ? <FiEye /> : <FiEyeOff />}

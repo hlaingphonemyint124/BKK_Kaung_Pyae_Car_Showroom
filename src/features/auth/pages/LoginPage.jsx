@@ -1,43 +1,42 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/AuthStyles.css";
 import AuthHeader from "../components/AuthHeader";
 import AuthInput from "../components/AuthInput";
 import PasswordInput from "../components/PasswordInput";
 import AuthButton from "../components/AuthButton";
+import { loginUser, getCurrentUser } from "../services/authService";
 
 function LoginPage() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // email format regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  // validate each field
   const validateField = (name, value) => {
     let error = "";
 
     if (name === "email") {
       if (!value.trim()) error = "Email is required";
-      else if (!emailRegex.test(value))
-        error = "Invalid email format";
+      else if (!emailRegex.test(value)) error = "Invalid email format";
     }
 
     if (name === "password") {
       if (!value) error = "Password is required";
-      else if (value.length < 6)
-        error = "Password must be at least 6 characters";
+      else if (value.length < 6) error = "Password must be at least 6 characters";
     }
 
     return error;
   };
 
-  // handle typing
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -46,7 +45,8 @@ function LoginPage() {
       [name]: value,
     }));
 
-    // real-time validation
+    setServerError("");
+
     const error = validateField(name, value);
 
     setErrors((prev) => ({
@@ -55,11 +55,10 @@ function LoginPage() {
     }));
   };
 
-  // handle submit
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    let newErrors = {};
+    const newErrors = {};
 
     Object.keys(form).forEach((key) => {
       const error = validateField(key, form[key]);
@@ -71,12 +70,26 @@ function LoginPage() {
     if (Object.keys(newErrors).length > 0) return;
 
     setLoading(true);
+    setServerError("");
 
-    setTimeout(() => {
-      console.log(form);
+    try {
+      await loginUser(form);
+
+      const currentUser = await getCurrentUser();
+      const role = currentUser?.user?.role;
+
+      if (role === "admin" || role === "employee") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      setServerError(
+        error.response?.data?.error || "Login failed. Please try again."
+      );
+    } finally {
       setLoading(false);
-      alert("Login successful (fake)");
-    }, 1000);
+    }
   };
 
   return (
@@ -86,6 +99,7 @@ function LoginPage() {
           <AuthInput
             label="Email"
             name="email"
+            type="email"
             placeholder="Enter your email"
             value={form.email}
             onChange={handleChange}
@@ -100,6 +114,8 @@ function LoginPage() {
             onChange={handleChange}
             error={errors.password}
           />
+
+          {serverError && <p className="input-error-text">{serverError}</p>}
 
           <AuthButton
             text={loading ? "Logging In..." : "Log In"}
