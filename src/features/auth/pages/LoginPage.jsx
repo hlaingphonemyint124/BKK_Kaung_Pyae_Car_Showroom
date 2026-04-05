@@ -73,19 +73,33 @@ function LoginPage() {
     setServerError("");
 
     try {
-      await loginUser(form);
+      const cleanForm = {
+        email: form.email.trim(),
+        password: form.password.trim(),
+      };
+
+      await loginUser(cleanForm);
 
       const currentUser = await getCurrentUser();
-      const role = currentUser?.user?.role;
+      console.log("CURRENT USER:", currentUser);
+
+      const role = currentUser?.user?.role || currentUser?.role;
+      console.log("ROLE:", role);
 
       if (role === "admin" || role === "employee") {
-        navigate("/admin");
+        navigate("/admin/buy");
       } else {
         navigate("/");
       }
     } catch (error) {
+      console.log("LOGIN ERROR:", error);
+      console.log("RESPONSE DATA:", error.response?.data);
+      console.log("STATUS:", error.response?.status);
+
       setServerError(
-        error.response?.data?.error || "Login failed. Please try again."
+        error.response?.data?.error ||
+        error.message ||
+        "Login failed. Please try again."
       );
     } finally {
       setLoading(false);
