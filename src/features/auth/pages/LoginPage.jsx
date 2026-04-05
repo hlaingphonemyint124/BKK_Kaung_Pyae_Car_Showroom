@@ -31,23 +31,10 @@ function LoginPage() {
 
     if (name === "password") {
       if (!value) error = "Password is required";
-      else if (value.length < 6)
-        error = "Password must be at least 6 characters";
+      else if (value.length < 6) error = "Password must be at least 6 characters";
     }
 
     return error;
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    Object.keys(form).forEach((key) => {
-      const error = validateField(key, form[key]);
-      if (error) newErrors[key] = error;
-    });
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
@@ -58,35 +45,46 @@ function LoginPage() {
       [name]: value,
     }));
 
+    setServerError("");
+
     const error = validateField(name, value);
 
     setErrors((prev) => ({
       ...prev,
       [name]: error,
     }));
-
-    if (serverError) setServerError("");
   };
 
-  // ✅ REAL LOGIN (will work when backend is running)
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!validateForm()) return;
+    const newErrors = {};
+
+    Object.keys(form).forEach((key) => {
+      const error = validateField(key, form[key]);
+      if (error) newErrors[key] = error;
+    });
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
 
     setLoading(true);
     setServerError("");
 
     try {
-      await loginUser({
-        email: form.email,
-        password: form.password,
-      });
+      const cleanForm = {
+        email: form.email.trim(),
+        password: form.password.trim(),
+      };
+
+      await loginUser(cleanForm);
 
       const currentUser = await getCurrentUser();
-      console.log("Current user:", currentUser);
+      console.log("CURRENT USER:", currentUser);
 
-      const role = currentUser.role || currentUser.user?.role;
+      const role = currentUser?.user?.role || currentUser?.role;
+      console.log("ROLE:", role);
 
       if (role === "admin" || role === "employee") {
         navigate("/admin/buy");
@@ -94,19 +92,18 @@ function LoginPage() {
         navigate("/");
       }
     } catch (error) {
+      console.log("LOGIN ERROR:", error);
+      console.log("RESPONSE DATA:", error.response?.data);
+      console.log("STATUS:", error.response?.status);
+
       setServerError(
-        error.response?.data?.message ||
-          error.message ||
-          "Login failed. Please try again."
+        error.response?.data?.error ||
+        error.message ||
+        "Login failed. Please try again."
       );
     } finally {
       setLoading(false);
     }
-  };
-
-  // ✅ DEV BUTTON (temporary)
-  const handleDevAdminLogin = () => {
-    navigate("/admin/buy");
   };
 
   return (
@@ -116,6 +113,7 @@ function LoginPage() {
           <AuthInput
             label="Email"
             name="email"
+            type="email"
             placeholder="Enter your email"
             value={form.email}
             onChange={handleChange}
@@ -131,36 +129,14 @@ function LoginPage() {
             error={errors.password}
           />
 
-          {serverError && (
-            <p style={{ color: "red", marginTop: "8px", marginBottom: "8px" }}>
-              {serverError}
-            </p>
-          )}
+          {serverError && <p className="input-error-text">{serverError}</p>}
 
-          {/* 🔴 REAL LOGIN BUTTON */}
           <AuthButton
             text={loading ? "Logging In..." : "Log In"}
             type="submit"
             disabled={loading}
           />
         </form>
-
-        {/* 🟡 DEV BUTTON */}
-        <button
-          type="button"
-          onClick={handleDevAdminLogin}
-          style={{
-            marginTop: "12px",
-            width: "100%",
-            padding: "12px",
-            borderRadius: "999px",
-            border: "1px solid #ccc",
-            background: "#f5f5f5",
-            cursor: "pointer",
-          }}
-        >
-          Enter Admin Demo
-        </button>
 
         <div className="auth-link-center">
           Forgot password? <Link to="/">Click Here</Link>

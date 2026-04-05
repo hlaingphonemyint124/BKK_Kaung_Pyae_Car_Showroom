@@ -4,6 +4,7 @@ import "../styles/AuthStyles.css";
 function AuthInput({
   label,
   name,
+  type = "text",
   placeholder,
   value,
   onChange,
@@ -17,7 +18,7 @@ function AuthInput({
       <input
         id={name}
         name={name}
-        type="text"
+        type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
