@@ -85,14 +85,32 @@
 }
 
 /* popup panels */
+.admin-toolbar-overlay {
+  position: relative;
+  margin: 0 24px 12px;
+  z-index: 20;
+}
+
+.admin-toolbar-overlay .admin-filterbar {
+  margin: 0;
+}
+
+.admin-overlay-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  z-index: 30;
+}
+
 .admin-filter-panel,
 .admin-search-panel {
   background: #f3f3f3;
   border-radius: 12px;
   padding: 16px;
-  margin: 10px 24px 12px;
   border: 1px solid #dfdfdf;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  margin: 0;
 }
 
 .admin-filter-panel__grid {

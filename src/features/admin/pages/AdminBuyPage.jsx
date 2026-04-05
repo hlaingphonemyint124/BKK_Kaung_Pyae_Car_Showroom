@@ -142,81 +142,83 @@ function AdminBuyPage() {
         </p>
       </div>
 
-      <AdminFilterBar
-        mode="Buy"
-        onFilterClick={handleFilterClick}
-        onModeClick={handleModeClick}
-        onSearchClick={handleSearchClick}
-        isFilterOpen={isFilterOpen}
-        isSearchOpen={isSearchOpen}
-      />
+      <div className="admin-toolbar-overlay">
+        <AdminFilterBar
+          mode="Buy"
+          onFilterClick={handleFilterClick}
+          onModeClick={handleModeClick}
+          onSearchClick={handleSearchClick}
+          isFilterOpen={isFilterOpen}
+          isSearchOpen={isSearchOpen}
+        />
 
-      {isFilterOpen && (
-        <div className="admin-filter-panel">
-          <div className="admin-filter-panel__grid">
-            <div className="admin-filter-panel__group">
-              <label>Brand</label>
-              <select
-                value={selectedBrand}
-                onChange={(e) => setSelectedBrand(e.target.value)}
-              >
-                <option value="">All Brands</option>
-                {brands.map((brand) => (
-                  <option key={brand} value={brand}>
-                    {brand}
-                  </option>
-                ))}
-              </select>
+        {isFilterOpen && (
+          <div className="admin-filter-panel admin-overlay-panel">
+            <div className="admin-filter-panel__grid">
+              <div className="admin-filter-panel__group">
+                <label>Brand</label>
+                <select
+                  value={selectedBrand}
+                  onChange={(e) => setSelectedBrand(e.target.value)}
+                >
+                  <option value="">All Brands</option>
+                  {brands.map((brand) => (
+                    <option key={brand} value={brand}>
+                      {brand}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="admin-filter-panel__group">
+                <label>Fuel</label>
+                <select
+                  value={selectedFuel}
+                  onChange={(e) => setSelectedFuel(e.target.value)}
+                >
+                  <option value="">All Fuel</option>
+                  <option value="Petrol">Petrol</option>
+                  <option value="Diesel">Diesel</option>
+                  <option value="Hybrid">Hybrid</option>
+                  <option value="EV">EV</option>
+                </select>
+              </div>
+
+              <div className="admin-filter-panel__group">
+                <label>Transmission</label>
+                <select
+                  value={selectedTransmission}
+                  onChange={(e) => setSelectedTransmission(e.target.value)}
+                >
+                  <option value="">All Transmission</option>
+                  <option value="Manual">Manual</option>
+                  <option value="Auto">Auto</option>
+                </select>
+              </div>
             </div>
 
-            <div className="admin-filter-panel__group">
-              <label>Fuel</label>
-              <select
-                value={selectedFuel}
-                onChange={(e) => setSelectedFuel(e.target.value)}
-              >
-                <option value="">All Fuel</option>
-                <option value="Petrol">Petrol</option>
-                <option value="Diesel">Diesel</option>
-                <option value="Hybrid">Hybrid</option>
-                <option value="EV">EV</option>
-              </select>
-            </div>
-
-            <div className="admin-filter-panel__group">
-              <label>Transmission</label>
-              <select
-                value={selectedTransmission}
-                onChange={(e) => setSelectedTransmission(e.target.value)}
-              >
-                <option value="">All Transmission</option>
-                <option value="Manual">Manual</option>
-                <option value="Auto">Auto</option>
-              </select>
+            <div className="admin-filter-panel__actions">
+              <button type="button" onClick={handleResetFilters}>
+                Reset
+              </button>
+              <button type="button" onClick={handleApplyFilters}>
+                Apply
+              </button>
             </div>
           </div>
+        )}
 
-          <div className="admin-filter-panel__actions">
-            <button type="button" onClick={handleResetFilters}>
-              Reset
-            </button>
-            <button type="button" onClick={handleApplyFilters}>
-              Apply
-            </button>
+        {isSearchOpen && (
+          <div className="admin-search-panel admin-overlay-panel">
+            <input
+              type="text"
+              placeholder="Search by car name or brand..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
-        </div>
-      )}
-
-      {isSearchOpen && (
-        <div className="admin-search-panel">
-          <input
-            type="text"
-            placeholder="Search by car name or brand..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      )}
+        )}
+      </div>
 
       <AdminTabs
         activeTab={activeTab}
