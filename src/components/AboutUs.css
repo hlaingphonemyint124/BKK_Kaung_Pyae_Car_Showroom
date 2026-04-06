@@ -2,54 +2,167 @@
   --primary: #e82222;
 }
 
-.about {
-  padding: 50px 20px;
-  font-family: sans-serif;
+/* ── Keyframes ── */
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+  50%       { opacity: 0.85; transform: translateX(-50%) scale(1.07); }
 }
 
+/* ── Base Section ── */
+.about {
+  padding: 80px 20px 70px;
+  font-family: sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dark theme: red glow top-center, fades to near-black at bottom — matching the reviews section */
+.about.dark {
+  background: linear-gradient(
+    180deg,
+    #0b0b0b 0%,
+    #0e0505 40%,
+    #110000 70%,
+    #1a0000 100%
+  );
+  color: #ffffff;
+}
 .about.light {
   background: #ffffff;
   color: #111;
 }
 
-.about.dark {
-  background: #000000;
+/* Red radial glow behind the title — same as reviews section */
+.about.dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 30%,
+    rgba(160, 15, 15, 0.45) 0%,
+    rgba(100, 5, 5, 0.22) 45%,
+    transparent 75%
+  );
+  pointer-events: none;
+  z-index: 0;
+  animation: glowPulse 5s ease-in-out infinite;
+}
+
+/* ── Title Wrapper ── */
+.about-title-wrapper {
+  text-align: center;
+  margin: 0 0 56px;
+  position: relative;
+  z-index: 1;
+
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.about--visible .about-title-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Title — same weight/size as "What Our Customers Say" */
+.about-title {
+  font-size: clamp(36px, 6vw, 52px);
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0 0 12px;
+  letter-spacing: 0.5px;
+}
+
+.about-title-white {
   color: #ffffff;
 }
 
-.about-title {
-  font-size: 26px;
-  font-weight: 700;
-  text-align: center;
-  margin: 0 0 36px;
+.about.light .about-title-white {
+  color: #111111;
 }
 
-/* ✅ Fix: title color per theme */
-.about.dark .about-title { color: #ffffff; }
-.about.light .about-title { color: #111111; }
+.about-title-red {
+  color: var(--primary);
+  display: inline-block;
+}
 
+/* Underline bar — same as reviews section */
+.about-title-underline {
+  width: 48px;
+  height: 3px;
+  background: var(--primary);
+  margin: 0 auto;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.5s ease 0.4s;
+}
+
+.about--visible .about-title-underline {
+  transform: scaleX(1);
+}
+
+/* ── Blocks ── */
 .about-block {
   text-align: left;
   max-width: 850px;
   margin: 0 auto 32px;
+  position: relative;
+  z-index: 1;
+
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
 }
 
+.about--visible .about-block--1 { opacity: 1; transform: translateY(0); transition-delay: 0.18s; }
+.about--visible .about-block--2 { opacity: 1; transform: translateY(0); transition-delay: 0.32s; }
+.about--visible .about-block--3 { opacity: 1; transform: translateY(0); transition-delay: 0.46s; }
+
+/* ── Heading with animated left-bar ── */
 .about-heading {
   color: var(--primary);
   font-size: 15px;
   font-weight: 700;
   margin: 0 0 10px;
+  padding-left: 12px;
+  position: relative;
 }
 
+.about-heading::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 2px;
+  width: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.35s ease 0.3s;
+}
+
+.about--visible .about-heading::before {
+  transform: scaleY(1);
+}
+
+/* ── Paragraphs ── */
 .about-block p {
   font-size: 13px;
   line-height: 1.75;
   margin: 0 0 8px;
 }
 
-.about.dark .about-block p { color: #cccccc; }
+.about.dark  .about-block p { color: #cccccc; }
 .about.light .about-block p { color: #444444; }
 
+/* ── List ── */
 .about-list {
   padding-left: 18px;
   margin: 0 0 10px;
@@ -59,17 +172,26 @@
   font-size: 13px;
   line-height: 1.75;
   margin-bottom: 4px;
+  transition: color 0.2s ease, padding-left 0.2s ease;
+  cursor: default;
 }
 
-.about.dark .about-list li { color: #cccccc; }
+.about-list li:hover {
+  color: var(--primary);
+  padding-left: 4px;
+}
+
+.about.dark  .about-list li { color: #cccccc; }
 .about.light .about-list li { color: #444444; }
 
+/* ── Highlight ── */
 .about-highlight {
   color: var(--primary);
   font-size: 13px;
   margin: 8px 0 0;
 }
 
+/* ── Values ── */
 .values {
   display: flex;
   gap: 10px;
@@ -89,16 +211,33 @@
   background: linear-gradient(180deg, #b30000 0%, #4d0000 100%);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5),
               inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  cursor: default;
+  position: relative;
+  z-index: 1;
 }
 
-/* ✅ Fix: lighter shadow in light mode so cards don't look muddy */
+.value-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 10px 24px rgba(232, 34, 34, 0.35),
+              inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  filter: brightness(1.12);
+}
+
 .about.light .value-card {
   background: linear-gradient(180deg, #e82222 0%, #a00000 100%);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
               inset 0 1px 1px rgba(255, 255, 255, 0.2);
 }
 
+.about.light .value-card:hover {
+  box-shadow: 0 10px 24px rgba(232, 34, 34, 0.25),
+              inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+
+/* ── Mobile ── */
 @media (max-width: 600px) {
+  .about-title { font-size: 34px; }
   .values { justify-content: center; }
   .value-card { flex: 1 1 45%; }
 }

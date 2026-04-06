@@ -1,13 +1,38 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./AboutUs.css";
 
 export default function AboutUs({ theme = "dark" }) {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("about--visible");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    const section = sectionRef.current;
+    if (section) observer.observe(section);
+    return () => { if (section) observer.unobserve(section); };
+  }, []);
+
   return (
-    <section className={`about ${theme}`}>
+    <section ref={sectionRef} className={`about ${theme}`}>
 
-      <h2 className="about-title">About Us</h2>
+      <div className="about-title-wrapper">
+        <h2 className="about-title">
+          <span className="about-title-white">About</span>
+          <br />
+          <span className="about-title-red">Us</span>
+        </h2>
+        <div className="about-title-underline" />
+      </div>
 
-      <div className="about-block">
+      <div className="about-block about-block--1">
         <h4 className="about-heading">Who We Are?</h4>
         <p>
           <strong>BKK Kaung Pyae</strong> is a premium car showroom and rental
@@ -20,7 +45,7 @@ export default function AboutUs({ theme = "dark" }) {
         <p>Our goal is simple: make every journey smooth, safe, and stress-free.</p>
       </div>
 
-      <div className="about-block">
+      <div className="about-block about-block--2">
         <h4 className="about-heading">What We Do?</h4>
         <ul className="about-list">
           <li>Car rental for daily, weekly, and long-term use</li>
@@ -34,7 +59,7 @@ export default function AboutUs({ theme = "dark" }) {
         </p>
       </div>
 
-      <div className="about-block">
+      <div className="about-block about-block--3">
         <h4 className="about-heading">Our Values</h4>
         <div className="values">
           <div className="value-card">Trust</div>
