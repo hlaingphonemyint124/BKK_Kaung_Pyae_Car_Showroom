@@ -156,12 +156,10 @@ export default function Testimonials() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap');
 
-        /* ── LIGHT MODE TOKENS (default) ── */
         :root {
           --ts-red: #e11d2e;
           --ts-red-dim: rgba(225,29,46,0.12);
           --ts-red-glow: rgba(225,29,46,0.45);
-
           --ts-bg: #f5f4f2;
           --ts-card-bg: #ffffff;
           --ts-card-border: rgba(0,0,0,0.08);
@@ -189,7 +187,6 @@ export default function Testimonials() {
           --ts-ambient-h: 380px;
         }
 
-        /* ── DARK MODE TOKENS — triggered by .dark on <html> or <body> ── */
         .dark {
           --ts-bg: #090909;
           --ts-card-bg: #111111;
@@ -216,15 +213,12 @@ export default function Testimonials() {
           --ts-ambient: rgba(225,29,46,0.13);
         }
 
-        /* ── RESET ── */
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* ── SECTION ── */
         .ts-section {
           background: var(--ts-bg);
-          padding: 72px 24px 60px;
+          padding: 56px 24px 44px;
           font-family: 'Barlow', sans-serif;
-          min-height: 100vh;
           position: relative;
           overflow: hidden;
           display: flex;
@@ -250,9 +244,6 @@ export default function Testimonials() {
           50% { opacity: 1; transform: translateX(-50%) scale(1.15); }
         }
 
-        
-
-        /* ── HEADINGS ── */
         .ts-title {
           font-family: 'Barlow Condensed', sans-serif;
           font-weight: 900;
@@ -296,7 +287,7 @@ export default function Testimonials() {
           color: var(--ts-text-muted);
           letter-spacing: 3px;
           text-transform: uppercase;
-          margin-bottom: 36px;
+          margin-bottom: 28px;
           position: relative;
           z-index: 2;
           opacity: 0;
@@ -309,18 +300,16 @@ export default function Testimonials() {
           transform: translateY(0);
         }
 
-        /* ── GRID ── */
         .ts-grid {
           display: flex;
           flex-direction: column;
-          gap: 14px;
+          gap: 12px;
           width: 100%;
           max-width: 430px;
           position: relative;
           z-index: 2;
         }
 
-        /* ── CARD ── */
         .ts-card {
           background: var(--ts-card-bg);
           border: 1px solid var(--ts-card-border);
@@ -349,7 +338,6 @@ export default function Testimonials() {
           box-shadow: var(--ts-card-shadow-hover);
         }
 
-        /* ── CURSOR GLOW ── */
         .ts-cursor-glow {
           position: absolute;
           width: 140px; height: 140px;
@@ -364,7 +352,6 @@ export default function Testimonials() {
 
         .ts-card:hover .ts-cursor-glow { opacity: 1; }
 
-        /* ── SHIMMER ── */
         .ts-shimmer {
           position: absolute;
           inset: 0;
@@ -389,7 +376,6 @@ export default function Testimonials() {
           to { transform: translateX(100%); }
         }
 
-        /* ── CORNER ACCENTS ── */
         .ts-corner-tl,
         .ts-corner-br {
           position: absolute;
@@ -417,7 +403,6 @@ export default function Testimonials() {
         .ts-card:hover .ts-corner-tl,
         .ts-card:hover .ts-corner-br { opacity: 1; }
 
-        /* ── SPARKLES ── */
         .ts-sparkle {
           position: absolute;
           background: var(--ts-red);
@@ -433,7 +418,6 @@ export default function Testimonials() {
           100% { opacity: 0; transform: scale(0.5) translateY(-16px); }
         }
 
-        /* ── QUOTE MARK ── */
         .ts-quote {
           position: absolute;
           top: 10px; right: 14px;
@@ -449,7 +433,6 @@ export default function Testimonials() {
 
         .ts-card:hover .ts-quote { color: var(--ts-quote-hover); }
 
-        /* ── LEFT COLUMN ── */
         .ts-left {
           display: flex;
           flex-direction: column;
@@ -505,7 +488,6 @@ export default function Testimonials() {
           z-index: 1;
         }
 
-        /* ── BADGE ── */
         .ts-badge {
           display: flex;
           align-items: center;
@@ -535,7 +517,6 @@ export default function Testimonials() {
           50% { opacity: 0.4; }
         }
 
-        /* ── BODY ── */
         .ts-body {
           flex: 1;
           position: relative;
@@ -581,7 +562,6 @@ export default function Testimonials() {
           filter: drop-shadow(0 0 4px rgba(225,29,46,0.5));
         }
 
-        /* ── DIVIDER ── */
         .ts-divider {
           height: 1px;
           background: var(--ts-divider);
@@ -613,13 +593,12 @@ export default function Testimonials() {
           opacity: 0.75;
         }
 
-        /* ── DOTS ── */
         .ts-dots {
           display: flex;
           justify-content: center;
           align-items: center;
           gap: 6px;
-          margin-top: 26px;
+          margin-top: 20px;
           position: relative;
           z-index: 2;
         }
@@ -638,10 +617,9 @@ export default function Testimonials() {
           box-shadow: 0 0 8px rgba(225,29,46,0.5), 0 0 18px rgba(225,29,46,0.2);
         }
 
-        /* ── FOOTER ── */
         .ts-footer {
           text-align: center;
-          margin-top: 24px;
+          margin-top: 18px;
           font-size: 11px;
           color: var(--ts-footer-color);
           max-width: 290px;
@@ -664,20 +642,21 @@ export default function Testimonials() {
           background: linear-gradient(90deg, rgba(225,29,46,0.15), transparent);
         }
 
-        /* ── STAGGER DELAYS ── */
         .ts-card-0 { transition-delay: 0.05s; }
         .ts-card-1 { transition-delay: 0.15s; }
         .ts-card-2 { transition-delay: 0.25s; }
 
         @media (max-width: 480px) {
-          .ts-grid { max-width: 100%; }
-          .ts-title { font-size: 34px; }
+          .ts-section  { padding: 44px 16px 36px; }
+          .ts-grid     { max-width: 100%; gap: 10px; }
+          .ts-title    { font-size: 34px; }
+          .ts-subtitle { margin-bottom: 20px; }
+          .ts-dots     { margin-top: 16px; }
+          .ts-footer   { margin-top: 14px; }
         }
       `}</style>
 
       <section className="ts-section">
-        <div className="ts-grid-lines" />
-
         <h2 className={`ts-title ${titleVisible ? "visible" : ""}`}>
           What Our
           <span className="ts-title-sub">Customers Say</span>

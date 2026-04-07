@@ -4,7 +4,7 @@
    SECTION
 ================================ */
 .whySection {
-  padding: 80px 0 80px;
+  padding: 60px 0 60px;
   background: #f0f2f4;
   overflow: hidden;
 }
@@ -32,7 +32,7 @@ body.dark .whySection {
   letter-spacing: 5px;
   color: #111;
   text-align: center;
-  margin: 0 0 10px;
+  margin: 0 0 6px;
   opacity: 0;
   transform: translateY(-22px);
   animation: fadeDown 0.6s ease 0.1s forwards;
@@ -47,7 +47,7 @@ body.dark .whyTitle { color: #fff; }
   letter-spacing: 2.5px;
   text-transform: uppercase;
   color: #e03030;
-  margin: 0 0 44px;
+  margin: 0 0 28px;
   opacity: 0;
   animation: fadeDown 0.6s ease 0.25s forwards;
 }
@@ -58,7 +58,8 @@ body.dark .whyTitle { color: #fff; }
 .whyGrid {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
+  position: relative;
 }
 
 /* ================================
@@ -97,7 +98,7 @@ body.dark .whyTitle { color: #fff; }
     0 0 40px rgba(200,0,0,0.18);
   transform: translateY(-5px);
 }
-/* keep hover working after visible */
+
 .whyItem.visible:hover {
   transform: translateY(-5px);
 }
@@ -275,8 +276,6 @@ body.dark .whyTitle { color: #fff; }
   top: 8%; bottom: 8%;
 }
 
-/* numbers removed */
-
 /* ================================
    RED GLOW TINT on hover
 ================================ */
@@ -312,12 +311,12 @@ body.dark .whyTitle { color: #fff; }
   z-index: 0;
 }
 
-.whyGrid {
-  position: relative;
-}
+/* ================================
+   CTA BUTTON BLOCK
+================================ */
 .whyAction {
   text-align: center;
-  padding: 44px 0 0;
+  padding: 28px 0 0;
   opacity: 0;
   animation: fadeUp 0.6s ease 0.8s forwards;
 }
@@ -381,19 +380,24 @@ body.dark .whyFeatures { color: #666; }
    TABLET  601–900px
 ================================ */
 @media (min-width: 601px) and (max-width: 900px) {
-  .whyItem   { height: 200px; }
-  .whyOverlay { width: 66%; }
+  .whySection  { padding: 48px 0; }
+  .whyItem     { height: 200px; }
+  .whyOverlay  { width: 66%; }
+  .whyAction   { padding: 24px 0 0; }
 }
 
 /* ================================
    MOBILE  ≤600px
 ================================ */
 @media (max-width: 600px) {
-  .whySection   { padding: 56px 0 56px; }
-  .whyContainer { padding: 0 16px; }
-  .whyItem      { height: 175px; border-radius: 16px; }
-  .whyOverlay   { width: 72%; padding: 0 16px; }
+  .whySection    { padding: 44px 0; }
+  .whyContainer  { padding: 0 16px; }
+  .whySubline    { margin: 0 0 20px; }
+  .whyGrid       { gap: 12px; }
+  .whyItem       { height: 175px; border-radius: 16px; }
+  .whyOverlay    { width: 72%; padding: 0 16px; }
   .whyOverlay h4 { font-size: 16px; }
   .whyOverlay p  { font-size: 11px; }
   .whyTag        { font-size: 9px; }
+  .whyAction     { padding: 20px 0 0; }
 }

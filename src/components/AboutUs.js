@@ -25,8 +25,7 @@ export default function AboutUs({ theme = "dark" }) {
 
       <div className="about-title-wrapper">
         <h2 className="about-title">
-          <span className="about-title-white">About</span>
-          <br />
+          <span className="about-title-white">About </span>
           <span className="about-title-red">Us</span>
         </h2>
         <div className="about-title-underline" />

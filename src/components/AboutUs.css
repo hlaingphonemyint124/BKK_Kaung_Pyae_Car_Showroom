@@ -10,13 +10,13 @@
 
 /* ── Base Section ── */
 .about {
-  padding: 80px 20px 70px;
+  padding: 80px 40px 70px;
   font-family: sans-serif;
   position: relative;
   overflow: hidden;
 }
 
-/* Dark theme: red glow top-center, fades to near-black at bottom — matching the reviews section */
+/* Dark theme */
 .about.dark {
   background: linear-gradient(
     180deg,
@@ -32,7 +32,7 @@
   color: #111;
 }
 
-/* Red radial glow behind the title — same as reviews section */
+/* Red radial glow */
 .about.dark::before {
   content: '';
   position: absolute;
@@ -52,10 +52,25 @@
   animation: glowPulse 5s ease-in-out infinite;
 }
 
+/* ── Constrained inner wrapper ── */
+.about > *:not(.about::before) {
+  position: relative;
+  z-index: 1;
+}
+
+/* All direct children centered with max-width */
+.about-title-wrapper,
+.about-block {
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
 /* ── Title Wrapper ── */
 .about-title-wrapper {
   text-align: center;
-  margin: 0 0 56px;
+  margin-bottom: 52px;
   position: relative;
   z-index: 1;
 
@@ -69,7 +84,7 @@
   transform: translateY(0);
 }
 
-/* Title — same weight/size as "What Our Customers Say" */
+/* Title */
 .about-title {
   font-size: clamp(36px, 6vw, 52px);
   font-weight: 800;
@@ -81,17 +96,15 @@
 .about-title-white {
   color: #ffffff;
 }
-
 .about.light .about-title-white {
   color: #111111;
 }
-
 .about-title-red {
   color: var(--primary);
   display: inline-block;
 }
 
-/* Underline bar — same as reviews section */
+/* Underline bar */
 .about-title-underline {
   width: 48px;
   height: 3px;
@@ -102,7 +115,6 @@
   transform-origin: center;
   transition: transform 0.5s ease 0.4s;
 }
-
 .about--visible .about-title-underline {
   transform: scaleX(1);
 }
@@ -110,10 +122,9 @@
 /* ── Blocks ── */
 .about-block {
   text-align: left;
-  max-width: 850px;
-  margin: 0 auto 32px;
   position: relative;
   z-index: 1;
+  margin-bottom: 36px;           /* consistent gap between blocks */
 
   opacity: 0;
   transform: translateY(24px);
@@ -147,7 +158,6 @@
   transform-origin: top;
   transition: transform 0.35s ease 0.3s;
 }
-
 .about--visible .about-heading::before {
   transform: scaleY(1);
 }
@@ -194,15 +204,15 @@
 /* ── Values ── */
 .values {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
   margin-top: 14px;
 }
 
 .value-card {
-  flex: 1;
+  flex: 1 1 calc(25% - 12px);   /* 4 per row on desktop */
   min-width: 110px;
-  padding: 14px 10px;
+  padding: 16px 12px;
   text-align: center;
   font-size: 13px;
   font-weight: 700;
@@ -215,6 +225,7 @@
   cursor: default;
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
 }
 
 .value-card:hover {
@@ -229,15 +240,42 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
               inset 0 1px 1px rgba(255, 255, 255, 0.2);
 }
-
 .about.light .value-card:hover {
   box-shadow: 0 10px 24px rgba(232, 34, 34, 0.25),
               inset 0 1px 1px rgba(255, 255, 255, 0.25);
 }
 
-/* ── Mobile ── */
-@media (max-width: 600px) {
-  .about-title { font-size: 34px; }
-  .values { justify-content: center; }
-  .value-card { flex: 1 1 45%; }
+/* ── Tablet (≤768px) ── */
+@media (max-width: 768px) {
+  .about {
+    padding: 64px 24px 60px;
+  }
+
+  .value-card {
+    flex: 1 1 calc(50% - 12px); /* 2 per row on tablet */
+  }
+}
+
+/* ── Mobile (≤480px) ── */
+@media (max-width: 480px) {
+  .about {
+    padding: 52px 16px 52px;
+  }
+
+  .about-title {
+    font-size: 34px;
+  }
+
+  .about-block {
+    margin-bottom: 28px;
+  }
+
+  .values {
+    gap: 10px;
+  }
+
+  .value-card {
+    flex: 1 1 calc(50% - 10px);
+    padding: 14px 10px;
+  }
 }

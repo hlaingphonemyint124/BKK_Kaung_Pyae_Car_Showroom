@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./BrandList.css";
 
@@ -21,69 +21,16 @@ const brands = [
   { name: "Mitsubishi",  logo: "/images/Brands/mitsubishi.png",  slug: "mitsubishi"  },
 ];
 
-const PER_SLIDE = 4;
+const SCROLL_AMOUNT = 280;
 
 export default function BrandList() {
   const navigate = useNavigate();
+  const rowRef = useRef(null);
 
-  const slides = [];
-  for (let i = 0; i < brands.length; i += PER_SLIDE) {
-    slides.push(brands.slice(i, i + PER_SLIDE));
-  }
+  const scrollLeft  = () => rowRef.current?.scrollBy({ left: -SCROLL_AMOUNT, behavior: "smooth" });
+  const scrollRight = () => rowRef.current?.scrollBy({ left:  SCROLL_AMOUNT, behavior: "smooth" });
 
-  const [current, setCurrent] = useState(0);
-  const sliderRef  = useRef(null);
-  const wheelAccum = useRef(0);
-  const wheelTimer = useRef(null);
-
-  const prev = () => setCurrent((c) => Math.max(c - 1, 0));
-  const next = () => setCurrent((c) => Math.min(c + 1, slides.length - 1));
-
-  // Non-passive wheel — fixes the console error
-  useEffect(() => {
-    const el = sliderRef.current;
-    if (!el) return;
-    const onWheel = (e) => {
-      if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
-      e.preventDefault();
-      wheelAccum.current += e.deltaX;
-      clearTimeout(wheelTimer.current);
-      wheelTimer.current = setTimeout(() => {
-        if      (wheelAccum.current >  40) setCurrent((c) => Math.min(c + 1, slides.length - 1));
-        else if (wheelAccum.current < -40) setCurrent((c) => Math.max(c - 1, 0));
-        wheelAccum.current = 0;
-      }, 50);
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [slides.length]);
-
-  // Touch swipe
-  const touchX = useRef(0);
-  const touchY = useRef(0);
-  const onTouchStart = (e) => {
-    touchX.current = e.touches[0].clientX;
-    touchY.current = e.touches[0].clientY;
-  };
-  const onTouchEnd = (e) => {
-    const dx = touchX.current - e.changedTouches[0].clientX;
-    const dy = Math.abs(touchY.current - e.changedTouches[0].clientY);
-    if (Math.abs(dx) > 40 && Math.abs(dx) > dy) dx > 0 ? next() : prev();
-  };
-
-  // Mouse drag
-  const mouseX   = useRef(0);
-  const isDrag   = useRef(false);
-  const onMouseDown  = (e) => { mouseX.current = e.clientX; isDrag.current = true; };
-  const onMouseUp    = (e) => {
-    if (!isDrag.current) return;
-    isDrag.current = false;
-    const dx = mouseX.current - e.clientX;
-    if (Math.abs(dx) > 40) dx > 0 ? next() : prev();
-  };
-  const onMouseLeave = () => { isDrag.current = false; };
-
-  // 3D tilt
+  /* ── 3-D tilt ── */
   const onCardMove = (e, el) => {
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width;
@@ -94,7 +41,7 @@ export default function BrandList() {
   };
   const onCardLeave = (el) => { el.style.transform = ""; };
 
-  // Particles
+  /* ── Particles ── */
   const spawnParticles = (el) => {
     for (let i = 0; i < 4; i++) {
       const p = document.createElement("div");
@@ -108,7 +55,7 @@ export default function BrandList() {
     }
   };
 
-  // Ripple
+  /* ── Ripple ── */
   const spawnRipple = (e, el) => {
     const r   = el.getBoundingClientRect();
     const rip = document.createElement("div");
@@ -121,7 +68,6 @@ export default function BrandList() {
 
   const handleCardClick = (e, brand) => {
     spawnRipple(e, e.currentTarget);
-    // Short delay so ripple is visible before navigation
     setTimeout(() => navigate(`/brands/${brand.slug}`), 180);
   };
 
@@ -135,75 +81,40 @@ export default function BrandList() {
         </button>
       </div>
 
-      <div className="bl-slider">
-        <button
-          className="bl-arrow"
-          onClick={prev}
-          disabled={current === 0}
-          aria-label="Previous"
-        >
-          ‹
+      <div className="bl-wrapper">
+        {/* Left arrow */}
+        <button className="bl-arrow bl-arrow--left" onClick={scrollLeft} aria-label="Scroll left">
+          ❮
         </button>
 
-        <div
-          ref={sliderRef}
-          className="bl-wrapper"
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-          onMouseDown={onMouseDown}
-          onMouseUp={onMouseUp}
-          onMouseLeave={onMouseLeave}
-          style={{ touchAction: "pan-y" }}
-        >
-          <div
-            className="bl-track"
-            style={{ transform: `translateX(-${current * 100}%)` }}
-          >
-            {slides.map((group, pi) => (
-              <div className="bl-slide" key={pi}>
-                {group.map((brand, i) => (
-                  <div
-                    key={brand.slug}
-                    className="bl-card"
-                    style={{ animationDelay: `${i * 0.07}s` }}
-                    onClick={(e) => handleCardClick(e, brand)}
-                    onMouseMove={(e) => onCardMove(e, e.currentTarget)}
-                    onMouseEnter={(e) => spawnParticles(e.currentTarget)}
-                    onMouseLeave={(e) => onCardLeave(e.currentTarget)}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`Browse ${brand.name} cars`}
-                    onKeyDown={(e) => e.key === "Enter" && navigate(`/brands/${brand.slug}`)}
-                  >
-                    <div className="bl-logo">
-                      <img src={brand.logo} alt={brand.name} draggable={false} />
-                    </div>
-                    <p className="bl-label">{brand.name}</p>
-                  </div>
-                ))}
+        {/* Scrollable row */}
+        <div className="bl-row" ref={rowRef}>
+          {brands.map((brand, i) => (
+            <div
+              key={brand.slug}
+              className="bl-card"
+              style={{ animationDelay: `${i * 0.07}s` }}
+              onClick={(e) => handleCardClick(e, brand)}
+              onMouseMove={(e) => onCardMove(e, e.currentTarget)}
+              onMouseEnter={(e) => spawnParticles(e.currentTarget)}
+              onMouseLeave={(e) => onCardLeave(e.currentTarget)}
+              role="button"
+              tabIndex={0}
+              aria-label={`Browse ${brand.name} cars`}
+              onKeyDown={(e) => e.key === "Enter" && navigate(`/brands/${brand.slug}`)}
+            >
+              <div className="bl-logo">
+                <img src={brand.logo} alt={brand.name} draggable={false} />
               </div>
-            ))}
-          </div>
+              <p className="bl-label">{brand.name}</p>
+            </div>
+          ))}
         </div>
 
-        <button
-          className="bl-arrow"
-          onClick={next}
-          disabled={current === slides.length - 1}
-          aria-label="Next"
-        >
-          ›
+        {/* Right arrow */}
+        <button className="bl-arrow bl-arrow--right" onClick={scrollRight} aria-label="Scroll right">
+          ❯
         </button>
-      </div>
-
-      <div className="bl-dots">
-        {slides.map((_, i) => (
-          <span
-            key={i}
-            className={`bl-dot${current === i ? " bl-dot--active" : ""}`}
-            onClick={() => setCurrent(i)}
-          />
-        ))}
       </div>
 
     </section>

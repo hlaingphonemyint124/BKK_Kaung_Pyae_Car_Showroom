@@ -51,21 +51,21 @@ body.dark {
 .deals {
   position: relative;
   overflow: hidden;
-  padding: 120px 0 140px;
+  padding: 72px 0 100px;        /* ← was 120px 0 140px */
   background: var(--bg);
   text-align: center;
   font-family: var(--font-b);
   transition: background 0.4s;
 }
 
-/* Top radial glow */
+/* Top radial glow — smaller so it doesn't push content */
 .deals::before {
   content: '';
   position: absolute;
-  top: -220px; left: 50%; transform: translateX(-50%);
-  width: 900px; height: 600px; border-radius: 50%;
+  top: -80px; left: 50%; transform: translateX(-50%);   /* ← was -220px */
+  width: 600px; height: 300px; border-radius: 50%;       /* ← was 900x600 */
   background: radial-gradient(circle, rgba(var(--accent-rgb),0.07), transparent 65%);
-  filter: blur(60px); pointer-events: none;
+  filter: blur(40px); pointer-events: none;              /* ← was blur(60px) */
 }
 
 /* Bottom section fade */
@@ -111,7 +111,7 @@ body.dark .deals-particles { opacity: 1; }
 /* ── Header ────────────────────────────────────────────────────────────────── */
 .deals-header {
   position: relative; z-index: 1;
-  padding: 0 24px; margin-bottom: 48px;
+  padding: 0 24px; margin-bottom: 32px;   /* ← was 48px */
 }
 
 .deals-eyebrow {
@@ -129,10 +129,10 @@ body.dark .deals-particles { opacity: 1; }
 
 .deals-title {
   font-family: var(--font-d);
-  font-size: clamp(38px, 5.5vw, 68px);
+  font-size: clamp(34px, 5vw, 60px);      /* ← was clamp(38px,5.5vw,68px) */
   font-weight: 700; color: var(--text-h);
   letter-spacing: -0.5px; line-height: 1.08;
-  margin: 0 0 14px;
+  margin: 0 0 12px;
 }
 
 .deals-sub {
@@ -143,7 +143,7 @@ body.dark .deals-particles { opacity: 1; }
 /* ── Tabs ──────────────────────────────────────────────────────────────────── */
 .deals-tabs {
   display: flex; justify-content: center; gap: 12px;
-  margin-bottom: 52px;
+  margin-bottom: 36px;                    /* ← was 52px */
   position: relative; z-index: 1;
   padding: 0 24px;
 }
@@ -186,13 +186,11 @@ body.dark .deals-tabs button.active {
   align-items: center;
   position: relative;
   z-index: 1;
-  /* Arrows sit flush, mask handles visual fade */
   padding: 0;
 }
 
 /* ── Nav arrows ────────────────────────────────────────────────────────────── */
 .nav-arrow {
-  /* Fixed size, never shrink */
   flex-shrink: 0;
   width: 48px; height: 48px; border-radius: 50%;
   border: none; outline: none; cursor: pointer;
@@ -200,7 +198,6 @@ body.dark .deals-tabs button.active {
   color: var(--accent); z-index: 10;
   margin: 0 10px;
   position: relative;
-  /* Glass pill */
   background: rgba(255,255,255,0.82);
   box-shadow:
     0 0 0 1.5px rgba(var(--accent-rgb), 0.40),
@@ -215,7 +212,6 @@ body.dark .nav-arrow {
     0 0 20px 3px rgba(var(--accent-rgb), 0.22),
     inset 0 1px 0 rgba(255,255,255,0.04);
 }
-
 .nav-arrow:hover {
   background: rgba(255,255,255,0.97);
   box-shadow:
@@ -230,7 +226,6 @@ body.dark .nav-arrow:hover {
     0 0 32px 8px rgba(var(--accent-rgb), 0.36),
     inset 0 1px 0 rgba(255,255,255,0.07);
 }
-
 .nav-arrow svg {
   width: 20px; height: 20px; position: relative; z-index: 2;
   filter: drop-shadow(0 0 4px rgba(var(--accent-rgb), 0.55));
@@ -240,7 +235,6 @@ body.dark .nav-arrow:hover {
 .nav-arrow--prev:hover svg { transform: translateX(-2px); }
 .nav-arrow--next:hover svg { transform: translateX(2px); }
 
-/* Glow layer */
 .nav-glow {
   position: absolute; inset: 0; border-radius: 50%;
   background: radial-gradient(circle, rgba(var(--accent-rgb),0.18) 0%, transparent 70%);
@@ -249,8 +243,6 @@ body.dark .nav-arrow:hover {
 .nav-arrow:hover .nav-glow {
   background: radial-gradient(circle, rgba(var(--accent-rgb),0.35) 0%, transparent 70%);
 }
-
-/* Pulse ring */
 .nav-ring {
   position: absolute; inset: -4px; border-radius: 50%;
   border: 1.5px solid rgba(var(--accent-rgb), 0.35);
@@ -264,10 +256,8 @@ body.dark .nav-arrow:hover {
 
 /* ── Slider mask + track ───────────────────────────────────────────────────── */
 .slider-mask {
-  /* Takes all remaining width between arrows */
   flex: 1;
   min-width: 0;
-  /* Soft fade at both edges */
   -webkit-mask-image: linear-gradient(to right,
     transparent 0%, black 8%, black 92%, transparent 100%);
   mask-image: linear-gradient(to right,
@@ -276,15 +266,12 @@ body.dark .nav-arrow:hover {
 }
 
 .slider-track {
-  /* This is the scrollable element */
   overflow-x: auto;
   overflow-y: visible;
   scrollbar-width: none;
   -ms-overflow-style: none;
   cursor: grab;
-  /* vertical padding so card drop-shadows & hover lift aren't clipped */
-  padding: 28px 0 40px;
-  /* keep perspective for child 3d — but NOT preserve-3d (that would conflict) */
+  padding: 20px 0 32px;         /* ← was 28px 0 40px */
   perspective: 0px;
 }
 .slider-track::-webkit-scrollbar { display: none; }
@@ -292,63 +279,29 @@ body.dark .nav-arrow:hover {
 
 .slider-inner {
   display: flex;
-  gap: 24px;
+  gap: 20px;                    /* ← was 24px */
   width: max-content;
-  /* Side padding so first/last card are centred under the arrows */
   padding: 0 56px;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════
    CAR CARD + FLIP
-   ──────────────────────────────────────────────────────────────────────────
-   RULES that guarantee flip works on ALL browsers including Safari/Chrome Mac:
-
-   1. .car-card
-      ✅ perspective: 1200px       — depth for the flip
-      ✅ width / flex-shrink: 0    — sizing
-      ❌ NO transform              — any JS or CSS transform here breaks preserve-3d
-      ❌ NO overflow: hidden       — creates stacking context → flattens children
-      ❌ NO filter                 — same problem
-      ❌ NO will-change: transform — same problem
-      ❌ NO opacity animation      — framer-motion's opacity is fine on the wrapper,
-                                     but avoid mixing with 3d children if possible
-
-   2. .card-flipper
-      ✅ transform-style: preserve-3d   (+ -webkit-)
-      ✅ explicit height (440px)         — if height is 0 or "100%"
-                                           the card collapses → black strip
-      ✅ transition on transform         — the actual flip
-      ❌ NO overflow: hidden
-      ❌ NO filter
-      ❌ NO will-change on this element
-
-   3. .card-face
-      ✅ position: absolute; inset: 0
-      ✅ backface-visibility: hidden     (+ -webkit-)
-      ✅ overflow: hidden                — SAFE here (leaf node, not preserve-3d parent)
-      ✅ display: flex; flex-direction: column  — layout
-      For .card-back: transform: rotateY(180deg)
-
-   4. Hover lift
-      ✅ Applied to .card-face directly (translateY) NOT to .car-card
 ══════════════════════════════════════════════════════════════════════════════ */
 
 .car-card {
-  /* ONLY perspective + sizing here */
   perspective: 1200px;
   -webkit-perspective: 1200px;
-  width: 290px;
+  width: 272px;                 /* ← was 290px */
   flex-shrink: 0;
   cursor: pointer;
   user-select: none;
-  /* Framer-motion sets opacity — that's fine on this wrapper */
 }
 
 /* ── Flipper ── */
 .card-flipper {
   position: relative;
   width: 100%;
-  height: 448px;         /* ← EXPLICIT height — critical, prevents black strip */
+  height: 400px;                /* ← was 448px */
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
   transition:
@@ -365,21 +318,18 @@ body.dark .nav-arrow:hover {
 .card-face {
   position: absolute;
   inset: 0;
-  border-radius: 20px;
-  overflow: hidden;           /* safe — leaf element */
+  border-radius: 18px;          /* ← was 20px */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: 24px 22px 18px;
-  /* Hide the back of this face */
+  padding: 20px 18px 14px;      /* ← was 24px 22px 18px */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  /* Theming */
   border: 1px solid var(--border-card);
   box-shadow: var(--shadow-card);
   transition: border-color 0.3s, box-shadow 0.35s, transform 0.35s cubic-bezier(0.22,1,0.36,1);
 }
 
-/* Light glass */
 .card-face {
   background: var(--bg-card-front);
   backdrop-filter: blur(22px) saturate(1.8);
@@ -390,38 +340,31 @@ body.dark .card-face {
   backdrop-filter: none; -webkit-backdrop-filter: none;
 }
 
-/* Hover lift on front face only (NOT on .car-card — that breaks 3d) */
 .car-card:hover .card-front {
   border-color: var(--border-hover);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-9px);
+  transform: translateY(-8px);  /* ← was -9px */
 }
-/* Don't lift when flipped */
-.card-flipper.flipped .card-front{
+.card-flipper.flipped .card-front {
   transform: none;
 }
 
-/* FRONT FACE */
-.card-front{
+.card-front {
   transform: rotateY(0deg);
   -webkit-transform: rotateY(0deg);
   z-index: 2;
 }
-
-/* BACK FACE */
-.card-back{
+.card-back {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
+.card-flipper.flipped {
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
 }
 
-/* CLICK FLIP */
-.card-flipper.flipped{
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-}
-
-/* OPTIONAL HOVER FLIP (desktop only) */
-.car-card:hover .card-flipper{
+/* Hover flip on desktop */
+.car-card:hover .card-flipper {
   transform: rotateY(180deg);
 }
 
@@ -430,7 +373,6 @@ body.dark .card-back {
   border-color: rgba(220,30,30,0.18);
 }
 
-/* Glass shine line */
 .card-gloss {
   position: absolute;
   top: 0; left: 14px; right: 14px; height: 1px;
@@ -441,7 +383,6 @@ body.dark .card-gloss {
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
 }
 
-/* Corner accents */
 .card-corner {
   position: absolute; width: 14px; height: 14px;
   pointer-events: none; opacity: 0;
@@ -455,10 +396,10 @@ body.dark .card-gloss {
 /* ── Card image ── */
 .card-img-wrap {
   position: relative;
-  width: 100%; height: 168px;
+  width: 100%; height: 148px;   /* ← was 168px */
   flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;          /* ← was 16px */
 }
 .card-img-glow {
   position: absolute;
@@ -473,7 +414,6 @@ body.dark .card-gloss {
   width: 100%; height: 100%; object-fit: contain;
   position: relative; z-index: 1; pointer-events: none;
   transition: transform 0.50s cubic-bezier(0.22,1,0.36,1), filter 0.40s;
-  /* Light: normal */
   mix-blend-mode: normal; filter: none;
 }
 .car-card:hover .card-front .card-img-wrap img {
@@ -488,7 +428,7 @@ body.dark .car-card:hover .card-front .card-img-wrap img {
 
 /* ── Separator ── */
 .card-sep {
-  height: 1px; flex-shrink: 0; margin-bottom: 14px;
+  height: 1px; flex-shrink: 0; margin-bottom: 12px;  /* ← was 14px */
   background: linear-gradient(90deg, transparent, rgba(0,0,0,0.08), transparent);
 }
 body.dark .card-sep {
@@ -496,11 +436,11 @@ body.dark .card-sep {
 }
 
 /* ── Name + price ── */
-.card-info { flex-shrink: 0; margin-bottom: 16px; }
+.card-info { flex-shrink: 0; margin-bottom: 12px; }  /* ← was 16px */
 .card-name {
   font-family: var(--font-d);
-  font-size: 22px; font-weight: 700; color: var(--text-h);
-  margin: 0 0 6px; letter-spacing: 0.01em; line-height: 1.18;
+  font-size: 20px; font-weight: 700; color: var(--text-h);  /* ← was 22px */
+  margin: 0 0 5px; letter-spacing: 0.01em; line-height: 1.18;
 }
 .card-price {
   font-family: var(--font-b);
@@ -511,7 +451,7 @@ body.dark .card-sep {
 /* ── CTA button ── */
 .card-cta {
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; padding: 11px 18px; border-radius: 10px; flex-shrink: 0;
+  width: 100%; padding: 10px 18px; border-radius: 10px; flex-shrink: 0;  /* ← was 11px */
   font-family: var(--font-b); font-size: 12px; font-weight: 500;
   letter-spacing: 0.09em; text-transform: uppercase;
   cursor: pointer; position: relative; overflow: hidden;
@@ -555,17 +495,17 @@ body.dark .card-cta:hover {
 .flip-hint {
   font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
   color: var(--text-p); text-align: center;
-  margin: 10px 0 0; opacity: 0.55; flex-shrink: 0;
+  margin: 8px 0 0; opacity: 0.55; flex-shrink: 0;  /* ← was 10px */
 }
 
 /* ── Back content ── */
 .back-head {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px; flex-shrink: 0;
+  margin-bottom: 12px; flex-shrink: 0;  /* ← was 16px */
 }
 .back-name {
   font-family: var(--font-d);
-  font-size: 20px; font-weight: 700; color: var(--text-h);
+  font-size: 19px; font-weight: 700; color: var(--text-h);  /* ← was 20px */
   margin: 0; line-height: 1.2;
 }
 .back-badge {
@@ -580,11 +520,11 @@ body.dark .card-cta:hover {
 /* Specs */
 .specs-list {
   flex: 1; display: flex; flex-direction: column;
-  gap: 7px; margin-bottom: 14px; overflow: hidden;
+  gap: 5px; margin-bottom: 12px; overflow: hidden;  /* ← was gap 7px, mb 14px */
 }
 .spec-row {
   display: flex; align-items: center; gap: 10px;
-  padding: 8px 11px; border-radius: 10px;
+  padding: 7px 11px; border-radius: 10px;           /* ← was 8px */
   background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);
   transition: background 0.2s, border-color 0.2s;
 }
@@ -595,7 +535,7 @@ body.dark .spec-row { background: rgba(255,255,255,0.03); border-color: rgba(255
 .spec-value { font-size: 11.5px; font-weight: 600; color: var(--text-h); text-align: right; }
 
 /* ── CTA section ───────────────────────────────────────────────────────────── */
-.deals-cta { margin-top: 60px; position: relative; z-index: 3; }
+.deals-cta { margin-top: 40px; position: relative; z-index: 3; }  /* ← was 60px */
 
 .cta-btn {
   padding: 15px 52px; border-radius: 6px;
@@ -632,27 +572,27 @@ body.dark .cta-btn:hover {
 
 /* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .car-card { width: 268px; }
+  .car-card { width: 256px; }
 }
 
 @media (max-width: 768px) {
-  .deals { padding: 80px 0 120px; }
-  .deals-title { font-size: 38px; }
-  .car-card { width: 252px; }
-  .card-flipper { height: 432px; }
-  .card-img-wrap { height: 148px; }
+  .deals { padding: 60px 0 90px; }
+  .deals-title { font-size: 34px; }
+  .car-card { width: 240px; }
+  .card-flipper { height: 384px; }
+  .card-img-wrap { height: 132px; }
   .nav-arrow { width: 40px; height: 40px; margin: 0 6px; }
   .nav-arrow svg { width: 17px; height: 17px; }
   .slider-inner { padding: 0 44px; }
 }
 
 @media (max-width: 480px) {
-  .car-card { width: 230px; }
-  .card-flipper { height: 420px; }
-  .card-img-wrap { height: 136px; }
+  .deals { padding: 48px 0 72px; }
+  .car-card { width: 218px; }
+  .card-flipper { height: 368px; }
+  .card-img-wrap { height: 120px; }
   .deals-tabs { flex-direction: column; align-items: center; }
   .nav-arrow { width: 36px; height: 36px; margin: 0 4px; }
   .nav-arrow svg { width: 15px; height: 15px; }
-  .slider-inner { padding: 0 36px; gap: 18px; }
+  .slider-inner { padding: 0 36px; gap: 16px; }
 }
-

@@ -3,21 +3,21 @@ import "./WhyChooseUs.css";
 
 const items = [
   {
-    img:  "/images/WhyChooseUs/WCU1.jpg",
+    img:  "/images/WhyChooseUs/WCU1.webp",
     tag:  "Quality",
     h4:   "Trusted & Well-Maintained Cars",
     p:    "Every vehicle is carefully inspected, clean, and ready to drive.",
     side: "left",
   },
   {
-    img:  "/images/WhyChooseUs/WCU3.webp",
+    img:  "/images/WhyChooseUs/WCU3.jpg",
     tag:  "Pricing",
     h4:   "Transparent Pricing",
     p:    "Clear price with no hidden fees — what you see is what you pay.",
     side: "right",
   },
   {
-    img:  "/images/WhyChooseUs/WCU2.webp",
+    img:  "/images/WhyChooseUs/WCU2.jpg",
     tag:  "Booking",
     h4:   "Fast & Easy Booking",
     p:    "Rent in minutes with flexible rental options and quick support.",

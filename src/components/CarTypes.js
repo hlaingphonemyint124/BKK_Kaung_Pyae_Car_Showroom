@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { BsCarFront } from "react-icons/bs";
 import { FaCarSide, FaTruckPickup, FaShuttleVan } from "react-icons/fa";
@@ -15,69 +15,16 @@ const types = [
   { name: "Electric",  icon: <MdElectricCar />, slug: "electric"  },
 ];
 
-const PER_SLIDE = 4;
+const SCROLL_AMOUNT = 280;
 
 export default function CarTypes() {
   const navigate = useNavigate();
+  const rowRef   = useRef(null);
 
-  const slides = [];
-  for (let i = 0; i < types.length; i += PER_SLIDE) {
-    slides.push(types.slice(i, i + PER_SLIDE));
-  }
+  const scrollLeft  = () => rowRef.current?.scrollBy({ left: -SCROLL_AMOUNT, behavior: "smooth" });
+  const scrollRight = () => rowRef.current?.scrollBy({ left:  SCROLL_AMOUNT, behavior: "smooth" });
 
-  const [current, setCurrent] = useState(0);
-  const sliderRef  = useRef(null);
-  const wheelAccum = useRef(0);
-  const wheelTimer = useRef(null);
-
-  const prev = () => setCurrent((c) => Math.max(c - 1, 0));
-  const next = () => setCurrent((c) => Math.min(c + 1, slides.length - 1));
-
-  // Non-passive wheel — fixes console error
-  useEffect(() => {
-    const el = sliderRef.current;
-    if (!el) return;
-    const onWheel = (e) => {
-      if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
-      e.preventDefault();
-      wheelAccum.current += e.deltaX;
-      clearTimeout(wheelTimer.current);
-      wheelTimer.current = setTimeout(() => {
-        if      (wheelAccum.current >  40) setCurrent((c) => Math.min(c + 1, slides.length - 1));
-        else if (wheelAccum.current < -40) setCurrent((c) => Math.max(c - 1, 0));
-        wheelAccum.current = 0;
-      }, 50);
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [slides.length]);
-
-  // Touch swipe
-  const touchX = useRef(0);
-  const touchY = useRef(0);
-  const onTouchStart = (e) => {
-    touchX.current = e.touches[0].clientX;
-    touchY.current = e.touches[0].clientY;
-  };
-  const onTouchEnd = (e) => {
-    const dx = touchX.current - e.changedTouches[0].clientX;
-    const dy = Math.abs(touchY.current - e.changedTouches[0].clientY);
-    if (Math.abs(dx) > 40 && Math.abs(dx) > dy) dx > 0 ? next() : prev();
-  };
-
-  // Mouse drag
-  const mouseX  = useRef(0);
-  const isDrag  = useRef(false);
-  const onMouseDown  = (e) => { mouseX.current = e.clientX; isDrag.current = true; };
-  const onMouseUp    = (e) => {
-    if (!isDrag.current) return;
-    isDrag.current = false;
-    const dx = mouseX.current - e.clientX;
-    if (Math.abs(dx) > 40) dx > 0 ? next() : prev();
-  };
-  const onMouseLeave = () => { isDrag.current = false; };
-
-  // 3D tilt
+  /* ── 3-D tilt ── */
   const onCardMove = (e, el) => {
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width;
@@ -88,7 +35,7 @@ export default function CarTypes() {
   };
   const onCardLeave = (el) => { el.style.transform = ""; };
 
-  // Particles
+  /* ── Particles ── */
   const spawnParticles = (el) => {
     for (let i = 0; i < 4; i++) {
       const p = document.createElement("div");
@@ -102,7 +49,7 @@ export default function CarTypes() {
     }
   };
 
-  // Ripple
+  /* ── Ripple ── */
   const spawnRipple = (e, el) => {
     const r   = el.getBoundingClientRect();
     const rip = document.createElement("div");
@@ -128,73 +75,36 @@ export default function CarTypes() {
         </button>
       </div>
 
-      <div className="ct-slider">
-        <button
-          className="ct-arrow"
-          onClick={prev}
-          disabled={current === 0}
-          aria-label="Previous"
-        >
-          ‹
+      {/* Same wrapper/row/arrow structure as BrandList */}
+      <div className="ct-wrapper">
+        <button className="ct-arrow" onClick={scrollLeft} aria-label="Scroll left">
+          ❮
         </button>
 
-        <div
-          ref={sliderRef}
-          className="ct-wrapper"
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-          onMouseDown={onMouseDown}
-          onMouseUp={onMouseUp}
-          onMouseLeave={onMouseLeave}
-          style={{ touchAction: "pan-y" }}
-        >
-          <div
-            className="ct-track"
-            style={{ transform: `translateX(-${current * 100}%)` }}
-          >
-            {slides.map((group, pi) => (
-              <div className="ct-slide" key={pi}>
-                {group.map((type, i) => (
-                  <div
-                    key={type.slug}
-                    className="ct-card"
-                    style={{ animationDelay: `${i * 0.07}s` }}
-                    onClick={(e) => handleCardClick(e, type)}
-                    onMouseMove={(e) => onCardMove(e, e.currentTarget)}
-                    onMouseEnter={(e) => spawnParticles(e.currentTarget)}
-                    onMouseLeave={(e) => onCardLeave(e.currentTarget)}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`Browse ${type.name} cars`}
-                    onKeyDown={(e) => e.key === "Enter" && navigate(`/types/${type.slug}`)}
-                  >
-                    <div className="ct-icon">{type.icon}</div>
-                    <p className="ct-label">{type.name}</p>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
+        <div className="ct-row" ref={rowRef}>
+          {types.map((type, i) => (
+            <div
+              key={type.slug}
+              className="ct-card"
+              style={{ animationDelay: `${i * 0.07}s` }}
+              onClick={(e) => handleCardClick(e, type)}
+              onMouseMove={(e) => onCardMove(e, e.currentTarget)}
+              onMouseEnter={(e) => spawnParticles(e.currentTarget)}
+              onMouseLeave={(e) => onCardLeave(e.currentTarget)}
+              role="button"
+              tabIndex={0}
+              aria-label={`Browse ${type.name} cars`}
+              onKeyDown={(e) => e.key === "Enter" && navigate(`/types/${type.slug}`)}
+            >
+              <div className="ct-icon">{type.icon}</div>
+              <p className="ct-label">{type.name}</p>
+            </div>
+          ))}
         </div>
 
-        <button
-          className="ct-arrow"
-          onClick={next}
-          disabled={current === slides.length - 1}
-          aria-label="Next"
-        >
-          ›
+        <button className="ct-arrow" onClick={scrollRight} aria-label="Scroll right">
+          ❯
         </button>
-      </div>
-
-      <div className="ct-dots">
-        {slides.map((_, i) => (
-          <span
-            key={i}
-            className={`ct-dot${current === i ? " ct-dot--active" : ""}`}
-            onClick={() => setCurrent(i)}
-          />
-        ))}
       </div>
 
       <p className="ct-note">+100 cars are ready to be yours</p>
