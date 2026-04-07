@@ -22,19 +22,18 @@ function AdminCarPage({ mode }) {
     markBestSeller,
     markMostRented,
     markNotAvailable,
+    loading,
+    error,
   } = useAdminCars(mode);
 
-  // UI state
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  // filter state
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedFuel, setSelectedFuel] = useState("");
   const [selectedTransmission, setSelectedTransmission] = useState("");
 
-  // tabs (dynamic)
   const tabs =
     mode === "buy"
       ? [
@@ -48,12 +47,10 @@ function AdminCarPage({ mode }) {
           { label: "Not Available", value: "not-available" },
         ];
 
-  // unique brands
   const brands = useMemo(() => {
-    return [...new Set(filteredCars.map((c) => c.brand).filter(Boolean))];
+    return [...new Set(filteredCars.map((c) => c.brand || "").filter(Boolean))];
   }, [filteredCars]);
 
-  // filtering logic (FINAL)
   const displayCars = useMemo(() => {
     return filteredCars.filter((car) => {
       const name = car.name?.toLowerCase() || "";
@@ -65,10 +62,8 @@ function AdminCarPage({ mode }) {
         (!searchTerm ||
           name.includes(searchTerm.toLowerCase()) ||
           brand.includes(searchTerm.toLowerCase())) &&
-        (!selectedBrand ||
-          brand === selectedBrand.toLowerCase()) &&
-        (!selectedFuel ||
-          fuel === selectedFuel.toLowerCase()) &&
+        (!selectedBrand || brand === selectedBrand.toLowerCase()) &&
+        (!selectedFuel || fuel === selectedFuel.toLowerCase()) &&
         (!selectedTransmission ||
           transmission === selectedTransmission.toLowerCase())
       );
@@ -81,7 +76,6 @@ function AdminCarPage({ mode }) {
     selectedTransmission,
   ]);
 
-  // close dropdown when click outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (overlayRef.current && !overlayRef.current.contains(e.target)) {
@@ -95,7 +89,6 @@ function AdminCarPage({ mode }) {
       document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // navigation
   const handleModeClick = () => {
     navigate(mode === "buy" ? "/admin/rental" : "/admin/buy");
   };
@@ -104,7 +97,6 @@ function AdminCarPage({ mode }) {
     navigate(`/admin/${mode}/new`);
   };
 
-  // filter actions
   const handleReset = () => {
     setSelectedBrand("");
     setSelectedFuel("");
@@ -118,17 +110,11 @@ function AdminCarPage({ mode }) {
 
   return (
     <div className="admin-page-section">
-      {/* HERO */}
       <div className="admin-hero-block">
-        <h1 className="admin-hero-block__title">
-          Fast, Simple and Easy.
-        </h1>
-        <p className="admin-hero-block__subtitle">
-          Shop Online. Pickup Today.
-        </p>
+        <h1 className="admin-hero-block__title">Fast, Simple and Easy.</h1>
+        <p className="admin-hero-block__subtitle">Shop Online. Pickup Today.</p>
       </div>
 
-      {/* TOOLBAR */}
       <div className="admin-toolbar-overlay" ref={overlayRef}>
         <AdminFilterBar
           mode={mode === "buy" ? "Buy" : "Rental"}
@@ -145,11 +131,9 @@ function AdminCarPage({ mode }) {
           isSearchOpen={isSearchOpen}
         />
 
-        {/* FILTER PANEL */}
         {isFilterOpen && (
           <div className="admin-filter-panel admin-overlay-panel">
             <div className="admin-filter-panel__grid">
-              {/* BRAND */}
               <div className="admin-filter-panel__group">
                 <label>Brand</label>
                 <select
@@ -165,7 +149,6 @@ function AdminCarPage({ mode }) {
                 </select>
               </div>
 
-              {/* FUEL */}
               <div className="admin-filter-panel__group">
                 <label>Fuel</label>
                 <select
@@ -180,14 +163,11 @@ function AdminCarPage({ mode }) {
                 </select>
               </div>
 
-              {/* TRANSMISSION */}
               <div className="admin-filter-panel__group">
                 <label>Transmission</label>
                 <select
                   value={selectedTransmission}
-                  onChange={(e) =>
-                    setSelectedTransmission(e.target.value)
-                  }
+                  onChange={(e) => setSelectedTransmission(e.target.value)}
                 >
                   <option value="">All Transmission</option>
                   <option value="Manual">Manual</option>
@@ -196,7 +176,6 @@ function AdminCarPage({ mode }) {
               </div>
             </div>
 
-            {/* ACTION BUTTONS */}
             <div className="admin-filter-panel__actions">
               <button onClick={handleReset}>Reset</button>
               <button onClick={handleApply}>Apply</button>
@@ -204,7 +183,6 @@ function AdminCarPage({ mode }) {
           </div>
         )}
 
-        {/* SEARCH PANEL */}
         {isSearchOpen && (
           <div className="admin-search-panel admin-overlay-panel">
             <input
@@ -217,61 +195,63 @@ function AdminCarPage({ mode }) {
         )}
       </div>
 
-      {/* TABS */}
       <AdminTabs
         tabs={tabs}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
 
-      {/* GRID */}
-      <div className="admin-grid">
-        <AddCarCard onClick={handleAddCar} />
+      {loading && <p className="admin-state-message">Loading cars...</p>}
+      {error && <p className="admin-state-message admin-state-message--error">{error}</p>}
 
-        {displayCars.map((car) => (
-          <AdminCarCard
-            key={car.id}
-            car={car}
-            isActive={activeCardId === car.id}
-            onToggleMenu={() =>
+      {!loading && !error && (
+        <div className="admin-grid">
+          <AddCarCard onClick={handleAddCar} />
+
+          {displayCars.map((car) => (
+            <AdminCarCard
+              key={car.id}
+              car={car}
+              isActive={activeCardId === car.id}
+              onToggleMenu={() =>
                 setActiveCardId(activeCardId === car.id ? null : car.id)
-            }
-            onCloseMenu={() => setActiveCardId(null)}
-            onEdit={() => navigate(`/admin/${mode}/${car.id}`)}
-            onViewDetail={() => navigate(`/admin/${mode}/${car.id}`)}
-            onClear={() => {
+              }
+              onCloseMenu={() => setActiveCardId(null)}
+              onEdit={() => navigate(`/admin/${mode}/${car.id}`)}
+              onViewDetail={() => navigate(`/admin/${mode}/${car.id}`)}
+              onClear={() => {
                 clearCar(car.id);
                 setActiveCardId(null);
-            }}
-
-            thirdActionLabel={
+              }}
+              thirdActionLabel={
                 mode === "buy" ? "Add to New Arrivals" : "Add to Most Rented"
-            }
-            thirdActionHandler={() => {
+              }
+              thirdActionHandler={() => {
                 if (mode === "buy") {
-                markNewArrival?.(car.id);
+                  markNewArrival?.(car.id);
                 } else {
-                markMostRented?.(car.id);
+                  markMostRented?.(car.id);
                 }
                 setActiveCardId(null);
-            }}
-
-            fourthActionLabel={
-                mode === "buy" ? "Add to Best Seller" : "Add to Not Available Now"
-            }
-            fourthActionHandler={() => {
+              }}
+              fourthActionLabel={
+                mode === "buy"
+                  ? "Add to Best Seller"
+                  : "Add to Not Available Now"
+              }
+              fourthActionHandler={() => {
                 if (mode === "buy") {
-                markBestSeller?.(car.id);
+                  markBestSeller?.(car.id);
                 } else {
-                markNotAvailable?.(car.id);
+                  markNotAvailable?.(car.id);
                 }
                 setActiveCardId(null);
-            }}
-
-            showUnavailableOverlay={mode === "rental"}
+              }}
+              showUnavailableOverlay={mode === "rental"}
             />
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

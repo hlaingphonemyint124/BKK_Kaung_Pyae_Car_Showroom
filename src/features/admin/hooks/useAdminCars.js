@@ -1,13 +1,102 @@
-import { useMemo, useState } from "react";
-import mockAdminCars from "../data/mockAdminCars";
+import { useEffect, useMemo, useState } from "react";
+import {
+  getAdminCars,
+  deleteAdminCar,
+  updateAdminCar,
+} from "../services/adminCarService";
 
 function useAdminCars(type) {
-  const [cars, setCars] = useState(mockAdminCars);
+  const [cars, setCars] = useState([]);
   const [activeTab, setActiveTab] = useState("all");
   const [activeCardId, setActiveCardId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const data = await getAdminCars();
+
+        console.log("RAW API:", data);
+
+        const carList =
+          data?.cars ||
+          data?.data?.cars ||
+          data?.data ||
+          data?.rows ||
+          [];
+
+        console.log("CAR LIST:", carList);
+
+        const mappedCars = carList.map((car) => ({
+          id: car.id,
+          brand: car.brand || "",
+          model: car.model || "",
+          name: `${car.brand || ""} ${car.model || ""}`.trim(),
+
+          image:
+            car.primary_image ||
+            car.image ||
+            car.images?.find((img) => img.is_primary)?.storage_path ||
+            car.images?.[0]?.storage_path ||
+            "",
+
+          images: car.images || [],
+
+          // use the page mode directly
+          type: type,
+
+          specs: {
+            fuel: car.fuel_type || car.fuel || "Petrol",
+            drive: car.drive_type || car.drive || "2WD",
+            doors: car.doors || 4,
+            seats: car.seats || 4,
+            transmission: car.transmission || "Auto",
+          },
+
+          buy: {
+            price: car.sale_price || 0,
+          },
+
+          rental: {
+            pricePerDay: car.rent_price_per_day || 0,
+          },
+
+          status: {
+            isNewArrival: car.is_new_arrival || false,
+            isBestSeller: car.is_best_seller || false,
+            isMostRented: car.is_most_rented || false,
+            isAvailable:
+              car.status !== "not_available" &&
+              car.status !== "rented" &&
+              car.status !== "sold",
+          },
+        }));
+
+        console.log("MAPPED CARS:", mappedCars);
+        console.log("MODE:", type);
+
+        setCars(mappedCars);
+      } catch (err) {
+        console.error("Failed to fetch cars:", err);
+        setError(err.response?.data?.error || "Failed to load cars");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  }, [type]);
 
   const filteredCars = useMemo(() => {
-    const typedCars = cars.filter((car) => car.type === type);
+    const typedCars = cars.filter((car) => {
+      if (type === "buy") return car.type === "buy";
+      if (type === "rental") return car.type === "rental";
+      return true;
+    });
 
     if (activeTab === "new-arrivals") {
       return typedCars.filter((car) => car.status?.isNewArrival);
@@ -28,77 +117,115 @@ function useAdminCars(type) {
     return typedCars;
   }, [cars, type, activeTab]);
 
-  const clearCar = (id) => {
-    setCars((prev) => prev.filter((car) => car.id !== id));
-    setActiveCardId(null);
+  const clearCar = async (id) => {
+    try {
+      await deleteAdminCar(id);
+      setCars((prev) => prev.filter((car) => car.id !== id));
+      setActiveCardId(null);
+    } catch (err) {
+      console.error("Failed to delete car:", err);
+      setError(err.response?.data?.error || "Failed to delete car");
+    }
   };
 
-  const markNewArrival = (id) => {
-    setCars((prev) =>
-      prev.map((car) =>
-        car.id === id
-          ? {
-              ...car,
-              status: {
-                ...car.status,
-                isNewArrival: true,
-              },
-            }
-          : car
-      )
-    );
-    setActiveCardId(null);
+  const markNewArrival = async (id) => {
+    try {
+      await updateAdminCar(id, { is_new_arrival: true });
+
+      setCars((prev) =>
+        prev.map((car) =>
+          car.id === id
+            ? {
+                ...car,
+                status: {
+                  ...car.status,
+                  isNewArrival: true,
+                },
+              }
+            : car
+        )
+      );
+
+      setActiveCardId(null);
+    } catch (err) {
+      console.error("Failed to update car:", err);
+      setError(err.response?.data?.error || "Failed to update car");
+    }
   };
 
-  const markBestSeller = (id) => {
-    setCars((prev) =>
-      prev.map((car) =>
-        car.id === id
-          ? {
-              ...car,
-              status: {
-                ...car.status,
-                isBestSeller: true,
-              },
-            }
-          : car
-      )
-    );
-    setActiveCardId(null);
+  const markBestSeller = async (id) => {
+    try {
+      await updateAdminCar(id, { is_best_seller: true });
+
+      setCars((prev) =>
+        prev.map((car) =>
+          car.id === id
+            ? {
+                ...car,
+                status: {
+                  ...car.status,
+                  isBestSeller: true,
+                },
+              }
+            : car
+        )
+      );
+
+      setActiveCardId(null);
+    } catch (err) {
+      console.error("Failed to update car:", err);
+      setError(err.response?.data?.error || "Failed to update car");
+    }
   };
 
-  const markMostRented = (id) => {
-    setCars((prev) =>
-      prev.map((car) =>
-        car.id === id
-          ? {
-              ...car,
-              status: {
-                ...car.status,
-                isMostRented: true,
-              },
-            }
-          : car
-      )
-    );
-    setActiveCardId(null);
+  const markMostRented = async (id) => {
+    try {
+      await updateAdminCar(id, { is_most_rented: true });
+
+      setCars((prev) =>
+        prev.map((car) =>
+          car.id === id
+            ? {
+                ...car,
+                status: {
+                  ...car.status,
+                  isMostRented: true,
+                },
+              }
+            : car
+        )
+      );
+
+      setActiveCardId(null);
+    } catch (err) {
+      console.error("Failed to update car:", err);
+      setError(err.response?.data?.error || "Failed to update car");
+    }
   };
 
-  const markNotAvailable = (id) => {
-    setCars((prev) =>
-      prev.map((car) =>
-        car.id === id
-          ? {
-              ...car,
-              status: {
-                ...car.status,
-                isAvailable: false,
-              },
-            }
-          : car
-      )
-    );
-    setActiveCardId(null);
+  const markNotAvailable = async (id) => {
+    try {
+      await updateAdminCar(id, { status: "not_available" });
+
+      setCars((prev) =>
+        prev.map((car) =>
+          car.id === id
+            ? {
+                ...car,
+                status: {
+                  ...car.status,
+                  isAvailable: false,
+                },
+              }
+            : car
+        )
+      );
+
+      setActiveCardId(null);
+    } catch (err) {
+      console.error("Failed to update car:", err);
+      setError(err.response?.data?.error || "Failed to update car");
+    }
   };
 
   return {
@@ -113,6 +240,8 @@ function useAdminCars(type) {
     markBestSeller,
     markMostRented,
     markNotAvailable,
+    loading,
+    error,
   };
 }
 

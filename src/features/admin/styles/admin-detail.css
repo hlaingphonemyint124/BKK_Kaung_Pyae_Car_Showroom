@@ -191,41 +191,71 @@
 /* Spec Grid */
 .admin-spec-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .admin-spec-item {
-  background: white;
-  border-radius: 14px;
-  padding: 14px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-  transition: 0.2s;
+  background: #f5f5f5;
+  border-radius: 18px;
+  padding: 18px 14px;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid transparent;
+  transition: 0.2s ease;
 }
 
 .admin-spec-item:hover {
+  border-color: #ff2b2b;
   transform: translateY(-2px);
 }
 
 .admin-spec-item__icon {
-  font-size: 16px;
-  margin-bottom: 4px;
+  color: #ff2b2b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.admin-spec-item__control {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.admin-spec-item__select,
 .admin-spec-item__input {
   width: 100%;
-  border: none;
-  background: transparent;
+  max-width: 150px;
+  height: 38px;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+  background: #fff;
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
   outline: none;
+  padding: 0 12px;
+  transition: 0.2s ease;
+}
+
+.admin-spec-item__select:focus,
+.admin-spec-item__input:focus {
+  border-color: #ff2b2b;
+  box-shadow: 0 0 0 3px rgba(255, 43, 43, 0.12);
 }
 
 .admin-spec-item__label {
-  font-size: 10px;
+  font-size: 13px;
   color: #666;
-  margin-top: 4px;
+  line-height: 1.2;
 }
+
 
 /* Info Rows */
 .admin-info-rows {

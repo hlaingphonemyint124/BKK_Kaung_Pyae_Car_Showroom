@@ -15,12 +15,14 @@ function AdminCarCard({
   fourthActionHandler,
   showUnavailableOverlay = true,
 }) {
-  const imageSrc = car.image || car.images?.[0];
+  const imageSrc =
+    car.image ||
+    car.images?.[0]?.storage_path ||
+    car.images?.[0] ||
+    "/images/placeholder-car.jpg";
 
   return (
     <div className="admin-product-card">
-      
-      {/* Image */}
       <div className="admin-product-card__image-wrap" onClick={onToggleMenu}>
         <img
           src={imageSrc}
@@ -28,12 +30,10 @@ function AdminCarCard({
           className="admin-product-card__image"
         />
 
-        {/* Badge */}
         <div className="admin-product-card__badge">
           {car.type === "buy" ? "Sale" : "Rent"}
         </div>
 
-        {/* Optional unavailable overlay */}
         {showUnavailableOverlay && !car.status?.isAvailable && (
           <div className="admin-product-card__unavailable">
             Not Available
@@ -41,20 +41,19 @@ function AdminCarCard({
         )}
       </div>
 
-      {/* Body */}
       <div className="admin-product-card__body">
         <h3 className="admin-product-card__title">{car.name}</h3>
 
         <p className="admin-product-card__meta">
           {car.specs?.fuel || "Petrol"}, {car.specs?.drive || "2WD"},{" "}
-          {car.specs?.doors || "2c"}, {car.specs?.seats || 4} seaters
+          {car.specs?.doors || 4}d, {car.specs?.seats || 4} seaters
         </p>
 
         <div className="admin-product-card__bottom">
           <div className="admin-product-card__price">
             {car.type === "buy"
-              ? `${car.buy?.price?.toLocaleString()} THB`
-              : `${car.rental?.pricePerDay?.toLocaleString()} THB/day`}
+              ? `${Number(car.buy?.price || 0).toLocaleString()} THB`
+              : `${Number(car.rental?.pricePerDay || 0).toLocaleString()} THB/day`}
           </div>
 
           <button
@@ -67,7 +66,6 @@ function AdminCarCard({
         </div>
       </div>
 
-      {/* ✅ FULL CARD OVERLAY MENU (FIXED POSITION) */}
       {isActive && (
         <div
           className="admin-product-card__menu-overlay"
