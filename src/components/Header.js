@@ -14,13 +14,13 @@ export default function Header() {
   const langRef = useRef(null);
 
   /* LOAD THEME */
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.body.classList.toggle("dark", savedTheme === "dark");
-    }
-  }, []);
+ useEffect(() => {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme) {
+    setTheme(savedTheme);
+    document.body.classList.toggle("dark", savedTheme === "dark");
+  }
+}, [setTheme]);
 
   /* DARK MODE */
   useEffect(() => {

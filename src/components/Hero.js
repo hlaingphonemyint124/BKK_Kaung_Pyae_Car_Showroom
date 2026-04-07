@@ -19,7 +19,6 @@ export default function Hero() {
 
   return (
     <section className="hero">
-
       <div className="hero__slider">
         {slides.map((slide, index) => (
           <img
@@ -57,7 +56,6 @@ export default function Hero() {
             <span></span>
           </div>
         </div>
-
         <div className="hero__dots">
           {slides.map((_, index) => (
             <span
@@ -68,7 +66,6 @@ export default function Hero() {
           ))}
         </div>
       </div>
-
     </section>
   );
 }
