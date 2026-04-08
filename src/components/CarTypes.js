@@ -17,6 +17,33 @@ const types = [
 
 const SCROLL_AMOUNT = 280;
 
+/* ✅ SAME NAV ARROW AS BRANDLIST */
+function NavArrow({ dir, onClick }) {
+  return (
+    <button
+      className={`ct-arrow ct-arrow--${dir}`}
+      onClick={onClick}
+      aria-label={dir === "prev" ? "Previous" : "Next"}
+    >
+      <span className="ct-nav-glow" />
+      <span className="ct-nav-ring" />
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {dir === "prev"
+          ? <polyline points="15 18 9 12 15 6" />
+          : <polyline points="9 6 15 12 9 18" />}
+      </svg>
+    </button>
+  );
+}
+
 export default function CarTypes() {
   const navigate = useNavigate();
   const rowRef   = useRef(null);
@@ -24,7 +51,7 @@ export default function CarTypes() {
   const scrollLeft  = () => rowRef.current?.scrollBy({ left: -SCROLL_AMOUNT, behavior: "smooth" });
   const scrollRight = () => rowRef.current?.scrollBy({ left:  SCROLL_AMOUNT, behavior: "smooth" });
 
-  /* ── 3-D tilt ── */
+  /* 3D tilt */
   const onCardMove = (e, el) => {
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width;
@@ -35,7 +62,7 @@ export default function CarTypes() {
   };
   const onCardLeave = (el) => { el.style.transform = ""; };
 
-  /* ── Particles ── */
+  /* particles */
   const spawnParticles = (el) => {
     for (let i = 0; i < 4; i++) {
       const p = document.createElement("div");
@@ -49,7 +76,7 @@ export default function CarTypes() {
     }
   };
 
-  /* ── Ripple ── */
+  /* ripple */
   const spawnRipple = (e, el) => {
     const r   = el.getBoundingClientRect();
     const rip = document.createElement("div");
@@ -75,11 +102,8 @@ export default function CarTypes() {
         </button>
       </div>
 
-      {/* Same wrapper/row/arrow structure as BrandList */}
       <div className="ct-wrapper">
-        <button className="ct-arrow" onClick={scrollLeft} aria-label="Scroll left">
-          ❮
-        </button>
+        <NavArrow dir="prev" onClick={scrollLeft} />
 
         <div className="ct-row" ref={rowRef}>
           {types.map((type, i) => (
@@ -91,10 +115,6 @@ export default function CarTypes() {
               onMouseMove={(e) => onCardMove(e, e.currentTarget)}
               onMouseEnter={(e) => spawnParticles(e.currentTarget)}
               onMouseLeave={(e) => onCardLeave(e.currentTarget)}
-              role="button"
-              tabIndex={0}
-              aria-label={`Browse ${type.name} cars`}
-              onKeyDown={(e) => e.key === "Enter" && navigate(`/types/${type.slug}`)}
             >
               <div className="ct-icon">{type.icon}</div>
               <p className="ct-label">{type.name}</p>
@@ -102,12 +122,11 @@ export default function CarTypes() {
           ))}
         </div>
 
-        <button className="ct-arrow" onClick={scrollRight} aria-label="Scroll right">
-          ❯
-        </button>
+        <NavArrow dir="next" onClick={scrollRight} />
       </div>
 
       <p className="ct-note">+100 cars are ready to be yours</p>
+
       <button className="ct-shopBtn" onClick={() => navigate("/shop")}>
         View on Shop →
       </button>

@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import "./BrandList.css";
 
 const brands = [
@@ -22,6 +23,28 @@ const brands = [
 ];
 
 const SCROLL_AMOUNT = 280;
+
+/* ── Deals-style Nav Arrow ── */
+function NavArrow({ dir, onClick }) {
+  return (
+    <motion.button
+      className={`bl-arrow bl-arrow--${dir}`}
+      onClick={onClick}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.88 }}
+      aria-label={dir === "prev" ? "Previous" : "Next"}
+    >
+      <span className="bl-nav-glow" />
+      <span className="bl-nav-ring" />
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        {dir === "prev"
+          ? <polyline points="15 18 9 12 15 6" />
+          : <polyline points="9 6 15 12 9 18" />}
+      </svg>
+    </motion.button>
+  );
+}
 
 export default function BrandList() {
   const navigate = useNavigate();
@@ -82,12 +105,8 @@ export default function BrandList() {
       </div>
 
       <div className="bl-wrapper">
-        {/* Left arrow */}
-        <button className="bl-arrow bl-arrow--left" onClick={scrollLeft} aria-label="Scroll left">
-          ❮
-        </button>
+        <NavArrow dir="prev" onClick={scrollLeft} />
 
-        {/* Scrollable row */}
         <div className="bl-row" ref={rowRef}>
           {brands.map((brand, i) => (
             <div
@@ -111,10 +130,7 @@ export default function BrandList() {
           ))}
         </div>
 
-        {/* Right arrow */}
-        <button className="bl-arrow bl-arrow--right" onClick={scrollRight} aria-label="Scroll right">
-          ❯
-        </button>
+        <NavArrow dir="next" onClick={scrollRight} />
       </div>
 
     </section>
