@@ -27,13 +27,12 @@
 }
 
 /* ── HERO BASE ── */
-/* Desktop: full viewport width & height, goes edge-to-edge */
 .hero {
   position: relative;
   color: #fff;
   overflow: hidden;
   width: 100vw;
-  margin-left: calc(-50vw + 50%); /* break out of any container */
+  margin-left: calc(-50vw + 50%);
   height: 100vh;
   min-height: 560px;
   background: #0b0f14;
@@ -298,11 +297,6 @@
   }
 }
 
-/* ══════════════════════════════════════════════
-   MOBILE — matches your mobile screenshot exactly
-   Centered content, compact, scroll indicator hidden
-   ══════════════════════════════════════════════ */
-
 /* ── LARGE MOBILE / SMALL TABLET (481px – 768px) ── */
 @media (min-width: 481px) and (max-width: 768px) {
   .hero {
@@ -336,8 +330,15 @@
     padding: 11px 22px;
   }
 
-  .hero__scroll-indicator {
+  /* ✅ FIX: Hide only the label & line — keep chevrons visible */
+  .hero__scroll-label,
+  .hero__scroll-line {
     display: none;
+  }
+
+  .hero__scroll-chevrons span {
+    width: 12px;
+    height: 12px;
   }
 
   .hero__bottom {
@@ -385,9 +386,17 @@
     padding: 10px 20px;
   }
 
-  /* Hide scroll line/label on mobile — matches screenshot */
-  .hero__scroll-indicator {
+  /* ✅ FIX: Hide only the label & line — keep chevrons visible */
+  .hero__scroll-label,
+  .hero__scroll-line {
     display: none;
+  }
+
+  .hero__scroll-chevrons span {
+    width: 11px;
+    height: 11px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
   }
 
   .hero__bottom {
@@ -418,6 +427,17 @@
   .btn {
     font-size: 11px;
     padding: 9px 16px;
+  }
+
+  /* ✅ FIX: Keep chevrons, hide only verbose elements */
+  .hero__scroll-label,
+  .hero__scroll-line {
+    display: none;
+  }
+
+  .hero__scroll-chevrons span {
+    width: 10px;
+    height: 10px;
   }
 }
 
@@ -450,8 +470,15 @@
     padding: 10px 20px;
   }
 
-  .hero__scroll-indicator {
+  /* ✅ FIX: Keep chevrons, hide only verbose elements */
+  .hero__scroll-label,
+  .hero__scroll-line {
     display: none;
+  }
+
+  .hero__scroll-chevrons span {
+    width: 11px;
+    height: 11px;
   }
 
   .hero__bottom {
