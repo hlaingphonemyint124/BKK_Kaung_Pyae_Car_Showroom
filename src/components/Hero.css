@@ -486,3 +486,10 @@
     gap: 8px;
   }
 }
+
+/* ❌ REMOVE SCROLL TEXT + VERTICAL LINE COMPLETELY */
+.hero__scroll-label,
+.hero__scroll-line,
+.hero__scroll-thumb {
+  display: none !important;
+}
