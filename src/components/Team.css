@@ -8,7 +8,7 @@
 /* SECTION */
 .team {
   font-family: 'DM Sans', sans-serif;
-  padding: 72px 24px 64px;
+  padding: 48px 24px 64px; /* ✅ reduced top padding to close gap */
   text-align: center;
   background: #f8f7f5;
   position: relative;
@@ -58,7 +58,10 @@ body.dark .team-label { color: var(--red); background: rgba(255,45,45,0.08); bor
   opacity: 0; animation: fadeUp 0.7s ease forwards 0.25s;
 }
 body.dark .team-title { color: #fff; }
-.team-title span { color: var(--red); font-style: italic; }
+.team-title span {
+  color: var(--red);
+  font-style: normal; /* ✅ removed italic */
+}
 
 .team-sub {
   font-size: 14px; color: #888; margin-bottom: 60px; letter-spacing: 0.02em;

@@ -5,7 +5,7 @@ export default function Hero() {
   const slides = [
     process.env.PUBLIC_URL + "/images/SlideShow/ss1.jpg",
     process.env.PUBLIC_URL + "/images/SlideShow/ss2.jpg",
-    process.env.PUBLIC_URL + "/images/SlideShow/ss3.jpg",
+    process.env.PUBLIC_URL + "/images/SlideShow/ss3.jpeg",
   ];
 
   const [current, setCurrent] = useState(0);

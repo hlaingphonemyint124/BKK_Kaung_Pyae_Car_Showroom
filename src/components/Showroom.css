@@ -68,15 +68,17 @@
 
 .searchItem {
   display: flex;
-  align-items: stretch;
+  align-items: center;  /* changed from stretch */
+  flex: 1;
 }
 
 .searchInputWrap {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 4px 10px;
+  padding: 0 10px;
   gap: 6px;
+  height: 100%;
 }
 
 .searchInput {
@@ -86,23 +88,36 @@
   outline: none;
   color: white;
   font-size: 14px;
-  padding: 4px 2px;
   min-width: 0;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  vertical-align: middle;
+  /* Reset browser default input styles */
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
 }
 
 .searchInput::placeholder {
   color: rgba(255, 255, 255, 0.5);
+  line-height: normal;
 }
 
 .searchClear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
   border: none;
   color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   font-size: 13px;
-  padding: 2px 4px;
+  padding: 0;
   line-height: 1;
   flex-shrink: 0;
+  height: 20px;
+  width: 20px;
 }
 
 .searchClear:hover {
