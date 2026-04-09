@@ -2,6 +2,62 @@ import "./Deals.css";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
+import { getBestSellers, getMostRented } from "../api/deals.api";
+
+// ─── Fallback static data ─────────────────────────────────────────────────────
+const FALLBACK_BEST_SELLER = [
+  { id: 1, name: "Nissan Juke",          price: "145,000", suffix: "THB",       image: "/images/BestDeals/bd1.png",
+    specs: { year: "2018", engine: "1.6L Turbo",      mileage: "62,000 km",  fuel: "Petrol", transmission: "Auto", color: "White"        }},
+  { id: 2, name: "Mazda 6",              price: "420,000", suffix: "THB",       image: "/images/BestDeals/bd2.png",
+    specs: { year: "2021", engine: "2.5L SKYACTIV",   mileage: "28,000 km",  fuel: "Petrol", transmission: "Auto", color: "Sonic Silver"  }},
+  { id: 3, name: "BMW e90",              price: "165,000", suffix: "THB",       image: "/images/BestDeals/bd3.png",
+    specs: { year: "2010", engine: "2.0L Twin Turbo", mileage: "110,000 km", fuel: "Petrol", transmission: "Auto", color: "Alpine White"  }},
+  { id: 4, name: "Mazda CX5",            price: "560,000", suffix: "THB",       image: "/images/BestDeals/bd4.png",
+    specs: { year: "2022", engine: "2.5L SKYACTIV",   mileage: "15,000 km",  fuel: "Petrol", transmission: "Auto", color: "Soul Red"      }},
+  { id: 5, name: "Mitsubishi Lancer EX", price: "125,000", suffix: "THB",       image: "/images/BestDeals/bd5.png",
+    specs: { year: "2012", engine: "2.0L MIVEC",      mileage: "95,000 km",  fuel: "Petrol", transmission: "CVT",  color: "Rally Red"     }},
+];
+
+const FALLBACK_MOST_RENTED = [
+  { id: 6,  name: "BMW 5 Series F90",   price: "5,500",  suffix: "THB / day", image: "/images/MostRented/mr1.png",
+    specs: { year: "2022", engine: "2.0L TwinPower",  mileage: "18,000 km", fuel: "Petrol", transmission: "Auto",      color: "Black Sapphire" }},
+  { id: 7,  name: "BMW 7 Series 750Li", price: "6,000",  suffix: "THB / day", image: "/images/MostRented/mr2.png",
+    specs: { year: "2021", engine: "4.4L V8 Turbo",   mileage: "22,000 km", fuel: "Petrol", transmission: "Auto",      color: "Carbon Black"   }},
+  { id: 8,  name: "Honda City",         price: "1,000",  suffix: "THB / day", image: "/images/MostRented/mr3.png",
+    specs: { year: "2023", engine: "1.0L VTEC Turbo", mileage: "8,000 km",  fuel: "Petrol", transmission: "CVT",       color: "Lunar Silver"   }},
+  { id: 9,  name: "Honda Accord G8",    price: "1,500",  suffix: "THB / day", image: "/images/MostRented/mr4.png",
+    specs: { year: "2020", engine: "1.5L VTEC Turbo", mileage: "35,000 km", fuel: "Petrol", transmission: "CVT",       color: "Platinum White" }},
+  { id: 10, name: "Mercedes E200",      price: "1,600",  suffix: "THB / day", image: "/images/MostRented/mr5.png",
+    specs: { year: "2021", engine: "2.0L EQ Boost",   mileage: "27,000 km", fuel: "Petrol", transmission: "9G-Tronic", color: "Polar White"    }},
+  { id: 11, name: "Mercedes S300",      price: "5,000",  suffix: "THB / day", image: "/images/MostRented/mr6.png",
+    specs: { year: "2022", engine: "3.0L Inline-6",   mileage: "12,000 km", fuel: "Petrol", transmission: "9G-Tronic", color: "Obsidian Black" }},
+];
+
+// ─── Map API car → card shape ─────────────────────────────────────────────────
+function mapApiCarToCard(car, tab) {
+  const isRent = tab === "rented";
+  return {
+    id:     car.id,
+    name:   `${car.brand} ${car.model}`,
+    price:  isRent
+              ? Number(car.rent_price_per_day).toLocaleString()
+              : Number(car.sale_price).toLocaleString(),
+    suffix: isRent
+              ? `${car.currency_code || "THB"} / day`
+              : car.currency_code || "THB",
+    // ✅ FIXED: backend image field is storage_path not url
+    image:  car.images?.[0]?.storage_path || car.img || "/images/placeholder.png",
+    specs: {
+      year:         String(car.year),
+      engine:       car.engine       || "—",
+      mileage:      car.mileage_km   ? `${Number(car.mileage_km).toLocaleString()} km` : "—",
+      fuel:         car.fuel_type    || "—",
+      transmission: car.transmission || "—",
+      color:        car.color        || "—",
+    },
+  };
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    ANIMATED PRICE
 ───────────────────────────────────────────────────────────────────────────── */
@@ -40,7 +96,7 @@ function AnimatedPrice({ value, suffix = "" }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   PARTICLE CANVAS  (dark mode only — opacity controlled by CSS)
+   PARTICLE CANVAS
 ───────────────────────────────────────────────────────────────────────────── */
 function ParticleBackground() {
   const canvasRef = useRef(null);
@@ -105,22 +161,6 @@ function SpecRow({ icon, label, value }) {
 
 /* ─────────────────────────────────────────────────────────────────────────────
    CAR CARD
-   ════════════════════════════════════════════════════════════════════════════
-   THE FLIP FIX — root causes on Safari / Chrome Mac:
-   ① Any JS-written `transform` on .car-card breaks preserve-3d on the child.
-   ② `overflow:hidden` on a preserve-3d ancestor flattens children in Safari.
-   ③ `will-change:transform` creates a new stacking context → same problem.
-   ④ `filter` on any ancestor collapses 3d.
-
-   Solution:
-   • .car-card        → perspective only. No transform, no overflow, no filter,
-                         no will-change. Just a sizing + perspective shell.
-   • .card-flipper    → the ONLY element that rotates. Has preserve-3d.
-                         Fixed pixel height so it never collapses.
-   • .card-face       → backface-visibility hidden. overflow:hidden is fine here
-                         because it's a leaf — NOT a preserve-3d parent.
-   • Hover lift       → applied via CSS on .card-face directly, not on .car-card.
-   • Click vs drag    → tracked by pointerdown/up distance on the card itself.
 ───────────────────────────────────────────────────────────────────────────── */
 function CarCard({ car, index, isFlipped, onFlip }) {
   const downPos = useRef({ x: 0, y: 0 });
@@ -128,8 +168,8 @@ function CarCard({ car, index, isFlipped, onFlip }) {
   return (
     <motion.div
       className="car-card"
-      onPointerDown={e  => { downPos.current = { x: e.clientX, y: e.clientY }; }}
-      onPointerUp={e    => {
+      onPointerDown={e => { downPos.current = { x: e.clientX, y: e.clientY }; }}
+      onPointerUp={e => {
         const dx = Math.abs(e.clientX - downPos.current.x);
         const dy = Math.abs(e.clientY - downPos.current.y);
         if (dx < 8 && dy < 8) onFlip(index);
@@ -145,19 +185,15 @@ function CarCard({ car, index, isFlipped, onFlip }) {
         <div className="card-face card-front">
           <div className="card-gloss" />
           <div className="card-corner tl" /><div className="card-corner br" />
-
           <div className="card-img-wrap">
             <div className="card-img-glow" />
             <img src={car.image} alt={car.name} draggable={false} />
           </div>
-
           <div className="card-sep" />
-
           <div className="card-info">
             <h3 className="card-name">{car.name}</h3>
             <p className="card-price"><AnimatedPrice value={car.price} suffix={car.suffix} /></p>
           </div>
-
           <button
             className="card-cta"
             onPointerDown={e => e.stopPropagation()}
@@ -172,12 +208,10 @@ function CarCard({ car, index, isFlipped, onFlip }) {
         <div className="card-face card-back">
           <div className="card-gloss" />
           <div className="card-corner tl" /><div className="card-corner br" />
-
           <div className="back-head">
             <h3 className="back-name">{car.name}</h3>
             <span className="back-badge">Specs</span>
           </div>
-
           <div className="specs-list">
             <SpecRow icon="📅" label="Year"         value={car.specs.year} />
             <SpecRow icon="⚙️" label="Engine"       value={car.specs.engine} />
@@ -186,7 +220,6 @@ function CarCard({ car, index, isFlipped, onFlip }) {
             <SpecRow icon="🔧" label="Transmission" value={car.specs.transmission} />
             <SpecRow icon="🎨" label="Color"        value={car.specs.color} />
           </div>
-
           <button
             className="card-cta"
             onPointerDown={e => e.stopPropagation()}
@@ -227,20 +260,18 @@ function NavArrow({ dir, onClick }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   SLIDER  — drag + momentum, NO auto-scroll
-   Cards do NOT move on their own. User must drag/swipe or click arrows.
+   SLIDER
 ───────────────────────────────────────────────────────────────────────────── */
 function Slider({ children, navigateRef }) {
-  const trackRef   = useRef(null);
-  const dragging   = useRef(false);
-  const startX     = useRef(0);
-  const startScr   = useRef(0);
-  const lastX      = useRef(0);
-  const lastT      = useRef(0);
-  const vel        = useRef(0);
-  const rafId      = useRef(null);
+  const trackRef = useRef(null);
+  const dragging = useRef(false);
+  const startX   = useRef(0);
+  const startScr = useRef(0);
+  const lastX    = useRef(0);
+  const lastT    = useRef(0);
+  const vel      = useRef(0);
+  const rafId    = useRef(null);
 
-  /* Smooth arrow navigation */
   useEffect(() => {
     if (!navigateRef) return;
     navigateRef.current = (dir) => {
@@ -263,7 +294,6 @@ function Slider({ children, navigateRef }) {
     };
   }, [navigateRef]);
 
-  /* Momentum after drag release */
   const momentum = () => {
     const el = trackRef.current;
     if (!el) return;
@@ -315,54 +345,43 @@ function Slider({ children, navigateRef }) {
       onPointerUp={onUp}
       onPointerLeave={onUp}
     >
-      <div className="slider-inner">
-        {children}
-      </div>
+      <div className="slider-inner">{children}</div>
     </div>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   DATA
-───────────────────────────────────────────────────────────────────────────── */
-const BEST_SELLER = [
-  { name: "Nissan Juke",          price: "145,000", suffix: "THB",       image: "/images/BestDeals/bd1.png",
-    specs: { year: "2018", engine: "1.6L Turbo",      mileage: "62,000 km",  fuel: "Petrol", transmission: "Auto", color: "White"        }},
-  { name: "Mazda 6",              price: "420,000", suffix: "THB",       image: "/images/BestDeals/bd2.png",
-    specs: { year: "2021", engine: "2.5L SKYACTIV",   mileage: "28,000 km",  fuel: "Petrol", transmission: "Auto", color: "Sonic Silver"  }},
-  { name: "BMW e90",              price: "165,000", suffix: "THB",       image: "/images/BestDeals/bd3.png",
-    specs: { year: "2010", engine: "2.0L Twin Turbo", mileage: "110,000 km", fuel: "Petrol", transmission: "Auto", color: "Alpine White"  }},
-  { name: "Mazda CX5",            price: "560,000", suffix: "THB",       image: "/images/BestDeals/bd4.png",
-    specs: { year: "2022", engine: "2.5L SKYACTIV",   mileage: "15,000 km",  fuel: "Petrol", transmission: "Auto", color: "Soul Red"      }},
-  { name: "Mitsubishi Lancer EX", price: "125,000", suffix: "THB",       image: "/images/BestDeals/bd5.png",
-    specs: { year: "2012", engine: "2.0L MIVEC",      mileage: "95,000 km",  fuel: "Petrol", transmission: "CVT",  color: "Rally Red"     }},
-];
-
-const MOST_RENTED = [
-  { name: "BMW 5 Series F90",   price: "5,500",   suffix: "THB / day", image: "/images/MostRented/mr1.png",
-    specs: { year: "2022", engine: "2.0L TwinPower",  mileage: "18,000 km", fuel: "Petrol", transmission: "Auto",      color: "Black Sapphire" }},
-  { name: "BMW 7 Series 750Li", price: "6,000",   suffix: "THB / day", image: "/images/MostRented/mr2.png",
-    specs: { year: "2021", engine: "4.4L V8 Turbo",   mileage: "22,000 km", fuel: "Petrol", transmission: "Auto",      color: "Carbon Black"   }},
-  { name: "Honda City",         price: "1,000",   suffix: "THB / day", image: "/images/MostRented/mr3.png",
-    specs: { year: "2023", engine: "1.0L VTEC Turbo", mileage: "8,000 km",  fuel: "Petrol", transmission: "CVT",       color: "Lunar Silver"   }},
-  { name: "Honda Accord G8",    price: "1,500",   suffix: "THB / day", image: "/images/MostRented/mr4.png",
-    specs: { year: "2020", engine: "1.5L VTEC Turbo", mileage: "35,000 km", fuel: "Petrol", transmission: "CVT",       color: "Platinum White" }},
-  { name: "Mercedes E200",      price: "1,600",   suffix: "THB / day", image: "/images/MostRented/mr5.png",
-    specs: { year: "2021", engine: "2.0L EQ Boost",   mileage: "27,000 km", fuel: "Petrol", transmission: "9G-Tronic", color: "Polar White"    }},
-  { name: "Mercedes S300",      price: "5,000",   suffix: "THB / day", image: "/images/MostRented/mr6.png",
-    specs: { year: "2022", engine: "3.0L Inline-6",   mileage: "12,000 km", fuel: "Petrol", transmission: "9G-Tronic", color: "Obsidian Black" }},
-];
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   MAIN
+   MAIN DEALS COMPONENT
 ───────────────────────────────────────────────────────────────────────────── */
 export default function Deals() {
   const [tab, setTab]       = useState("seller");
   const [flipped, setFlip]  = useState(null);
   const navigateRef         = useRef(null);
+  const [cards, setCards]   = useState(FALLBACK_BEST_SELLER);
+  const [loading, setLoading] = useState(true);
 
-  const cars = tab === "seller" ? BEST_SELLER : MOST_RENTED;
-  useEffect(() => setFlip(null), [tab]);
+  useEffect(() => {
+    setFlip(null);
+    setLoading(true);
+
+    const apiFn = tab === "seller" ? getBestSellers : getMostRented;
+
+    apiFn()
+      .then((res) => {
+        // ✅ FIXED: backend returns { cars: [...], total: n } not { data: [...] }
+        const data = res.data.cars ?? [];
+        if (data.length > 0) {
+          setCards(data.map((car) => mapApiCarToCard(car, tab)));
+        } else {
+          setCards(tab === "seller" ? FALLBACK_BEST_SELLER : FALLBACK_MOST_RENTED);
+        }
+      })
+      .catch(() => {
+        console.warn("Deals API unavailable — using static fallback.");
+        setCards(tab === "seller" ? FALLBACK_BEST_SELLER : FALLBACK_MOST_RENTED);
+      })
+      .finally(() => setLoading(false));
+  }, [tab]);
 
   return (
     <section className="deals">
@@ -397,26 +416,33 @@ export default function Deals() {
         </button>
       </motion.div>
 
-      {/* ── Slider Row ── */}
-      <div className="slider-row">
-        <NavArrow dir="prev" onClick={() => navigateRef.current?.(-1)} />
-
-        <div className="slider-mask">
-          <Slider navigateRef={navigateRef}>
-            {cars.map((car, i) => (
-              <CarCard
-                key={`${tab}-${i}`}
-                car={car}
-                index={i}
-                isFlipped={flipped === i}
-                onFlip={idx => setFlip(flipped === idx ? null : idx)}
-              />
-            ))}
-          </Slider>
+      {/* ── Loading ── */}
+      {loading && (
+        <div style={{ textAlign: "center", padding: "60px 0", opacity: 0.5 }}>
+          Loading...
         </div>
+      )}
 
-        <NavArrow dir="next" onClick={() => navigateRef.current?.(1)} />
-      </div>
+      {/* ── Slider Row ── */}
+      {!loading && (
+        <div className="slider-row">
+          <NavArrow dir="prev" onClick={() => navigateRef.current?.(-1)} />
+          <div className="slider-mask">
+            <Slider navigateRef={navigateRef}>
+              {cards.map((car, i) => (
+                <CarCard
+                  key={`${tab}-${car.id ?? i}`}
+                  car={car}
+                  index={i}
+                  isFlipped={flipped === i}
+                  onFlip={idx => setFlip(flipped === idx ? null : idx)}
+                />
+              ))}
+            </Slider>
+          </div>
+          <NavArrow dir="next" onClick={() => navigateRef.current?.(1)} />
+        </div>
+      )}
 
       {/* ── CTA ── */}
       <motion.div className="deals-cta"

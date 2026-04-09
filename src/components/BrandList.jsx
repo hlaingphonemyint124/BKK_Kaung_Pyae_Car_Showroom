@@ -1,9 +1,13 @@
-import React, { useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./BrandList.css";
 
-const brands = [
+// ✅ FIXED: use brands.api.js instead of raw fetch()
+import { getAllBrands } from "../api/brands.api";
+
+// ─── Fallback static brands ───────────────────────────────────────────────────
+const FALLBACK_BRANDS = [
   { name: "Suzuki",      logo: "/images/Brands/suzuki.png",      slug: "suzuki"      },
   { name: "Toyota",      logo: "/images/Brands/toyota.png",      slug: "toyota"      },
   { name: "BMW",         logo: "/images/Brands/bmw.png",         slug: "bmw"         },
@@ -24,7 +28,7 @@ const brands = [
 
 const SCROLL_AMOUNT = 280;
 
-/* ── Deals-style Nav Arrow ── */
+/* ── Nav Arrow ── */
 function NavArrow({ dir, onClick }) {
   return (
     <motion.button
@@ -48,7 +52,23 @@ function NavArrow({ dir, onClick }) {
 
 export default function BrandList() {
   const navigate = useNavigate();
-  const rowRef = useRef(null);
+  const rowRef   = useRef(null);
+
+  const [brands, setBrands]   = useState(FALLBACK_BRANDS);
+  const [loading, setLoading] = useState(true);
+
+  // ✅ FIXED: getAllBrands() from brands.api.js — handles both { data: [...] } and { data: { data: [...] } }
+  useEffect(() => {
+    getAllBrands()
+      .then((res) => {
+        const data = res.data?.data ?? res.data;
+        if (Array.isArray(data) && data.length > 0) setBrands(data);
+      })
+      .catch(() => {
+        console.warn("Brands API unavailable — using static fallback.");
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const scrollLeft  = () => rowRef.current?.scrollBy({ left: -SCROLL_AMOUNT, behavior: "smooth" });
   const scrollRight = () => rowRef.current?.scrollBy({ left:  SCROLL_AMOUNT, behavior: "smooth" });
@@ -67,7 +87,7 @@ export default function BrandList() {
   /* ── Particles ── */
   const spawnParticles = (el) => {
     for (let i = 0; i < 4; i++) {
-      const p = document.createElement("div");
+      const p  = document.createElement("div");
       p.className = "bl-particle";
       const sz = Math.random() * 3 + 2;
       const x  = Math.random() * 70 + 15;
@@ -104,34 +124,42 @@ export default function BrandList() {
         </button>
       </div>
 
-      <div className="bl-wrapper">
-        <NavArrow dir="prev" onClick={scrollLeft} />
-
-        <div className="bl-row" ref={rowRef}>
-          {brands.map((brand, i) => (
-            <div
-              key={brand.slug}
-              className="bl-card"
-              style={{ animationDelay: `${i * 0.07}s` }}
-              onClick={(e) => handleCardClick(e, brand)}
-              onMouseMove={(e) => onCardMove(e, e.currentTarget)}
-              onMouseEnter={(e) => spawnParticles(e.currentTarget)}
-              onMouseLeave={(e) => onCardLeave(e.currentTarget)}
-              role="button"
-              tabIndex={0}
-              aria-label={`Browse ${brand.name} cars`}
-              onKeyDown={(e) => e.key === "Enter" && navigate(`/brands/${brand.slug}`)}
-            >
-              <div className="bl-logo">
-                <img src={brand.logo} alt={brand.name} draggable={false} />
-              </div>
-              <p className="bl-label">{brand.name}</p>
-            </div>
-          ))}
+      {loading && (
+        <div style={{ textAlign: "center", padding: "40px 0", opacity: 0.5 }}>
+          Loading brands...
         </div>
+      )}
 
-        <NavArrow dir="next" onClick={scrollRight} />
-      </div>
+      {!loading && (
+        <div className="bl-wrapper">
+          <NavArrow dir="prev" onClick={scrollLeft} />
+
+          <div className="bl-row" ref={rowRef}>
+            {brands.map((brand, i) => (
+              <div
+                key={brand.slug || brand.id || i}
+                className="bl-card"
+                style={{ animationDelay: `${i * 0.07}s` }}
+                onClick={(e) => handleCardClick(e, brand)}
+                onMouseMove={(e) => onCardMove(e, e.currentTarget)}
+                onMouseEnter={(e) => spawnParticles(e.currentTarget)}
+                onMouseLeave={(e) => onCardLeave(e.currentTarget)}
+                role="button"
+                tabIndex={0}
+                aria-label={`Browse ${brand.name} cars`}
+                onKeyDown={(e) => e.key === "Enter" && navigate(`/brands/${brand.slug}`)}
+              >
+                <div className="bl-logo">
+                  <img src={brand.logo} alt={brand.name} draggable={false} />
+                </div>
+                <p className="bl-label">{brand.name}</p>
+              </div>
+            ))}
+          </div>
+
+          <NavArrow dir="next" onClick={scrollRight} />
+        </div>
+      )}
 
     </section>
   );
