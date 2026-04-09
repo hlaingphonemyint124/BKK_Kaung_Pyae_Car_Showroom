@@ -188,6 +188,36 @@
   font-weight: bold;
 }
 
+.admin-price-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.admin-price-row .price {
+  flex: 1;
+}
+
+.admin-currency-select {
+  width: 90px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  background: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.admin-currency-select:hover {
+  border-color: #999;
+}
+
+.admin-currency-select:focus {
+  outline: none;
+  border-color: black;
+}
+
 /* Spec Grid */
 .admin-spec-grid {
   display: grid;

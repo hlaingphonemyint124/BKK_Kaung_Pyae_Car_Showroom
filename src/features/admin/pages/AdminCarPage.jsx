@@ -53,10 +53,10 @@ function AdminCarPage({ mode }) {
 
   const displayCars = useMemo(() => {
     return filteredCars.filter((car) => {
-      const name = car.name?.toLowerCase() || "";
-      const brand = car.brand?.toLowerCase() || "";
-      const fuel = car.specs?.fuel?.toLowerCase() || "";
-      const transmission = car.specs?.transmission?.toLowerCase() || "";
+      const name = `${car.brand || ""} ${car.model || ""}`.trim().toLowerCase();
+      const brand = (car.brand || "").toLowerCase();
+      const fuel = (car.fuel_type || "").toLowerCase();
+      const transmission = (car.transmission || "").toLowerCase();
 
       return (
         (!searchTerm ||
@@ -217,8 +217,14 @@ function AdminCarPage({ mode }) {
                 setActiveCardId(activeCardId === car.id ? null : car.id)
               }
               onCloseMenu={() => setActiveCardId(null)}
-              onEdit={() => navigate(`/admin/${mode}/${car.id}`)}
-              onViewDetail={() => navigate(`/admin/${mode}/${car.id}`)}
+              onEdit={() => {
+                console.log("EDIT car.id =", car.id, car);
+                navigate(`/admin/${mode}/${car.id}`);
+              }}
+              onViewDetail={() => {
+                console.log("VIEW car.id =", car.id, car);
+                navigate(`/admin/${mode}/${car.id}`);
+              }}
               onClear={() => {
                 clearCar(car.id);
                 setActiveCardId(null);

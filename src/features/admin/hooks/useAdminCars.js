@@ -37,6 +37,8 @@ function useAdminCars(type) {
           model: car.model || "",
           name: `${car.brand || ""} ${car.model || ""}`.trim(),
 
+          primary_image: car.primary_image || "",
+
           image:
             car.primary_image ||
             car.image ||
@@ -46,9 +48,11 @@ function useAdminCars(type) {
 
           images: car.images || [],
 
-          // use the page mode directly
-          type: type,
+          // ✅ REAL pricing fields
+          sale_price: car.sale_price,
+          rent_price_per_day: car.rent_price_per_day,
 
+          // ✅ specs (used in card)
           specs: {
             fuel: car.fuel_type || car.fuel || "Petrol",
             drive: car.drive_type || car.drive || "2WD",
@@ -57,27 +61,22 @@ function useAdminCars(type) {
             transmission: car.transmission || "Auto",
           },
 
-          buy: {
-            price: car.sale_price || 0,
-          },
+          // ✅ raw backend status
+          rawStatus: car.status || "available",
 
-          rental: {
-            pricePerDay: car.rent_price_per_day || 0,
-          },
-
+          // ✅ UI status
           status: {
             isNewArrival: car.is_new_arrival || false,
             isBestSeller: car.is_best_seller || false,
             isMostRented: car.is_most_rented || false,
             isAvailable:
-              car.status !== "not_available" &&
               car.status !== "rented" &&
-              car.status !== "sold",
+              car.status !== "sold" &&
+              car.status !== "maintenance",
           },
         }));
 
         console.log("MAPPED CARS:", mappedCars);
-        console.log("MODE:", type);
 
         setCars(mappedCars);
       } catch (err) {
@@ -91,10 +90,11 @@ function useAdminCars(type) {
     fetchCars();
   }, [type]);
 
+  // ✅ FIXED FILTERING (IMPORTANT)
   const filteredCars = useMemo(() => {
     const typedCars = cars.filter((car) => {
-      if (type === "buy") return car.type === "buy";
-      if (type === "rental") return car.type === "rental";
+      if (type === "buy") return car.sale_price != null;
+      if (type === "rental") return car.rent_price_per_day != null;
       return true;
     });
 
@@ -205,7 +205,7 @@ function useAdminCars(type) {
 
   const markNotAvailable = async (id) => {
     try {
-      await updateAdminCar(id, { status: "not_available" });
+      await updateAdminCar(id, { status: "maintenance" });
 
       setCars((prev) =>
         prev.map((car) =>

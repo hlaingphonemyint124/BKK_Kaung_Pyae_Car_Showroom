@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AdminMediaUploader from "../components/AdminMediaUploader";
 import AdminDetailHero from "../components/AdminDetailHero";
 import SpecGrid from "../components/SpecGrid";
 import InfoRows from "../components/InfoRows";
 import RentalTermsSection from "../components/RentalTermsSection";
 import ConfirmBar from "../components/ConfirmBar";
-import mockAdminCars from "../data/mockAdminCars";
+import {
+  createAdminCar,
+  getAdminCarById,
+  updateAdminCar,
+} from "../services/adminCarService";
 
 const defaultRentalTerms = [
   "Driver must have a valid license.",
@@ -27,6 +31,11 @@ const emptyRentalForm = {
     seats: "",
   },
   info: {
+    mileage: 0,
+    year: new Date().getFullYear(),
+    currencyCode: "THB",
+    status: "available",
+    isPublished: false,
     rent7: "",
     rent30: "",
     deposit: "",
@@ -35,60 +44,123 @@ const emptyRentalForm = {
 };
 
 function AdminRentalDetailPage() {
+  const navigate = useNavigate();
   const { id } = useParams();
-  const isCreateMode = id === "new";
+  const isCreateMode = !id;
 
   const [form, setForm] = useState(emptyRentalForm);
+  const [loading, setLoading] = useState(!isCreateMode);
+  const [saving, setSaving] = useState(false);
 
   const rentalFields = [
-    { key: "rent7", label: "Rent for 7 Days", placeholder: "5000 THB" },
-    { key: "rent30", label: "Rent for 30 Days", placeholder: "21000 THB" },
+    { key: "rent7", label: "7 Days (5% OFF)", readOnly: true },
+    { key: "rent30", label: "30 Days (10% OFF)", readOnly: true },
     { key: "deposit", label: "Deposit", placeholder: "Optional" },
   ];
 
   useEffect(() => {
-    if (isCreateMode) {
-      setForm(emptyRentalForm);
+    const fetchCar = async () => {
+      if (isCreateMode) {
+        setForm(emptyRentalForm);
+        setLoading(false);
+        return;
+      }
+
+      if (!id) {
+        console.error("Missing route id");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+
+        const car = await getAdminCarById(id);
+
+        if (!car) {
+          setForm(emptyRentalForm);
+          return;
+        }
+
+        const primaryImage =
+          car.primary_image ||
+          car.image ||
+          car.images?.find((img) => img.is_primary)?.storage_path ||
+          car.images?.[0]?.storage_path ||
+          "";
+
+        const dailyPrice = Number(car.rent_price_per_day) || 0;
+
+        setForm({
+          name: `${car.brand || ""} ${car.model || ""}`.trim(),
+          price: car.rent_price_per_day ?? "",
+          media: primaryImage
+            ? [
+                {
+                  id: `existing-${car.id}`,
+                  url: primaryImage,
+                  type: "image",
+                },
+              ]
+            : [],
+          specs: {
+            fuel: car.fuel_type || "",
+            transmission: car.transmission || "",
+            color: car.color || "",
+            engine: car.engine || "",
+            drive: car.drive_type || "",
+            seats: car.seats || "",
+          },
+          info: {
+            mileage: car.mileage_km ?? "",
+            year: car.year ?? "",
+            currencyCode: car.currency_code ?? "THB",
+            status: car.status ?? "available",
+            isPublished: Boolean(car.is_published),
+            rent7: dailyPrice ? Math.round(dailyPrice * 7 * 0.95).toString() : "",
+            rent30: dailyPrice ? Math.round(dailyPrice * 30 * 0.9).toString() : "",
+            deposit: "",
+          },
+          terms: defaultRentalTerms,
+        });
+      } catch (err) {
+        console.error("Failed to fetch rental car:", err);
+        setForm(emptyRentalForm);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCar();
+  }, [id, isCreateMode]);
+
+  useEffect(() => {
+    const dailyPrice = Number(form.price) || 0;
+
+    if (!dailyPrice) {
+      setForm((prev) => ({
+        ...prev,
+        info: {
+          ...prev.info,
+          rent7: "",
+          rent30: "",
+        },
+      }));
       return;
     }
 
-    const car = mockAdminCars.find((item) => String(item.id) === String(id));
+    const rent7 = Math.round(dailyPrice * 7 * 0.95);
+    const rent30 = Math.round(dailyPrice * 30 * 0.9);
 
-    if (!car) return;
-
-    setForm({
-      name: car.name || "",
-      price: car.rental?.pricePerDay || "",
-      media: car.image
-        ? [
-            {
-              id: `existing-${car.id}`,
-              url: car.image,
-              type: "image",
-            },
-          ]
-        : [],
-      specs: {
-        fuel: car.specs?.fuel || "",
-        transmission: car.specs?.transmission || "",
-        color: car.specs?.color || "",
-        engine: car.specs?.engine || "",
-        drive: car.specs?.drive || "",
-        seats: car.specs?.seats || "",
-      },
+    setForm((prev) => ({
+      ...prev,
       info: {
-        rent7: car.rental?.price7Days || "",
-        rent30: car.rental?.price30Days || "",
-        deposit: car.rental?.deposit || "",
+        ...prev.info,
+        rent7: rent7.toString(),
+        rent30: rent30.toString(),
       },
-      terms:
-        car.rental?.terms && typeof car.rental.terms === "string"
-          ? [car.rental.terms]
-          : Array.isArray(car.rental?.terms) && car.rental.terms.length > 0
-          ? car.rental.terms
-          : defaultRentalTerms,
-    });
-  }, [id, isCreateMode]);
+    }));
+  }, [form.price]);
 
   const updateField = (field, value) => {
     setForm((prev) => ({
@@ -108,6 +180,8 @@ function AdminRentalDetailPage() {
   };
 
   const updateInfo = (key, value) => {
+    if (key === "rent7" || key === "rent30") return;
+
     setForm((prev) => ({
       ...prev,
       info: {
@@ -141,24 +215,59 @@ function AdminRentalDetailPage() {
     }));
   };
 
-  const handleSubmit = () => {
-    if (form.media.length === 0) {
-      alert("Please upload at least one image.");
+  const handleSubmit = async () => {
+    if (!form.name.trim()) {
+      alert("Please enter car name.");
       return;
     }
 
-    const hasImage = form.media.some((item) => item.type === "image");
+    const [brand, ...modelParts] = form.name.trim().split(" ");
+    const model = modelParts.join(" ");
 
-    if (!hasImage) {
-      alert("Please upload at least one image.");
+    if (!brand || !model) {
+      alert("Use format: Toyota Corolla");
       return;
     }
 
-    console.log(
-      isCreateMode ? "CREATE RENTAL CAR" : "UPDATE RENTAL CAR",
-      form
-    );
+    if (!form.info.year) {
+      alert("Please enter year.");
+      return;
+    }
+
+    const payload = {
+      brand,
+      model,
+      year: Number(form.info.year) || new Date().getFullYear(),
+      mileage_km: form.info.mileage ? Number(form.info.mileage) : 0,
+      rent_price_per_day: form.price ? Number(form.price) : 0,
+      currency_code: form.info.currencyCode,
+      status: form.info.status,
+      is_published: form.info.isPublished,
+    };
+
+    try {
+      setSaving(true);
+
+      if (isCreateMode) {
+        await createAdminCar(payload);
+        alert("Rental car created successfully.");
+      } else {
+        await updateAdminCar(id, payload);
+        alert("Rental car updated successfully.");
+      }
+
+      navigate("/admin/rental");
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.error || "Failed to save rental car.");
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return <p className="admin-state-message">Loading rental car details...</p>;
+  }
 
   return (
     <div className="admin-detail-page">
@@ -174,10 +283,18 @@ function AdminRentalDetailPage() {
           <h3 className="admin-section-title">
             {isCreateMode ? "Rental Car Info" : "Edit Rental Car Info"}
           </h3>
+
           <AdminDetailHero
             name={form.name}
             price={form.price}
-            onChange={updateField}
+            currencyCode={form.info.currencyCode}
+            onChange={(key, value) => {
+              if (key === "currencyCode") {
+                updateInfo("currencyCode", value);
+              } else {
+                updateField(key, value);
+              }
+            }}
             namePlaceholder="Rental Car Name"
             pricePlaceholder="Price Per Day"
           />
@@ -210,7 +327,13 @@ function AdminRentalDetailPage() {
         <div className="admin-detail-panel admin-detail-panel--action">
           <ConfirmBar
             onClick={handleSubmit}
-            label={isCreateMode ? "Create Rental Car" : "Update Rental Car"}
+            label={
+              saving
+                ? "Saving..."
+                : isCreateMode
+                ? "Create Rental Car"
+                : "Update Rental Car"
+            }
           />
         </div>
       </div>

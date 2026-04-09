@@ -16,25 +16,31 @@ function AdminCarCard({
   showUnavailableOverlay = true,
 }) {
   const imageSrc =
+    car.primary_image ||
     car.image ||
+    car.images?.find((img) => img.is_primary)?.storage_path ||
     car.images?.[0]?.storage_path ||
-    car.images?.[0] ||
     "/images/placeholder-car.jpg";
+
+  const name = `${car.brand || ""} ${car.model || ""}`.trim();
+
+  const isBuyCar = car.sale_price != null;
+  const isAvailable = car.status?.isAvailable ?? true;
 
   return (
     <div className="admin-product-card">
       <div className="admin-product-card__image-wrap" onClick={onToggleMenu}>
         <img
           src={imageSrc}
-          alt={car.name}
+          alt={name}
           className="admin-product-card__image"
         />
 
         <div className="admin-product-card__badge">
-          {car.type === "buy" ? "Sale" : "Rent"}
+          {isBuyCar ? "Sale" : "Rent"}
         </div>
 
-        {showUnavailableOverlay && !car.status?.isAvailable && (
+        {showUnavailableOverlay && !isAvailable && (
           <div className="admin-product-card__unavailable">
             Not Available
           </div>
@@ -42,18 +48,18 @@ function AdminCarCard({
       </div>
 
       <div className="admin-product-card__body">
-        <h3 className="admin-product-card__title">{car.name}</h3>
+        <h3 className="admin-product-card__title">{name}</h3>
 
         <p className="admin-product-card__meta">
           {car.specs?.fuel || "Petrol"}, {car.specs?.drive || "2WD"},{" "}
-          {car.specs?.doors || 4}d, {car.specs?.seats || 4} seaters
+          {car.specs?.seats || 4} seats
         </p>
 
         <div className="admin-product-card__bottom">
           <div className="admin-product-card__price">
-            {car.type === "buy"
-              ? `${Number(car.buy?.price || 0).toLocaleString()} THB`
-              : `${Number(car.rental?.pricePerDay || 0).toLocaleString()} THB/day`}
+            {isBuyCar
+              ? `${Number(car.sale_price || 0).toLocaleString()} THB`
+              : `${Number(car.rent_price_per_day || 0).toLocaleString()} THB/day`}
           </div>
 
           <button

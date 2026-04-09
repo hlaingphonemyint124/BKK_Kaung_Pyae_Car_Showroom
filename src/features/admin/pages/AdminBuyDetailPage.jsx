@@ -8,9 +8,18 @@ import DocumentSection from "../components/DocumentSection";
 import ConfirmBar from "../components/ConfirmBar";
 import {
   createAdminCar,
-  getAdminCars,
+  getAdminCarById,
   updateAdminCar,
 } from "../services/adminCarService";
+
+const defaultDocumentLines = [
+  { key: "Owner Name", value: "" },
+  { key: "Registration Number", value: "" },
+  { key: "Plate Number", value: "" },
+  { key: "Transfer Status", value: "" },
+  { key: "Tax Paid Until", value: "" },
+  { key: "Insurance Status", value: "" },
+];
 
 const emptyBuyForm = {
   name: "",
@@ -26,34 +35,34 @@ const emptyBuyForm = {
   },
   info: {
     mileage: "",
-    model: "",
+    year: "",
+    vin: "",
+    rentPricePerDay: "",
+    currencyCode: "THB",
+    status: "available",
+    isPublished: false,
     documents: "",
   },
-  documentLines: [
-    { key: "Owner Name", value: "" },
-    { key: "Registration Number", value: "" },
-    { key: "Plate Number", value: "" },
-    { key: "Transfer Status", value: "" },
-    { key: "Tax Paid Until", value: "" },
-    { key: "Insurance Status", value: "" },
-  ],
+  documentLines: defaultDocumentLines,
 };
 
 function AdminBuyDetailPage() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const isCreateMode = id === "new";
+  console.log("AdminBuyDetailPage id =", id);
+  
+  const isCreateMode = !id;
 
   const [form, setForm] = useState(emptyBuyForm);
   const [loading, setLoading] = useState(!isCreateMode);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
 
   const buyFields = [
     { key: "mileage", label: "Mileage" },
-    { key: "model", label: "Year" },
+    { key: "year", label: "Year" },
     { key: "documents", label: "Documents" },
   ];
+  
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -63,18 +72,19 @@ function AdminBuyDetailPage() {
         return;
       }
 
+      if (!id) {
+        console.error("Missing route id");
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
-        setError("");
 
-        const data = await getAdminCars();
-        const carList = data?.cars || data?.data?.cars || data?.data || [];
-
-        const car = carList.find((item) => String(item.id) === String(id));
+        const car = await getAdminCarById(id);
 
         if (!car) {
-          setError("Car not found.");
-          setLoading(false);
+          setForm(emptyBuyForm);
           return;
         }
 
@@ -87,7 +97,7 @@ function AdminBuyDetailPage() {
 
         setForm({
           name: `${car.brand || ""} ${car.model || ""}`.trim(),
-          price: car.sale_price || "",
+          price: car.sale_price ?? "",
           media: primaryImage
             ? [
                 {
@@ -106,8 +116,13 @@ function AdminBuyDetailPage() {
             seats: car.seats || "",
           },
           info: {
-            mileage: car.mileage || "",
-            model: car.year || "",
+            mileage: car.mileage_km ?? "",
+            year: car.year ?? "",
+            vin: car.vin ?? "",
+            rentPricePerDay: car.rent_price_per_day ?? "",
+            currencyCode: car.currency_code ?? "THB",
+            status: car.status ?? "available",
+            isPublished: Boolean(car.is_published),
             documents: car.documents || "",
           },
           documentLines: [
@@ -121,7 +136,7 @@ function AdminBuyDetailPage() {
         });
       } catch (err) {
         console.error("Failed to fetch car:", err);
-        setError(err.response?.data?.error || "Failed to load car.");
+        setForm(emptyBuyForm);
       } finally {
         setLoading(false);
       }
@@ -155,13 +170,14 @@ function AdminBuyDetailPage() {
   };
 
   const handleDocumentChange = (index, updatedLine) => {
-    const newLines = [...form.documentLines];
-    newLines[index] = updatedLine;
-
-    setForm((prev) => ({
-      ...prev,
-      documentLines: newLines,
-    }));
+    setForm((prev) => {
+      const newLines = [...prev.documentLines];
+      newLines[index] = updatedLine;
+      return {
+        ...prev,
+        documentLines: newLines,
+      };
+    });
   };
 
   const handleAddRow = () => {
@@ -172,11 +188,9 @@ function AdminBuyDetailPage() {
   };
 
   const handleDeleteRow = (index) => {
-    const newLines = form.documentLines.filter((_, i) => i !== index);
-
     setForm((prev) => ({
       ...prev,
-      documentLines: newLines,
+      documentLines: prev.documentLines.filter((_, i) => i !== index),
     }));
   };
 
@@ -186,52 +200,37 @@ function AdminBuyDetailPage() {
       return;
     }
 
-    if (!form.price) {
-      alert("Please enter sale price.");
-      return;
-    }
-
-    const hasImage = form.media.some((item) => item.type === "image");
-    if (!hasImage) {
-      alert("Please upload at least one image.");
-      return;
-    }
-
-    const [brand = "", ...modelParts] = form.name.trim().split(" ");
+    const [brand, ...modelParts] = form.name.trim().split(" ");
     const model = modelParts.join(" ");
+
+    if (!brand || !model) {
+      alert("Use format: Toyota Corolla");
+      return;
+    }
 
     const payload = {
       brand,
       model,
-      sale_price: Number(form.price) || 0,
-      rent_price_per_day: 0,
-      status: "available",
-      fuel_type: form.specs.fuel || null,
-      transmission: form.specs.transmission || null,
-      color: form.specs.color || null,
-      engine: form.specs.engine || null,
-      drive_type: form.specs.drive || null,
-      seats: Number(form.specs.seats) || null,
-      mileage: Number(form.info.mileage) || null,
-      year: Number(form.info.model) || null,
+      year: form.info.year ? Number(form.info.year) : null,
+      mileage_km: form.info.mileage ? Number(form.info.mileage) : 0,
+      sale_price: form.price ? Number(form.price) : 0,
+      currency_code: form.info.currencyCode,
+      status: form.info.status,
+      is_published: form.info.isPublished,
     };
 
     try {
       setSaving(true);
-      setError("");
 
       if (isCreateMode) {
         await createAdminCar(payload);
-        alert("Buy car created successfully.");
       } else {
         await updateAdminCar(id, payload);
-        alert("Buy car updated successfully.");
       }
 
       navigate("/admin/buy");
     } catch (err) {
-      console.error("Failed to save car:", err);
-      setError(err.response?.data?.error || "Failed to save car.");
+      console.error(err);
       alert(err.response?.data?.error || "Failed to save car.");
     } finally {
       setSaving(false);
@@ -244,12 +243,6 @@ function AdminBuyDetailPage() {
 
   return (
     <div className="admin-detail-page">
-      {error && (
-        <p className="admin-state-message admin-state-message--error">
-          {error}
-        </p>
-      )}
-
       <div className="admin-detail-page__left">
         <div className="admin-detail-panel">
           <AdminMediaUploader
@@ -266,9 +259,14 @@ function AdminBuyDetailPage() {
           <AdminDetailHero
             name={form.name}
             price={form.price}
-            onChange={updateField}
-            namePlaceholder="Car Name"
-            pricePlaceholder="Sale Price"
+            currencyCode={form.info.currencyCode}
+            onChange={(key, value) => {
+              if (key === "currencyCode") {
+                updateInfo("currencyCode", value);
+              } else {
+                updateField(key, value);
+              }
+            }}
           />
         </div>
 
@@ -299,7 +297,13 @@ function AdminBuyDetailPage() {
         <div className="admin-detail-panel admin-detail-panel--action">
           <ConfirmBar
             onClick={handleSubmit}
-            label={saving ? "Saving..." : isCreateMode ? "Save Buy Car" : "Update Buy Car"}
+            label={
+              saving
+                ? "Saving..."
+                : isCreateMode
+                ? "Save Buy Car"
+                : "Update Buy Car"
+            }
           />
         </div>
       </div>

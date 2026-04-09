@@ -1,9 +1,12 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 function AdminMediaUploader({ media = [], onChange }) {
   const inputRef = useRef(null);
   const [previewItem, setPreviewItem] = useState(null);
 
+  // =========================
+  // HANDLE FILES
+  // =========================
   const handleFiles = (fileList) => {
     const files = Array.from(fileList || []);
 
@@ -19,6 +22,7 @@ function AdminMediaUploader({ media = [], onChange }) {
       type: file.type.startsWith("video/") ? "video" : "image",
       file,
       preview: URL.createObjectURL(file),
+      isNew: true, // ✅ IMPORTANT
     }));
 
     onChange([...media, ...newItems]);
@@ -57,6 +61,9 @@ function AdminMediaUploader({ media = [], onChange }) {
     handleFiles(pastedFiles);
   };
 
+  // =========================
+  // REMOVE ITEM
+  // =========================
   const handleRemove = (id) => {
     const target = media.find((item) => item.id === id);
 
@@ -71,6 +78,22 @@ function AdminMediaUploader({ media = [], onChange }) {
     }
   };
 
+  // =========================
+  // CLEANUP (VERY IMPORTANT)
+  // =========================
+  useEffect(() => {
+    return () => {
+      media.forEach((item) => {
+        if (item.preview) {
+          URL.revokeObjectURL(item.preview);
+        }
+      });
+    };
+  }, []);
+
+  // =========================
+  // UI
+  // =========================
   return (
     <>
       <div
@@ -144,6 +167,9 @@ function AdminMediaUploader({ media = [], onChange }) {
         />
       </div>
 
+      {/* =========================
+          PREVIEW MODAL
+      ========================= */}
       {previewItem && (
         <div
           className="admin-media-preview-modal"
