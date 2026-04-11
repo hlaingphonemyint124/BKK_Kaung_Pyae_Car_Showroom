@@ -5,7 +5,11 @@ import AuthHeader from "../components/AuthHeader";
 import AuthInput from "../components/AuthInput";
 import PasswordInput from "../components/PasswordInput";
 import AuthButton from "../components/AuthButton";
-import { loginUser, getCurrentUser } from "../services/authService";
+import {
+  loginUser,
+  getCurrentUser,
+  resendVerification,
+} from "../services/authService";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -17,7 +21,11 @@ function LoginPage() {
 
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
+  const [verifyEmail, setVerifyEmail] = useState("");
+  const [resendMessage, setResendMessage] = useState("");
+  const [resendError, setResendError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -25,13 +33,19 @@ function LoginPage() {
     let error = "";
 
     if (name === "email") {
-      if (!value.trim()) error = "Email is required";
-      else if (!emailRegex.test(value)) error = "Invalid email format";
+      if (!value.trim()) {
+        error = "Email is required";
+      } else if (!emailRegex.test(value.trim())) {
+        error = "Invalid email format";
+      }
     }
 
     if (name === "password") {
-      if (!value) error = "Password is required";
-      else if (value.length < 6) error = "Password must be at least 6 characters";
+      if (!value) {
+        error = "Password is required";
+      } else if (value.length < 8) {
+        error = "Password must be at least 8 characters";
+      }
     }
 
     return error;
@@ -46,12 +60,13 @@ function LoginPage() {
     }));
 
     setServerError("");
-
-    const error = validateField(name, value);
+    setVerifyEmail("");
+    setResendMessage("");
+    setResendError(false);
 
     setErrors((prev) => ({
       ...prev,
-      [name]: error,
+      [name]: validateField(name, value),
     }));
   };
 
@@ -62,7 +77,9 @@ function LoginPage() {
 
     Object.keys(form).forEach((key) => {
       const error = validateField(key, form[key]);
-      if (error) newErrors[key] = error;
+      if (error) {
+        newErrors[key] = error;
+      }
     });
 
     setErrors(newErrors);
@@ -71,20 +88,30 @@ function LoginPage() {
 
     setLoading(true);
     setServerError("");
+    setVerifyEmail("");
+    setResendMessage("");
+    setResendError(false);
 
     try {
       const cleanForm = {
         email: form.email.trim(),
-        password: form.password.trim(),
+        password: form.password,
       };
 
-      await loginUser(cleanForm);
+      const loginResponse = await loginUser(cleanForm);
 
-      const currentUser = await getCurrentUser();
-      console.log("CURRENT USER:", currentUser);
+      let role =
+        loginResponse?.user?.role ||
+        loginResponse?.role ||
+        null;
 
-      const role = currentUser?.user?.role || currentUser?.role;
-      console.log("ROLE:", role);
+      if (!role) {
+        const currentUser = await getCurrentUser();
+        role =
+          currentUser?.user?.role ||
+          currentUser?.role ||
+          "customer";
+      }
 
       if (role === "admin" || role === "employee") {
         navigate("/admin/buy");
@@ -92,17 +119,49 @@ function LoginPage() {
         navigate("/");
       }
     } catch (error) {
-      console.log("LOGIN ERROR:", error);
-      console.log("RESPONSE DATA:", error.response?.data);
-      console.log("STATUS:", error.response?.status);
+      const responseData = error.response?.data || {};
+      const message =
+        responseData.message ||
+        responseData.error ||
+        "Login failed. Please try again.";
 
-      setServerError(
-        error.response?.data?.error ||
-        error.message ||
-        "Login failed. Please try again."
-      );
+      setServerError(message);
+
+      if (
+        error.response?.status === 403 &&
+        responseData.email &&
+        message.toLowerCase().includes("verify")
+      ) {
+        setVerifyEmail(responseData.email);
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    if (!verifyEmail) return;
+
+    try {
+      setResendLoading(true);
+      setResendMessage("");
+      setResendError(false);
+
+      const response = await resendVerification({ email: verifyEmail });
+
+      setResendMessage(
+        response?.message ||
+          "Verification email sent. Please check your inbox or spam folder."
+      );
+    } catch (error) {
+      setResendError(true);
+      setResendMessage(
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Failed to resend verification email."
+      );
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -129,17 +188,42 @@ function LoginPage() {
             error={errors.password}
           />
 
-          {serverError && <p className="input-error-text">{serverError}</p>}
-
           <AuthButton
             text={loading ? "Logging In..." : "Log In"}
             type="submit"
             disabled={loading}
           />
+
+          {serverError && (
+            <p className="auth-submit-message error-message">
+              {serverError}
+            </p>
+          )}
+
+          {verifyEmail && (
+            <button
+              type="button"
+              className="resend-btn"
+              onClick={handleResendVerification}
+              disabled={resendLoading}
+            >
+              {resendLoading ? "Sending..." : "Resend Verification Email"}
+            </button>
+          )}
+
+          {resendMessage && (
+            <p
+              className={`auth-submit-message ${
+                resendError ? "error-message" : "success-message"
+              }`}
+            >
+              {resendMessage}
+            </p>
+          )}
         </form>
 
         <div className="auth-link-center">
-          Forgot password? <Link to="/">Click Here</Link>
+          Forgot password? <Link to="/forgot-password">Click Here</Link>
         </div>
 
         <div className="auth-link-bottom">

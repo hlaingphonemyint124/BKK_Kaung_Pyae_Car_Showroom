@@ -23,10 +23,13 @@ function AuthInput({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        autoComplete="off"
         className={`auth-input ${error ? "input-error" : ""}`}
       />
 
-      {error && <p className="input-error-text">{error}</p>}
+      <p className={`input-error-text ${error ? "show" : ""}`}>
+        {error || "\u00A0"}
+      </p>
     </div>
   );
 }

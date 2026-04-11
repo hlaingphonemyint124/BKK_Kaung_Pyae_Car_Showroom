@@ -1,3 +1,6 @@
+/* =========================
+   1) PAGE BACKGROUND
+========================= */
 .auth-page {
   min-height: 100vh;
   background:
@@ -9,6 +12,9 @@
   padding-top: 5px;
 }
 
+/* =========================
+   2) MAIN AUTH CARD / BOOK
+========================= */
 .auth-book {
   width: 100%;
   max-width: 420px;
@@ -18,11 +24,13 @@
   box-shadow:
     0 14px 40px rgba(0, 0, 0, 0.35),
     0 4px 14px rgba(120, 0, 0, 0.12);
-
-  display: flex;         
+  display: flex;
   flex-direction: column;
 }
 
+/* =========================
+   3) LEFT BRAND PANEL
+========================= */
 .auth-book-left {
   background: linear-gradient(to bottom, #050505, #8f0000 70%, #b10000);
   color: white;
@@ -36,10 +44,9 @@
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: -1px;
-  font-size: clamp(32px, 3vw, 48px);  /* clamp(min, preferred, max) */
+  font-size: clamp(32px, 3vw, 48px);
 }
 
-/* Default = mobile (NO break) */
 .desktop-break {
   display: none;
 }
@@ -59,9 +66,11 @@
   border-radius: 999px;
 }
 
+/* =========================
+   4) RIGHT FORM PANEL
+========================= */
 .auth-book-right {
   background: #ffffff;
-
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -74,14 +83,22 @@
   border-top-right-radius: 28px;
   padding: 24px 18px 24px;
   box-shadow: 0 -8px 18px rgba(0, 0, 0, 0.06);
-
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
+.auth-body form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* =========================
+   5) INPUT GROUP / LABEL
+========================= */
 .auth-input-group {
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .auth-input-group label {
@@ -92,11 +109,9 @@
   color: #1f2937;
 }
 
-.password-wrapper {
-  position: relative;
-  width: 100%;
-}
-
+/* =========================
+   6) NORMAL INPUT
+========================= */
 .auth-input {
   display: block;
   width: 100%;
@@ -119,24 +134,54 @@
     0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
+.auth-input.input-error {
+  border: 1px solid #d93025;
+}
+
+/* =========================
+   7) PASSWORD FIELD WRAPPER
+========================= */
+.password-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 999px;
+}
+
+.password-wrapper.input-error {
+  border: 1px solid #d93025;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.password-input {
+  border: none !important;
+  box-shadow: none !important;
+  background: linear-gradient(to bottom, #f0f0f0, #ebebeb);
+  padding-right: 52px;
+}
+
+/* =========================
+   8) EYE BUTTON
+========================= */
 .eye-button {
   position: absolute;
   top: 50%;
-  right: 12px;
+  right: 8px;
   transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
   border: none;
   background: transparent;
   box-shadow: none;
   border-radius: 999px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 20px;
   color: #9a9a9a;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 0;
+  z-index: 2;
 }
 
 .eye-button:hover {
@@ -144,40 +189,53 @@
   background: transparent;
 }
 
-.auth-message {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  text-align: center;
+.eye-button svg {
+  width: 20px;
+  height: 20px;
 }
 
-.input-error {
-  border: 1px solid #d93025;
-}
-
+/* =========================
+   9) RESERVED FIELD ERROR SPACE
+========================= */
 .input-error-text {
+  min-height: 18px;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: transparent;
+  visibility: hidden;
+}
+
+.input-error-text.show {
   color: #d93025;
-  font-size: 13px;
-  margin-top: 5px;
+  visibility: visible;
 }
 
-.error-message {
-  color: #d93025;
-}
-
-.success-message {
-  color: #188038;
-}
-
+/* =========================
+   10) CHECKBOX / TERMS
+========================= */
 .remember-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 6px 0 18px;
+  margin: 6px 0 8px;
   font-size: 13px;
   color: #111;
 }
 
+.terms-error {
+  margin-top: -4px;
+  margin-bottom: 10px;
+}
+
+.auth-checkbox-spacer {
+  min-height: 18px;
+  margin-top: 4px;
+}
+
+/* =========================
+   11) MAIN BUTTON
+========================= */
 .auth-button {
   width: 100%;
   height: 46px;
@@ -201,31 +259,15 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
-.auth-link-center {
-  text-align: center;
-  margin-top: 32px;
-  font-size: 12px;
-  color: #111;
+.auth-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }
 
-.auth-link-bottom {
-  text-align: center;
-  margin-top: auto;
-  font-size: 12px;
-  color: #111;
-}
-
-.auth-link-center a,
-.auth-link-bottom a {
-  color: #0066ff;
-  text-decoration: none;
-}
-
-.auth-link-center a:hover,
-.auth-link-bottom a:hover {
-  text-decoration: underline;
-}
-
+/* =========================
+   12) GOOGLE BUTTON
+========================= */
 .google-signin-btn {
   width: 100%;
   height: 46px;
@@ -253,6 +295,7 @@
     0 10px 18px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
+
 .google-icon {
   width: 20px;
   height: 20px;
@@ -271,15 +314,99 @@
   font-size: 13px;
   color: #333;
   margin-bottom: 16px;
-  padding: 20px;
+  padding: 10px;
 }
 
-.auth-body form {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+/* =========================
+   13) SUBMIT / SERVER / VERIFY MESSAGE
+========================= */
+.auth-submit-message {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
+.error-message {
+  color: #b42318;
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+}
+
+.success-message {
+  color: #027a48;
+  background: #ecfdf3;
+  border: 1px solid #abefc6;
+}
+
+.verify-message {
+  color: #b54708;
+  background: #fffaeb;
+  border: 1px solid #fedf89;
+}
+
+/* =========================
+   14) RESEND VERIFICATION BUTTON
+========================= */
+.resend-btn {
+  margin-top: 10px;
+  width: 100%;
+  height: 40px;
+  background: transparent;
+  border: 1px solid #d0d5dd;
+  border-radius: 12px;
+  color: #344054;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.resend-btn:hover {
+  background: #f9fafb;
+}
+
+.resend-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* =========================
+   15) LINKS
+========================= */
+.auth-link-center {
+  text-align: center;
+  margin-top: 28px;
+  font-size: 12px;
+  color: #111;
+}
+
+.auth-link-bottom {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 12px;
+  color: #111;
+  padding-bottom: 4px;
+}
+
+.auth-link-center a,
+.auth-link-bottom a,
+.auth-policy-text a {
+  color: #0066ff;
+  text-decoration: none;
+}
+
+.auth-link-center a:hover,
+.auth-link-bottom a:hover,
+.auth-policy-text a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   16) POLICY / TERMS TEXT
+========================= */
 .auth-policy-text {
   text-align: center;
   font-size: 12px;
@@ -288,126 +415,145 @@
   line-height: 1.6;
 }
 
-.auth-policy-text a {
-  color: #0066ff;
-  text-decoration: none;
+/* =========================
+   17) OPTIONAL GENERAL MESSAGE
+========================= */
+.auth-message {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  text-align: center;
 }
 
-.auth-policy-text a:hover {
-  text-decoration: underline;
-}
-
-/* .signup-login-link {
-  margin-top: 14px;
-} */
-
+/* =========================
+   18) DESKTOP
+   keep mobile style feeling
+   but center whole card
+========================= */
 @media (min-width: 768px) {
   .auth-page {
     align-items: center;
-    padding: 40px 20px;
+    justify-content: center;
+    padding: 32px;
   }
 
   .auth-book {
-    max-width: 900px;
+    max-width: 1080px;
+    min-height: 760px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 0.95fr 1.05fr;
     border-radius: 28px;
     overflow: hidden;
     box-shadow:
-      0 28px 80px rgba(0, 0, 0, 0.45),
-      0 8px 24px rgba(120, 0, 0, 0.18);
-    backdrop-filter: blur(10px);
+      0 30px 90px rgba(0, 0, 0, 0.45),
+      0 10px 28px rgba(120, 0, 0, 0.18);
   }
 
   .auth-book-left {
     display: flex;
     align-items: center;
     justify-content: center;
-    justify-content: flex-start; 
-    text-align: left;
-    padding: 48px;
+    text-align: center;
+    padding: 56px;
   }
 
   .auth-brand-content {
-    max-width: 300px;
+    max-width: 360px;
+    width: 100%;
   }
 
   .desktop-break {
     display: block;
   }
 
+  .auth-brand-content h1 {
+    font-size: 42px;
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+
   .auth-brand-content p {
     margin-top: 18px;
-    font-size: 20px;
-    line-height: 1.4;
+    font-size: 18px;
+    line-height: 1.5;
   }
 
   .auth-brand-line {
-    width: 90px;
-    margin: 24px 0 18px;
+    width: 100px;
+    margin: 26px auto 18px;
   }
-  
+
   .auth-book-right {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
-    padding: 40px;
+    padding: 52px 48px;
     background: #fbfbfb;
   }
 
   .auth-body {
     width: 100%;
-    max-width: 400px;
+    max-width: 460px;
     margin-top: 0;
     padding: 0;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .auth-body form {
+    display: flex;
+    flex-direction: column;
   }
 
   .auth-input-group {
-    margin-bottom: 22px;
+    margin-bottom: 16px;
   }
 
   .auth-input-group label {
-    margin-bottom: 10px;
-    font-size: 15px;
+    margin-bottom: 9px;
+    font-size: 14px;
   }
 
   .auth-input {
-    height: 56px;
+    height: 58px;
     padding: 0 20px;
-    font-size: 16px;
+    font-size: 15px;
     box-shadow:
       inset 0 1px 2px rgba(255, 255, 255, 0.65),
       0 6px 18px rgba(0, 0, 0, 0.06);
   }
 
+  .password-input {
+    padding-right: 62px;
+  }
+
   .eye-button {
-    width: 60px;
-    height: 56px;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    right: 6px;
+  }
+
+  .eye-button svg {
+    width: 20px;
+    height: 20px;
   }
 
   .remember-row {
-    font-size: 15px;
-    margin: 10px 0 22px;
+    font-size: 14px;
+    margin: 12px 0 10px;
   }
 
   .auth-button {
     height: 56px;
-    font-size: 19px;
+    font-size: 18px;
     box-shadow:
       0 10px 24px rgba(210, 18, 18, 0.28),
       inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  }
-
-  .auth-link-center,
-  .auth-link-bottom {
-    font-size: 14px;
-  }
-
-  .auth-link-center {
-    margin-top: 20px;
   }
 
   .google-signin-btn {
@@ -419,18 +565,47 @@
   }
 
   .google-icon {
-    width: 24px;
-    height: 24px;
-    font-size: 14px;
+    width: 22px;
+    height: 22px;
+    font-size: 13px;
   }
 
   .auth-or {
-    font-size: 14px;
-    margin-bottom: 20px;
+    font-size: 13px;
+    margin-bottom: 22px;
+  }
+
+  .auth-link-center,
+  .auth-link-bottom,
+  .auth-policy-text {
+    font-size: 13px;
+  }
+
+  .auth-link-center {
+    margin-top: 20px;
+  }
+
+  .auth-link-bottom {
+    margin-top: auto;
+    padding-top: 28px;
   }
 
   .auth-policy-text {
-    font-size: 12px;
     margin-top: 18px;
+    line-height: 1.7;
+  }
+
+  .input-error-text {
+    min-height: 18px;
+    font-size: 12px;
+  }
+
+  .auth-submit-message {
+    font-size: 14px;
+  }
+
+  .resend-btn {
+    height: 44px;
+    font-size: 14px;
   }
 }

@@ -16,6 +16,7 @@ import Showroom from "./components/Showroom";
 import CarDetail from "./components/CarDetail";
 import LoginPage from "./features/auth/pages/LoginPage";
 import SignupPage from "./features/auth/pages/SignupPage";
+import VerifyEmailPage from "./features/auth/pages/VerifyEmailPage";
 
 function Home() {
   return (
@@ -49,6 +50,7 @@ function AppLayout() {
         <Route path="/car/:id" element={<CarDetail />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
       </Routes>
 
       {!hideLayout && <Footer />}
