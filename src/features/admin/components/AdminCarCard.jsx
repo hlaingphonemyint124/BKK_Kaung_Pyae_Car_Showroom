@@ -1,4 +1,5 @@
 import React from "react";
+import { LuFuel, LuSettings2, } from "react-icons/lu";
 import AdminCardMenu from "./AdminCardMenu";
 
 function AdminCarCard({
@@ -25,7 +26,19 @@ function AdminCarCard({
   const name = `${car.brand || ""} ${car.model || ""}`.trim();
 
   const isBuyCar = car.sale_price != null;
-  const isAvailable = car.status?.isAvailable ?? true;
+
+  const status = car.status || "available";
+  const isAvailable = status === "available";
+
+  const fuelLabel =
+    car.fuel_type || car.fuel || car.specs?.fuel || "Petrol";
+
+  const transmissionLabel =
+    car.transmission || car.specs?.transmission || "Auto";
+
+  const priceLabel = isBuyCar
+    ? `${Number(car.sale_price || 0).toLocaleString()} THB`
+    : `${Number(car.rent_price_per_day || 0).toLocaleString()} THB/day`;
 
   return (
     <div className="admin-product-card">
@@ -50,17 +63,24 @@ function AdminCarCard({
       <div className="admin-product-card__body">
         <h3 className="admin-product-card__title">{name}</h3>
 
-        <p className="admin-product-card__meta">
-          {car.specs?.fuel || "Petrol"}, {car.specs?.drive || "2WD"},{" "}
-          {car.specs?.seats || 4} seats
-        </p>
+        <div className="admin-product-card__features">
+          <div className="admin-product-card__feature">
+            <span className="admin-product-card__feature-icon admin-product-card__feature-icon--fuel">
+              <LuFuel />
+            </span>
+            <span className="admin-product-card__feature-text">{fuelLabel}</span>
+          </div>
+
+          <div className="admin-product-card__feature">
+            <span className="admin-product-card__feature-icon">
+              <LuSettings2 />
+            </span>
+            <span className="admin-product-card__feature-text">{transmissionLabel}</span>
+          </div>
+        </div>
 
         <div className="admin-product-card__bottom">
-          <div className="admin-product-card__price">
-            {isBuyCar
-              ? `${Number(car.sale_price || 0).toLocaleString()} THB`
-              : `${Number(car.rent_price_per_day || 0).toLocaleString()} THB/day`}
-          </div>
+          <div className="admin-product-card__price">{priceLabel}</div>
 
           <button
             className="admin-product-card__detail"

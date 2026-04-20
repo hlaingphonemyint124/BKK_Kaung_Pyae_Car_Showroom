@@ -1,72 +1,65 @@
+/* =========================
+   PAGE CONTAINER
+========================= */
 .admin-page-section {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 12px;
   box-sizing: border-box;
 }
 
-.admin-page-header {
-  margin-bottom: 20px;
-}
-
-.admin-page-title {
-  font-size: 28px;
-  font-weight: 700;
-  margin: 0;
-  color: #ffffff;
-}
-
+/* =========================
+   HERO SECTION
+========================= */
 .admin-hero-block {
-  padding: 0 24px 14px;
+  padding: 0 0 12px;
 }
 
 .admin-hero-block__title {
-  margin: 0 0 8px;
-  font-size: 24px;
+  margin: 0 0 6px;
+  font-size: 20px;
   font-weight: 800;
   color: #ff2b2b;
 }
 
 .admin-hero-block__subtitle {
   margin: 0;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   color: #666;
 }
 
-/* top filter bar */
+/* =========================
+   FILTER BAR (MOBILE FIRST)
+========================= */
 .admin-filterbar {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  margin: 0 24px 12px;
+  margin: 0 0 12px;
   background: #767676;
-  border-radius: 2px;
+  border-radius: 0;
   overflow: hidden;
 }
 
 .admin-filterbar__item {
-  min-height: 58px;
-  color: #ffffff;
-  font-size: 14px;
+  min-height: 42px;
+  font-size: 11px;
   font-weight: 700;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 4px;
+  padding: 0 6px;
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: background 0.2s ease;
-  padding: 0 10px;
 }
 
 .admin-filterbar__item + .admin-filterbar__item {
   border-left: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.admin-filterbar__item:hover {
-  background: rgba(255, 255, 255, 0.08);
 }
 
 .admin-filterbar__item--active {
@@ -74,25 +67,21 @@
 }
 
 .admin-filterbar__item--mode {
-  gap: 6px;
   flex-wrap: wrap;
 }
 
 .admin-filterbar__mode-hint {
-  font-size: 11px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 9px;
+  opacity: 0.9;
 }
 
-/* popup panels */
+/* =========================
+   OVERLAY PANELS
+========================= */
 .admin-toolbar-overlay {
   position: relative;
-  margin: 0 24px 12px;
+  margin: 0 0 12px;
   z-index: 20;
-}
-
-.admin-toolbar-overlay .admin-filterbar {
-  margin: 0;
 }
 
 .admin-overlay-panel {
@@ -107,16 +96,18 @@
 .admin-search-panel {
   background: #f3f3f3;
   border-radius: 12px;
-  padding: 16px;
+  padding: 12px;
   border: 1px solid #dfdfdf;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-  margin: 0;
 }
 
+/* =========================
+   FILTER INPUTS
+========================= */
 .admin-filter-panel__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 .admin-filter-panel__group {
@@ -126,7 +117,7 @@
 }
 
 .admin-filter-panel__group label {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #444;
 }
@@ -134,70 +125,54 @@
 .admin-filter-panel__group select,
 .admin-search-panel input {
   width: 100%;
-  min-height: 42px;
-  padding: 10px 12px;
-  border-radius: 10px;
+  min-height: 40px;
+  padding: 10px;
+  border-radius: 8px;
   border: 1px solid #d5d5d5;
-  background: #ffffff;
-  font-size: 14px;
-  color: #222;
-  outline: none;
-  box-sizing: border-box;
+  font-size: 13px;
 }
 
-.admin-filter-panel__group select:focus,
-.admin-search-panel input:focus {
-  border-color: #ef2b2d;
-  box-shadow: 0 0 0 2px rgba(239, 43, 45, 0.12);
-}
-
-.admin-search-panel input::placeholder {
-  color: #888;
-}
-
+/* =========================
+   ACTION BUTTONS
+========================= */
 .admin-filter-panel__actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 14px;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .admin-filter-panel__actions button {
-  min-width: 90px;
-  height: 40px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
   font-weight: 600;
+  border: none;
 }
 
 .admin-filter-panel__actions button:first-child {
   background: #ececec;
-  color: #333;
 }
 
 .admin-filter-panel__actions button:last-child {
   background: #ef2b2d;
-  color: #ffffff;
+  color: #fff;
 }
 
-/* tabs */
+/* =========================
+   TABS
+========================= */
 .admin-tabs-bar {
   display: flex;
-  gap: 36px;
-  padding: 10px 24px 20px;
-  align-items: center;
-  flex-wrap: wrap;
+  gap: 20px;
+  padding: 6px 0 14px;
 }
 
 .admin-tabs-bar__item {
-  position: relative;
+  font-size: 14px;
+  background: none;
   border: none;
-  background: transparent;
-  font-size: 16px;
-  color: #222;
   cursor: pointer;
-  padding: 0;
 }
 
 .admin-tabs-bar__item--active {
@@ -205,32 +180,46 @@
   font-weight: 700;
 }
 
-.admin-tabs-bar__item--active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -8px;
-  width: 34px;
-  height: 3px;
-  background: #ef2b2d;
-  border-radius: 999px;
-}
-
-/* card grid */
+/* =========================
+   GRID
+========================= */
 .admin-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
+/* =========================
+   DESKTOP
+========================= */
 @media (min-width: 768px) {
+  .admin-page-section {
+    padding: 16px;
+  }
+
+  .admin-hero-block__title {
+    font-size: 26px;
+  }
+
+  .admin-filterbar {
+    max-width: 1400px;
+    margin: 0 auto 16px;
+    border-radius: 6px;
+  }
+
+  .admin-filterbar__item {
+    min-height: 60px;
+    font-size: 14px;
+    gap: 8px;
+  }
+
+  .admin-filterbar__mode-hint {
+    font-size: 12px;
+  }
+
   .admin-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-  }
-
-  .admin-filter-panel__grid {
-    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -238,54 +227,5 @@
   .admin-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
-  }
-}
-
-@media (max-width: 767px) {
-  .admin-page-section {
-    padding: 12px;
-  }
-
-  .admin-hero-block {
-    padding: 0 0 12px;
-  }
-
-  .admin-filterbar {
-    margin: 0 0 10px;
-  }
-
-  .admin-filterbar__item {
-    min-height: 42px;
-    font-size: 11px;
-    gap: 4px;
-    padding: 0 4px;
-  }
-
-  .admin-filterbar__item--mode {
-    gap: 4px;
-  }
-
-  .admin-filterbar__mode-hint {
-    font-size: 9px;
-  }
-
-  .admin-filter-panel,
-  .admin-search-panel {
-    margin: 8px 0 10px;
-    padding: 12px;
-  }
-
-  .admin-filter-panel__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-tabs-bar {
-    gap: 24px;
-    padding: 8px 0 16px;
-  }
-
-  .admin-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
   }
 }
