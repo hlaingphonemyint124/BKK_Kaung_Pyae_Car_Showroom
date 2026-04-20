@@ -30,7 +30,21 @@ export const updateAdminCarPublishStatus = async (id, is_published) => {
   return res.data;
 };
 
-export const addAdminCarImage = async (id, payload) => {
-  const res = await api.post(`/admin/cars/${id}/images`, payload);
+export const addAdminCarImage = async (
+  id,
+  file,
+  { isPrimary = false, sortOrder = 0 } = {}
+) => {
+  const formData = new FormData();
+  formData.append("image", file);
+  formData.append("is_primary", String(isPrimary));
+  formData.append("sort_order", String(sortOrder));
+
+  const res = await api.post(`/admin/cars/${id}/images`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
   return res.data;
 };

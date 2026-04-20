@@ -10,6 +10,7 @@ import {
   createAdminCar,
   getAdminCarById,
   updateAdminCar,
+  addAdminCarImage,
 } from "../services/adminCarService";
 
 const defaultDocumentLines = [
@@ -49,8 +50,6 @@ const emptyBuyForm = {
 function AdminBuyDetailPage() {
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log("AdminBuyDetailPage id =", id);
-  
   const isCreateMode = !id;
 
   const [form, setForm] = useState(emptyBuyForm);
@@ -62,7 +61,6 @@ function AdminBuyDetailPage() {
     { key: "year", label: "Year" },
     { key: "documents", label: "Documents" },
   ];
-  
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -73,7 +71,6 @@ function AdminBuyDetailPage() {
       }
 
       if (!id) {
-        console.error("Missing route id");
         setLoading(false);
         return;
       }
@@ -88,25 +85,20 @@ function AdminBuyDetailPage() {
           return;
         }
 
-        const primaryImage =
-          car.primary_image ||
-          car.image ||
-          car.images?.find((img) => img.is_primary)?.storage_path ||
-          car.images?.[0]?.storage_path ||
-          "";
+        const media =
+          car.images?.map((img) => ({
+            id: `existing-${img.id}`,
+            url: img.storage_path,
+            type: "image",
+            isPrimary: Boolean(img.is_primary),
+            sortOrder: img.sort_order ?? 0,
+            isExisting: true,
+          })) || [];
 
         setForm({
           name: `${car.brand || ""} ${car.model || ""}`.trim(),
           price: car.sale_price ?? "",
-          media: primaryImage
-            ? [
-                {
-                  id: `existing-${car.id}`,
-                  url: primaryImage,
-                  type: "image",
-                },
-              ]
-            : [],
+          media,
           specs: {
             fuel: car.fuel_type || car.fuel || "",
             transmission: car.transmission || "",
@@ -194,6 +186,21 @@ function AdminBuyDetailPage() {
     }));
   };
 
+  const uploadNewImages = async (carId) => {
+    const newImageItems = form.media.filter(
+      (item) => item.isNew && item.type === "image" && item.file
+    );
+
+    for (let i = 0; i < newImageItems.length; i += 1) {
+      const item = newImageItems[i];
+
+      await addAdminCarImage(carId, item.file, {
+        isPrimary: i === 0,
+        sortOrder: i,
+      });
+    }
+  };
+
   const handleSubmit = async () => {
     if (!form.name.trim()) {
       alert("Please enter car name.");
@@ -208,6 +215,12 @@ function AdminBuyDetailPage() {
       return;
     }
 
+    const imageCount = form.media.filter((item) => item.type === "image").length;
+    if (imageCount === 0) {
+      alert("Please add at least one image.");
+      return;
+    }
+
     const payload = {
       brand,
       model,
@@ -217,21 +230,32 @@ function AdminBuyDetailPage() {
       currency_code: form.info.currencyCode,
       status: form.info.status,
       is_published: form.info.isPublished,
+      vin: form.info.vin || undefined,
     };
 
     try {
       setSaving(true);
 
+      let savedCar;
+
       if (isCreateMode) {
-        await createAdminCar(payload);
+        savedCar = await createAdminCar(payload);
       } else {
-        await updateAdminCar(id, payload);
+        savedCar = await updateAdminCar(id, payload);
       }
+
+      const carId = savedCar?.id || id;
+
+      if (!carId) {
+        throw new Error("Missing car id after save.");
+      }
+
+      await uploadNewImages(carId);
 
       navigate("/admin/buy");
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.error || "Failed to save car.");
+      alert(err.response?.data?.error || err.message || "Failed to save car.");
     } finally {
       setSaving(false);
     }

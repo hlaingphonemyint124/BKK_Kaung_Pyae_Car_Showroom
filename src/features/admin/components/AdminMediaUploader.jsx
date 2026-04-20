@@ -4,25 +4,19 @@ function AdminMediaUploader({ media = [], onChange }) {
   const inputRef = useRef(null);
   const [previewItem, setPreviewItem] = useState(null);
 
-  // =========================
-  // HANDLE FILES
-  // =========================
   const handleFiles = (fileList) => {
     const files = Array.from(fileList || []);
 
-    const validFiles = files.filter(
-      (file) =>
-        file.type.startsWith("image/") || file.type.startsWith("video/")
-    );
+    const validFiles = files.filter((file) => file.type.startsWith("image/"));
 
     if (validFiles.length === 0) return;
 
     const newItems = validFiles.map((file) => ({
       id: `${file.name}-${Date.now()}-${Math.random()}`,
-      type: file.type.startsWith("video/") ? "video" : "image",
+      type: "image",
       file,
       preview: URL.createObjectURL(file),
-      isNew: true, // ✅ IMPORTANT
+      isNew: true,
     }));
 
     onChange([...media, ...newItems]);
@@ -50,10 +44,7 @@ function AdminMediaUploader({ media = [], onChange }) {
 
     for (const item of items) {
       const file = item.getAsFile?.();
-      if (
-        file &&
-        (file.type.startsWith("image/") || file.type.startsWith("video/"))
-      ) {
+      if (file && file.type.startsWith("image/")) {
         pastedFiles.push(file);
       }
     }
@@ -61,9 +52,6 @@ function AdminMediaUploader({ media = [], onChange }) {
     handleFiles(pastedFiles);
   };
 
-  // =========================
-  // REMOVE ITEM
-  // =========================
   const handleRemove = (id) => {
     const target = media.find((item) => item.id === id);
 
@@ -78,9 +66,6 @@ function AdminMediaUploader({ media = [], onChange }) {
     }
   };
 
-  // =========================
-  // CLEANUP (VERY IMPORTANT)
-  // =========================
   useEffect(() => {
     return () => {
       media.forEach((item) => {
@@ -89,11 +74,8 @@ function AdminMediaUploader({ media = [], onChange }) {
         }
       });
     };
-  }, []);
+  }, [media]);
 
-  // =========================
-  // UI
-  // =========================
   return (
     <>
       <div
@@ -105,8 +87,8 @@ function AdminMediaUploader({ media = [], onChange }) {
       >
         {media.length === 0 ? (
           <div className="admin-media-uploader__empty">
-            <p>Drag / Paste / Upload photos and videos</p>
-            <p>At least one image is required. Video is optional.</p>
+            <p>Drag / Paste / Upload images</p>
+            <p>At least one image is required.</p>
           </div>
         ) : (
           <div className="admin-media-uploader__grid">
@@ -119,19 +101,11 @@ function AdminMediaUploader({ media = [], onChange }) {
                   className="admin-media-uploader__item"
                   onClick={() => setPreviewItem(item)}
                 >
-                  {item.type === "image" ? (
-                    <img
-                      src={src}
-                      alt="preview"
-                      className="admin-media-uploader__preview"
-                    />
-                  ) : (
-                    <video
-                      src={src}
-                      className="admin-media-uploader__preview"
-                      muted
-                    />
-                  )}
+                  <img
+                    src={src}
+                    alt="preview"
+                    className="admin-media-uploader__preview"
+                  />
 
                   <button
                     type="button"
@@ -154,22 +128,19 @@ function AdminMediaUploader({ media = [], onChange }) {
           className="admin-media-uploader__upload-btn"
           onClick={() => inputRef.current?.click()}
         >
-          Upload Media
+          Upload Images
         </button>
 
         <input
           ref={inputRef}
           type="file"
-          accept="image/*,video/*"
+          accept="image/*"
           multiple
           hidden
           onChange={handleInputChange}
         />
       </div>
 
-      {/* =========================
-          PREVIEW MODAL
-      ========================= */}
       {previewItem && (
         <div
           className="admin-media-preview-modal"
@@ -187,20 +158,11 @@ function AdminMediaUploader({ media = [], onChange }) {
               ×
             </button>
 
-            {previewItem.type === "image" ? (
-              <img
-                src={previewItem.preview || previewItem.url}
-                alt="full preview"
-                className="admin-media-preview-modal__media"
-              />
-            ) : (
-              <video
-                src={previewItem.preview || previewItem.url}
-                className="admin-media-preview-modal__media"
-                controls
-                autoPlay
-              />
-            )}
+            <img
+              src={previewItem.preview || previewItem.url}
+              alt="full preview"
+              className="admin-media-preview-modal__media"
+            />
           </div>
         </div>
       )}

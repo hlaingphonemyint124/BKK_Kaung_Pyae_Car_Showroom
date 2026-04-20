@@ -10,6 +10,7 @@ import {
   createAdminCar,
   getAdminCarById,
   updateAdminCar,
+  addAdminCarImage,
 } from "../services/adminCarService";
 
 const defaultRentalTerms = [
@@ -67,7 +68,6 @@ function AdminRentalDetailPage() {
       }
 
       if (!id) {
-        console.error("Missing route id");
         setLoading(false);
         return;
       }
@@ -82,33 +82,28 @@ function AdminRentalDetailPage() {
           return;
         }
 
-        const primaryImage =
-          car.primary_image ||
-          car.image ||
-          car.images?.find((img) => img.is_primary)?.storage_path ||
-          car.images?.[0]?.storage_path ||
-          "";
+        const media =
+          car.images?.map((img) => ({
+            id: `existing-${img.id}`,
+            url: img.storage_path,
+            type: "image",
+            isPrimary: Boolean(img.is_primary),
+            sortOrder: img.sort_order ?? 0,
+            isExisting: true,
+          })) || [];
 
         const dailyPrice = Number(car.rent_price_per_day) || 0;
 
         setForm({
           name: `${car.brand || ""} ${car.model || ""}`.trim(),
           price: car.rent_price_per_day ?? "",
-          media: primaryImage
-            ? [
-                {
-                  id: `existing-${car.id}`,
-                  url: primaryImage,
-                  type: "image",
-                },
-              ]
-            : [],
+          media,
           specs: {
-            fuel: car.fuel_type || "",
+            fuel: car.fuel_type || car.fuel || "",
             transmission: car.transmission || "",
             color: car.color || "",
             engine: car.engine || "",
-            drive: car.drive_type || "",
+            drive: car.drive_type || car.drive || "",
             seats: car.seats || "",
           },
           info: {
@@ -215,6 +210,21 @@ function AdminRentalDetailPage() {
     }));
   };
 
+  const uploadNewImages = async (carId) => {
+    const newImageItems = form.media.filter(
+      (item) => item.isNew && item.type === "image" && item.file
+    );
+
+    for (let i = 0; i < newImageItems.length; i += 1) {
+      const item = newImageItems[i];
+
+      await addAdminCarImage(carId, item.file, {
+        isPrimary: i === 0,
+        sortOrder: i,
+      });
+    }
+  };
+
   const handleSubmit = async () => {
     if (!form.name.trim()) {
       alert("Please enter car name.");
@@ -234,6 +244,12 @@ function AdminRentalDetailPage() {
       return;
     }
 
+    const imageCount = form.media.filter((item) => item.type === "image").length;
+    if (imageCount === 0) {
+      alert("Please add at least one image.");
+      return;
+    }
+
     const payload = {
       brand,
       model,
@@ -248,18 +264,28 @@ function AdminRentalDetailPage() {
     try {
       setSaving(true);
 
+      let savedCar;
+
       if (isCreateMode) {
-        await createAdminCar(payload);
-        alert("Rental car created successfully.");
+        savedCar = await createAdminCar(payload);
       } else {
-        await updateAdminCar(id, payload);
-        alert("Rental car updated successfully.");
+        savedCar = await updateAdminCar(id, payload);
       }
+
+      const carId = savedCar?.id || id;
+
+      if (!carId) {
+        throw new Error("Missing car id after save.");
+      }
+
+      await uploadNewImages(carId);
 
       navigate("/admin/rental");
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.error || "Failed to save rental car.");
+      alert(
+        err.response?.data?.error || err.message || "Failed to save rental car."
+      );
     } finally {
       setSaving(false);
     }
