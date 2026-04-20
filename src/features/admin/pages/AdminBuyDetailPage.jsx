@@ -294,12 +294,13 @@ function AdminBuyDetailPage() {
           />
         </div>
 
-        <div className="admin-detail-panel">
-          <SpecGrid specs={form.specs} onChange={updateSpecs} />
-        </div>
       </div>
 
       <div className="admin-detail-page__right">
+        <div className="admin-detail-panel">
+          <SpecGrid specs={form.specs} onChange={updateSpecs} />
+        </div>
+        
         <div className="admin-detail-panel">
           <InfoRows
             fields={buyFields}
