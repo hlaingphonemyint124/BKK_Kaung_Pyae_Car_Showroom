@@ -2,19 +2,19 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { createContext, useContext, useState } from "react";
 
 import Header from "./components/Header";
-import Hero from "./components/Hero";
-import Deals from "./components/Deals";
-import BrandList from "./components/BrandList";
-import CarTypes from "./components/CarTypes";
-import EasyRental from "./components/EasyRental";
-import Testimonials from "./components/Testimonials";
-import WhyChooseUs from "./components/WhyChooseUs";
-import AboutUs from "./components/AboutUs";
-import Team from "./components/Team";
+import Hero from "./section/Hero";
+import Deals from "./section/Deals";
+import BrandList from "./section/BrandList";
+import CarTypes from "./section/CarTypes";
+import EasyRental from "./section/EasyRental";
+import Testimonials from "./section/Testimonials";
+import WhyChooseUs from "./section/WhyChooseUs";
+import AboutUs from "./section/AboutUs";
+import Team from "./section/Team";
 import Footer from "./components/Footer";
 
-import Showroom from "./components/Showroom";
-import CarDetail from "./components/CarDetail";
+import Showroom from "./pages/Showroom";
+import CarDetail from "./pages/CarDetail";
 import LoginPage from "./features/auth/pages/LoginPage";
 import SignupPage from "./features/auth/pages/SignupPage";
 
