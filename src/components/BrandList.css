@@ -1,281 +1,308 @@
-/* ============================= */
-/* SECTION */
-/* ============================= */
+/* =====================================================
+   BrandList — scoped with bl- prefix to avoid leaks
+   ===================================================== */
 
-.brandsSection{
-padding:110px 20px;
-background:#f7f8fb;
-text-align:center;
+/* ---- Section ---- */
+.bl-section {
+  padding: 16px;
+  background: #f5f5f5;
+  transition: background 0.3s;
+  position: relative;
 }
 
-/* ============================= */
-/* HEADER */
-/* ============================= */
-
-.brandsHeader{
-
-max-width:1200px;
-margin:0 auto 50px;
-
-display:flex;
-align-items:center;
-justify-content:space-between;
-
+/* ---- Header ---- */
+.bl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
 }
 
-.brandsHeader h3{
-font-size:32px;
-font-weight:600;
-color:#111827;
+.bl-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  color: #111111;
 }
 
-.headerActions{
-display:flex;
-align-items:center;
-gap:12px;
+.bl-viewall {
+  font-size: 12px;
+  color: #e53e3e;
+  cursor: pointer;
+  font-weight: 500;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+.bl-viewall:hover { opacity: 0.75; }
+
+/* ---- Wrapper ---- */
+.bl-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
 }
 
-.viewAll{
-font-size:14px;
-color:#6b7280;
-cursor:pointer;
-transition:.25s;
+/* ---- Scrollable row ---- */
+.bl-row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 4px 2px 10px;
+  flex: 1;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.bl-row::-webkit-scrollbar { display: none; }
+
+/* ══════════════════════════════════════════════════════
+   NAV ARROWS  — exact Deals style
+══════════════════════════════════════════════════════ */
+.bl-arrow {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e8281e;
+  z-index: 10;
+  margin: 0 6px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow:
+    0 0 0 1.5px rgba(232, 40, 30, 0.40),
+    0 0 18px 2px rgba(232, 40, 30, 0.18),
+    0 4px 16px rgba(0, 0, 0, 0.10);
+  transition: box-shadow 0.25s, background 0.25s;
 }
 
-.viewAll:hover{
-color:#ef4444;
+.bl-arrow svg {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 4px rgba(232, 40, 30, 0.55));
+  transition: filter 0.2s, transform 0.2s;
 }
 
-/* ============================= */
-/* NAV BUTTON */
-/* ============================= */
+.bl-arrow:hover {
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow:
+    0 0 0 1.5px rgba(232, 40, 30, 0.70),
+    0 0 30px 6px rgba(232, 40, 30, 0.30),
+    0 6px 20px rgba(0, 0, 0, 0.14);
+}
+.bl-arrow:hover svg {
+  filter: drop-shadow(0 0 9px rgba(232, 40, 30, 1.0));
+}
+.bl-arrow--prev:hover svg { transform: translateX(-2px); }
+.bl-arrow--next:hover svg { transform: translateX(2px); }
 
-.navBtn{
-
-width:40px;
-height:40px;
-
-border:none;
-border-radius:50%;
-
-background:white;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-font-size:20px;
-
-cursor:pointer;
-
-box-shadow:0 8px 20px rgba(0,0,0,0.08);
-
-transition:.25s;
-
+/* Radial glow layer */
+.bl-nav-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 40, 30, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+  transition: background 0.25s;
+}
+.bl-arrow:hover .bl-nav-glow {
+  background: radial-gradient(circle, rgba(232, 40, 30, 0.35) 0%, transparent 70%);
 }
 
-.navBtn:hover{
-transform:scale(1.08);
-box-shadow:0 14px 30px rgba(0,0,0,0.12);
+/* Pulsing outer ring */
+.bl-nav-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(232, 40, 30, 0.35);
+  animation: bl-nav-pulse 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes bl-nav-pulse {
+  0%,  100% { opacity: 0.35; transform: scale(1);    }
+  50%        { opacity: 0.85; transform: scale(1.14); }
 }
 
-/* ============================= */
-/* SLIDER */
-/* ============================= */
-
-.brandsSlider{
-
-max-width:1200px;
-margin:auto;
-
-overflow:hidden;
-
+/* ---- Card ---- */
+.bl-card {
+  flex-shrink: 0;
+  width: 80px;
+  height: 86px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px 4px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 2px solid transparent;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.2s ease;
+  animation: blCardIn 0.35s ease both;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  box-sizing: border-box;
 }
 
-/* ============================= */
-/* TRACK */
-/* ============================= */
-
-.brandsTrack{
-display:flex;
+@keyframes blCardIn {
+  from { opacity: 0; transform: scale(0.88) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);   }
 }
 
-/* ============================= */
-/* GRID */
-/* ============================= */
-
-.brandsGrid{
-
-min-width:100%;
-
-display:grid;
-
-grid-template-columns:repeat(4,1fr);
-
-gap:26px;
-
+.bl-card:hover {
+  border-color: #e53e3e;
+  box-shadow:
+    0 8px 24px rgba(229, 62, 62, 0.35),
+    0 0 0 1px rgba(229, 62, 62, 0.2),
+    inset 0 0 18px rgba(229, 62, 62, 0.06);
+}
+.bl-card:active { transform: scale(0.95) !important; }
+.bl-card:focus-visible {
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.35);
 }
 
-/* ============================= */
-/* CARD */
-/* ============================= */
+.bl-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(229, 62, 62, 0.12) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.bl-card:hover::before { opacity: 1; }
 
-.brandCard{
+/* ---- Logo ---- */
+.bl-logo {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.bl-logo img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  pointer-events: none;
+}
+@keyframes blLogoBounce {
+  0%   { transform: translateY(0);   }
+  30%  { transform: translateY(-5px);}
+  55%  { transform: translateY(-1px);}
+  75%  { transform: translateY(-3px);}
+  100% { transform: translateY(0);   }
+}
+.bl-card:hover .bl-logo { animation: blLogoBounce 0.5s ease both; }
 
-background:white;
+/* ---- Label ---- */
+.bl-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #111111;
+  margin: 0;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  line-height: 1.2;
+  width: 100%;
+  padding: 0 2px;
+  flex-shrink: 0;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+.bl-card:hover .bl-label { color: #e53e3e; transform: translateY(-1px); }
 
-padding:30px 20px;
-
-border-radius:18px;
-
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-
-min-height:120px;
-
-cursor:pointer;
-
-border:1px solid #eef0f4;
-
-transition:all .25s ease;
-
+/* ---- Ripple ---- */
+@keyframes blRipple {
+  0%   { transform: scale(0); opacity: 0.4; }
+  100% { transform: scale(4); opacity: 0;   }
+}
+.bl-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(229, 62, 62, 0.25);
+  pointer-events: none;
+  animation: blRipple 0.55s ease-out forwards;
 }
 
-/* hover */
-
-.brandCard:hover{
-
-transform:translateY(-8px);
-
-box-shadow:
-0 20px 40px rgba(0,0,0,0.08),
-0 6px 20px rgba(0,0,0,0.05);
-
+/* ---- Floating particles ---- */
+@keyframes blFloatUp {
+  0%   { opacity: 0.7; transform: translateY(0)     scale(1);   }
+  100% { opacity: 0;   transform: translateY(-26px) scale(0.3); }
+}
+.bl-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: #e53e3e;
+  pointer-events: none;
+  opacity: 0;
 }
 
-/* logo */
+/* =====================================================
+   DARK MODE
+   ===================================================== */
+body.dark .bl-section { background: #000000 !important; }
+body.dark .bl-title   { color: #ffffff !important; }
 
-.brandCard img{
-
-height:42px;
-object-fit:contain;
-
-margin-bottom:12px;
-
-filter:grayscale(40%);
-
-transition:.25s;
-
+/* Dark nav arrows — mirror Deals dark style */
+body.dark .bl-arrow {
+  background: rgba(12, 4, 4, 0.82) !important;
+  box-shadow:
+    0 0 0 1.5px rgba(255, 51, 51, 0.45),
+    0 0 20px 3px rgba(255, 51, 51, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  color: #ff3333 !important;
+}
+body.dark .bl-arrow:hover {
+  background: rgba(18, 5, 5, 0.95) !important;
+  box-shadow:
+    0 0 0 1.5px rgba(255, 51, 51, 0.80),
+    0 0 32px 8px rgba(255, 51, 51, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+}
+body.dark .bl-nav-ring {
+  border-color: rgba(255, 51, 51, 0.35);
 }
 
-.brandCard:hover img{
-filter:grayscale(0%);
-transform:scale(1.05);
+body.dark .bl-card {
+  background:   #1c1c1c !important;
+  border-color: transparent !important;
+  box-shadow:   0 1px 4px rgba(0, 0, 0, 0.3) !important;
 }
-
-/* name */
-
-.brandCard p{
-
-font-size:14px;
-font-weight:500;
-
-color:#374151;
-
+body.dark .bl-card:hover {
+  border-color: #e53e3e !important;
+  box-shadow:
+    0 8px 24px rgba(229, 62, 62, 0.35),
+    0 0 0 1px rgba(229, 62, 62, 0.2),
+    inset 0 0 18px rgba(229, 62, 62, 0.06) !important;
 }
-
-/* ============================= */
-/* DOTS */
-/* ============================= */
-
-.brandDots{
-
-margin-top:45px;
-
-display:flex;
-justify-content:center;
-gap:10px;
-
-}
-
-.dot{
-
-width:8px;
-height:8px;
-
-border-radius:20px;
-
-background:#d1d5db;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-.dot.active{
-
-width:24px;
-background:#ef4444;
-
-}
-
-/* ============================= */
-/* TABLET */
-/* ============================= */
-
-@media (max-width:900px){
-
-.brandsGrid{
-grid-template-columns:repeat(3,1fr);
-gap:20px;
-}
-
-}
-
-/* ============================= */
-/* MOBILE */
-/* ============================= */
-
-@media (max-width:600px){
-
-.brandsSection{
-padding:80px 16px;
-}
-
-.brandsHeader h3{
-font-size:24px;
-}
-
-.brandsGrid{
-grid-template-columns:repeat(2,1fr);
-gap:16px;
-}
-
-.brandCard{
-padding:22px 14px;
-min-height:95px;
-}
-
-.brandCard img{
-height:34px;
-}
-
-.navBtn{
-display:none;
-}
-
-.brandsTrack{
-display:flex;
-touch-action:pan-y;
-cursor:grab;
-user-select:none;
-}
-
-.brandsTrack:active{
-cursor:grabbing;
-}
-}
-
+body.dark .bl-label               { color: #ffffff !important; }
+body.dark .bl-card:hover .bl-label { color: #ff6b6b !important; }

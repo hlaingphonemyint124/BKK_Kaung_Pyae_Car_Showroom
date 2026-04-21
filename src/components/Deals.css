@@ -1,243 +1,598 @@
-/* section */
+/* ══════════════════════════════════════════════════════════════════════════════
+   DEALS.CSS  — Full rewrite. Replace entire Deals.css with this file.
+   Google Fonts (add to index.html):
+   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+══════════════════════════════════════════════════════════════════════════════ */
 
-.deals{
-padding:110px 20px;
-background:
-radial-gradient(circle at top,#ffffff 0%,#f4f6fa 60%,#eef1f6 100%);
-text-align:center;
-overflow:hidden;
-position:relative;
+/* ── Variables ─────────────────────────────────────────────────────────────── */
+:root {
+  /* Light */
+  --bg:              #ffffff;
+  --bg-card-front:   rgba(255, 255, 255, 0.62);
+  --bg-card-back:    rgba(255, 255, 255, 0.75);
+  --border-card:     rgba(255, 255, 255, 0.70);
+  --border-hover:    rgba(232, 40, 30, 0.42);
+  --text-h:          #0f0f10;
+  --text-p:          #8a8a9a;
+  --accent:          #e8281e;
+  --accent-rgb:      232, 40, 30;
+  --shadow-card:
+    0 8px 32px rgba(0,0,0,0.08),
+    0 2px 8px  rgba(0,0,0,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.90);
+  --shadow-hover:
+    0 28px 64px rgba(0,0,0,0.14),
+    0 8px  24px rgba(232,40,30,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.95);
+  --font-d: 'Cormorant Garamond', Georgia, serif;
+  --font-b: 'Outfit', system-ui, sans-serif;
 }
 
-/* title */
-
-.deals-title{
-font-size:36px;
-font-weight:700;
-letter-spacing:-0.5px;
-color:#111;
-margin-bottom:28px;
+body.dark {
+  --bg:              #0a0a0a;
+  --bg-card-front:   #111111;
+  --bg-card-back:    #100808;
+  --border-card:     rgba(255,255,255,0.05);
+  --border-hover:    rgba(220,38,38,0.55);
+  --text-h:          #f0ece4;
+  --text-p:          #6b6b74;
+  --accent:          #ff3333;
+  --accent-rgb:      255, 51, 51;
+  --shadow-card:
+    0 4px 28px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.03);
+  --shadow-hover:
+    0 32px 72px rgba(0,0,0,0.65),
+    0 0   48px rgba(255,42,42,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
-/* tabs */
-
-.deal-tabs{
-display:flex;
-justify-content:center;
-gap:16px;
-margin-bottom:48px;
+/* ── Section shell ─────────────────────────────────────────────────────────── */
+.deals {
+  position: relative;
+  overflow: hidden;
+  padding: 72px 0 100px;        /* ← was 120px 0 140px */
+  background: var(--bg);
+  text-align: center;
+  font-family: var(--font-b);
+  transition: background 0.4s;
 }
 
-.deal-tabs button{
-background:white;
-border:1px solid #e5e7eb;
-font-size:14px;
-font-weight:600;
-color:#555;
-cursor:pointer;
-padding:10px 20px;
-border-radius:30px;
-
-transition:all .25s ease;
+/* Top radial glow — smaller so it doesn't push content */
+.deals::before {
+  content: '';
+  position: absolute;
+  top: -80px; left: 50%; transform: translateX(-50%);   /* ← was -220px */
+  width: 600px; height: 300px; border-radius: 50%;       /* ← was 900x600 */
+  background: radial-gradient(circle, rgba(var(--accent-rgb),0.07), transparent 65%);
+  filter: blur(40px); pointer-events: none;              /* ← was blur(60px) */
 }
 
-.deal-tabs button:hover{
-border-color:#ff2a2a;
-color:#111;
+/* Bottom section fade */
+.deals::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+  background: linear-gradient(transparent, var(--bg));
+  pointer-events: none; z-index: 2;
 }
 
-.deal-tabs button.active{
-background:linear-gradient(135deg,#ff2a2a,#c70000);
-color:white;
-border:none;
-box-shadow:0 10px 20px rgba(0,0,0,0.15);
+/* Blobs — dark only */
+.deals-blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(130px); pointer-events: none;
+  opacity: 0; transition: opacity 0.4s;
+}
+body.dark .deals-blob { opacity: 1; }
+
+.deals-blob--1 { width: 500px; height: 500px; top: -150px; left: 50%; transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(200,20,20,0.22), transparent 70%); }
+.deals-blob--2 { width: 320px; height: 320px; bottom: -80px; left: -80px;
+  background: radial-gradient(circle, rgba(180,10,10,0.14), transparent 70%); }
+.deals-blob--3 { width: 260px; height: 260px; top: 40%; right: -60px;
+  background: radial-gradient(circle, rgba(200,20,20,0.10), transparent 70%); }
+
+/* Noise — dark only */
+.deals-noise {
+  position: absolute; inset: 0; pointer-events: none;
+  opacity: 0; transition: opacity 0.4s;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+body.dark .deals-noise { opacity: 0.022; }
+
+/* Particles — dark only */
+.deals-particles {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+  opacity: 0; transition: opacity 0.5s;
+}
+body.dark .deals-particles { opacity: 1; }
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+.deals-header {
+  position: relative; z-index: 1;
+  padding: 0 24px; margin-bottom: 32px;   /* ← was 48px */
 }
 
-/* slider */
-
-.slider{
-overflow-x:auto;
-scroll-behavior:smooth;
-padding:15px 0;
+.deals-eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 18px;
+}
+.eyebrow-rule {
+  display: inline-block; width: 32px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent));
+}
+.eyebrow-rule:last-child {
+  background: linear-gradient(90deg, var(--accent), transparent);
 }
 
-.slider::-webkit-scrollbar{
-display:none;
+.deals-title {
+  font-family: var(--font-d);
+  font-size: clamp(34px, 5vw, 60px);      /* ← was clamp(38px,5.5vw,68px) */
+  font-weight: 700; color: var(--text-h);
+  letter-spacing: -0.5px; line-height: 1.08;
+  margin: 0 0 12px;
 }
 
-.slide-track{
-display:flex;
-gap:32px;
-width:max-content;
-padding:10px;
+.deals-sub {
+  font-size: 15px; color: var(--text-p);
+  letter-spacing: 0.03em; margin: 0;
 }
 
-/* card */
-
-.car-card{
-width:300px;
-flex-shrink:0;
+/* ── Tabs ──────────────────────────────────────────────────────────────────── */
+.deals-tabs {
+  display: flex; justify-content: center; gap: 12px;
+  margin-bottom: 36px;                    /* ← was 52px */
+  position: relative; z-index: 1;
+  padding: 0 24px;
 }
 
-.card-inner{
-position:relative;
-background:white;
-border-radius:20px;
-padding:26px;
-
-border:1px solid #eceef2;
-
-box-shadow:
-0 6px 18px rgba(0,0,0,0.05),
-0 2px 6px rgba(0,0,0,0.04);
-
-transition:all .35s ease;
-overflow:hidden;
+.deals-tabs button {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-b); font-size: 13px; font-weight: 500;
+  letter-spacing: 0.06em; color: var(--text-p);
+  cursor: pointer; padding: 11px 28px; border-radius: 6px;
+  transition: all 0.28s ease;
+  background: rgba(255,255,255,0.50);
+  border: 1px solid rgba(0,0,0,0.08);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.80);
+}
+body.dark .deals-tabs button {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(255,255,255,0.07);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+.deals-tabs button:hover { border-color: var(--accent); color: var(--accent); }
+.deals-tabs button.active {
+  background: linear-gradient(135deg, #ff2a2a, #c0392b);
+  color: #fff; border-color: transparent;
+  box-shadow: 0 0 22px rgba(255,42,42,0.50), 0 0 44px rgba(255,42,42,0.22), 0 6px 20px rgba(200,30,30,0.30);
+}
+body.dark .deals-tabs button.active {
+  background: linear-gradient(135deg, #cc1a1a, #8b0000);
+  box-shadow: 0 0 28px rgba(255,42,42,0.60), 0 0 56px rgba(255,42,42,0.28), 0 8px 24px rgba(0,0,0,0.40);
+}
+.tab-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: currentColor; opacity: 0.6; flex-shrink: 0;
 }
 
-.card-inner:hover{
-transform:translateY(-12px);
-box-shadow:
-0 25px 50px rgba(0,0,0,0.12),
-0 10px 25px rgba(0,0,0,0.08);
+/* ── Slider row layout ─────────────────────────────────────────────────────── */
+.slider-row {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  padding: 0;
 }
 
-/* spotlight */
+/* ── Nav arrows ────────────────────────────────────────────────────────────── */
+.nav-arrow {
+  flex-shrink: 0;
+  width: 48px; height: 48px; border-radius: 50%;
+  border: none; outline: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent); z-index: 10;
+  margin: 0 10px;
+  position: relative;
+  background: rgba(255,255,255,0.82);
+  box-shadow:
+    0 0 0 1.5px rgba(var(--accent-rgb), 0.40),
+    0 0 18px 2px rgba(var(--accent-rgb), 0.18),
+    0 4px 16px rgba(0,0,0,0.10);
+  transition: box-shadow 0.25s, background 0.25s;
+}
+body.dark .nav-arrow {
+  background: rgba(12, 4, 4, 0.82);
+  box-shadow:
+    0 0 0 1.5px rgba(var(--accent-rgb), 0.45),
+    0 0 20px 3px rgba(var(--accent-rgb), 0.22),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.nav-arrow:hover {
+  background: rgba(255,255,255,0.97);
+  box-shadow:
+    0 0 0 1.5px rgba(var(--accent-rgb), 0.70),
+    0 0 30px 6px rgba(var(--accent-rgb), 0.30),
+    0 6px 20px rgba(0,0,0,0.14);
+}
+body.dark .nav-arrow:hover {
+  background: rgba(18, 5, 5, 0.95);
+  box-shadow:
+    0 0 0 1.5px rgba(var(--accent-rgb), 0.80),
+    0 0 32px 8px rgba(var(--accent-rgb), 0.36),
+    inset 0 1px 0 rgba(255,255,255,0.07);
+}
+.nav-arrow svg {
+  width: 20px; height: 20px; position: relative; z-index: 2;
+  filter: drop-shadow(0 0 4px rgba(var(--accent-rgb), 0.55));
+  transition: filter 0.2s, transform 0.2s;
+}
+.nav-arrow:hover svg { filter: drop-shadow(0 0 9px rgba(var(--accent-rgb), 1.0)); }
+.nav-arrow--prev:hover svg { transform: translateX(-2px); }
+.nav-arrow--next:hover svg { transform: translateX(2px); }
 
-.spotlight{
-position:absolute;
-top:-60%;
-left:-60%;
-width:220%;
-height:220%;
-background:
-radial-gradient(circle,
-rgba(255,40,40,0.15),
-transparent 65%);
-opacity:0;
-transition:0.6s;
-pointer-events:none;
+.nav-glow {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--accent-rgb),0.18) 0%, transparent 70%);
+  pointer-events: none; transition: background 0.25s;
+}
+.nav-arrow:hover .nav-glow {
+  background: radial-gradient(circle, rgba(var(--accent-rgb),0.35) 0%, transparent 70%);
+}
+.nav-ring {
+  position: absolute; inset: -4px; border-radius: 50%;
+  border: 1.5px solid rgba(var(--accent-rgb), 0.35);
+  animation: nav-pulse 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes nav-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50%       { opacity: 0.85; transform: scale(1.14); }
 }
 
-.card-inner:hover .spotlight{
-opacity:1;
+/* ── Slider mask + track ───────────────────────────────────────────────────── */
+.slider-mask {
+  flex: 1;
+  min-width: 0;
+  -webkit-mask-image: linear-gradient(to right,
+    transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right,
+    transparent 0%, black 8%, black 92%, transparent 100%);
+  overflow: hidden;
 }
 
-/* image */
+.slider-track {
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+  padding: 20px 0 32px;         /* ← was 28px 0 40px */
+  perspective: 0px;
+}
+.slider-track::-webkit-scrollbar { display: none; }
+.slider-track:active { cursor: grabbing; }
 
-.card-inner img{
-width:100%;
-height:170px;
-object-fit:contain;
-margin-bottom:20px;
-
-transition:
-transform .45s ease,
-filter .4s ease;
+.slider-inner {
+  display: flex;
+  gap: 20px;                    /* ← was 24px */
+  width: max-content;
+  padding: 0 56px;
 }
 
-.card-inner:hover img{
-transform:scale(1.12);
-filter:drop-shadow(0 15px 20px rgba(0,0,0,0.15));
+/* ══════════════════════════════════════════════════════════════════════════════
+   CAR CARD + FLIP
+══════════════════════════════════════════════════════════════════════════════ */
+
+.car-card {
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
+  width: 272px;                 /* ← was 290px */
+  flex-shrink: 0;
+  cursor: pointer;
+  user-select: none;
 }
 
-/* info */
-
-.car-info h3{
-font-size:18px;
-font-weight:700;
-margin-bottom:6px;
-color:#111;
+/* ── Flipper ── */
+.card-flipper {
+  position: relative;
+  width: 100%;
+  height: 400px;                /* ← was 448px */
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition:
+    transform 0.70s cubic-bezier(0.32, 0.10, 0.15, 1.00);
+  -webkit-transition:
+    -webkit-transform 0.70s cubic-bezier(0.32, 0.10, 0.15, 1.00);
+}
+.card-flipper.flipped {
+  transform:  rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
 }
 
-.car-info p{
-font-size:14px;
-font-weight:600;
-color:#666;
-margin-bottom:18px;
+/* ── Faces shared ── */
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;          /* ← was 20px */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 18px 14px;      /* ← was 24px 22px 18px */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: 1px solid var(--border-card);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.3s, box-shadow 0.35s, transform 0.35s cubic-bezier(0.22,1,0.36,1);
 }
 
-/* rent button */
-
-.rent-btn{
-background:#111;
-color:white;
-border:none;
-
-padding:11px 24px;
-border-radius:25px;
-
-font-size:13px;
-font-weight:600;
-
-cursor:pointer;
-
-transition:all .25s ease;
+.card-face {
+  background: var(--bg-card-front);
+  backdrop-filter: blur(22px) saturate(1.8);
+  -webkit-backdrop-filter: blur(22px) saturate(1.8);
+}
+body.dark .card-face {
+  background: var(--bg-card-front);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
 }
 
-.rent-btn:hover{
-background:#ff2a2a;
-transform:translateY(-2px);
-box-shadow:0 10px 18px rgba(0,0,0,0.18);
+.car-card:hover .card-front {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-8px);  /* ← was -9px */
+}
+.card-flipper.flipped .card-front {
+  transform: none;
 }
 
-/* bottom button */
-
-.view-shop{
-margin-top:55px;
-
-background:linear-gradient(135deg,#ff2a2a,#c70000);
-border:none;
-color:white;
-
-padding:15px 38px;
-border-radius:40px;
-
-font-weight:600;
-font-size:14px;
-
-cursor:pointer;
-
-transition:all .25s ease;
-
-box-shadow:0 15px 35px rgba(0,0,0,0.18);
+.card-front {
+  transform: rotateY(0deg);
+  -webkit-transform: rotateY(0deg);
+  z-index: 2;
+}
+.card-back {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
+.card-flipper.flipped {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
 }
 
-.view-shop:hover{
-transform:translateY(-3px);
-box-shadow:0 25px 50px rgba(0,0,0,0.22);
+/* Hover flip on desktop */
+.car-card:hover .card-flipper {
+  transform: rotateY(180deg);
 }
 
-/* responsive */
-
-@media(max-width:1024px){
-
-.car-card{
-width:260px;
+body.dark .card-back {
+  background: linear-gradient(150deg, #120808, #1a0a0a);
+  border-color: rgba(220,30,30,0.18);
 }
 
+.card-gloss {
+  position: absolute;
+  top: 0; left: 14px; right: 14px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.88), transparent);
+  border-radius: 100%; pointer-events: none; z-index: 1;
+}
+body.dark .card-gloss {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
 }
 
-@media(max-width:768px){
+.card-corner {
+  position: absolute; width: 14px; height: 14px;
+  pointer-events: none; opacity: 0;
+  transition: opacity 0.35s;
+}
+.car-card:hover .card-front .card-corner,
+.card-back .card-corner { opacity: 1; }
+.card-corner.tl { top: 14px; left: 14px; border-top: 1.5px solid var(--accent); border-left: 1.5px solid var(--accent); }
+.card-corner.br { bottom: 14px; right: 14px; border-bottom: 1.5px solid var(--accent); border-right: 1.5px solid var(--accent); }
 
-.deals-title{
-font-size:28px;
+/* ── Card image ── */
+.card-img-wrap {
+  position: relative;
+  width: 100%; height: 148px;   /* ← was 168px */
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;          /* ← was 16px */
+}
+.card-img-glow {
+  position: absolute;
+  width: 80%; height: 50%; bottom: -8px; left: 50%; transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(var(--accent-rgb),0.18), transparent 70%);
+  filter: blur(16px); opacity: 0; pointer-events: none;
+  transition: opacity 0.45s;
+}
+.car-card:hover .card-img-glow { opacity: 1; }
+
+.card-img-wrap img {
+  width: 100%; height: 100%; object-fit: contain;
+  position: relative; z-index: 1; pointer-events: none;
+  transition: transform 0.50s cubic-bezier(0.22,1,0.36,1), filter 0.40s;
+  mix-blend-mode: normal; filter: none;
+}
+.car-card:hover .card-front .card-img-wrap img {
+  transform: scale(1.08) translateY(-5px);
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.13));
+}
+body.dark .card-img-wrap img { mix-blend-mode: luminosity; filter: brightness(0.90) contrast(1.06); }
+body.dark .car-card:hover .card-front .card-img-wrap img {
+  mix-blend-mode: normal;
+  filter: brightness(1.04) contrast(1.05) drop-shadow(0 14px 26px rgba(0,0,0,0.55));
 }
 
-.car-card{
-width:220px;
+/* ── Separator ── */
+.card-sep {
+  height: 1px; flex-shrink: 0; margin-bottom: 12px;  /* ← was 14px */
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.08), transparent);
+}
+body.dark .card-sep {
+  background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),0.14), transparent);
 }
 
-.card-inner img{
-height:130px;
+/* ── Name + price ── */
+.card-info { flex-shrink: 0; margin-bottom: 12px; }  /* ← was 16px */
+.card-name {
+  font-family: var(--font-d);
+  font-size: 20px; font-weight: 700; color: var(--text-h);  /* ← was 22px */
+  margin: 0 0 5px; letter-spacing: 0.01em; line-height: 1.18;
+}
+.card-price {
+  font-family: var(--font-b);
+  font-size: 13px; font-weight: 600; color: var(--accent);
+  letter-spacing: 0.05em; margin: 0;
 }
 
+/* ── CTA button ── */
+.card-cta {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 10px 18px; border-radius: 10px; flex-shrink: 0;  /* ← was 11px */
+  font-family: var(--font-b); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.09em; text-transform: uppercase;
+  cursor: pointer; position: relative; overflow: hidden;
+  color: var(--accent);
+  background: rgba(255,255,255,0.45);
+  border: 1px solid rgba(var(--accent-rgb), 0.28);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.80);
+  transition: all 0.28s ease;
+}
+body.dark .card-cta {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(var(--accent-rgb), 0.28);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.08);
+}
+.card-cta::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, #ff2a2a, #c0392b);
+  opacity: 0; transition: opacity 0.28s;
+}
+.card-cta:hover {
+  color: #fff; border-color: transparent;
+  box-shadow:
+    0 0 22px rgba(var(--accent-rgb), 0.48),
+    0 0 44px rgba(var(--accent-rgb), 0.20),
+    0 6px 18px rgba(0,0,0,0.14);
+}
+body.dark .card-cta:hover {
+  box-shadow:
+    0 0 26px rgba(var(--accent-rgb), 0.58),
+    0 0 52px rgba(var(--accent-rgb), 0.26),
+    0 8px 24px rgba(0,0,0,0.40);
+}
+.card-cta:hover::before { opacity: 1; }
+.card-cta span { position: relative; z-index: 1; }
+.cta-arrow { font-size: 15px; transition: transform 0.25s; }
+.card-cta:hover .cta-arrow { transform: translateX(4px); }
+
+/* ── Flip hint ── */
+.flip-hint {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
+  color: var(--text-p); text-align: center;
+  margin: 8px 0 0; opacity: 0.55; flex-shrink: 0;  /* ← was 10px */
 }
 
-@media(max-width:480px){
-
-.car-card{
-width:200px;
+/* ── Back content ── */
+.back-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; flex-shrink: 0;  /* ← was 16px */
+}
+.back-name {
+  font-family: var(--font-d);
+  font-size: 19px; font-weight: 700; color: var(--text-h);  /* ← was 20px */
+  margin: 0; line-height: 1.2;
+}
+.back-badge {
+  font-family: var(--font-b);
+  font-size: 10px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.10);
+  border: 1px solid rgba(var(--accent-rgb), 0.22);
+  padding: 4px 10px; border-radius: 100px; white-space: nowrap;
 }
 
+/* Specs */
+.specs-list {
+  flex: 1; display: flex; flex-direction: column;
+  gap: 5px; margin-bottom: 12px; overflow: hidden;  /* ← was gap 7px, mb 14px */
+}
+.spec-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 11px; border-radius: 10px;           /* ← was 8px */
+  background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05);
+  transition: background 0.2s, border-color 0.2s;
+}
+body.dark .spec-row { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.05); }
+.spec-row:hover { background: rgba(var(--accent-rgb),0.07); border-color: rgba(var(--accent-rgb),0.18); }
+.spec-icon { font-size: 13px; flex-shrink: 0; width: 20px; text-align: center; }
+.spec-label { font-size: 11.5px; font-weight: 500; color: var(--text-p); flex: 1; letter-spacing: 0.02em; }
+.spec-value { font-size: 11.5px; font-weight: 600; color: var(--text-h); text-align: right; }
+
+/* ── CTA section ───────────────────────────────────────────────────────────── */
+.deals-cta { margin-top: 40px; position: relative; z-index: 3; }  /* ← was 60px */
+
+.cta-btn {
+  padding: 15px 52px; border-radius: 6px;
+  font-family: var(--font-b); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer;
+  position: relative; overflow: hidden;
+  color: var(--accent);
+  background: rgba(255,255,255,0.50);
+  border: 1px solid rgba(var(--accent-rgb), 0.38);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.85);
+  transition: all 0.35s ease;
+}
+body.dark .cta-btn {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(var(--accent-rgb), 0.40);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+  box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.18), inset 0 0 18px rgba(var(--accent-rgb), 0.04);
+}
+.cta-btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, #ff2a2a, #c0392b);
+  opacity: 0; transition: opacity 0.35s;
+}
+.cta-btn:hover {
+  color: #fff; border-color: transparent; letter-spacing: 0.20em;
+  box-shadow: 0 0 30px rgba(var(--accent-rgb),0.44), 0 0 60px rgba(var(--accent-rgb),0.20), 0 8px 28px rgba(0,0,0,0.12);
+}
+body.dark .cta-btn:hover {
+  box-shadow: 0 0 34px rgba(var(--accent-rgb),0.58), 0 0 68px rgba(var(--accent-rgb),0.26), 0 8px 32px rgba(0,0,0,0.50);
+}
+.cta-btn:hover::before { opacity: 1; }
+.cta-btn > * { position: relative; z-index: 1; }
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .car-card { width: 256px; }
+}
+
+@media (max-width: 768px) {
+  .deals { padding: 60px 0 90px; }
+  .deals-title { font-size: 34px; }
+  .car-card { width: 240px; }
+  .card-flipper { height: 384px; }
+  .card-img-wrap { height: 132px; }
+  .nav-arrow { width: 40px; height: 40px; margin: 0 6px; }
+  .nav-arrow svg { width: 17px; height: 17px; }
+  .slider-inner { padding: 0 44px; }
+}
+
+@media (max-width: 480px) {
+  .deals { padding: 48px 0 72px; }
+  .car-card { width: 218px; }
+  .card-flipper { height: 368px; }
+  .card-img-wrap { height: 120px; }
+  .deals-tabs { flex-direction: column; align-items: center; }
+  .nav-arrow { width: 36px; height: 36px; margin: 0 4px; }
+  .nav-arrow svg { width: 15px; height: 15px; }
+  .slider-inner { padding: 0 36px; gap: 16px; }
 }

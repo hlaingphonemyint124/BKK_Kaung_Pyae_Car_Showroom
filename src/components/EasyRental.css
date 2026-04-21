@@ -1,20 +1,40 @@
+/* SECTION */
+
 .easyRentalSection{
-background:#f5f5f5;
-padding:50px 16px;
+width:100%;
+padding:60px 16px;
 text-align:center;
-font-family: "Inter", sans-serif;
+background:#f3f3f3;
+font-family:"Inter",sans-serif;
 }
 
+/* DARK MODE */
+
+body.dark .easyRentalSection{
+background:linear-gradient(180deg,#0b0b0b,#3b0000);
+}
+
+/* HEADER */
+
 .easyRentalHeader h2{
-font-size:28px;
+font-size:26px;
 font-weight:700;
 margin-bottom:6px;
+color:#222;
 }
 
 .easyRentalHeader p{
-color:#777;
 font-size:14px;
+color:#777;
 margin-bottom:28px;
+}
+
+body.dark .easyRentalHeader h2{
+color:white;
+}
+
+body.dark .easyRentalHeader p{
+color:#bbb;
 }
 
 /* CARD */
@@ -24,8 +44,13 @@ background:white;
 max-width:520px;
 margin:auto;
 border-radius:14px;
-padding:22px;
-box-shadow:0 6px 20px rgba(0,0,0,0.08);
+padding:24px;
+box-shadow:0 6px 18px rgba(0,0,0,0.12);
+}
+
+body.dark .easyCard{
+background:#0d0d0d;
+box-shadow:0 12px 40px rgba(0,0,0,0.7);
 }
 
 /* STEP ROW */
@@ -33,21 +58,28 @@ box-shadow:0 6px 20px rgba(0,0,0,0.08);
 .stepsRow{
 display:flex;
 align-items:center;
-gap:10px;
-margin-bottom:24px;
-flex-wrap:wrap;
+justify-content:space-between;
+margin-bottom:20px;
 }
 
+.stepsGroup{
+display:flex;
+gap:10px;
+}
+
+/* STEP BOX */
+
 .stepBox{
-background:#eee;
-padding:10px 12px;
+width:60px;
+height:52px;
 border-radius:10px;
+background:#eee;
 display:flex;
 flex-direction:column;
 align-items:center;
+justify-content:center;
 font-size:12px;
 color:#555;
-min-width:60px;
 }
 
 .stepBox strong{
@@ -62,39 +94,55 @@ color:white;
 /* RENTAL BUTTON */
 
 .rentalBtn{
-margin-left:auto;
 background:#ff3b3b;
 border:none;
 color:white;
 padding:10px 18px;
 border-radius:999px;
 font-size:14px;
-cursor:pointer;
 font-weight:500;
-box-shadow:0 4px 10px rgba(255,59,59,0.4);
+cursor:pointer;
+box-shadow:0 6px 14px rgba(255,59,59,0.45);
+transition:0.2s;
 }
 
 .rentalBtn:hover{
 transform:translateY(-2px);
 }
 
-/* LOGIN AREA */
+/* DIVIDER */
 
-.loginArea{
-border-top:1px solid #eee;
-padding-top:18px;
+.divider{
+height:1px;
+background:#eee;
+margin-bottom:18px;
 }
+
+body.dark .divider{
+background:#222;
+}
+
+/* LOGIN AREA */
 
 .loginArea h4{
 font-size:16px;
 font-weight:600;
 margin-bottom:6px;
+color:#222;
+}
+
+body.dark .loginArea h4{
+color:white;
 }
 
 .loginArea p{
 font-size:13px;
 color:#777;
 margin-bottom:16px;
+}
+
+body.dark .loginArea p{
+color:#bbb;
 }
 
 /* SIGNUP BUTTON */
@@ -106,6 +154,7 @@ padding:10px 22px;
 border-radius:999px;
 font-size:13px;
 cursor:pointer;
+transition:0.2s;
 }
 
 .signupBtn:hover{
@@ -113,10 +162,26 @@ border-color:#ff3b3b;
 color:#ff3b3b;
 }
 
+body.dark .signupBtn{
+background:#fff;
+}
+
+/* LOGIN HINT */
+
+.loginHint{
+font-size:12px;
+color:#777;
+margin-top:10px;
+}
+
+body.dark .loginHint{
+color:#aaa;
+}
+
 /* NEXT STEP */
 
 .nextStep{
-margin-top:14px;
+margin-top:12px;
 font-size:13px;
 color:#ff3b3b;
 cursor:pointer;
@@ -125,27 +190,30 @@ cursor:pointer;
 /* FOOTER */
 
 .easyFooter{
-margin-top:14px;
+margin-top:16px;
 font-size:12px;
 color:#777;
 }
 
-/* RESPONSIVE */
+body.dark .easyFooter{
+color:#bbb;
+}
+
+/* MOBILE */
 
 @media (max-width:480px){
 
 .stepsRow{
-justify-content:center;
+flex-direction:column;
+gap:12px;
 }
 
 .rentalBtn{
 width:100%;
-margin-left:0;
-margin-top:10px;
 }
 
 .easyCard{
-padding:18px;
+padding:20px;
 }
 
 }

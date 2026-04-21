@@ -1,14 +1,31 @@
-.carDetail{
+/* ===============================
+WRAPPER (🔥 MAIN FIX)
+=============================== */
+
+.carDetailWrapper{
+width:100%;
+min-height:100vh;
 background:#f2f2f2;
+}
+
+/* ===============================
+MAIN CARD
+=============================== */
+
+.carDetail{
 max-width:500px;
 margin:auto;
 font-family:sans-serif;
 }
 
+/* IMAGE */
+
 .carHero img{
 width:100%;
 height:auto;
 }
+
+/* CONTENT */
 
 .carContent{
 padding:22px;
@@ -27,8 +44,7 @@ font-size:20px;
 margin-bottom:20px;
 }
 
-
-/* SPEC GRID */
+/* SPEC GRID (UNCHANGED) */
 
 .specGrid{
 display:grid;
@@ -59,7 +75,6 @@ font-size:14px;
 color:#666;
 }
 
-
 /* INFO ROW */
 
 .infoRow{
@@ -73,7 +88,6 @@ font-size:16px;
 .highlight{
 color:#e60000;
 }
-
 
 /* DOC TABLE */
 
@@ -105,7 +119,6 @@ border-right:1px solid #ccc;
 border-right:none;
 }
 
-
 /* CONTACT */
 
 .contactSection{
@@ -133,10 +146,10 @@ transform:translateY(-2px);
 }
 
 /* ============================= */
-/* DARK MODE - CAR DETAIL PAGE */
+/* 🔥 DARK MODE FULL BACKGROUND */
 /* ============================= */
 
-body.dark .carDetail{
+body.dark .carDetailWrapper{
 background:linear-gradient(
 180deg,
 #000000 0%,
@@ -144,68 +157,55 @@ background:linear-gradient(
 #520000 60%,
 #a30000 100%
 );
+}
+
+/* CONTENT COLORS */
+
+body.dark .carDetail{
 color:white;
 }
 
-/* title */
-
-body.dark .carDetail .carTitle{
+body.dark .carTitle{
 color:white;
 }
 
-/* price */
-
-body.dark .carDetail .carPrice{
+body.dark .carPrice{
 color:#ff2b2b;
 }
 
-/* specs */
-
-body.dark .carDetail .specItem p{
+body.dark .specItem p{
 color:#ddd;
 }
 
-body.dark .carDetail .divider{
+body.dark .divider{
 background:#550000;
 }
 
-/* info rows */
-
-body.dark .carDetail .infoRow{
+body.dark .infoRow{
 border-bottom:1px solid #500000;
-color:white;
 }
 
-body.dark .carDetail .highlight{
+body.dark .highlight{
 color:#ff2b2b;
-font-weight:700;
 }
 
-/* document table */
-
-body.dark .carDetail .docHeader{
+body.dark .docHeader{
 background:#8b0000;
 }
 
-body.dark .carDetail .docTable{
+body.dark .docTable{
 border:1px solid #500000;
 }
 
-body.dark .carDetail .docRow{
+body.dark .docRow{
 border-bottom:1px solid #500000;
 }
 
-body.dark .carDetail .docRow div{
+body.dark .docRow div{
 border-right:1px solid #500000;
 }
 
-/* contact button */
-
-body.dark .carDetail .contactBtn{
+body.dark .contactBtn{
 background:linear-gradient(90deg,#ff0000,#b80000);
 box-shadow:0 6px 20px rgba(0,0,0,0.6);
-}
-
-body.dark .carDetail .contactBtn:hover{
-transform:translateY(-3px) scale(1.03);
 }

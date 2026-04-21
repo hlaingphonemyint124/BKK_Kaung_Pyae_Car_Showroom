@@ -1,282 +1,354 @@
-/* ============================= */
-/* SECTION */
-/* ============================= */
+/* =====================================================
+   CarTypes — scoped with ct- prefix
+   Pixel-matched to BrandList layout
+   ===================================================== */
 
-.carTypes{
-padding:110px 20px;
-background:#ffffff;
-text-align:center;
+/* ---- Section ---- */
+.ct-section {
+  padding: 16px;
+  background: #f5f5f5;
+  transition: background 0.3s;
+  position: relative;
 }
 
-/* ============================= */
-/* HEADER */
-/* ============================= */
-
-.typesHeader{
-
-max-width:1200px;
-margin:0 auto 40px;
-
-display:flex;
-align-items:center;
-justify-content:space-between;
-
+/* ---- Header ---- */
+.ct-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
 }
 
-.typesHeader h3{
-font-size:32px;
-font-weight:600;
-color:#111827;
+.ct-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  color: #111111;
 }
 
-/* view all */
+.ct-viewall {
+  font-size: 12px;
+  color: #e53e3e;
+  cursor: pointer;
+  font-weight: 500;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+.ct-viewall:hover { opacity: 0.75; }
 
-.viewAll{
-font-size:14px;
-color:#6b7280;
-cursor:pointer;
-transition:.25s;
+/* ---- Wrapper: arrow + scroll row (identical to bl-wrapper) ---- */
+.ct-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.viewAll:hover{
-color:#ef4444;
+/* ---- Scrollable single row (identical to bl-row) ---- */
+.ct-row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 4px 2px 10px;
+  flex: 1;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.ct-row::-webkit-scrollbar { display: none; }
+
+/* ══════════════════════════════════════════════════════
+   NAV ARROWS — EXACT MATCH WITH BRANDLIST
+══════════════════════════════════════════════════════ */
+.ct-arrow {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e8281e;
+  z-index: 10;
+  margin: 0 6px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow:
+    0 0 0 1.5px rgba(232, 40, 30, 0.40),
+    0 0 18px 2px rgba(232, 40, 30, 0.18),
+    0 4px 16px rgba(0, 0, 0, 0.10);
+  transition: box-shadow 0.25s, background 0.25s;
 }
 
-/* ============================= */
-/* GRID */
-/* ============================= */
-
-.typesGrid{
-
-max-width:900px;
-margin:auto;
-
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:24px;
-
-margin-bottom:35px;
-
+.ct-arrow svg {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 4px rgba(232, 40, 30, 0.55));
+  transition: filter 0.2s, transform 0.2s;
 }
 
-/* ============================= */
-/* CARD */
-/* ============================= */
-
-.typeCard{
-
-background:white;
-
-padding:30px 20px;
-
-border-radius:18px;
-
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-
-cursor:pointer;
-
-border:1px solid #eef0f4;
-
-transition:all .25s ease;
-
+.ct-arrow:hover {
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow:
+    0 0 0 1.5px rgba(232, 40, 30, 0.70),
+    0 0 30px 6px rgba(232, 40, 30, 0.30),
+    0 6px 20px rgba(0, 0, 0, 0.14);
 }
 
-/* hover */
-
-.typeCard:hover{
-
-transform:translateY(-6px);
-
-box-shadow:
-0 20px 40px rgba(0,0,0,0.08),
-0 6px 20px rgba(0,0,0,0.05);
-
+.ct-arrow:hover svg {
+  filter: drop-shadow(0 0 9px rgba(232, 40, 30, 1));
 }
 
-/* ============================= */
-/* ICON CONTAINER */
-/* ============================= */
+.ct-arrow--prev:hover svg { transform: translateX(-2px); }
+.ct-arrow--next:hover svg { transform: translateX(2px); }
 
-.typeIcon{
-
-width:60px;
-height:60px;
-
-border-radius:14px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-background:#f3f4f6;
-
-margin-bottom:12px;
-
-transition:.25s;
-
+.ct-nav-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 40, 30, 0.18) 0%, transparent 70%);
+}
+.ct-arrow:hover .ct-nav-glow {
+  background: radial-gradient(circle, rgba(232, 40, 30, 0.35) 0%, transparent 70%);
 }
 
-/* PNG IMAGE */
-
-.typeIcon img{
-
-width:38px;
-height:38px;
-
-object-fit:contain;
-
-transition:.25s;
-
+.ct-nav-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(232, 40, 30, 0.35);
+  animation: ct-nav-pulse 2.6s ease-in-out infinite;
 }
 
-/* hover */
-
-.typeCard:hover .typeIcon{
-background:#ef4444;
+@keyframes ct-nav-pulse {
+  0%,100% { opacity: 0.35; transform: scale(1); }
+  50%     { opacity: 0.85; transform: scale(1.14); }
 }
 
-.typeCard:hover .typeIcon img{
-transform:scale(1.1);
+/* ---- Card (identical dimensions to bl-card) ---- */
+.ct-card {
+  flex-shrink: 0;
+  width: 80px;
+  height: 86px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px 4px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 2px solid transparent;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.2s ease;
+  animation: ctCardIn 0.35s ease both;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  box-sizing: border-box;
 }
 
-/* ============================= */
-/* TEXT */
-/* ============================= */
-
-.typeCard p{
-
-font-size:15px;
-font-weight:500;
-
-color:#374151;
-
+@keyframes ctCardIn {
+  from { opacity: 0; transform: scale(0.88) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);   }
 }
 
-/* ============================= */
-/* NOTE */
-/* ============================= */
-
-.typesNote{
-
-margin-top:10px;
-
-font-size:14px;
-
-color:#6b7280;
-
+/* red glow on hover */
+.ct-card:hover {
+  border-color: #e53e3e;
+  box-shadow:
+    0 8px 24px rgba(229, 62, 62, 0.35),
+    0 0 0 1px rgba(229, 62, 62, 0.2),
+    inset 0 0 18px rgba(229, 62, 62, 0.06);
 }
 
-/* ============================= */
-/* BUTTON */
-/* ============================= */
+.ct-card:active { transform: scale(0.95) !important; }
 
-.shopBtn{
-
-margin-top:18px;
-
-background:#ef4444;
-color:white;
-
-border:none;
-
-padding:12px 26px;
-
-border-radius:30px;
-
-font-size:14px;
-font-weight:500;
-
-cursor:pointer;
-
-transition:.25s;
-
+.ct-card:focus-visible {
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.35);
 }
 
-.shopBtn:hover{
-background:#dc2626;
-transform:translateY(-2px);
-box-shadow:0 12px 30px rgba(0,0,0,0.15);
+/* mouse-tracked spotlight sheen */
+.ct-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(229, 62, 62, 0.12) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.ct-card:hover::before { opacity: 1; }
+
+/* ---- Icon (sized to fit 80px card like bl-logo) ---- */
+.ct-icon {
+  font-size: 20px;
+  color: #e53e3e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: #f5f5f5;
+  border-radius: 9px;
+  flex-shrink: 0;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-/* ============================= */
-/* TABLET */
-/* ============================= */
-
-@media (max-width:900px){
-
-.typesGrid{
-grid-template-columns:repeat(2,1fr);
+@keyframes ctIconBounce {
+  0%   { transform: translateY(0); }
+  30%  { transform: translateY(-5px); }
+  55%  { transform: translateY(-1px); }
+  75%  { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+.ct-card:hover .ct-icon {
+  background: #e53e3e;
+  color: #ffffff;
+  animation: ctIconBounce 0.5s ease both;
 }
 
-.typesHeader h3{
-font-size:26px;
+/* ---- Label (identical to bl-label) ---- */
+.ct-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #111111;
+  margin: 0;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  line-height: 1.2;
+  width: 100%;
+  padding: 0 2px;
+  flex-shrink: 0;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+.ct-card:hover .ct-label { color: #e53e3e; transform: translateY(-1px); }
+
+/* ---- Ripple ---- */
+@keyframes ctRipple {
+  0%   { transform: scale(0); opacity: 0.4; }
+  100% { transform: scale(4); opacity: 0;   }
+}
+.ct-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(229, 62, 62, 0.25);
+  pointer-events: none;
+  animation: ctRipple 0.55s ease-out forwards;
 }
 
+/* ---- Floating particles ---- */
+@keyframes ctFloatUp {
+  0%   { opacity: 0.7; transform: translateY(0)     scale(1);   }
+  100% { opacity: 0;   transform: translateY(-26px) scale(0.3); }
+}
+.ct-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: #e53e3e;
+  pointer-events: none;
+  opacity: 0;
 }
 
-/* ============================= */
-/* MOBILE */
-/* ============================= */
-
-@media (max-width:600px){
-
-.carTypes{
-padding:80px 16px;
+/* ---- Note ---- */
+.ct-note {
+  font-size: 11px;
+  color: #888888;
+  margin: 12px 0 8px;
+  text-align: center;
 }
 
-.typesHeader{
-flex-direction:column;
-gap:8px;
+/* ---- Shop button ---- */
+.ct-shopBtn {
+  background: #e53e3e;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 14px rgba(229, 62, 62, 0.35);
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.ct-shopBtn:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(229, 62, 62, 0.45);
+}
+.ct-shopBtn:active {
+  opacity: 0.85;
+  transform: scale(0.98);
 }
 
-.typesGrid{
-grid-template-columns:repeat(2,1fr);
-gap:16px;
+/* =====================================================
+   DARK MODE
+   ===================================================== */
+body.dark .ct-section  { background: #000000 !important; }
+body.dark .ct-title    { color: #ffffff !important; }
+
+body.dark .ct-arrow {
+  background: rgba(12, 4, 4, 0.82) !important;
+  box-shadow:
+    0 0 0 1.5px rgba(255, 51, 51, 0.45),
+    0 0 20px 3px rgba(255, 51, 51, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  color: #ff3333 !important;
 }
 
-.typeCard{
-padding:20px 14px;
+body.dark .ct-arrow:hover {
+  background: rgba(18, 5, 5, 0.95) !important;
+  box-shadow:
+    0 0 0 1.5px rgba(255, 51, 51, 0.80),
+    0 0 32px 8px rgba(255, 51, 51, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
 }
 
-.typeIcon{
-width:50px;
-height:50px;
+body.dark .ct-nav-ring {
+  border-color: rgba(255, 51, 51, 0.35);
 }
 
-.typeIcon img{
-width:30px;
-height:30px;
+/* Card — dark mode (identical to bl-card dark) */
+body.dark .ct-card {
+  background:   #1c1c1c !important;
+  border-color: transparent !important;
+  box-shadow:   0 1px 4px rgba(0, 0, 0, 0.3) !important;
+}
+body.dark .ct-card:hover {
+  border-color: #e53e3e !important;
+  box-shadow:
+    0 8px 24px rgba(229, 62, 62, 0.35),
+    0 0 0 1px rgba(229, 62, 62, 0.2),
+    inset 0 0 18px rgba(229, 62, 62, 0.06) !important;
 }
 
-.typeIcon{
+body.dark .ct-icon                 { background: #2a2a2a !important; color: #e53e3e !important; }
+body.dark .ct-card:hover .ct-icon  { background: #e53e3e !important; color: #ffffff !important; }
 
-width:60px;
-height:60px;
+body.dark .ct-label                { color: #ffffff !important; }
+body.dark .ct-card:hover .ct-label { color: #ff6b6b !important; }
 
-border-radius:14px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-background:#f3f4f6;
-
-font-size:28px;
-color:#ef4444;
-
-margin-bottom:12px;
-
-transition:.25s;
-
-}
-
-.typeCard:hover .typeIcon{
-background:#ef4444;
-color:white;
-transform:scale(1.08);
-}
-
-}
+body.dark .ct-note { color: #666666 !important; }
