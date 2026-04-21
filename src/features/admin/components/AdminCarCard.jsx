@@ -25,10 +25,26 @@ function AdminCarCard({
 
   const name = `${car.brand || ""} ${car.model || ""}`.trim();
 
-  const isBuyCar = car.sale_price != null;
+  const isBuy = car.sale_price != null;
+  const isRental = car.rent_price_per_day != null;
+
+  const badgeText = isBuy ? "Sale" : isRental ? "Rent" : "";
+
+  const badgeClass = isBuy
+    ? "admin-product-card-badge--sale"
+    : isRental
+    ? "admin-product-card-badge--rent"
+    : "";
 
   const status = car.status || "available";
-  const isAvailable = status === "available";
+  const isUnavailable = ["sold", "rented", "reserved", "maintenance"].includes(status);
+
+  const statusLabelMap = {
+    sold: "Sold",
+    rented: "Rented",
+    reserved: "Reserved",
+    maintenance: "Maintenance",
+  };
 
   const fuelLabel =
     car.fuel_type || car.fuel || car.specs?.fuel || "Petrol";
@@ -36,7 +52,7 @@ function AdminCarCard({
   const transmissionLabel =
     car.transmission || car.specs?.transmission || "Auto";
 
-  const priceLabel = isBuyCar
+  const priceLabel = isBuy
     ? `${Number(car.sale_price || 0).toLocaleString()} THB`
     : `${Number(car.rent_price_per_day || 0).toLocaleString()} THB/day`;
 
@@ -49,13 +65,15 @@ function AdminCarCard({
           className="admin-product-card__image"
         />
 
-        <div className="admin-product-card__badge">
-          {isBuyCar ? "Sale" : "Rent"}
-        </div>
+        {badgeText && (
+          <div className={`admin-product-card-badge ${badgeClass}`}>
+            {badgeText}
+          </div>
+        )}
 
-        {showUnavailableOverlay && !isAvailable && (
+        {showUnavailableOverlay && !isUnavailable && (
           <div className="admin-product-card__unavailable">
-            Not Available
+            {statusLabelMap[status] || "Not Available"}
           </div>
         )}
       </div>

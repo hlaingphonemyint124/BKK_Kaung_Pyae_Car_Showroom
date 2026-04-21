@@ -20,16 +20,12 @@ function useAdminCars(type) {
 
         const data = await getAdminCars();
 
-        console.log("RAW API:", data);
-
         const carList =
           data?.cars ||
           data?.data?.cars ||
           data?.data ||
           data?.rows ||
           [];
-
-        console.log("CAR LIST:", carList);
 
         const mappedCars = carList.map((car) => ({
           id: car.id,
@@ -48,11 +44,9 @@ function useAdminCars(type) {
 
           images: car.images || [],
 
-          // ✅ REAL pricing fields
           sale_price: car.sale_price,
           rent_price_per_day: car.rent_price_per_day,
 
-          // ✅ specs (used in card)
           specs: {
             fuel: car.fuel_type || car.fuel || "Petrol",
             drive: car.drive_type || car.drive || "2WD",
@@ -61,22 +55,21 @@ function useAdminCars(type) {
             transmission: car.transmission || "Auto",
           },
 
-          // ✅ raw backend status
-          rawStatus: car.status || "available",
+          // keep backend status as STRING
+          status: car.status || "available",
 
-          // ✅ UI status
-          status: {
+          // UI-only flags
+          uiStatus: {
             isNewArrival: car.is_new_arrival || false,
             isBestSeller: car.is_best_seller || false,
             isMostRented: car.is_most_rented || false,
             isAvailable:
               car.status !== "rented" &&
               car.status !== "sold" &&
-              car.status !== "maintenance",
+              car.status !== "maintenance" &&
+              car.status !== "reserved",
           },
         }));
-
-        console.log("MAPPED CARS:", mappedCars);
 
         setCars(mappedCars);
       } catch (err) {
@@ -90,7 +83,6 @@ function useAdminCars(type) {
     fetchCars();
   }, [type]);
 
-  // ✅ FIXED FILTERING (IMPORTANT)
   const filteredCars = useMemo(() => {
     const typedCars = cars.filter((car) => {
       if (type === "buy") return car.sale_price != null;
@@ -99,19 +91,19 @@ function useAdminCars(type) {
     });
 
     if (activeTab === "new-arrivals") {
-      return typedCars.filter((car) => car.status?.isNewArrival);
+      return typedCars.filter((car) => car.uiStatus?.isNewArrival);
     }
 
     if (activeTab === "best-seller") {
-      return typedCars.filter((car) => car.status?.isBestSeller);
+      return typedCars.filter((car) => car.uiStatus?.isBestSeller);
     }
 
     if (activeTab === "most-rented") {
-      return typedCars.filter((car) => car.status?.isMostRented);
+      return typedCars.filter((car) => car.uiStatus?.isMostRented);
     }
 
     if (activeTab === "not-available") {
-      return typedCars.filter((car) => !car.status?.isAvailable);
+      return typedCars.filter((car) => !car.uiStatus?.isAvailable);
     }
 
     return typedCars;
@@ -137,8 +129,8 @@ function useAdminCars(type) {
           car.id === id
             ? {
                 ...car,
-                status: {
-                  ...car.status,
+                uiStatus: {
+                  ...car.uiStatus,
                   isNewArrival: true,
                 },
               }
@@ -162,8 +154,8 @@ function useAdminCars(type) {
           car.id === id
             ? {
                 ...car,
-                status: {
-                  ...car.status,
+                uiStatus: {
+                  ...car.uiStatus,
                   isBestSeller: true,
                 },
               }
@@ -187,8 +179,8 @@ function useAdminCars(type) {
           car.id === id
             ? {
                 ...car,
-                status: {
-                  ...car.status,
+                uiStatus: {
+                  ...car.uiStatus,
                   isMostRented: true,
                 },
               }
@@ -212,8 +204,9 @@ function useAdminCars(type) {
           car.id === id
             ? {
                 ...car,
-                status: {
-                  ...car.status,
+                status: "maintenance",
+                uiStatus: {
+                  ...car.uiStatus,
                   isAvailable: false,
                 },
               }

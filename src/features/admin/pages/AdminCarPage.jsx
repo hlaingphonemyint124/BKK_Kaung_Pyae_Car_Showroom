@@ -253,7 +253,9 @@ function AdminCarPage({ mode }) {
                 }
                 setActiveCardId(null);
               }}
-              showUnavailableOverlay={mode === "rental"}
+              showUnavailableOverlay={
+                car.status !== "available"
+              }
             />
           ))}
         </div>
