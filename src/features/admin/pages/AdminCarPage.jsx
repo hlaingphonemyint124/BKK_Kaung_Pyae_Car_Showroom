@@ -7,6 +7,8 @@ import AdminFilterBar from "../components/AdminFilterBar";
 import AdminTabs from "../components/AdminTabs";
 import useAdminCars from "../hooks/useAdminCars";
 
+const PANEL_ANIMATION_MS = 250;
+
 function AdminCarPage({ mode }) {
   const navigate = useNavigate();
   const overlayRef = useRef(null);
@@ -28,6 +30,9 @@ function AdminCarPage({ mode }) {
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const [isFilterMounted, setIsFilterMounted] = useState(false);
+  const [isSearchMounted, setIsSearchMounted] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
@@ -55,8 +60,12 @@ function AdminCarPage({ mode }) {
     return filteredCars.filter((car) => {
       const name = `${car.brand || ""} ${car.model || ""}`.trim().toLowerCase();
       const brand = (car.brand || "").toLowerCase();
-      const fuel = (car.fuel_type || "").toLowerCase();
-      const transmission = (car.transmission || "").toLowerCase();
+      const fuel = (car.specs?.fuel || car.fuel_type || car.fuel || "").toLowerCase();
+      const transmission = (
+        car.specs?.transmission ||
+        car.transmission ||
+        ""
+      ).toLowerCase();
 
       return (
         (!searchTerm ||
@@ -77,6 +86,34 @@ function AdminCarPage({ mode }) {
   ]);
 
   useEffect(() => {
+    let timeoutId;
+
+    if (isFilterOpen) {
+      setIsFilterMounted(true);
+    } else if (isFilterMounted) {
+      timeoutId = setTimeout(() => {
+        setIsFilterMounted(false);
+      }, PANEL_ANIMATION_MS);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [isFilterOpen, isFilterMounted]);
+
+  useEffect(() => {
+    let timeoutId;
+
+    if (isSearchOpen) {
+      setIsSearchMounted(true);
+    } else if (isSearchMounted) {
+      timeoutId = setTimeout(() => {
+        setIsSearchMounted(false);
+      }, PANEL_ANIMATION_MS);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [isSearchOpen, isSearchMounted]);
+
+  useEffect(() => {
     const handleClickOutside = (e) => {
       if (overlayRef.current && !overlayRef.current.contains(e.target)) {
         setIsFilterOpen(false);
@@ -85,8 +122,7 @@ function AdminCarPage({ mode }) {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleModeClick = () => {
@@ -119,10 +155,16 @@ function AdminCarPage({ mode }) {
         <AdminFilterBar
           mode={mode === "buy" ? "Buy" : "Rental"}
           onFilterClick={() => {
+            if (!isFilterOpen) {
+              setIsFilterMounted(true);
+            }
             setIsFilterOpen((prev) => !prev);
             setIsSearchOpen(false);
           }}
           onSearchClick={() => {
+            if (!isSearchOpen) {
+              setIsSearchMounted(true);
+            }
             setIsSearchOpen((prev) => !prev);
             setIsFilterOpen(false);
           }}
@@ -131,8 +173,12 @@ function AdminCarPage({ mode }) {
           isSearchOpen={isSearchOpen}
         />
 
-        {isFilterOpen && (
-          <div className="admin-filter-panel admin-overlay-panel">
+        {isFilterMounted && (
+          <div
+            className={`admin-filter-panel admin-overlay-panel ${
+              isFilterOpen ? "admin-overlay-panel--visible" : ""
+            }`}
+          >
             <div className="admin-filter-panel__grid">
               <div className="admin-filter-panel__group">
                 <label>Brand</label>
@@ -177,14 +223,22 @@ function AdminCarPage({ mode }) {
             </div>
 
             <div className="admin-filter-panel__actions">
-              <button onClick={handleReset}>Reset</button>
-              <button onClick={handleApply}>Apply</button>
+              <button type="button" onClick={handleReset}>
+                Reset
+              </button>
+              <button type="button" onClick={handleApply}>
+                Apply
+              </button>
             </div>
           </div>
         )}
 
-        {isSearchOpen && (
-          <div className="admin-search-panel admin-overlay-panel">
+        {isSearchMounted && (
+          <div
+            className={`admin-search-panel admin-overlay-panel ${
+              isSearchOpen ? "admin-overlay-panel--visible" : ""
+            }`}
+          >
             <input
               type="text"
               placeholder="Search by name or brand..."
@@ -202,7 +256,11 @@ function AdminCarPage({ mode }) {
       />
 
       {loading && <p className="admin-state-message">Loading cars...</p>}
-      {error && <p className="admin-state-message admin-state-message--error">{error}</p>}
+      {error && (
+        <p className="admin-state-message admin-state-message--error">
+          {error}
+        </p>
+      )}
 
       {!loading && !error && (
         <div className="admin-grid">
@@ -218,11 +276,9 @@ function AdminCarPage({ mode }) {
               }
               onCloseMenu={() => setActiveCardId(null)}
               onEdit={() => {
-                console.log("EDIT car.id =", car.id, car);
                 navigate(`/admin/${mode}/${car.id}`);
               }}
               onViewDetail={() => {
-                console.log("VIEW car.id =", car.id, car);
                 navigate(`/admin/${mode}/${car.id}`);
               }}
               onClear={() => {
@@ -253,9 +309,7 @@ function AdminCarPage({ mode }) {
                 }
                 setActiveCardId(null);
               }}
-              showUnavailableOverlay={
-                car.status !== "available"
-              }
+              showUnavailableOverlay={car.status !== "available"}
             />
           ))}
         </div>

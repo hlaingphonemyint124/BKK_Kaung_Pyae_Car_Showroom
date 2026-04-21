@@ -31,7 +31,7 @@
 }
 
 /* =========================
-   FILTER BAR (MOBILE FIRST)
+   FILTER BAR
 ========================= */
 .admin-filterbar {
   width: 100%;
@@ -39,23 +39,28 @@
   grid-template-columns: repeat(3, 1fr);
   margin: 0 0 12px;
   background: #767676;
-  border-radius: 0;
+  border-radius: 6px;
   overflow: hidden;
 }
 
 .admin-filterbar__item {
-  min-height: 42px;
-  font-size: 11px;
+  min-height: 46px;
+  font-size: 12px;
   font-weight: 700;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 0 6px;
+  gap: 6px;
+  padding: 0 8px;
   background: transparent;
   border: none;
   cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.admin-filterbar__item:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .admin-filterbar__item + .admin-filterbar__item {
@@ -63,16 +68,37 @@
 }
 
 .admin-filterbar__item--active {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .admin-filterbar__item--mode {
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-filterbar__mode-main {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .admin-filterbar__mode-hint {
-  font-size: 9px;
+  font-size: 10px;
   opacity: 0.9;
+}
+
+.admin-filterbar__label {
+  line-height: 1;
+}
+
+.admin-filterbar__icon {
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.admin-filterbar__icon--mode {
+  font-size: 11px;
 }
 
 /* =========================
@@ -90,15 +116,27 @@
   left: 0;
   width: 100%;
   z-index: 30;
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.admin-overlay-panel--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
 }
 
 .admin-filter-panel,
 .admin-search-panel {
   background: #f3f3f3;
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 14px;
+  padding: 14px;
   border: 1px solid #dfdfdf;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
 }
 
 /* =========================
@@ -107,7 +145,7 @@
 .admin-filter-panel__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 10px;
+  gap: 12px;
 }
 
 .admin-filter-panel__group {
@@ -125,11 +163,21 @@
 .admin-filter-panel__group select,
 .admin-search-panel input {
   width: 100%;
-  min-height: 40px;
-  padding: 10px;
-  border-radius: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
   border: 1px solid #d5d5d5;
+  background: #fff;
   font-size: 13px;
+  color: #222;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.admin-filter-panel__group select:focus,
+.admin-search-panel input:focus {
+  border-color: #ef2b2d;
+  box-shadow: 0 0 0 2px rgba(239, 43, 45, 0.1);
 }
 
 /* =========================
@@ -143,19 +191,22 @@
 }
 
 .admin-filter-panel__actions button {
-  height: 36px;
-  padding: 0 12px;
-  border-radius: 8px;
-  font-weight: 600;
+  height: 38px;
+  min-width: 88px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-weight: 700;
   border: none;
+  cursor: pointer;
 }
 
 .admin-filter-panel__actions button:first-child {
   background: #ececec;
+  color: #333;
 }
 
 .admin-filter-panel__actions button:last-child {
-  background: #ef2b2d;
+  background: linear-gradient(90deg, #ff2a2a, #d11212 55%, #970909);
   color: #fff;
 }
 
@@ -166,6 +217,7 @@
   display: flex;
   gap: 20px;
   padding: 6px 0 16px;
+  flex-wrap: wrap;
 }
 
 .admin-tabs-bar__item {
@@ -202,19 +254,65 @@
   }
 
   .admin-filterbar {
-    max-width: 1400px;
     margin: 0 auto 16px;
-    border-radius: 6px;
   }
 
   .admin-filterbar__item {
     min-height: 60px;
     font-size: 14px;
     gap: 8px;
+    padding: 0 16px;
+  }
+
+  .admin-filterbar__item--mode {
+    gap: 4px;
+  }
+
+  .admin-filterbar__mode-main {
+    gap: 8px;
   }
 
   .admin-filterbar__mode-hint {
     font-size: 12px;
+  }
+
+  .admin-filterbar__icon,
+  .admin-filterbar__icon--mode {
+    font-size: 12px;
+  }
+
+  .admin-filter-panel,
+  .admin-search-panel {
+    border-radius: 18px;
+    padding: 18px 20px;
+  }
+
+  .admin-filter-panel__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .admin-filter-panel__group label {
+    font-size: 13px;
+  }
+
+  .admin-filter-panel__group select,
+  .admin-search-panel input {
+    min-height: 54px;
+    padding: 0 16px;
+    border-radius: 14px;
+    font-size: 14px;
+  }
+
+  .admin-filter-panel__actions {
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .admin-filter-panel__actions button {
+    min-width: 110px;
+    height: 50px;
+    border-radius: 14px;
   }
 
   .admin-grid {
