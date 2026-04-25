@@ -17,6 +17,9 @@ import Showroom from "./components/Showroom";
 import CarDetail from "./components/CarDetail";
 import LoginPage from "./features/auth/pages/LoginPage";
 import SignupPage from "./features/auth/pages/SignupPage";
+import VerifyEmailPage from "./features/auth/pages/VerifyEmailPage";
+import ForgotPasswordPage from "./features/auth/pages/ForgotPasswordPage";
+import ResetPasswordPage from "./features/auth/pages/ResetPasswordPage";
 
 
 import AdminBuyPage from "./features/admin/pages/AdminBuyPage";
@@ -62,11 +65,13 @@ function AppLayout() {
         <Route path="/car/:id" element={<CarDetail />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/admin/buy" element={<AdminBuyPage />} />
         <Route path="/admin/rental" element={<AdminRentalPage />} />
         <Route path="/admin/buy/new" element={<AdminBuyDetailPage />} />
         <Route path="/admin/buy/:id" element={<AdminBuyDetailPage />} />
-
         <Route path="/admin/rental/new" element={<AdminRentalDetailPage />} />
         <Route path="/admin/rental/:id" element={<AdminRentalDetailPage />} />
       </Routes>

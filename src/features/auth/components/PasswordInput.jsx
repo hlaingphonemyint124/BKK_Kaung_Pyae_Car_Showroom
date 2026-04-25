@@ -17,7 +17,7 @@ function PasswordInput({
     <div className="auth-input-group">
       <label htmlFor={name}>{label}</label>
 
-      <div className="password-wrapper">
+      <div className={`password-wrapper ${error ? "input-error" : ""}`}>
         <input
           id={name}
           name={name}
@@ -26,9 +26,8 @@ function PasswordInput({
           value={value}
           onChange={onChange}
           onBlur={onBlur}
-          className={`auth-input password-input ${
-            error ? "input-error" : ""
-          }`}
+          autoComplete="current-password"
+          className="auth-input password-input"
         />
 
         <button
@@ -41,7 +40,9 @@ function PasswordInput({
         </button>
       </div>
 
-      {error && <p className="input-error-text">{error}</p>}
+      <p className={`input-error-text ${error ? "show" : ""}`}>
+        {error || "\u00A0"}
+      </p>
     </div>
   );
 }
