@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../App";
+import { useAuth } from "../context/AuthContext";
 
 export default function Header() {
-
   const { theme, setTheme } = useContext(ThemeContext);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
   const [menu, setMenu] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [language, setLanguage] = useState("EN");
@@ -13,14 +16,16 @@ export default function Header() {
   const menuRef = useRef(null);
   const langRef = useRef(null);
 
+  const isAdmin = user?.role === "admin" || user?.role === "employee";
+
   /* LOAD THEME */
- useEffect(() => {
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme) {
-    setTheme(savedTheme);
-    document.body.classList.toggle("dark", savedTheme === "dark");
-  }
-}, [setTheme]);
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.body.classList.toggle("dark", savedTheme === "dark");
+    }
+  }, [setTheme]);
 
   /* DARK MODE */
   useEffect(() => {
@@ -56,6 +61,12 @@ export default function Header() {
     return () => { document.body.style.overflow = ""; };
   }, [menu]);
 
+  const handleLogout = async () => {
+    setMenu(false);
+    await logout();
+    navigate("/login");
+  };
+
   const languages = [
     { code: "EN", flag: "https://flagcdn.com/w20/gb.png" },
     { code: "MM", flag: "https://flagcdn.com/w20/mm.png" },
@@ -63,6 +74,16 @@ export default function Header() {
   ];
 
   const currentLang = languages.find((l) => l.code === language);
+
+  /* Nav items — admin users get admin-specific routes for Shop/Rental */
+  const navItems = [
+    { to: "/",                                    label: "Home Page"    },
+    ...(isAdmin ? [{ to: "/admin",                label: "Dashboard"   }] : []),
+    { to: isAdmin ? "/admin/buy"    : "/showroom", label: "Shop the Cars" },
+    { to: isAdmin ? "/admin/rental" : "/rental",   label: "Car Rental"   },
+    { to: "/contact",                             label: "Contact Us"   },
+    { to: "/help",                                label: "Need Help?"   },
+  ];
 
   return (
     <>
@@ -147,8 +168,6 @@ export default function Header() {
       {/* SIDE MENU */}
       <nav ref={menuRef} className={`sideMenu${menu ? " show" : ""}`} aria-hidden={!menu}>
 
-        
-
         {/* PROFILE / LOGIN ROW */}
         <div className="sideMenu__profile">
           <div className="avatar">
@@ -157,23 +176,25 @@ export default function Header() {
               <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#ff3b3b" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           </div>
-          <Link to="/login" className="loginMenuItem" onClick={() => setMenu(false)}>
-            Log In / Sign Up
-          </Link>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{flexShrink:0}}>
+
+          {user ? (
+            <span className="loginMenuItem" style={{ cursor: "default" }}>
+              {user.name || user.email || "Admin"}
+            </span>
+          ) : (
+            <Link to="/login" className="loginMenuItem" onClick={() => setMenu(false)}>
+              Log In / Sign Up
+            </Link>
+          )}
+
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}>
             <path d="M3 8h10M9 4l4 4-4 4" stroke="#ff3b3b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
 
         <div className="divider" />
 
-        {[
-          { to: "/",         label: "Home Page"    },
-          { to: "/showroom", label: "Shop the Cars" },
-          { to: "/rental",   label: "Car Rental"   },
-          { to: "/contact",  label: "Contact Us"   },
-          { to: "/help",     label: "Need Help?"   },
-        ].map(({ to, label }, i) => (
+        {navItems.map(({ to, label }, i) => (
           <Link
             key={to}
             to={to}
@@ -192,13 +213,23 @@ export default function Header() {
 
         <div className="divider" />
 
-        <button className="logout">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M10 11l3-3-3-3M13 8H6"
-              stroke="#ff3b3b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          Log Out
-        </button>
+        {user ? (
+          <button className="logout" onClick={handleLogout}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M6 14H3a1 1 0 01-1-1V3a1 1 0 011-1h3M10 11l3-3-3-3M13 8H6"
+                stroke="#ff3b3b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Log Out
+          </button>
+        ) : (
+          <Link to="/login" className="logout" onClick={() => setMenu(false)}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M10 2h3a1 1 0 011 1v10a1 1 0 01-1 1h-3M7 11l3-3-3-3M2 8h10"
+                stroke="#ff3b3b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Log In
+          </Link>
+        )}
 
       </nav>
     </>

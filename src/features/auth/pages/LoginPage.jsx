@@ -5,14 +5,12 @@ import AuthHeader from "../components/AuthHeader";
 import AuthInput from "../components/AuthInput";
 import PasswordInput from "../components/PasswordInput";
 import AuthButton from "../components/AuthButton";
-import {
-  loginUser,
-  getCurrentUser,
-  resendVerification,
-} from "../services/authService";
+import { resendVerification } from "../services/authService";
+import { useAuth } from "../../../context/AuthContext";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [form, setForm] = useState({
     email: "",
@@ -98,23 +96,11 @@ function LoginPage() {
         password: form.password,
       };
 
-      const loginResponse = await loginUser(cleanForm);
-
-      let role =
-        loginResponse?.user?.role ||
-        loginResponse?.role ||
-        null;
-
-      if (!role) {
-        const currentUser = await getCurrentUser();
-        role =
-          currentUser?.user?.role ||
-          currentUser?.role ||
-          "customer";
-      }
+      const userData = await login(cleanForm);
+      const role = userData?.role || "customer";
 
       if (role === "admin" || role === "employee") {
-        navigate("/admin/buy");
+        navigate("/admin");
       } else {
         navigate("/");
       }
