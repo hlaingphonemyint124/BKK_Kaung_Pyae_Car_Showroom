@@ -14,6 +14,7 @@ function AdminFilterBar({
 
   return (
     <div className="admin-filterbar">
+      {/* FILTER */}
       <button
         type="button"
         className={`admin-filterbar__item ${
@@ -21,22 +22,26 @@ function AdminFilterBar({
         }`}
         onClick={onFilterClick}
       >
-        <span>Filter</span>
-        <FaChevronDown size={11} />
+        <span className="admin-filterbar__label">Filter</span>
+        <FaChevronDown className="admin-filterbar__icon" />
       </button>
 
+      {/* MODE SWITCH */}
       <button
         type="button"
         className="admin-filterbar__item admin-filterbar__item--mode"
         onClick={onModeClick}
       >
-        <span>{mode}</span>
-        <FaExchangeAlt size={11} />
+        <span className="admin-filterbar__mode-main">
+          <span>{mode}</span>
+          <FaExchangeAlt className="admin-filterbar__icon admin-filterbar__icon--mode" />
+        </span>
         <span className="admin-filterbar__mode-hint">
           Switch to {nextMode}
         </span>
       </button>
 
+      {/* SEARCH */}
       <button
         type="button"
         className={`admin-filterbar__item ${
@@ -44,8 +49,8 @@ function AdminFilterBar({
         }`}
         onClick={onSearchClick}
       >
-        <span>Search</span>
-        <FaSearch size={11} />
+        <span className="admin-filterbar__label">Search</span>
+        <FaSearch className="admin-filterbar__icon" />
       </button>
     </div>
   );

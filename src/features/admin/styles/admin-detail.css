@@ -394,7 +394,7 @@
 .admin-confirm {
   width: 100%;
   padding: 12px;
-   background: linear-gradient(90deg, #ff2a2a, #d11212 55%, #970909);
+  background: linear-gradient(90deg, #ff2a2a, #d11212 55%, #970909);
   box-shadow:
       0 10px 24px rgba(210, 18, 18, 0.28),
       inset 0 1px 0 rgba(255, 255, 255, 0.15);
