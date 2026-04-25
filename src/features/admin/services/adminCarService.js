@@ -1,5 +1,6 @@
 import api from "../../../services/api";
 
+// ─── CARS ────────────────────────────────────────────────
 export const getAdminCars = async (params = {}) => {
   const res = await api.get("/admin/cars", { params });
   return res.data;
@@ -41,10 +42,47 @@ export const addAdminCarImage = async (
   formData.append("sort_order", String(sortOrder));
 
   const res = await api.post(`/admin/cars/${id}/images`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+    headers: { "Content-Type": "multipart/form-data" },
   });
+  return res.data;
+};
 
+// ─── CAR DOCUMENTS (migration 014) ───────────────────────
+// GET /admin/cars/:id/documents → [{ id, field_name, field_value, sort_order }]
+export const getCarDocuments = async (carId) => {
+  const res = await api.get(`/admin/cars/${carId}/documents`);
+  return res.data;
+};
+
+// PUT /admin/cars/:id/documents → replaces all documents for the car
+// body: { documents: [{ field_name, field_value, sort_order }] }
+export const saveCarDocuments = async (carId, documents) => {
+  const res = await api.put(`/admin/cars/${carId}/documents`, { documents });
+  return res.data;
+};
+
+// ─── RENTAL TERMS (migration 013) ────────────────────────
+// GET /admin/rental-terms → [{ id, title, description, sort_order, is_active }]
+export const getRentalTerms = async () => {
+  const res = await api.get("/admin/rental-terms");
+  return res.data;
+};
+
+// POST /admin/rental-terms
+// body: { title, description, sort_order }
+export const createRentalTerm = async (payload) => {
+  const res = await api.post("/admin/rental-terms", payload);
+  return res.data;
+};
+
+// PATCH /admin/rental-terms/:id
+export const updateRentalTerm = async (id, payload) => {
+  const res = await api.patch(`/admin/rental-terms/${id}`, payload);
+  return res.data;
+};
+
+// DELETE /admin/rental-terms/:id
+export const deleteRentalTerm = async (id) => {
+  const res = await api.delete(`/admin/rental-terms/${id}`);
   return res.data;
 };

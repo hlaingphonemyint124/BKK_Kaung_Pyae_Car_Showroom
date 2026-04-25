@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminMediaUploader from "../components/AdminMediaUploader";
 import AdminDetailHero from "../components/AdminDetailHero";
@@ -11,15 +11,20 @@ import {
   getAdminCarById,
   updateAdminCar,
   addAdminCarImage,
+  getRentalTerms,
+  createRentalTerm,
+  updateRentalTerm,
+  deleteRentalTerm,
 } from "../services/adminCarService";
 
-const defaultRentalTerms = [
-  "Driver must have a valid license.",
-  "Deposit may be required before pickup.",
-  "Late return may include extra charges.",
+// terms are { id: string|null, text: string }
+const DEFAULT_TERMS = [
+  { id: null, text: "Driver must have a valid license." },
+  { id: null, text: "Deposit may be required before pickup." },
+  { id: null, text: "Late return may include extra charges." },
 ];
 
-const emptyRentalForm = {
+const EMPTY_FORM = {
   name: "",
   price: "",
   media: [],
@@ -41,7 +46,7 @@ const emptyRentalForm = {
     rent30: "",
     deposit: "",
   },
-  terms: defaultRentalTerms,
+  terms: DEFAULT_TERMS,
 };
 
 function AdminRentalDetailPage() {
@@ -49,36 +54,53 @@ function AdminRentalDetailPage() {
   const { id } = useParams();
   const isCreateMode = !id;
 
-  const [form, setForm] = useState(emptyRentalForm);
-  const [loading, setLoading] = useState(!isCreateMode);
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  // Track IDs of terms deleted during this session so we can DELETE them on save
+  const deletedTermIds = useRef([]);
+
+  // Keep a snapshot of the terms loaded from the API for diffing on save
+  const originalTerms = useRef([]);
+
   const rentalFields = [
-    { key: "rent7", label: "7 Days (5% OFF)", readOnly: true },
-    { key: "rent30", label: "30 Days (10% OFF)", readOnly: true },
-    { key: "deposit", label: "Deposit", placeholder: "Optional" },
+    { key: "rent7",   label: "7 Days (5% OFF)",   readOnly: true },
+    { key: "rent30",  label: "30 Days (10% OFF)",  readOnly: true },
+    { key: "deposit", label: "Deposit",            placeholder: "Optional" },
   ];
 
+  // Load car data + global rental terms in parallel
   useEffect(() => {
-    const fetchCar = async () => {
-      if (isCreateMode) {
-        setForm(emptyRentalForm);
-        setLoading(false);
-        return;
-      }
-
-      if (!id) {
-        setLoading(false);
-        return;
-      }
-
+    const fetchAll = async () => {
       try {
         setLoading(true);
+        deletedTermIds.current = [];
 
-        const car = await getAdminCarById(id);
+        const [termsData, car] = await Promise.all([
+          getRentalTerms().catch(() => null),
+          isCreateMode ? Promise.resolve(null) : getAdminCarById(id),
+        ]);
 
-        if (!car) {
-          setForm(emptyRentalForm);
+        // Map API rental terms → { id, text }
+        const rawTerms =
+          termsData?.terms ||
+          termsData?.data?.terms ||
+          termsData?.data ||
+          (Array.isArray(termsData) ? termsData : null);
+
+        const mappedTerms =
+          rawTerms?.length > 0
+            ? rawTerms.map((t) => ({
+                id: t.id ?? null,
+                text: t.description || t.title || "",
+              }))
+            : DEFAULT_TERMS;
+
+        originalTerms.current = mappedTerms.map((t) => ({ ...t }));
+
+        if (isCreateMode || !car) {
+          setForm({ ...EMPTY_FORM, terms: mappedTerms });
           return;
         }
 
@@ -99,111 +121,79 @@ function AdminRentalDetailPage() {
           price: car.rent_price_per_day ?? "",
           media,
           specs: {
-            fuel: car.fuel_type || car.fuel || "",
+            fuel:         car.fuel         || car.fuel_type  || "",
             transmission: car.transmission || "",
-            color: car.color || "",
-            engine: car.engine || "",
-            drive: car.drive_type || car.drive || "",
-            seats: car.seats || "",
+            color:        car.color        || "",
+            engine:       car.engine       || "",
+            drive:        car.drive        || car.drive_type || "",
+            seats:        car.seats        ? String(car.seats) : "",
           },
           info: {
-            mileage: car.mileage_km ?? "",
-            year: car.year ?? "",
+            mileage:      car.mileage_km   ?? "",
+            year:         car.year         ?? "",
             currencyCode: car.currency_code ?? "THB",
-            status: car.status ?? "available",
-            isPublished: Boolean(car.is_published),
-            rent7: dailyPrice ? Math.round(dailyPrice * 7 * 0.95).toString() : "",
-            rent30: dailyPrice ? Math.round(dailyPrice * 30 * 0.9).toString() : "",
+            status:       car.status       ?? "available",
+            isPublished:  Boolean(car.is_published),
+            rent7:  dailyPrice ? Math.round(dailyPrice * 7  * 0.95).toString() : "",
+            rent30: dailyPrice ? Math.round(dailyPrice * 30 * 0.90).toString() : "",
             deposit: "",
           },
-          terms: defaultRentalTerms,
+          terms: mappedTerms,
         });
       } catch (err) {
-        console.error("Failed to fetch rental car:", err);
-        setForm(emptyRentalForm);
+        console.error("Failed to fetch rental data:", err);
+        setForm(EMPTY_FORM);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCar();
+    fetchAll();
   }, [id, isCreateMode]);
 
+  // Auto-calculate discount prices whenever daily price changes
   useEffect(() => {
     const dailyPrice = Number(form.price) || 0;
-
-    if (!dailyPrice) {
-      setForm((prev) => ({
-        ...prev,
-        info: {
-          ...prev.info,
-          rent7: "",
-          rent30: "",
-        },
-      }));
-      return;
-    }
-
-    const rent7 = Math.round(dailyPrice * 7 * 0.95);
-    const rent30 = Math.round(dailyPrice * 30 * 0.9);
-
     setForm((prev) => ({
       ...prev,
       info: {
         ...prev.info,
-        rent7: rent7.toString(),
-        rent30: rent30.toString(),
+        rent7:  dailyPrice ? Math.round(dailyPrice * 7  * 0.95).toString() : "",
+        rent30: dailyPrice ? Math.round(dailyPrice * 30 * 0.90).toString() : "",
       },
     }));
   }, [form.price]);
 
-  const updateField = (field, value) => {
-    setForm((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
+  const updateField = (field, value) =>
+    setForm((prev) => ({ ...prev, [field]: value }));
 
-  const updateSpecs = (key, value) => {
-    setForm((prev) => ({
-      ...prev,
-      specs: {
-        ...prev.specs,
-        [key]: value,
-      },
-    }));
-  };
+  const updateSpecs = (key, value) =>
+    setForm((prev) => ({ ...prev, specs: { ...prev.specs, [key]: value } }));
 
   const updateInfo = (key, value) => {
     if (key === "rent7" || key === "rent30") return;
-
-    setForm((prev) => ({
-      ...prev,
-      info: {
-        ...prev.info,
-        [key]: value,
-      },
-    }));
+    setForm((prev) => ({ ...prev, info: { ...prev.info, [key]: value } }));
   };
 
-  const handleTermChange = (index, value) => {
-    const newTerms = [...form.terms];
-    newTerms[index] = value;
+  // onChange for RentalTermsSection: receives (index, newText)
+  const handleTermChange = (index, text) =>
+    setForm((prev) => {
+      const updated = [...prev.terms];
+      updated[index] = { ...updated[index], text };
+      return { ...prev, terms: updated };
+    });
 
+  const handleAddTerm = () =>
     setForm((prev) => ({
       ...prev,
-      terms: newTerms,
+      terms: [...prev.terms, { id: null, text: "" }],
     }));
-  };
-
-  const handleAddTerm = () => {
-    setForm((prev) => ({
-      ...prev,
-      terms: [...prev.terms, ""],
-    }));
-  };
 
   const handleDeleteTerm = (index) => {
+    const term = form.terms[index];
+    if (term.id) {
+      deletedTermIds.current = [...deletedTermIds.current, term.id];
+    }
     setForm((prev) => ({
       ...prev,
       terms: prev.terms.filter((_, i) => i !== index),
@@ -211,18 +201,51 @@ function AdminRentalDetailPage() {
   };
 
   const uploadNewImages = async (carId) => {
-    const newImageItems = form.media.filter(
+    const newItems = form.media.filter(
       (item) => item.isNew && item.type === "image" && item.file
     );
-
-    for (let i = 0; i < newImageItems.length; i += 1) {
-      const item = newImageItems[i];
-
-      await addAdminCarImage(carId, item.file, {
+    for (let i = 0; i < newItems.length; i++) {
+      await addAdminCarImage(carId, newItems[i].file, {
         isPrimary: i === 0,
         sortOrder: i,
       });
     }
+  };
+
+  // Diff and save rental terms via CRUD endpoints
+  const saveTerms = async () => {
+    const originalMap = new Map(
+      originalTerms.current.filter((t) => t.id).map((t) => [t.id, t.text])
+    );
+
+    const saves = form.terms
+      .filter((t) => t.text.trim())
+      .map((t, i) => {
+        if (!t.id) {
+          // New term — create
+          return createRentalTerm({
+            title: t.text,
+            description: t.text,
+            sort_order: i,
+          });
+        }
+        // Existing — update only if text changed
+        if (originalMap.get(t.id) !== t.text) {
+          return updateRentalTerm(t.id, {
+            title: t.text,
+            description: t.text,
+            sort_order: i,
+          });
+        }
+        return Promise.resolve();
+      });
+
+    const deletes = deletedTermIds.current.map((termId) =>
+      deleteRentalTerm(termId)
+    );
+
+    await Promise.all([...saves, ...deletes]);
+    deletedTermIds.current = [];
   };
 
   const handleSubmit = async () => {
@@ -230,20 +253,16 @@ function AdminRentalDetailPage() {
       alert("Please enter car name.");
       return;
     }
-
     const [brand, ...modelParts] = form.name.trim().split(" ");
     const model = modelParts.join(" ");
-
     if (!brand || !model) {
       alert("Use format: Toyota Corolla");
       return;
     }
-
     if (!form.info.year) {
       alert("Please enter year.");
       return;
     }
-
     const imageCount = form.media.filter((item) => item.type === "image").length;
     if (imageCount === 0) {
       alert("Please add at least one image.");
@@ -253,32 +272,37 @@ function AdminRentalDetailPage() {
     const payload = {
       brand,
       model,
-      year: Number(form.info.year) || new Date().getFullYear(),
-      mileage_km: form.info.mileage ? Number(form.info.mileage) : 0,
-      rent_price_per_day: form.price ? Number(form.price) : 0,
-      currency_code: form.info.currencyCode,
-      status: form.info.status,
-      is_published: form.info.isPublished,
+      year:               Number(form.info.year)    || new Date().getFullYear(),
+      mileage_km:         form.info.mileage          ? Number(form.info.mileage) : 0,
+      rent_price_per_day: form.price                 ? Number(form.price)        : 0,
+      currency_code:      form.info.currencyCode,
+      status:             form.info.status,
+      is_published:       form.info.isPublished,
+      // Specs (migration 012)
+      fuel:         form.specs.fuel         || null,
+      transmission: form.specs.transmission || null,
+      color:        form.specs.color        || null,
+      engine:       form.specs.engine       || null,
+      drive:        form.specs.drive        || null,
+      seats:        form.specs.seats        ? Number(form.specs.seats) : null,
     };
 
     try {
       setSaving(true);
 
-      let savedCar;
+      const savedCar = isCreateMode
+        ? await createAdminCar(payload)
+        : await updateAdminCar(id, payload);
 
-      if (isCreateMode) {
-        savedCar = await createAdminCar(payload);
-      } else {
-        savedCar = await updateAdminCar(id, payload);
-      }
-
-      const carId = savedCar?.id || id;
-
-      if (!carId) {
-        throw new Error("Missing car id after save.");
-      }
+      const carId = savedCar?.car?.id || savedCar?.id || id;
+      if (!carId) throw new Error("Missing car id after save.");
 
       await uploadNewImages(carId);
+
+      // Save rental terms (migration 013) — graceful failure
+      await saveTerms().catch((err) =>
+        console.error("Failed to save rental terms:", err)
+      );
 
       navigate("/admin/rental");
     } catch (err) {
@@ -296,7 +320,7 @@ function AdminRentalDetailPage() {
   }
 
   return (
-    <div className="admin-detail-page">
+    <div className="admin-detail-shell">
       <div className="admin-detail-page__left">
         <div className="admin-detail-panel">
           <AdminMediaUploader
@@ -309,23 +333,15 @@ function AdminRentalDetailPage() {
           <h3 className="admin-section-title">
             {isCreateMode ? "Rental Car Info" : "Edit Rental Car Info"}
           </h3>
-
           <AdminDetailHero
             name={form.name}
             price={form.price}
-            currencyCode={form.info.currencyCode}
-            onChange={(key, value) => {
-              if (key === "currencyCode") {
-                updateInfo("currencyCode", value);
-              } else {
-                updateField(key, value);
-              }
-            }}
+            priceLabel="THB/Day"
+            onChange={(key, value) => updateField(key, value)}
             namePlaceholder="Rental Car Name"
             pricePlaceholder="Price Per Day"
           />
         </div>
-
       </div>
 
       <div className="admin-detail-page__right">
@@ -334,14 +350,11 @@ function AdminRentalDetailPage() {
         </div>
 
         <div className="admin-detail-panel">
-          <InfoRows
-            fields={rentalFields}
-            values={form.info}
-            onChange={updateInfo}
-          />
+          <InfoRows fields={rentalFields} values={form.info} onChange={updateInfo} />
         </div>
 
         <div className="admin-detail-panel">
+          <p className="admin-rental-note">Please read Terms and Conditions</p>
           <RentalTermsSection
             lines={form.terms}
             onChange={handleTermChange}
