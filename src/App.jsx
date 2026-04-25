@@ -20,6 +20,8 @@ import SignupPage from "./features/auth/pages/SignupPage";
 import VerifyEmailPage from "./features/auth/pages/VerifyEmailPage";
 import ForgotPasswordPage from "./features/auth/pages/ForgotPasswordPage";
 import ResetPasswordPage from "./features/auth/pages/ResetPasswordPage";
+import ContactPage from "./features/user/pages/ContactPage";
+import ProfilePage from "./features/user/pages/ProfilePage";
 
 
 import AdminBuyPage from "./features/admin/pages/AdminBuyPage";
@@ -65,6 +67,8 @@ function AppLayout() {
         <Route path="/car/:id" element={<CarDetail />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />

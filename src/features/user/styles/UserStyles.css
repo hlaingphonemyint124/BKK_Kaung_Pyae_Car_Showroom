@@ -1,0 +1,114 @@
+.user-content-box {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  /* background: #f4f4f4; */
+  padding: 28px 22px 30px;
+  /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); */
+}
+
+.user-page-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #111;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #d9d9d9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.2rem;
+  color: #e00000;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.info-group {
+  margin-bottom: 18px;
+}
+
+.info-label {
+  display: block;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  color: #222;
+  font-weight: 500;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-icon-box {
+  width: 54px;
+  height: 46px;
+  border-radius: 16px;
+  background: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.info-value {
+  flex: 1;
+  min-height: 46px;
+  background: #ececec;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  color: #222;
+  font-size: 0.95rem;
+}
+
+.editable-value {
+  justify-content: space-between;
+}
+
+.edit-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 6px;
+  background: #e00000;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 1.4rem;
+}
+
+.red-icon {
+  color: #d70000;
+}
+
+.line-icon {
+  color: #33dd33;
+}
+
+.facebook-icon {
+  color: #1877f2;
+}
+
+.instagram-icon {
+  color: #e1306c;
+}
+
+.gmail-icon {
+  color: #db4437;
+}
