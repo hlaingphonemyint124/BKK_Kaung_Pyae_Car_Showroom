@@ -234,7 +234,12 @@
 }
 
 .sale { background: #ff2b2b; }
-.rent { background: #ffc107; color: black; }
+.rent { background: #2563eb; color: #fff; }
+
+/* Buy / Rent card accent */
+.carCard--buy  { border-top: 3px solid #ff2b2b; }
+.carCard--rent { border-top: 3px solid #2563eb; }
+.carCard--rent .price { color: #2563eb; }
 
 /* ===================== */
 /* CARD BODY             */
@@ -350,5 +355,8 @@ body.dark .cardBody h3 { color: white; }
 body.dark .desc { color: #aaa; }
 body.dark .gear { background: #330000; color: #ddd; }
 body.dark .price { color: #ff2b2b; }
+body.dark .carCard--rent .price { color: #60a5fa; }
+body.dark .carCard--buy  { border-top-color: #ff2b2b; }
+body.dark .carCard--rent { border-top-color: #2563eb; }
 body.dark .detail { color: #bbb; }
 body.dark .detail:hover { color: white; }

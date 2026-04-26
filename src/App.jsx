@@ -30,6 +30,7 @@ import AdminBuyPage          from "./features/admin/pages/AdminBuyPage";
 import AdminRentalPage       from "./features/admin/pages/AdminRentalPage";
 import AdminBuyDetailPage    from "./features/admin/pages/AdminBuyDetailPage";
 import AdminRentalDetailPage from "./features/admin/pages/AdminRentalDetailPage";
+import AdminRolesPage        from "./features/admin/pages/AdminRolesPage";
 import ProtectedRoute        from "./features/admin/components/ProtectedRoute";
 
 import { AuthProvider } from "./context/AuthContext";
@@ -139,6 +140,14 @@ function AppLayout() {
           element={
             <ProtectedRoute allowedRoles={ADMIN_ROLES}>
               <AdminRentalDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/roles"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminRolesPage />
             </ProtectedRoute>
           }
         />

@@ -192,7 +192,7 @@ export default function Showroom() {
           <div className="carsGrid">
             {filteredCars.map((car) => (
               <div
-                className="carCard"
+                className={`carCard carCard--${mode}`}
                 key={car.id}
                 onClick={() => navigate(`/car/${car.id}`)}
                 style={{ cursor: "pointer" }}
@@ -206,12 +206,12 @@ export default function Showroom() {
                 <div className="cardBody">
                   <h3>{car.brand} {car.model}</h3>
                   <p className="desc">
-                    {[car.fuel_type, car.drive_type, car.engine, car.seats && `${car.seats} seats`]
+                    {[(car.fuel || car.fuel_type), (car.drive || car.drive_type), car.engine, car.seats && `${car.seats} seats`]
                       .filter(Boolean)
                       .join(", ") || "Details available on request"}
                   </p>
                   <div className="specs">
-                    <div className="fuel">⛽ {car.fuel_type || "—"}</div>
+                    <div className="fuel">⛽ {car.fuel || car.fuel_type || "—"}</div>
                     <div className="gear">⚙ {car.transmission || "—"}</div>
                   </div>
                   <div className="bottomRow">
