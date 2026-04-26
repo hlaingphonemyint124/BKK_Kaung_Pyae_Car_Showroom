@@ -20,10 +20,7 @@ function AdminCarPage({ mode }) {
     activeTab,
     setActiveTab,
     clearCar,
-    markNewArrival,
-    markBestSeller,
-    markMostRented,
-    markNotAvailable,
+    markAsStatus,
     loading,
     error,
   } = useAdminCars(mode);
@@ -42,13 +39,15 @@ function AdminCarPage({ mode }) {
   const tabs =
     mode === "buy"
       ? [
-          { label: "All", value: "all" },
-          { label: "New Arrivals", value: "new-arrivals" },
-          { label: "Popular Brands", value: "best-seller" },
+          { label: "All",       value: "all"       },
+          { label: "Available", value: "available"  },
+          { label: "Reserved",  value: "reserved"   },
+          { label: "Sold",      value: "sold"       },
         ]
       : [
-          { label: "All", value: "all" },
-          { label: "Most Rented", value: "most-rented" },
+          { label: "All",           value: "all"           },
+          { label: "Available",     value: "available"     },
+          { label: "Rented",        value: "rented"        },
           { label: "Not Available", value: "not-available" },
         ];
 
@@ -285,30 +284,14 @@ function AdminCarPage({ mode }) {
                 clearCar(car.id);
                 setActiveCardId(null);
               }}
-              thirdActionLabel={
-                mode === "buy" ? "Add to New Arrivals" : "Add to Most Rented"
+              thirdActionLabel={mode === "buy" ? "Mark as Reserved" : "Mark as Rented"}
+              thirdActionHandler={() =>
+                markAsStatus(car.id, mode === "buy" ? "reserved" : "rented")
               }
-              thirdActionHandler={() => {
-                if (mode === "buy") {
-                  markNewArrival?.(car.id);
-                } else {
-                  markMostRented?.(car.id);
-                }
-                setActiveCardId(null);
-              }}
-              fourthActionLabel={
-                mode === "buy"
-                  ? "Add to Best Seller"
-                  : "Add to Not Available Now"
+              fourthActionLabel={mode === "buy" ? "Mark as Sold" : "Mark as Unavailable"}
+              fourthActionHandler={() =>
+                markAsStatus(car.id, mode === "buy" ? "sold" : "maintenance")
               }
-              fourthActionHandler={() => {
-                if (mode === "buy") {
-                  markBestSeller?.(car.id);
-                } else {
-                  markNotAvailable?.(car.id);
-                }
-                setActiveCardId(null);
-              }}
               showUnavailableOverlay={car.status !== "available"}
             />
           ))}

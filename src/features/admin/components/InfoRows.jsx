@@ -1,14 +1,32 @@
 function InfoRows({ fields, values, onChange }) {
   return (
-    <div className="admin-info-rows">
+    <div className="admin-info-stack">
       {fields.map((field) => (
-        <div className="row" key={field.key}>
-          <span>{field.label}</span>
-          <input
-            value={values[field.key] || ""}
-            placeholder={field.placeholder || ""}
-            onChange={(e) => onChange(field.key, e.target.value)}
-          />
+        <div className="admin-detail-field" key={field.key}>
+          <span className="admin-detail-field__label">{field.label}</span>
+          {field.type === "select" ? (
+            <select
+              className="admin-detail-input"
+              value={values[field.key] || ""}
+              onChange={(e) => onChange(field.key, e.target.value)}
+            >
+              {field.options.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input
+              className="admin-detail-input"
+              value={values[field.key] || ""}
+              placeholder={field.placeholder || ""}
+              readOnly={field.readOnly}
+              onChange={(e) =>
+                !field.readOnly && onChange(field.key, e.target.value)
+              }
+            />
+          )}
         </div>
       ))}
     </div>

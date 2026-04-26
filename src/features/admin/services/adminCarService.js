@@ -8,7 +8,9 @@ export const getAdminCars = async (params = {}) => {
 
 export const getAdminCarById = async (id) => {
   const res = await api.get(`/admin/cars/${id}`);
-  return res.data;
+  const d = res.data;
+  // Unwrap envelope: { car: {...} } | { data: {...} } | {...}
+  return d?.car ?? d?.data?.car ?? d?.data ?? d;
 };
 
 export const createAdminCar = async (payload) => {

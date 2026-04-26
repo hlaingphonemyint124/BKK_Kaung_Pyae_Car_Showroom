@@ -99,7 +99,7 @@ function AdminRentalDetailPage() {
 
         originalTerms.current = mappedTerms.map((t) => ({ ...t }));
 
-        if (isCreateMode || !car) {
+        if (isCreateMode || !car?.id) {
           setForm({ ...EMPTY_FORM, terms: mappedTerms });
           return;
         }

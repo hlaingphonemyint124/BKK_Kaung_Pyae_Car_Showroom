@@ -59,7 +59,17 @@ function AdminBuyDetailPage() {
   const buyFields = [
     { key: "mileage", label: "Mileage" },
     { key: "year",    label: "Year"    },
-    { key: "vin",     label: "VIN"     },
+    {
+      key: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "available",   label: "Available"   },
+        { value: "reserved",    label: "Reserved"    },
+        { value: "sold",        label: "Sold"        },
+        { value: "maintenance", label: "Maintenance" },
+      ],
+    },
   ];
 
   useEffect(() => {
@@ -79,7 +89,7 @@ function AdminBuyDetailPage() {
           getCarDocuments(id).catch(() => null),
         ]);
 
-        if (!car) {
+        if (!car?.id) {
           setForm(EMPTY_FORM);
           return;
         }

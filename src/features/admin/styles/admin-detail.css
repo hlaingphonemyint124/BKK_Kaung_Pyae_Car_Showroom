@@ -4,7 +4,7 @@
    Desktop: dark bg, two-column side by side
 ========================= */
 .admin-detail-shell {
-  background: #111;
+  background: #f0f0f0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -39,6 +39,7 @@
     justify-content: center;
     gap: 24px;
     padding: 40px 32px;
+    background: #f0f0f0;
   }
 
   .admin-detail-page__left {
@@ -257,7 +258,7 @@
   border-radius: 10px;
   border: 1px solid #e0e0e0;
   font-size: 14px;
-  background: #fafafa;
+  background: #fff;
   color: #111;
   transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
@@ -381,50 +382,14 @@
 }
 
 /* =========================
-   INFO ROWS
+   INFO STACK (stacked fields, reuses .admin-detail-field / .admin-detail-input)
 ========================= */
-.admin-info-rows {
+.admin-info-stack {
   display: flex;
   flex-direction: column;
-  gap: 0;
-}
-
-.admin-info-rows .row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.admin-info-rows .row:last-child {
-  border-bottom: none;
-}
-
-.admin-info-rows span {
-  font-size: 12px;
-  font-weight: 600;
-  color: #555;
-  flex-shrink: 0;
-}
-
-.admin-info-rows input {
-  border: none;
-  background: transparent;
-  text-align: right;
-  font-size: 13px;
-  font-weight: 600;
-  color: #111;
-  outline: none;
-  width: 0;
-  flex: 1;
-  min-width: 0;
-  padding: 0 4px;
-}
-
-.admin-info-rows input::placeholder {
-  color: #bbb;
-  font-weight: 400;
+  gap: 12px;
+  background: #fff;
+  border-radius: 12px;
 }
 
 /* =========================
