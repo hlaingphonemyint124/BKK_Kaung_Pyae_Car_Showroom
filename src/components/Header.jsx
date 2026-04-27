@@ -67,8 +67,12 @@ export default function Header() {
 
   const handleLogout = async () => {
     setMenu(false);
-    await logout();
-    navigate("/login");
+    try {
+      await logout();
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+    navigate("/");
   };
 
   const languages = [
@@ -194,40 +198,53 @@ export default function Header() {
         aria-label="Navigation menu"
       >
 
-        {/* PROFILE / LOGIN ROW */}
-        <Link
-          to="/login"
-          className="sideMenu__profile"
-          onClick={() => setMenu(false)}
-          aria-label="Log in or sign up"
-        >
-          <div className="avatar">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2"/>
-              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-                stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          </div>
-
-          <div className="sideMenu__profile-info">
-            {user ? (
-              <span className="loginMenuItem" style={{ cursor: "default" }}>
+        {/* PROFILE / AUTH ROW */}
+        {user ? (
+          <Link
+            to="/profile"
+            className="sideMenu__profile"
+            onClick={() => setMenu(false)}
+            aria-label="View profile"
+          >
+            <div className="avatar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2"/>
+                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
+                  stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <div className="sideMenu__profile-info">
+              <span className="loginMenuItem">
                 {user.name || user.email || "Admin"}
               </span>
-            ) : (
-              <span className="loginMenuItem">Log In / Sign Up</span>
-            )}
-            <span className="sideMenu__profile-sub">Access your account</span>
+              <span className="sideMenu__profile-sub">View your profile</span>
+            </div>
+            <svg
+              className="sideMenu__profile-arrow"
+              width="16" height="16" viewBox="0 0 16 16" fill="none"
+            >
+              <path d="M3 8h10M9 4l4 4-4 4"
+                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </Link>
+        ) : (
+          <div className="sideMenu__auth-row">
+            <Link
+              to="/login"
+              className="sideMenu__auth-btn sideMenu__auth-btn--login"
+              onClick={() => setMenu(false)}
+            >
+              Log In
+            </Link>
+            <Link
+              to="/signup"
+              className="sideMenu__auth-btn sideMenu__auth-btn--signup"
+              onClick={() => setMenu(false)}
+            >
+              Sign Up
+            </Link>
           </div>
-
-          <svg
-            className="sideMenu__profile-arrow"
-            width="16" height="16" viewBox="0 0 16 16" fill="none"
-          >
-            <path d="M3 8h10M9 4l4 4-4 4"
-              stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </Link>
+        )}
 
         {/* SECTION LABEL */}
         <div className="sideMenu__section-label">Menu</div>

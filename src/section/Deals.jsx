@@ -1,5 +1,6 @@
 import "./Deals.css";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import { getBestSellers, getMostRented } from "../api/deals.api";
@@ -163,6 +164,7 @@ function SpecRow({ icon, label, value }) {
    CAR CARD
 ───────────────────────────────────────────────────────────────────────────── */
 function CarCard({ car, index, isFlipped, onFlip }) {
+  const navigate = useNavigate();
   const downPos = useRef({ x: 0, y: 0 });
 
   return (
@@ -197,7 +199,7 @@ function CarCard({ car, index, isFlipped, onFlip }) {
           <button
             className="card-cta"
             onPointerDown={e => e.stopPropagation()}
-            onClick={e => e.stopPropagation()}
+            onClick={e => { e.stopPropagation(); navigate(`/car/${car.id}`); }}
           >
             <span>Shop Now</span><span className="cta-arrow">→</span>
           </button>
@@ -223,7 +225,7 @@ function CarCard({ car, index, isFlipped, onFlip }) {
           <button
             className="card-cta"
             onPointerDown={e => e.stopPropagation()}
-            onClick={e => e.stopPropagation()}
+            onClick={e => { e.stopPropagation(); navigate(`/car/${car.id}`); }}
           >
             <span>Shop Now</span><span className="cta-arrow">→</span>
           </button>
@@ -354,6 +356,7 @@ function Slider({ children, navigateRef }) {
    MAIN DEALS COMPONENT
 ───────────────────────────────────────────────────────────────────────────── */
 export default function Deals() {
+  const navigate            = useNavigate();
   const [tab, setTab]       = useState("seller");
   const [flipped, setFlip]  = useState(null);
   const navigateRef         = useRef(null);
@@ -451,6 +454,7 @@ export default function Deals() {
       >
         <motion.button className="cta-btn"
           whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}
+          onClick={() => navigate("/showroom")}
         >
           View Full Collection
         </motion.button>

@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./Hero.css";
 
-export default function Hero() {
-  const slides = [
-    process.env.PUBLIC_URL + "/images/SlideShow/ss1.jpg",
-    process.env.PUBLIC_URL + "/images/SlideShow/ss2.jpg",
-    process.env.PUBLIC_URL + "/images/SlideShow/ss3.jpeg",
-  ];
+const SLIDES = [
+  process.env.PUBLIC_URL + "/images/SlideShow/ss1.jpg",
+  process.env.PUBLIC_URL + "/images/SlideShow/ss2.jpg",
+  process.env.PUBLIC_URL + "/images/SlideShow/ss3.jpeg",
+];
 
+export default function Hero() {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % slides.length);
+      setCurrent((prev) => (prev + 1) % SLIDES.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, []);
 
   return (
     <section className="hero">
       <div className="hero__slider">
-        {slides.map((slide, index) => (
+        {SLIDES.map((slide, index) => (
           <img
-            key={index}
+            key={slide}
             src={slide}
-            alt="Car slide"
+            alt={`Showroom slide ${index + 1}`}
             className={`hero__bg ${index === current ? "active" : ""}`}
           />
         ))}
@@ -37,9 +38,9 @@ export default function Hero() {
           <p className="hero__eyebrow">Premium cars</p>
           <h1 className="hero__title">For rent and ownership</h1>
           <div className="hero__actions">
-            <a className="btn btn--primary" href="/shop">
+            <Link className="btn btn--primary" to="/showroom">
               Browse Cars →
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -57,11 +58,15 @@ export default function Hero() {
           </div>
         </div>
         <div className="hero__dots">
-          {slides.map((_, index) => (
+          {SLIDES.map((_, index) => (
             <span
               key={index}
+              role="button"
+              tabIndex={0}
+              aria-label={`Go to slide ${index + 1}`}
               className={`hero__dot ${index === current ? "hero__dot--active" : ""}`}
               onClick={() => setCurrent(index)}
+              onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && setCurrent(index)}
             ></span>
           ))}
         </div>

@@ -13,19 +13,21 @@ const SPEC_ITEMS = [
     key: "fuel",
     label: "Fuel",
     icon: Fuel,
+    color: "#f59e0b",
     type: "select",
     options: [
-      { value: "petrol",       label: "Petrol"        },
-      { value: "diesel",       label: "Diesel"        },
-      { value: "hybrid",       label: "Hybrid"        },
-      { value: "electric",     label: "Electric"      },
-      { value: "plug-in hybrid", label: "Plug-in Hybrid" },
+      { value: "petrol",          label: "Petrol"         },
+      { value: "diesel",          label: "Diesel"         },
+      { value: "hybrid",          label: "Hybrid"         },
+      { value: "electric",        label: "Electric"       },
+      { value: "plug-in hybrid",  label: "Plug-in Hybrid" },
     ],
   },
   {
     key: "transmission",
     label: "Transmission",
     icon: Settings2,
+    color: "#3b82f6",
     type: "select",
     options: [
       { value: "automatic", label: "Automatic" },
@@ -37,6 +39,7 @@ const SPEC_ITEMS = [
     key: "color",
     label: "Color",
     icon: Palette,
+    color: "#8b5cf6",
     type: "input",
     placeholder: "White",
   },
@@ -44,6 +47,7 @@ const SPEC_ITEMS = [
     key: "engine",
     label: "Engine",
     icon: Gauge,
+    color: "#10b981",
     type: "input",
     placeholder: "1.2L",
   },
@@ -51,6 +55,7 @@ const SPEC_ITEMS = [
     key: "drive",
     label: "Drive",
     icon: Disc3,
+    color: "#06b6d4",
     type: "select",
     options: [
       { value: "fwd", label: "FWD" },
@@ -63,6 +68,7 @@ const SPEC_ITEMS = [
     key: "seats",
     label: "Seats",
     icon: Users,
+    color: "#f43f5e",
     type: "select",
     options: [
       { value: "2", label: "2" },
@@ -74,6 +80,15 @@ const SPEC_ITEMS = [
   },
 ];
 
+// Fuel value → distinct icon color
+const FUEL_COLORS = {
+  petrol:          "#f59e0b",
+  diesel:          "#78716c",
+  hybrid:          "#14b8a6",
+  electric:        "#3b82f6",
+  "plug-in hybrid":"#8b5cf6",
+};
+
 function SpecGrid({ specs, onChange }) {
   return (
     <div className="admin-spec-grid">
@@ -81,15 +96,21 @@ function SpecGrid({ specs, onChange }) {
         const Icon = item.icon;
         const value = specs[item.key] ?? "";
 
+        const iconColor =
+          item.key === "fuel" && value
+            ? (FUEL_COLORS[value] ?? item.color)
+            : item.color;
+
         return (
           <div key={item.key} className="admin-spec-item">
-            <div className="admin-spec-item__icon">
+            <div className="admin-spec-item__icon" style={{ color: iconColor }}>
               <Icon size={22} strokeWidth={2} />
             </div>
 
             <div className="admin-spec-item__control">
               {item.type === "select" ? (
                 <select
+                  id={`spec-${item.key}`}
                   className="admin-spec-item__select"
                   value={value}
                   onChange={(e) => onChange(item.key, e.target.value)}
@@ -103,6 +124,7 @@ function SpecGrid({ specs, onChange }) {
                 </select>
               ) : (
                 <input
+                  id={`spec-${item.key}`}
                   className="admin-spec-item__input"
                   type="text"
                   value={value}
@@ -112,7 +134,9 @@ function SpecGrid({ specs, onChange }) {
               )}
             </div>
 
-            <div className="admin-spec-item__label">{item.label}</div>
+            <label htmlFor={`spec-${item.key}`} className="admin-spec-item__label">
+              {item.label}
+            </label>
           </div>
         );
       })}

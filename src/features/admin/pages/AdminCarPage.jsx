@@ -201,10 +201,11 @@ function AdminCarPage({ mode }) {
                   onChange={(e) => setSelectedFuel(e.target.value)}
                 >
                   <option value="">All Fuel</option>
-                  <option value="Petrol">Petrol</option>
-                  <option value="Diesel">Diesel</option>
-                  <option value="Hybrid">Hybrid</option>
-                  <option value="EV">EV</option>
+                  <option value="petrol">Petrol</option>
+                  <option value="diesel">Diesel</option>
+                  <option value="hybrid">Hybrid</option>
+                  <option value="electric">Electric</option>
+                  <option value="plug-in hybrid">Plug-in Hybrid</option>
                 </select>
               </div>
 
@@ -215,8 +216,9 @@ function AdminCarPage({ mode }) {
                   onChange={(e) => setSelectedTransmission(e.target.value)}
                 >
                   <option value="">All Transmission</option>
-                  <option value="Manual">Manual</option>
-                  <option value="Auto">Auto</option>
+                  <option value="manual">Manual</option>
+                  <option value="automatic">Automatic</option>
+                  <option value="cvt">CVT</option>
                 </select>
               </div>
             </div>
@@ -278,7 +280,7 @@ function AdminCarPage({ mode }) {
                 navigate(`/admin/${mode}/${car.id}`);
               }}
               onViewDetail={() => {
-                navigate(`/admin/${mode}/${car.id}`);
+                navigate(`/car/${car.id}`);
               }}
               onClear={() => {
                 clearCar(car.id);

@@ -17,7 +17,10 @@ export default function AboutUs({ theme = "dark" }) {
     );
     const section = sectionRef.current;
     if (section) observer.observe(section);
-    return () => { if (section) observer.unobserve(section); };
+    return () => {
+      if (section) observer.unobserve(section);
+      observer.disconnect();
+    };
   }, []);
 
   return (
