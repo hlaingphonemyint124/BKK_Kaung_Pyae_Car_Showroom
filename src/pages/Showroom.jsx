@@ -74,15 +74,16 @@ export default function Showroom() {
       .finally(() => setLoading(false));
   }, [mode]);
 
-  // ── Filter by category + search ────────────────────────────────────────────
+  // ── Filter by mode price, category + search ───────────────────────────────
   const filteredCars = cars.filter((c) => {
+    const hasPrice = mode === "buy" ? c.sale_price != null : c.rent_price_per_day != null;
     const matchesCategory =
       selectedCategory === "All" ||
       (c.type || "").toLowerCase() === selectedCategory.toLowerCase();
     const matchesSearch =
       !searchQuery.trim() ||
       `${c.brand} ${c.model}`.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return hasPrice && matchesCategory && matchesSearch;
   });
 
   // ── Display price ──────────────────────────────────────────────────────────
