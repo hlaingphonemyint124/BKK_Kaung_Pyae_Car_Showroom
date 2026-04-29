@@ -2,6 +2,16 @@ import React from "react";
 import { Fuel, Settings2 } from "lucide-react";
 import AdminCardMenu from "./AdminCardMenu";
 
+const RED_THEME = "#ef2b2d";
+
+const FUEL_COLORS = {
+  petrol: "#f59e0b",
+  diesel: "#78716c",
+  hybrid: "#14b8a6",
+  electric: "#3b82f6",
+  "plug-in hybrid": "#8b5cf6",
+};
+
 function AdminCarCard({
   car,
   isActive,
@@ -46,11 +56,13 @@ function AdminCarCard({
   };
 
   const fuelLabel = car.fuel || car.fuel_type || car.specs?.fuel || "—";
-  const transmissionLabel =
-    car.transmission || car.specs?.transmission || "—";
+  const transmissionLabel = car.transmission || car.specs?.transmission || "—";
   const driveLabel = car.drive || car.drive_type || car.specs?.drive || "";
   const engineLabel = car.engine || car.specs?.engine || "";
   const seatsLabel = car.seats ? `${car.seats} seats` : "";
+
+  const normalizedFuel = String(fuelLabel).toLowerCase();
+  const fuelIconColor = FUEL_COLORS[normalizedFuel] || RED_THEME;
 
   const description =
     [fuelLabel, driveLabel, engineLabel, seatsLabel]
@@ -98,15 +110,15 @@ function AdminCarCard({
 
         <div className="admin-product-card__features">
           <div className="admin-product-card__feature">
-            <span className="admin-product-card__feature-icon admin-product-card__feature-icon--fuel">
-              <Fuel size={21} strokeWidth={2.2} />
+            <span className="admin-product-card__feature-icon">
+              <Fuel size={21} strokeWidth={2.2} style={{ color: fuelIconColor }} />
             </span>
             <span className="admin-product-card__feature-text">{fuelLabel}</span>
           </div>
 
           <div className="admin-product-card__feature">
             <span className="admin-product-card__feature-icon">
-              <Settings2 size={21} strokeWidth={2.2} />
+              <Settings2 size={21} strokeWidth={2.2} style={{ color: RED_THEME }} />
             </span>
             <span className="admin-product-card__feature-text">
               {transmissionLabel}

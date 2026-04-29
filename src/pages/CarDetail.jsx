@@ -3,7 +3,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Fuel, Settings2, Palette, Gauge, Disc3, Users } from "lucide-react";
 import { getCarById } from "../api/cars.api";
 import "./CarDetail.css";
-import { getCarDocuments, getRentalTerms } from "../features/admin/services/adminCarService";
+import {
+  getPublicCarDocuments,
+  getPublicRentalTerms,
+} from "../api/showroom.api";
 
 
 // Fuel value → icon color (same as admin SpecGrid)
@@ -36,11 +39,11 @@ export default function CarDetail() {
 
     Promise.all([
       getCarById(id),
-      getCarDocuments(id).catch(() => null),
-      getRentalTerms().catch(() => null),
+      getPublicCarDocuments(id).catch(() => null),
+      getPublicRentalTerms().catch(() => null),
     ])
       .then(([carRes, docsRes, termsRes]) => {
-        setCar(carRes.data);
+        setCar(carRes.data?.car || carRes.data);
 
         // Documents
         const docs =
@@ -55,7 +58,8 @@ export default function CarDetail() {
           termsRes?.terms ||
           termsRes?.data?.terms ||
           termsRes?.data ||
-          [];
+          (Array.isArray(termsRes) ? termsRes : []);
+
         setRentalTerms(terms);
       })
       .catch(() => setError("Car not found"))
@@ -75,30 +79,46 @@ export default function CarDetail() {
   const isRental = !!car.rent_price_per_day && !car.sale_price;
 
   const specs = [
-    { key: "fuel",         Icon: Fuel,      color: FUEL_COLORS[fuel] ?? "#f59e0b", label: "Fuel",         value: fuel  || "—" },
-    { key: "transmission", Icon: Settings2, color: "#3b82f6",                      label: "Transmission", value: car.transmission || "—" },
-    { key: "color",        Icon: Palette,   color: "#8b5cf6",                      label: "Color",        value: car.color || "—" },
-    { key: "engine",       Icon: Gauge,     color: "#10b981",                      label: "Engine",       value: car.engine || "—" },
-    { key: "drive",        Icon: Disc3,     color: "#06b6d4",                      label: "Drive",        value: drive || "—" },
-    { key: "seats",        Icon: Users,     color: "#f43f5e",                      label: "Seats",        value: car.seats ? `${car.seats} Seaters` : "—" },
+    { key: "fuel",         Icon: Fuel,      color: FUEL_COLORS[fuel] ?? "#ef2b2d", label: "Fuel",         value: fuel  || "—" },
+    { key: "transmission", Icon: Settings2, color: "#ef2b2d",                      label: "Transmission", value: car.transmission || "—" },
+    { key: "color",        Icon: Palette,   color: "#ef2b2d",                      label: "Color",        value: car.color || "—" },
+    { key: "engine",       Icon: Gauge,     color: "#ef2b2d",                      label: "Engine",       value: car.engine || "—" },
+    { key: "drive",        Icon: Disc3,     color: "#ef2b2d",                      label: "Drive",        value: drive || "—" },
+    { key: "seats",        Icon: Users,     color: "#ef2b2d",                      label: "Seats",        value: car.seats ? `${car.seats} Seaters` : "—" },
   ];
 
   const dailyPrice = isRental ? Number(car.rent_price_per_day) || 0 : 0;
   const currency   = car.currency_code || "THB";
 
-  const infoRows = [
-    { label: "Mileage",    value: car.mileage_km ? `${Number(car.mileage_km).toLocaleString()} km` : "—" },
-    { label: "Model Year", value: car.year || "—" },
-    { label: "Status",     value: car.status || "—" },
-    ...(car.vin ? [{ label: "VIN", value: car.vin }] : []),
-    ...(isRental && dailyPrice ? [
-      { label: "7-Day Price (5% off)",   value: `${Math.round(dailyPrice * 7  * 0.95).toLocaleString()} ${currency}`, highlight: true },
-      { label: "30-Day Price (10% off)", value: `${Math.round(dailyPrice * 30 * 0.90).toLocaleString()} ${currency}`, highlight: true },
-    ] : []),
-    ...(isRental && car.deposit ? [
-      { label: "Deposit", value: `${Number(car.deposit).toLocaleString()} ${currency}` },
-    ] : []),
-  ];
+  const infoRows = isRental
+    ? [
+        ...(dailyPrice
+          ? [
+              {
+                label: "7-Day Price (5% off)",
+                value: `${Math.round(dailyPrice * 7 * 0.95).toLocaleString()} ${currency}`,
+                highlight: true,
+              },
+              {
+                label: "30-Day Price (10% off)",
+                value: `${Math.round(dailyPrice * 30 * 0.9).toLocaleString()} ${currency}`,
+                highlight: true,
+              },
+            ]
+          : []),
+        { label: "Status", value: car.status || "—" },
+      ]
+    : [
+        {
+          label: "Mileage",
+          value: car.mileage_km
+            ? `${Number(car.mileage_km).toLocaleString()} km`
+            : "—",
+        },
+        { label: "Model Year", value: car.year || "—" },
+        { label: "Status", value: car.status || "—" },
+        ...(car.vin ? [{ label: "VIN", value: car.vin }] : []),
+      ];
 
   return (
     <div className="cd-wrapper">
@@ -194,16 +214,19 @@ export default function CarDetail() {
             </div>
           )}
 
-          {isRental && rentalTerms.length > 0 && (
+          {rentalTerms.length > 0 && (
             <div className="cd-panel">
               <p className="cd-section-label">Rental Terms & Conditions</p>
-              <ul className="cd-terms-list">
+              <div className="cd-terms-grid">
                 {rentalTerms.map((term, i) => (
-                  <li key={i}>
-                    {term.description || term.title || term.text}
-                  </li>
+                  <div key={term.id || i} className="cd-term-item">
+                    <span className="cd-term-icon">✔</span>
+                    <span className="cd-term-text">
+                      {(term.description || term.title).replace("-", ": ")}
+                    </span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
 

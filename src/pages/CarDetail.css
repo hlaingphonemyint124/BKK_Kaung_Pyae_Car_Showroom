@@ -31,7 +31,7 @@ body.dark .cd-wrapper {
 /* ── COLUMNS ── */
 .cd-left {
   width: 100%;
-  max-width: 360px;
+  max-width: 420px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -299,4 +299,40 @@ body.dark .cd-info-row {
   text-align: center;
   font-size: 17px;
   color: var(--text-muted);
+}
+
+/* Rental Terms - Premium UI */
+.cd-terms-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.cd-term-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  transition: 0.2s ease;
+}
+
+.cd-term-item:hover {
+  background: #f1f5f9;
+}
+
+.cd-term-icon {
+  color: #ef4444;
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.cd-term-text {
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.4;
 }

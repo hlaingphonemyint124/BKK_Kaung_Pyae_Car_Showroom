@@ -8,56 +8,67 @@ import {
   Users,
 } from "lucide-react";
 
-// Values match DB CHECK constraints (migration 012 + 015)
+const RED_THEME = "#ef2b2d";
+
+// Fuel value → distinct icon color
+const FUEL_COLORS = {
+  petrol: "#f59e0b",
+  diesel: "#78716c",
+  hybrid: "#14b8a6",
+  electric: "#3b82f6",
+  "plug-in hybrid": "#8b5cf6",
+};
+
+// Values match DB CHECK constraints
 const SPEC_ITEMS = [
   {
     key: "type",
     label: "Type",
     icon: Car,
-    color: "#e60000",
+    color: RED_THEME,
     type: "select",
     options: [
-      { value: "Sedan",        label: "Sedan"        },
-      { value: "Hatchback",    label: "Hatchback"    },
-      { value: "SUV",          label: "SUV"          },
+      { value: "Sedan", label: "Sedan" },
+      { value: "Hatchback", label: "Hatchback" },
+      { value: "SUV", label: "SUV" },
       { value: "Pickup Truck", label: "Pickup Truck" },
-      { value: "Van / Minivan",label: "Van / Minivan"},
-      { value: "Electric",     label: "Electric"     },
-      { value: "Coupe",        label: "Coupe"        },
-      { value: "Convertible",  label: "Convertible"  },
+      { value: "Van / Minivan", label: "Van / Minivan" },
+      { value: "Electric", label: "Electric" },
+      { value: "Coupe", label: "Coupe" },
+      { value: "Convertible", label: "Convertible" },
     ],
   },
   {
     key: "fuel",
     label: "Fuel",
     icon: Fuel,
-    color: "#f59e0b",
+    color: RED_THEME,
     type: "select",
     options: [
-      { value: "petrol",          label: "Petrol"         },
-      { value: "diesel",          label: "Diesel"         },
-      { value: "hybrid",          label: "Hybrid"         },
-      { value: "electric",        label: "Electric"       },
-      { value: "plug-in hybrid",  label: "Plug-in Hybrid" },
+      { value: "petrol", label: "Petrol" },
+      { value: "diesel", label: "Diesel" },
+      { value: "hybrid", label: "Hybrid" },
+      { value: "electric", label: "Electric" },
+      { value: "plug-in hybrid", label: "Plug-in Hybrid" },
     ],
   },
   {
     key: "transmission",
     label: "Transmission",
     icon: Settings2,
-    color: "#3b82f6",
+    color: RED_THEME,
     type: "select",
     options: [
       { value: "automatic", label: "Automatic" },
-      { value: "manual",    label: "Manual"    },
-      { value: "cvt",       label: "CVT"       },
+      { value: "manual", label: "Manual" },
+      { value: "cvt", label: "CVT" },
     ],
   },
   {
     key: "color",
     label: "Color",
     icon: Palette,
-    color: "#8b5cf6",
+    color: RED_THEME,
     type: "input",
     placeholder: "White",
   },
@@ -65,7 +76,7 @@ const SPEC_ITEMS = [
     key: "engine",
     label: "Engine",
     icon: Gauge,
-    color: "#10b981",
+    color: RED_THEME,
     type: "input",
     placeholder: "1.2L",
   },
@@ -73,7 +84,7 @@ const SPEC_ITEMS = [
     key: "drive",
     label: "Drive",
     icon: Disc3,
-    color: "#06b6d4",
+    color: RED_THEME,
     type: "select",
     options: [
       { value: "fwd", label: "FWD" },
@@ -86,7 +97,7 @@ const SPEC_ITEMS = [
     key: "seats",
     label: "Seats",
     icon: Users,
-    color: "#f43f5e",
+    color: RED_THEME,
     type: "select",
     options: [
       { value: "2", label: "2" },
@@ -98,15 +109,6 @@ const SPEC_ITEMS = [
   },
 ];
 
-// Fuel value → distinct icon color
-const FUEL_COLORS = {
-  petrol:          "#f59e0b",
-  diesel:          "#78716c",
-  hybrid:          "#14b8a6",
-  electric:        "#3b82f6",
-  "plug-in hybrid":"#8b5cf6",
-};
-
 function SpecGrid({ specs, onChange }) {
   return (
     <div className="admin-spec-grid">
@@ -114,10 +116,12 @@ function SpecGrid({ specs, onChange }) {
         const Icon = item.icon;
         const value = specs[item.key] ?? "";
 
+        const normalizedValue = String(value).toLowerCase();
+
         const iconColor =
-          item.key === "fuel" && value
-            ? (FUEL_COLORS[value] ?? item.color)
-            : item.color;
+          item.key === "fuel"
+            ? FUEL_COLORS[normalizedValue] || RED_THEME
+            : RED_THEME;
 
         return (
           <div key={item.key} className="admin-spec-item">
@@ -134,6 +138,7 @@ function SpecGrid({ specs, onChange }) {
                   onChange={(e) => onChange(item.key, e.target.value)}
                 >
                   <option value="">Select</option>
+
                   {item.options.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label}

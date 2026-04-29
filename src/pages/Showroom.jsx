@@ -6,6 +6,16 @@ import { getCarsForSale, getCarsForRent } from "../api/showroom.api";
 import { useAuth } from "../context/AuthContext";
 import { Fuel, Settings2 } from "lucide-react";
 
+const RED_THEME = "#ef2b2d";
+
+const FUEL_COLORS = {
+  petrol: "#f59e0b",
+  diesel: "#78716c",
+  hybrid: "#14b8a6",
+  electric: "#3b82f6",
+  "plug-in hybrid": "#8b5cf6",
+};
+
 
 const CATEGORIES = ["All", "Sedan", "Hatchback", "SUV", "Pickup Truck", "Van / Minivan", "Electric"];
 
@@ -224,12 +234,26 @@ export default function Showroom() {
                   </p>
                   <div className="showroom-specs">
                     <div className="showroom-spec-item">
-                      <Fuel className="showroom-spec-icon showroom-spec-icon--fuel" size={21} strokeWidth={2.2} />
+                      <Fuel
+                        className="showroom-spec-icon"
+                        size={21}
+                        strokeWidth={2.2}
+                        style={{
+                          color:
+                            FUEL_COLORS[String(car.fuel || car.fuel_type || "").toLowerCase()] ||
+                            RED_THEME,
+                        }}
+                      />
                       <span>{car.fuel || car.fuel_type || "—"}</span>
                     </div>
 
                     <div className="showroom-spec-item">
-                      <Settings2 className="showroom-spec-icon showroom-spec-icon--gear" size={21} strokeWidth={2.2} />
+                      <Settings2
+                        className="showroom-spec-icon"
+                        size={21}
+                        strokeWidth={2.2}
+                        style={{ color: RED_THEME }}
+                      />
                       <span>{car.transmission || "—"}</span>
                     </div>
                   </div>
