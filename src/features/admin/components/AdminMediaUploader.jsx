@@ -80,12 +80,14 @@ function AdminMediaUploader({ media = [], onChange }) {
   useEffect(() => {
     return () => {
       media.forEach((item) => {
-        if (item.preview) {
+        if (item.preview && item.isNew) {
           URL.revokeObjectURL(item.preview);
         }
       });
     };
-  }, [media]);
+    // cleanup only when component unmounts
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -104,7 +106,7 @@ function AdminMediaUploader({ media = [], onChange }) {
         ) : (
           <div className="admin-media-uploader__grid">
             {media.map((item) => {
-              const src = item.preview || item.url;
+              const src = item.preview || item.url || item.storage_path;
 
               return (
                 <div
@@ -176,7 +178,7 @@ function AdminMediaUploader({ media = [], onChange }) {
             </button>
 
             <img
-              src={previewItem.preview || previewItem.url}
+              src={previewItem.preview || previewItem.url || previewItem.storage_path}
               alt="full preview"
               className="admin-media-preview-modal__media"
             />

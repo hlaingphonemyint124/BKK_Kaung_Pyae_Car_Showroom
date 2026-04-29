@@ -68,7 +68,6 @@ function AdminBuyDetailPage() {
         { value: "available",   label: "Available"   },
         { value: "reserved",    label: "Reserved"    },
         { value: "sold",        label: "Sold"        },
-        { value: "maintenance", label: "Maintenance" },
       ],
     },
     {
@@ -201,13 +200,23 @@ function AdminBuyDetailPage() {
     }));
 
   const uploadNewImages = async (carId) => {
+    const existingImages = form.media.filter((item) => item.isExisting);
+
+    const hasExistingPrimary = existingImages.some((item) => item.isPrimary);
+
+    const maxExistingSortOrder = existingImages.reduce((max, item) => {
+      const sortOrder = Number(item.sortOrder ?? item.sort_order ?? 0);
+      return Math.max(max, sortOrder);
+    }, -1);
+
     const newItems = form.media.filter(
       (item) => item.isNew && item.type === "image" && item.file
     );
+
     for (let i = 0; i < newItems.length; i++) {
       await addAdminCarImage(carId, newItems[i].file, {
-        isPrimary: i === 0,
-        sortOrder: i,
+        isPrimary: !hasExistingPrimary && i === 0,
+        sortOrder: maxExistingSortOrder + i + 1,
       });
     }
   };

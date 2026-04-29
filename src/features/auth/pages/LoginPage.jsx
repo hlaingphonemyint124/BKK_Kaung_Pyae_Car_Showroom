@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../styles/AuthStyles.css";
 import AuthHeader from "../components/AuthHeader";
 import AuthInput from "../components/AuthInput";
@@ -10,7 +10,10 @@ import { useAuth } from "../../../context/AuthContext";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+
+  const from = location.state?.from || null;
 
   const [form, setForm] = useState({
     email: "",
@@ -99,10 +102,15 @@ function LoginPage() {
       const userData = await login(cleanForm);
       const role = userData?.role || "customer";
 
+      if (from) {
+        navigate(from, { replace: true });
+        return;
+      }
+
       if (role === "admin" || role === "employee") {
-        navigate("/admin");
+        navigate("/admin", { replace: true });
       } else {
-        navigate("/");
+        navigate("/", { replace: true });
       }
     } catch (error) {
       const responseData = error.response?.data || {};

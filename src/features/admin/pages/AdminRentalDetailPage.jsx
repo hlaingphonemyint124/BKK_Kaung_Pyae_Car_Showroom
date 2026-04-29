@@ -67,7 +67,16 @@ function AdminRentalDetailPage() {
   const rentalFields = [
     { key: "rent7",   label: "7 Days (5% OFF)",   readOnly: true },
     { key: "rent30",  label: "30 Days (10% OFF)",  readOnly: true },
-    { key: "deposit", label: "Deposit",            placeholder: "Optional" },
+    {
+      key: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "available", label: "Available" },
+        { value: "rented", label: "Rented" },
+        { value: "maintenance", label: "Maintenance" },
+      ],
+    },
     {
       key: "isPublished",
       label: "Published",
@@ -216,13 +225,23 @@ function AdminRentalDetailPage() {
   };
 
   const uploadNewImages = async (carId) => {
+    const existingImages = form.media.filter((item) => item.isExisting);
+
+    const hasExistingPrimary = existingImages.some((item) => item.isPrimary);
+
+    const maxExistingSortOrder = existingImages.reduce((max, item) => {
+      const sortOrder = Number(item.sortOrder ?? item.sort_order ?? 0);
+      return Math.max(max, sortOrder);
+    }, -1);
+
     const newItems = form.media.filter(
       (item) => item.isNew && item.type === "image" && item.file
     );
+
     for (let i = 0; i < newItems.length; i++) {
       await addAdminCarImage(carId, newItems[i].file, {
-        isPrimary: i === 0,
-        sortOrder: i,
+        isPrimary: !hasExistingPrimary && i === 0,
+        sortOrder: maxExistingSortOrder + i + 1,
       });
     }
   };
