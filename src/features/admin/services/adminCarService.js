@@ -56,10 +56,18 @@ export const getCarDocuments = async (carId) => {
   return res.data;
 };
 
-// PUT /admin/cars/:id/documents → replaces all documents for the car
-// body: { documents: [{ field_name, field_value, sort_order }] }
-export const saveCarDocuments = async (carId, documents) => {
-  const res = await api.put(`/admin/cars/${carId}/documents`, { documents });
+export const createCarDocument = async (carId, payload) => {
+  const res = await api.post(`/admin/cars/${carId}/documents`, payload);
+  return res.data;
+};
+
+export const updateCarDocument = async (carId, documentId, payload) => {
+  const res = await api.patch(`/admin/cars/${carId}/documents/${documentId}`, payload);
+  return res.data;
+};
+
+export const deleteCarDocument = async (carId, documentId) => {
+  const res = await api.delete(`/admin/cars/${carId}/documents/${documentId}`);
   return res.data;
 };
 

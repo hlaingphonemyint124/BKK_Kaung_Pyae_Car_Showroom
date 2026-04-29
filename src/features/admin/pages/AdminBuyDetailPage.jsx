@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminMediaUploader from "../components/AdminMediaUploader";
 import AdminDetailHero from "../components/AdminDetailHero";
@@ -12,7 +12,9 @@ import {
   updateAdminCar,
   addAdminCarImage,
   getCarDocuments,
-  saveCarDocuments,
+  createCarDocument,
+  updateCarDocument,
+  deleteCarDocument,
 } from "../services/adminCarService";
 
 const DEFAULT_DOCUMENT_LINES = [
@@ -193,11 +195,20 @@ function AdminBuyDetailPage() {
       documentLines: [...prev.documentLines, { id: null, key: "", value: "" }],
     }));
 
-  const handleDeleteRow = (index) =>
+  const deletedDocumentIds = useRef([]);
+
+  const handleDeleteRow = (index) => {
+    const target = form.documentLines[index];
+
+    if (target?.id) {
+      deletedDocumentIds.current.push(target.id);
+    }
+
     setForm((prev) => ({
       ...prev,
       documentLines: prev.documentLines.filter((_, i) => i !== index),
     }));
+  };
 
   const uploadNewImages = async (carId) => {
     const existingImages = form.media.filter((item) => item.isExisting);
@@ -276,15 +287,33 @@ function AdminBuyDetailPage() {
 
       // Save documents (migration 014) — replace all
       const documents = form.documentLines
-        .filter((line) => line.key.trim())
-        .map((line, i) => ({
-          field_name:  line.key,
-          field_value: line.value,
-          sort_order:  i,
-        }));
-      await saveCarDocuments(carId, documents).catch((err) =>
-        console.error("Failed to save documents:", err)
-      );
+      .filter((line) => line.key.trim() && line.value.trim())
+      .map((line, i) => ({
+        id: line.id,
+        field_name: line.key.trim(),
+        field_value: line.value.trim(),
+        sort_order: i,
+      }));
+
+    for (const documentId of deletedDocumentIds.current) {
+      await deleteCarDocument(carId, documentId);
+    }
+
+    for (const doc of documents) {
+      const payload = {
+        field_name: doc.field_name,
+        field_value: doc.field_value,
+        sort_order: doc.sort_order,
+      };
+
+      if (doc.id) {
+        await updateCarDocument(carId, doc.id, payload);
+      } else {
+        await createCarDocument(carId, payload);
+      }
+    }
+
+    deletedDocumentIds.current = [];
 
       navigate("/admin/buy");
     } catch (err) {
