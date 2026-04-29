@@ -280,7 +280,7 @@ function AdminCarPage({ mode }) {
                 navigate(`/admin/${mode}/${car.id}`);
               }}
               onViewDetail={() => {
-                navigate(`/car/${car.id}`);
+                navigate(`/admin/${mode}/${car.id}`);
               }}
               onClear={() => {
                 clearCar(car.id);

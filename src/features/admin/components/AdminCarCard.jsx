@@ -71,7 +71,7 @@ function AdminCarCard({
           </div>
         )}
 
-        {showUnavailableOverlay && !isUnavailable && (
+        {showUnavailableOverlay && isUnavailable && (
           <div className="admin-product-card__unavailable">
             {statusLabelMap[status] || "Not Available"}
           </div>

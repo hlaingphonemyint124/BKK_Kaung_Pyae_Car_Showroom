@@ -41,7 +41,7 @@ const EMPTY_FORM = {
     year: new Date().getFullYear(),
     currencyCode: "THB",
     status: "available",
-    isPublished: false,
+    isPublished: true,
     rent7: "",
     rent30: "",
     deposit: "",
@@ -68,6 +68,15 @@ function AdminRentalDetailPage() {
     { key: "rent7",   label: "7 Days (5% OFF)",   readOnly: true },
     { key: "rent30",  label: "30 Days (10% OFF)",  readOnly: true },
     { key: "deposit", label: "Deposit",            placeholder: "Optional" },
+    {
+      key: "isPublished",
+      label: "Published",
+      type: "select",
+      options: [
+        { value: "true",  label: "Yes — Visible in Shop" },
+        { value: "false", label: "No — Hidden"           },
+      ],
+    },
   ];
 
   // Load car data + global rental terms in parallel
@@ -172,7 +181,13 @@ function AdminRentalDetailPage() {
 
   const updateInfo = (key, value) => {
     if (key === "rent7" || key === "rent30") return;
-    setForm((prev) => ({ ...prev, info: { ...prev.info, [key]: value } }));
+    setForm((prev) => ({
+      ...prev,
+      info: {
+        ...prev.info,
+        [key]: key === "isPublished" ? value === "true" || value === true : value,
+      },
+    }));
   };
 
   // onChange for RentalTermsSection: receives (index, newText)
@@ -269,22 +284,22 @@ function AdminRentalDetailPage() {
       return;
     }
 
+    // Build payload — omit undefined fields so Zod .optional() is satisfied
     const payload = {
       brand,
       model,
-      year:               Number(form.info.year)    || new Date().getFullYear(),
-      mileage_km:         form.info.mileage          ? Number(form.info.mileage) : 0,
-      rent_price_per_day: form.price                 ? Number(form.price)        : 0,
+      year:               Number(form.info.year) || new Date().getFullYear(),
+      ...(form.info.mileage  ? { mileage_km:         Number(form.info.mileage) } : {}),
+      ...(form.price         ? { rent_price_per_day: Number(form.price)        } : {}),
       currency_code:      form.info.currencyCode,
       status:             form.info.status,
       is_published:       form.info.isPublished,
-      // Specs (migration 012)
-      fuel:         form.specs.fuel         || null,
-      transmission: form.specs.transmission || null,
-      color:        form.specs.color        || null,
-      engine:       form.specs.engine       || null,
-      drive:        form.specs.drive        || null,
-      seats:        form.specs.seats        ? Number(form.specs.seats) : null,
+      ...(form.specs.fuel        ? { fuel:         form.specs.fuel }          : {}),
+      ...(form.specs.transmission? { transmission: form.specs.transmission }  : {}),
+      ...(form.specs.color       ? { color:        form.specs.color }         : {}),
+      ...(form.specs.engine      ? { engine:       form.specs.engine }        : {}),
+      ...(form.specs.drive       ? { drive:        form.specs.drive }         : {}),
+      ...(form.specs.seats       ? { seats:        Number(form.specs.seats) } : {}),
     };
 
     try {

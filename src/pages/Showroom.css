@@ -1,10 +1,57 @@
 /* ===================== */
+/* ADMIN CONTROLS        */
+/* ===================== */
+
+.showroom-admin-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.showroom-add-btn {
+  background: var(--color-red);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.showroom-add-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.showroom-edit-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.showroom-edit-btn:hover {
+  background: var(--color-red);
+}
+
+/* ===================== */
 /* BASE LAYOUT           */
 /* ===================== */
 
 .showroom {
   padding: 24px 20px;
-  background: #f3f3f3;
+  background: var(--bg-page);
   min-height: 100vh;
 }
 
@@ -14,14 +61,14 @@
 }
 
 .title {
-  color: #ff2b2b;
+  color: var(--color-red);
   font-size: 28px;
   font-weight: 800;
   margin: 0 0 6px;
 }
 
 .subtitle {
-  color: #777;
+  color: var(--text-muted);
   margin: 0 0 18px;
   font-size: 15px;
 }
@@ -68,7 +115,7 @@
 
 .searchItem {
   display: flex;
-  align-items: center;  /* changed from stretch */
+  align-items: center;
   flex: 1;
 }
 
@@ -93,7 +140,6 @@
   margin: 0;
   line-height: 1;
   vertical-align: middle;
-  /* Reset browser default input styles */
   -webkit-appearance: none;
   appearance: none;
   box-sizing: border-box;
@@ -134,9 +180,9 @@
   left: 0;
   width: 100%;
   min-width: 160px;
-  background: white;
+  background: var(--bg-surface);
   border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
   z-index: 100;
   overflow: hidden;
   animation: drop 0.18s ease;
@@ -150,13 +196,13 @@
 .dropdownItem {
   padding: 12px 16px;
   font-size: 14px;
-  color: #333;
+  color: var(--text-primary);
   cursor: pointer;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
 }
 
 .dropdownItem:last-child { border-bottom: none; }
-.dropdownItem:hover { background: #f5f5f5; }
+.dropdownItem:hover { background: var(--bg-surface-2); }
 
 /* ===================== */
 /* GRID                  */
@@ -189,17 +235,17 @@
 /* ===================== */
 
 .carCard {
-  background: white;
+  background: var(--bg-surface);
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
   position: relative;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .carCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+  box-shadow: var(--shadow-md);
 }
 
 .carCard img {
@@ -233,11 +279,11 @@
   letter-spacing: 0.3px;
 }
 
-.sale { background: #ff2b2b; }
+.sale { background: var(--color-red); }
 .rent { background: #2563eb; color: #fff; }
 
 /* Buy / Rent card accent */
-.carCard--buy  { border-top: 3px solid #ff2b2b; }
+.carCard--buy  { border-top: 3px solid var(--color-red); }
 .carCard--rent { border-top: 3px solid #2563eb; }
 .carCard--rent .price { color: #2563eb; }
 
@@ -257,7 +303,7 @@
 }
 
 .desc {
-  color: #999;
+  color: var(--text-muted);
   font-size: 11px;
   margin: 0 0 10px;
   white-space: nowrap;
@@ -276,10 +322,10 @@
 .fuel { color: #f4a300; font-weight: 600; }
 
 .gear {
-  background: #f1f1f1;
+  background: var(--bg-surface-2);
   padding: 2px 7px;
   border-radius: 4px;
-  color: #555;
+  color: var(--text-muted);
 }
 
 .bottomRow {
@@ -290,7 +336,7 @@
 }
 
 .price {
-  color: #ff2b2b;
+  color: var(--color-red);
   font-weight: 800;
   font-size: 14px;
   white-space: nowrap;
@@ -298,12 +344,12 @@
 
 .detail {
   font-size: 11px;
-  color: #888;
+  color: var(--text-muted);
   cursor: pointer;
   white-space: nowrap;
 }
 
-.detail:hover { color: #333; }
+.detail:hover { color: var(--text-primary); }
 
 /* ========================= */
 /* DARK MODE                 */
@@ -314,19 +360,12 @@ body.dark .showroom {
   color: white;
 }
 
-body.dark .title { color: #ff2b2b; }
-body.dark .subtitle { color: #ccc; }
-
 body.dark .filterBar {
   background: #2b0000;
   border: 1px solid #600000;
 }
 
-body.dark .filterItem { color: #fff; }
-
 body.dark .filterBtn:hover { background: #3a0000; }
-
-body.dark .searchInput { color: white; }
 
 body.dark .dropdown {
   background: #1a0000;
@@ -334,29 +373,21 @@ body.dark .dropdown {
 }
 
 body.dark .dropdownItem {
-  color: #fff;
   border-bottom: 1px solid #300000;
 }
 
 body.dark .dropdownItem:hover { background: #400000; }
 
 body.dark .carCard {
-  background: #140000;
+  background: var(--bg-surface);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
   border: 1px solid #330000;
 }
 
 body.dark .carCard:hover {
-  transform: translateY(-4px);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
 }
 
-body.dark .cardBody h3 { color: white; }
-body.dark .desc { color: #aaa; }
-body.dark .gear { background: #330000; color: #ddd; }
-body.dark .price { color: #ff2b2b; }
+body.dark .gear { background: #330000; }
 body.dark .carCard--rent .price { color: #60a5fa; }
-body.dark .carCard--buy  { border-top-color: #ff2b2b; }
 body.dark .carCard--rent { border-top-color: #2563eb; }
-body.dark .detail { color: #bbb; }
-body.dark .detail:hover { color: white; }

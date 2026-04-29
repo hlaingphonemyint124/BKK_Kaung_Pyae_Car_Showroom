@@ -94,7 +94,7 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #ff2e2e;
+  color: var(--color-red);
   margin: 0 0 14px 0;
   opacity: 0;
   animation: fadeUp 0.8s ease 0.15s forwards;
@@ -138,22 +138,22 @@
 }
 
 .btn--primary {
-  background: #ff2e2e;
+  background: var(--color-red);
   color: #fff;
-  box-shadow: 0 8px 28px rgba(255,46,46,0.45);
+  box-shadow: 0 8px 28px var(--color-red-glow);
   animation: jumpPulse 2s ease-in-out infinite;
 }
 
 .btn--primary:hover {
   animation: none;
   transform: translateY(-3px);
-  box-shadow: 0 16px 36px rgba(255,46,46,0.6);
+  box-shadow: 0 16px 36px rgba(var(--color-red-rgb), 0.6);
 }
 
 .btn--primary:active {
   animation: none;
   transform: scale(0.97);
-  box-shadow: 0 4px 16px rgba(255,46,46,0.4);
+  box-shadow: 0 4px 16px rgba(var(--color-red-rgb), 0.4);
 }
 
 /* ── BOTTOM BAR ── */
@@ -219,8 +219,8 @@
   display: block;
   width: 14px;
   height: 14px;
-  border-right: 2.5px solid #ff2e2e;
-  border-bottom: 2.5px solid #ff2e2e;
+  border-right: 2.5px solid var(--color-red);
+  border-bottom: 2.5px solid var(--color-red);
   border-radius: 1px;
   opacity: 0;
   animation: chevronCascade 1.5s ease-in-out infinite;
@@ -249,7 +249,7 @@
 }
 
 .hero__dot--active {
-  background: #ff2e2e;
+  background: var(--color-red);
   border-color: #fff;
   transform: scale(1.3);
 }
@@ -258,236 +258,66 @@
    RESPONSIVE BREAKPOINTS
    ═══════════════════════════════════════════ */
 
-/* ── LARGE DESKTOP (≥ 1440px) ── */
 @media (min-width: 1440px) {
-  .hero__container {
-    padding: 0 80px 80px 80px;
-  }
-
-  .hero__title {
-    font-size: 68px;
-  }
-
-  .hero__left {
-    max-width: 620px;
-  }
-
-  .btn {
-    font-size: 16px;
-    padding: 16px 36px;
-  }
+  .hero__container { padding: 0 80px 80px 80px; }
+  .hero__title { font-size: 68px; }
+  .hero__left { max-width: 620px; }
+  .btn { font-size: 16px; padding: 16px 36px; }
 }
 
-/* ── TABLET (769px – 1024px) ── */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .hero__container {
-    padding: 0 40px 80px 40px;
-  }
-
-  .hero__title {
-    font-size: 44px;
-  }
-
-  .hero__left {
-    max-width: 460px;
-  }
-
-  .hero__bottom {
-    bottom: 28px;
-  }
+  .hero__container { padding: 0 40px 80px 40px; }
+  .hero__title { font-size: 44px; }
+  .hero__left { max-width: 460px; }
+  .hero__bottom { bottom: 28px; }
 }
 
-/* ── LARGE MOBILE / SMALL TABLET (481px – 768px) ── */
 @media (min-width: 481px) and (max-width: 768px) {
-  .hero {
-    width: 100%;
-    margin-left: 0;
-    height: 260px;
-    min-height: 0;
-  }
-
-  .hero__container {
-    padding: 0 24px 60px 24px;
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-  .hero__left {
-    max-width: 100%;
-  }
-
-  .hero__eyebrow {
-    font-size: 10px;
-  }
-
-  .hero__title {
-    font-size: 28px;
-    margin-bottom: 16px;
-  }
-
-  .btn {
-    font-size: 13px;
-    padding: 11px 22px;
-  }
-
-  /* ✅ FIX: Hide only the label & line — keep chevrons visible */
-  .hero__scroll-label,
-  .hero__scroll-line {
-    display: none;
-  }
-
-  .hero__scroll-chevrons span {
-    width: 12px;
-    height: 12px;
-  }
-
-  .hero__bottom {
-    bottom: 16px;
-    gap: 10px;
-  }
+  .hero { width: 100%; margin-left: 0; height: 260px; min-height: 0; }
+  .hero__container { padding: 0 24px 60px 24px; align-items: center; justify-content: flex-start; }
+  .hero__left { max-width: 100%; }
+  .hero__eyebrow { font-size: 10px; }
+  .hero__title { font-size: 28px; margin-bottom: 16px; }
+  .btn { font-size: 13px; padding: 11px 22px; }
+  .hero__scroll-label, .hero__scroll-line { display: none; }
+  .hero__scroll-chevrons span { width: 12px; height: 12px; }
+  .hero__bottom { bottom: 16px; gap: 10px; }
 }
 
-/* ── SMALL MOBILE (≤ 480px) ── */
 @media (max-width: 480px) {
-  .hero {
-    width: 100%;
-    margin-left: 0;
-    height: 240px;
-    min-height: 0;
-  }
-
-  .hero__container {
-    padding: 0 20px 56px 20px;
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-  .hero__left {
-    max-width: 100%;
-  }
-
-  .hero__eyebrow {
-    font-size: 9px;
-    margin-bottom: 8px;
-  }
-
-  .hero__title {
-    font-size: 24px;
-    margin-bottom: 14px;
-    line-height: 1.15;
-  }
-
-  .hero__actions {
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    font-size: 12px;
-    padding: 10px 20px;
-  }
-
-  /* ✅ FIX: Hide only the label & line — keep chevrons visible */
-  .hero__scroll-label,
-  .hero__scroll-line {
-    display: none;
-  }
-
-  .hero__scroll-chevrons span {
-    width: 11px;
-    height: 11px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-  }
-
-  .hero__bottom {
-    bottom: 14px;
-    gap: 8px;
-  }
-
-  .hero__dot {
-    width: 8px;
-    height: 8px;
-  }
+  .hero { width: 100%; margin-left: 0; height: 240px; min-height: 0; }
+  .hero__container { padding: 0 20px 56px 20px; align-items: center; justify-content: flex-start; }
+  .hero__left { max-width: 100%; }
+  .hero__eyebrow { font-size: 9px; margin-bottom: 8px; }
+  .hero__title { font-size: 24px; margin-bottom: 14px; line-height: 1.15; }
+  .hero__actions { flex-wrap: wrap; }
+  .btn { font-size: 12px; padding: 10px 20px; }
+  .hero__scroll-label, .hero__scroll-line { display: none; }
+  .hero__scroll-chevrons span { width: 11px; height: 11px; border-right-width: 2px; border-bottom-width: 2px; }
+  .hero__bottom { bottom: 14px; gap: 8px; }
+  .hero__dot { width: 8px; height: 8px; }
 }
 
-/* ── VERY SMALL MOBILE (≤ 360px) ── */
 @media (max-width: 360px) {
-  .hero {
-    height: 220px;
-  }
-
-  .hero__title {
-    font-size: 21px;
-  }
-
-  .hero__eyebrow {
-    font-size: 8px;
-  }
-
-  .btn {
-    font-size: 11px;
-    padding: 9px 16px;
-  }
-
-  /* ✅ FIX: Keep chevrons, hide only verbose elements */
-  .hero__scroll-label,
-  .hero__scroll-line {
-    display: none;
-  }
-
-  .hero__scroll-chevrons span {
-    width: 10px;
-    height: 10px;
-  }
+  .hero { height: 220px; }
+  .hero__title { font-size: 21px; }
+  .hero__eyebrow { font-size: 8px; }
+  .btn { font-size: 11px; padding: 9px 16px; }
+  .hero__scroll-label, .hero__scroll-line { display: none; }
+  .hero__scroll-chevrons span { width: 10px; height: 10px; }
 }
 
-/* ── LANDSCAPE PHONE ── */
 @media (max-height: 500px) and (orientation: landscape) {
-  .hero {
-    width: 100%;
-    margin-left: 0;
-    height: 100svh;
-    min-height: 0;
-  }
-
-  .hero__container {
-    padding: 0 32px 60px 32px;
-    align-items: center;
-  }
-
-  .hero__title {
-    font-size: 28px;
-    margin-bottom: 14px;
-  }
-
-  .hero__eyebrow {
-    font-size: 9px;
-    margin-bottom: 8px;
-  }
-
-  .btn {
-    font-size: 13px;
-    padding: 10px 20px;
-  }
-
-  /* ✅ FIX: Keep chevrons, hide only verbose elements */
-  .hero__scroll-label,
-  .hero__scroll-line {
-    display: none;
-  }
-
-  .hero__scroll-chevrons span {
-    width: 11px;
-    height: 11px;
-  }
-
-  .hero__bottom {
-    bottom: 14px;
-    gap: 8px;
-  }
+  .hero { width: 100%; margin-left: 0; height: 100svh; min-height: 0; }
+  .hero__container { padding: 0 32px 60px 32px; align-items: center; }
+  .hero__title { font-size: 28px; margin-bottom: 14px; }
+  .hero__eyebrow { font-size: 9px; margin-bottom: 8px; }
+  .btn { font-size: 13px; padding: 10px 20px; }
+  .hero__scroll-label, .hero__scroll-line { display: none; }
+  .hero__scroll-chevrons span { width: 11px; height: 11px; }
+  .hero__bottom { bottom: 14px; gap: 8px; }
 }
 
-/* ❌ REMOVE SCROLL TEXT + VERTICAL LINE COMPLETELY */
 .hero__scroll-label,
 .hero__scroll-line,
 .hero__scroll-thumb {

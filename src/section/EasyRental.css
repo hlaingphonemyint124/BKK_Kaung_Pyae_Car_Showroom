@@ -4,14 +4,14 @@
 width:100%;
 padding:60px 16px;
 text-align:center;
-background:#f3f3f3;
-font-family:"Inter",sans-serif;
+background: var(--bg-page);
+font-family: var(--font);
 }
 
 /* DARK MODE */
 
 body.dark .easyRentalSection{
-background:linear-gradient(180deg,#0b0b0b,#3b0000);
+background:linear-gradient(180deg, var(--bg-page), #3b0000);
 }
 
 /* HEADER */
@@ -20,37 +20,32 @@ background:linear-gradient(180deg,#0b0b0b,#3b0000);
 font-size:26px;
 font-weight:700;
 margin-bottom:6px;
-color:#222;
+color: var(--text-primary);
 }
 
 .easyRentalHeader p{
 font-size:14px;
-color:#777;
+color: var(--text-muted);
 margin-bottom:28px;
 }
 
-body.dark .easyRentalHeader h2{
-color:white;
-}
-
-body.dark .easyRentalHeader p{
-color:#bbb;
-}
+body.dark .easyRentalHeader h2{ color: var(--text-primary); }
+body.dark .easyRentalHeader p{ color: var(--text-muted); }
 
 /* CARD */
 
 .easyCard{
-background:white;
+background: var(--bg-surface);
 max-width:520px;
 margin:auto;
-border-radius:14px;
+border-radius: var(--radius-md);
 padding:24px;
-box-shadow:0 6px 18px rgba(0,0,0,0.12);
+box-shadow: var(--shadow-md);
 }
 
 body.dark .easyCard{
-background:#0d0d0d;
-box-shadow:0 12px 40px rgba(0,0,0,0.7);
+background: var(--bg-surface);
+box-shadow: var(--shadow-lg);
 }
 
 /* STEP ROW */
@@ -73,13 +68,13 @@ gap:10px;
 width:60px;
 height:52px;
 border-radius:10px;
-background:#eee;
+background: var(--bg-surface-2);
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
 font-size:12px;
-color:#555;
+color: var(--text-muted);
 }
 
 .stepBox strong{
@@ -87,14 +82,14 @@ font-size:16px;
 }
 
 .stepBox.active{
-background:#ff3b3b;
+background: var(--color-red);
 color:white;
 }
 
 /* RENTAL BUTTON */
 
 .rentalBtn{
-background:#ff3b3b;
+background: var(--color-red);
 border:none;
 color:white;
 padding:10px 18px;
@@ -102,7 +97,7 @@ border-radius:999px;
 font-size:14px;
 font-weight:500;
 cursor:pointer;
-box-shadow:0 6px 14px rgba(255,59,59,0.45);
+box-shadow: var(--shadow-red);
 transition:0.2s;
 }
 
@@ -114,12 +109,8 @@ transform:translateY(-2px);
 
 .divider{
 height:1px;
-background:#eee;
+background: var(--border);
 margin-bottom:18px;
-}
-
-body.dark .divider{
-background:#222;
 }
 
 /* LOGIN AREA */
@@ -128,54 +119,39 @@ background:#222;
 font-size:16px;
 font-weight:600;
 margin-bottom:6px;
-color:#222;
-}
-
-body.dark .loginArea h4{
-color:white;
+color: var(--text-primary);
 }
 
 .loginArea p{
 font-size:13px;
-color:#777;
+color: var(--text-muted);
 margin-bottom:16px;
-}
-
-body.dark .loginArea p{
-color:#bbb;
 }
 
 /* SIGNUP BUTTON */
 
 .signupBtn{
-background:white;
-border:1.5px solid #ccc;
+background: var(--bg-surface);
+border: 1.5px solid var(--border);
 padding:10px 22px;
 border-radius:999px;
 font-size:13px;
 cursor:pointer;
 transition:0.2s;
+color: var(--text-primary);
 }
 
 .signupBtn:hover{
-border-color:#ff3b3b;
-color:#ff3b3b;
-}
-
-body.dark .signupBtn{
-background:#fff;
+border-color: var(--color-red);
+color: var(--color-red);
 }
 
 /* LOGIN HINT */
 
 .loginHint{
 font-size:12px;
-color:#777;
+color: var(--text-muted);
 margin-top:10px;
-}
-
-body.dark .loginHint{
-color:#aaa;
 }
 
 /* NEXT STEP */
@@ -183,7 +159,7 @@ color:#aaa;
 .nextStep{
 margin-top:12px;
 font-size:13px;
-color:#ff3b3b;
+color: var(--color-red);
 cursor:pointer;
 }
 
@@ -192,11 +168,7 @@ cursor:pointer;
 .easyFooter{
 margin-top:16px;
 font-size:12px;
-color:#777;
-}
-
-body.dark .easyFooter{
-color:#bbb;
+color: var(--text-muted);
 }
 
 /* MOBILE */

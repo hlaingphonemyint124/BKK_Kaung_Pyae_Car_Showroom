@@ -1,4 +1,5 @@
 import {
+  Car,
   Fuel,
   Settings2,
   Palette,
@@ -7,8 +8,25 @@ import {
   Users,
 } from "lucide-react";
 
-// Values match DB CHECK constraints (migration 012)
+// Values match DB CHECK constraints (migration 012 + 015)
 const SPEC_ITEMS = [
+  {
+    key: "type",
+    label: "Type",
+    icon: Car,
+    color: "#e60000",
+    type: "select",
+    options: [
+      { value: "Sedan",        label: "Sedan"        },
+      { value: "Hatchback",    label: "Hatchback"    },
+      { value: "SUV",          label: "SUV"          },
+      { value: "Pickup Truck", label: "Pickup Truck" },
+      { value: "Van / Minivan",label: "Van / Minivan"},
+      { value: "Electric",     label: "Electric"     },
+      { value: "Coupe",        label: "Coupe"        },
+      { value: "Convertible",  label: "Convertible"  },
+    ],
+  },
   {
     key: "fuel",
     label: "Fuel",

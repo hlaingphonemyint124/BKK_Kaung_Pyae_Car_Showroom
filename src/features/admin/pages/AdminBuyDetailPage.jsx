@@ -29,6 +29,7 @@ const EMPTY_FORM = {
   price: "",
   media: [],
   specs: {
+    type: "",
     fuel: "",
     transmission: "",
     color: "",
@@ -42,7 +43,7 @@ const EMPTY_FORM = {
     vin: "",
     currencyCode: "THB",
     status: "available",
-    isPublished: false,
+    isPublished: true,
   },
   documentLines: DEFAULT_DOCUMENT_LINES,
 };
@@ -68,6 +69,15 @@ function AdminBuyDetailPage() {
         { value: "reserved",    label: "Reserved"    },
         { value: "sold",        label: "Sold"        },
         { value: "maintenance", label: "Maintenance" },
+      ],
+    },
+    {
+      key: "isPublished",
+      label: "Published",
+      type: "select",
+      options: [
+        { value: "true",  label: "Yes — Visible in Shop" },
+        { value: "false", label: "No — Hidden"           },
       ],
     },
   ];
@@ -125,6 +135,7 @@ function AdminBuyDetailPage() {
           price: car.sale_price ?? "",
           media,
           specs: {
+            type:         car.type         || "",
             // migration 012: columns are fuel / drive (not fuel_type / drive_type)
             fuel:         car.fuel         || car.fuel_type  || "",
             transmission: car.transmission || "",
@@ -162,7 +173,13 @@ function AdminBuyDetailPage() {
     setForm((prev) => ({ ...prev, specs: { ...prev.specs, [key]: value } }));
 
   const updateInfo = (key, value) =>
-    setForm((prev) => ({ ...prev, info: { ...prev.info, [key]: value } }));
+    setForm((prev) => ({
+      ...prev,
+      info: {
+        ...prev.info,
+        [key]: key === "isPublished" ? value === "true" || value === true : value,
+      },
+    }));
 
   const handleDocumentChange = (index, updatedLine) =>
     setForm((prev) => {
@@ -206,30 +223,33 @@ function AdminBuyDetailPage() {
       alert("Use format: Toyota Corolla");
       return;
     }
+    if (isCreateMode && !form.info.year) {
+      alert("Please enter the car year.");
+      return;
+    }
     const imageCount = form.media.filter((item) => item.type === "image").length;
     if (imageCount === 0) {
       alert("Please add at least one image.");
       return;
     }
 
-    // Build payload — specs included (migration 012 columns)
+    // Build payload — omit undefined fields so Zod .optional() is satisfied
     const payload = {
       brand,
       model,
-      year:         form.info.year    ? Number(form.info.year)    : null,
-      mileage_km:   form.info.mileage ? Number(form.info.mileage) : 0,
-      sale_price:   form.price        ? Number(form.price)        : 0,
+      ...(form.info.year    ? { year:       Number(form.info.year)    } : {}),
+      ...(form.info.mileage ? { mileage_km: Number(form.info.mileage) } : {}),
+      ...(form.price        ? { sale_price: Number(form.price)        } : {}),
       currency_code: form.info.currencyCode,
-      status:       form.info.status,
-      is_published: form.info.isPublished,
-      vin:          form.info.vin || undefined,
-      // Specs (migration 012)
-      fuel:         form.specs.fuel         || null,
-      transmission: form.specs.transmission || null,
-      color:        form.specs.color        || null,
-      engine:       form.specs.engine       || null,
-      drive:        form.specs.drive        || null,
-      seats:        form.specs.seats        ? Number(form.specs.seats) : null,
+      status:        form.info.status,
+      is_published:  form.info.isPublished,
+      ...(form.info.vin          ? { vin:          form.info.vin }               : {}),
+      ...(form.specs.fuel        ? { fuel:         form.specs.fuel }              : {}),
+      ...(form.specs.transmission? { transmission: form.specs.transmission }      : {}),
+      ...(form.specs.color       ? { color:        form.specs.color }             : {}),
+      ...(form.specs.engine      ? { engine:       form.specs.engine }            : {}),
+      ...(form.specs.drive       ? { drive:        form.specs.drive }             : {}),
+      ...(form.specs.seats       ? { seats:        Number(form.specs.seats) }     : {}),
     };
 
     try {

@@ -1,12 +1,11 @@
 /* =====================================================
    CarTypes — scoped with ct- prefix
-   Pixel-matched to BrandList layout
    ===================================================== */
 
 /* ---- Section ---- */
 .ct-section {
   padding: 16px;
-  background: #f5f5f5;
+  background: var(--bg-page);
   transition: background 0.3s;
   position: relative;
 }
@@ -23,12 +22,12 @@
   font-size: 16px;
   font-weight: 700;
   margin: 0;
-  color: #111111;
+  color: var(--text-primary);
 }
 
 .ct-viewall {
   font-size: 12px;
-  color: #e53e3e;
+  color: var(--color-red);
   cursor: pointer;
   font-weight: 500;
   background: none;
@@ -38,7 +37,7 @@
 }
 .ct-viewall:hover { opacity: 0.75; }
 
-/* ---- Wrapper: arrow + scroll row (identical to bl-wrapper) ---- */
+/* ---- Wrapper ---- */
 .ct-wrapper {
   position: relative;
   display: flex;
@@ -46,7 +45,7 @@
   gap: 8px;
 }
 
-/* ---- Scrollable single row (identical to bl-row) ---- */
+/* ---- Scrollable single row ---- */
 .ct-row {
   display: flex;
   flex-direction: row;
@@ -61,7 +60,7 @@
 .ct-row::-webkit-scrollbar { display: none; }
 
 /* ══════════════════════════════════════════════════════
-   NAV ARROWS — EXACT MATCH WITH BRANDLIST
+   NAV ARROWS
 ══════════════════════════════════════════════════════ */
 .ct-arrow {
   flex-shrink: 0;
@@ -73,14 +72,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #e8281e;
+  color: var(--color-red);
   z-index: 10;
   margin: 0 6px;
   position: relative;
   background: rgba(255, 255, 255, 0.82);
   box-shadow:
-    0 0 0 1.5px rgba(232, 40, 30, 0.40),
-    0 0 18px 2px rgba(232, 40, 30, 0.18),
+    0 0 0 1.5px rgba(var(--color-red-rgb), 0.40),
+    0 0 18px 2px rgba(var(--color-red-rgb), 0.18),
     0 4px 16px rgba(0, 0, 0, 0.10);
   transition: box-shadow 0.25s, background 0.25s;
 }
@@ -90,20 +89,20 @@
   height: 16px;
   position: relative;
   z-index: 2;
-  filter: drop-shadow(0 0 4px rgba(232, 40, 30, 0.55));
+  filter: drop-shadow(0 0 4px rgba(var(--color-red-rgb), 0.55));
   transition: filter 0.2s, transform 0.2s;
 }
 
 .ct-arrow:hover {
   background: rgba(255, 255, 255, 0.97);
   box-shadow:
-    0 0 0 1.5px rgba(232, 40, 30, 0.70),
-    0 0 30px 6px rgba(232, 40, 30, 0.30),
+    0 0 0 1.5px rgba(var(--color-red-rgb), 0.70),
+    0 0 30px 6px rgba(var(--color-red-rgb), 0.30),
     0 6px 20px rgba(0, 0, 0, 0.14);
 }
 
 .ct-arrow:hover svg {
-  filter: drop-shadow(0 0 9px rgba(232, 40, 30, 1));
+  filter: drop-shadow(0 0 9px rgba(var(--color-red-rgb), 1));
 }
 
 .ct-arrow--prev:hover svg { transform: translateX(-2px); }
@@ -113,17 +112,17 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(232, 40, 30, 0.18) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.18) 0%, transparent 70%);
 }
 .ct-arrow:hover .ct-nav-glow {
-  background: radial-gradient(circle, rgba(232, 40, 30, 0.35) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.35) 0%, transparent 70%);
 }
 
 .ct-nav-ring {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  border: 1.5px solid rgba(232, 40, 30, 0.35);
+  border: 1.5px solid rgba(var(--color-red-rgb), 0.35);
   animation: ct-nav-pulse 2.6s ease-in-out infinite;
 }
 
@@ -132,13 +131,13 @@
   50%     { opacity: 0.85; transform: scale(1.14); }
 }
 
-/* ---- Card (identical dimensions to bl-card) ---- */
+/* ---- Card ---- */
 .ct-card {
   flex-shrink: 0;
   width: 80px;
   height: 86px;
-  background: #ffffff;
-  border-radius: 12px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
   padding: 10px 4px 8px;
   display: flex;
   flex-direction: column;
@@ -146,7 +145,7 @@
   justify-content: center;
   gap: 5px;
   border: 2px solid transparent;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -167,23 +166,21 @@
   to   { opacity: 1; transform: scale(1)    translateY(0);   }
 }
 
-/* red glow on hover */
 .ct-card:hover {
-  border-color: #e53e3e;
+  border-color: var(--color-red);
   box-shadow:
-    0 8px 24px rgba(229, 62, 62, 0.35),
-    0 0 0 1px rgba(229, 62, 62, 0.2),
-    inset 0 0 18px rgba(229, 62, 62, 0.06);
+    0 8px 24px rgba(var(--color-red-rgb), 0.35),
+    0 0 0 1px rgba(var(--color-red-rgb), 0.2),
+    inset 0 0 18px rgba(var(--color-red-rgb), 0.06);
 }
 
 .ct-card:active { transform: scale(0.95) !important; }
 
 .ct-card:focus-visible {
-  border-color: #e53e3e;
-  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.35);
+  border-color: var(--color-red);
+  box-shadow: 0 0 0 3px rgba(var(--color-red-rgb), 0.35);
 }
 
-/* mouse-tracked spotlight sheen */
 .ct-card::before {
   content: '';
   position: absolute;
@@ -191,7 +188,7 @@
   border-radius: 10px;
   background: radial-gradient(
     circle at var(--mx, 50%) var(--my, 50%),
-    rgba(229, 62, 62, 0.12) 0%,
+    rgba(var(--color-red-rgb), 0.12) 0%,
     transparent 60%
   );
   opacity: 0;
@@ -200,16 +197,16 @@
 }
 .ct-card:hover::before { opacity: 1; }
 
-/* ---- Icon (sized to fit 80px card like bl-logo) ---- */
+/* ---- Icon ---- */
 .ct-icon {
   font-size: 20px;
-  color: #e53e3e;
+  color: var(--color-red);
   display: flex;
   align-items: center;
   justify-content: center;
   width: 34px;
   height: 34px;
-  background: #f5f5f5;
+  background: var(--bg-surface-2);
   border-radius: 9px;
   flex-shrink: 0;
   transition: background 0.2s ease, color 0.2s ease;
@@ -223,16 +220,16 @@
   100% { transform: translateY(0); }
 }
 .ct-card:hover .ct-icon {
-  background: #e53e3e;
+  background: var(--color-red);
   color: #ffffff;
   animation: ctIconBounce 0.5s ease both;
 }
 
-/* ---- Label (identical to bl-label) ---- */
+/* ---- Label ---- */
 .ct-label {
   font-size: 10px;
   font-weight: 700;
-  color: #111111;
+  color: var(--text-primary);
   margin: 0;
   white-space: normal;
   word-break: break-word;
@@ -243,7 +240,7 @@
   flex-shrink: 0;
   transition: color 0.2s ease, transform 0.15s ease;
 }
-.ct-card:hover .ct-label { color: #e53e3e; transform: translateY(-1px); }
+.ct-card:hover .ct-label { color: var(--color-red); transform: translateY(-1px); }
 
 /* ---- Ripple ---- */
 @keyframes ctRipple {
@@ -253,7 +250,7 @@
 .ct-ripple {
   position: absolute;
   border-radius: 50%;
-  background: rgba(229, 62, 62, 0.25);
+  background: rgba(var(--color-red-rgb), 0.25);
   pointer-events: none;
   animation: ctRipple 0.55s ease-out forwards;
 }
@@ -266,7 +263,7 @@
 .ct-particle {
   position: absolute;
   border-radius: 50%;
-  background: #e53e3e;
+  background: var(--color-red);
   pointer-events: none;
   opacity: 0;
 }
@@ -274,14 +271,14 @@
 /* ---- Note ---- */
 .ct-note {
   font-size: 11px;
-  color: #888888;
+  color: var(--text-muted);
   margin: 12px 0 8px;
   text-align: center;
 }
 
 /* ---- Shop button ---- */
 .ct-shopBtn {
-  background: #e53e3e;
+  background: var(--color-red);
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -291,13 +288,13 @@
   cursor: pointer;
   width: 100%;
   letter-spacing: 0.3px;
-  box-shadow: 0 4px 14px rgba(229, 62, 62, 0.35);
+  box-shadow: var(--shadow-red);
   transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
 }
 .ct-shopBtn:hover {
   opacity: 0.92;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(229, 62, 62, 0.45);
+  box-shadow: 0 6px 20px rgba(var(--color-red-rgb), 0.45);
 }
 .ct-shopBtn:active {
   opacity: 0.85;
@@ -307,48 +304,47 @@
 /* =====================================================
    DARK MODE
    ===================================================== */
-body.dark .ct-section  { background: #000000 !important; }
-body.dark .ct-title    { color: #ffffff !important; }
+body.dark .ct-section  { background: var(--bg-page) !important; }
+body.dark .ct-title    { color: var(--text-primary) !important; }
 
 body.dark .ct-arrow {
   background: rgba(12, 4, 4, 0.82) !important;
   box-shadow:
-    0 0 0 1.5px rgba(255, 51, 51, 0.45),
-    0 0 20px 3px rgba(255, 51, 51, 0.22),
+    0 0 0 1.5px rgba(var(--color-red-rgb), 0.45),
+    0 0 20px 3px rgba(var(--color-red-rgb), 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
-  color: #ff3333 !important;
+  color: var(--color-red) !important;
 }
 
 body.dark .ct-arrow:hover {
   background: rgba(18, 5, 5, 0.95) !important;
   box-shadow:
-    0 0 0 1.5px rgba(255, 51, 51, 0.80),
-    0 0 32px 8px rgba(255, 51, 51, 0.36),
+    0 0 0 1.5px rgba(var(--color-red-rgb), 0.80),
+    0 0 32px 8px rgba(var(--color-red-rgb), 0.36),
     inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
 }
 
 body.dark .ct-nav-ring {
-  border-color: rgba(255, 51, 51, 0.35);
+  border-color: rgba(var(--color-red-rgb), 0.35);
 }
 
-/* Card — dark mode (identical to bl-card dark) */
 body.dark .ct-card {
-  background:   #1c1c1c !important;
+  background: var(--bg-surface-2) !important;
   border-color: transparent !important;
-  box-shadow:   0 1px 4px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 body.dark .ct-card:hover {
-  border-color: #e53e3e !important;
+  border-color: var(--color-red) !important;
   box-shadow:
-    0 8px 24px rgba(229, 62, 62, 0.35),
-    0 0 0 1px rgba(229, 62, 62, 0.2),
-    inset 0 0 18px rgba(229, 62, 62, 0.06) !important;
+    0 8px 24px rgba(var(--color-red-rgb), 0.35),
+    0 0 0 1px rgba(var(--color-red-rgb), 0.2),
+    inset 0 0 18px rgba(var(--color-red-rgb), 0.06) !important;
 }
 
-body.dark .ct-icon                 { background: #2a2a2a !important; color: #e53e3e !important; }
-body.dark .ct-card:hover .ct-icon  { background: #e53e3e !important; color: #ffffff !important; }
+body.dark .ct-icon                 { background: #2a2a2a !important; color: var(--color-red) !important; }
+body.dark .ct-card:hover .ct-icon  { background: var(--color-red) !important; color: #ffffff !important; }
 
-body.dark .ct-label                { color: #ffffff !important; }
+body.dark .ct-label                { color: var(--text-primary) !important; }
 body.dark .ct-card:hover .ct-label { color: #ff6b6b !important; }
 
-body.dark .ct-note { color: #666666 !important; }
+body.dark .ct-note { color: var(--text-muted) !important; }

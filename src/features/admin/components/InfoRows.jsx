@@ -7,7 +7,7 @@ function InfoRows({ fields, values, onChange }) {
           {field.type === "select" ? (
             <select
               className="admin-detail-input"
-              value={values[field.key] || ""}
+              value={String(values[field.key] ?? "")}
               onChange={(e) => onChange(field.key, e.target.value)}
             >
               {field.options.map((opt) => (

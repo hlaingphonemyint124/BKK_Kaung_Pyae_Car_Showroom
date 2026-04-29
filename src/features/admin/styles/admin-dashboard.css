@@ -252,7 +252,7 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  background: linear-gradient(90deg, #ff2a2a, #d11212 55%, #970909);
+  background: linear-gradient(90deg, var(--color-red), var(--color-red-hover) 55%, #970909);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -309,7 +309,7 @@
 
 .dash-add-btn {
   width: 100%;
-  background: linear-gradient(90deg, #ff2a2a, #d11212 55%, #970909);
+  background: linear-gradient(90deg, var(--color-red), var(--color-red-hover) 55%, #970909);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -402,7 +402,7 @@
 }
 
 .dash-admin-badge {
-  background: linear-gradient(135deg, #ff2a2a, #c70000);
+  background: linear-gradient(135deg, var(--color-red), var(--color-red-hover));
   color: #fff;
   font-size: 10px;
   font-weight: 700;
@@ -571,7 +571,7 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  background: linear-gradient(90deg, #ff2a2a, #d11212 55%, #970909);
+  background: linear-gradient(90deg, var(--color-red), var(--color-red-hover) 55%, #970909);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -775,7 +775,7 @@
 .roles-modal__submit {
   width: 100%;
   padding: 13px;
-  background: linear-gradient(90deg, #ff2a2a, #d11212 55%, #970909);
+  background: linear-gradient(90deg, var(--color-red), var(--color-red-hover) 55%, #970909);
   color: #fff;
   border: none;
   border-radius: 12px;

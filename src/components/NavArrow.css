@@ -1,0 +1,123 @@
+/* ══════════════════════════════════════════════════════
+   Shared NavArrow — used by BrandList, CarTypes, Deals
+   Base size: 38px. Deals overrides to 48px via .deals .nav-arrow
+══════════════════════════════════════════════════════ */
+
+.nav-arrow {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-red);
+  z-index: 10;
+  margin: 0 6px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow:
+    0 0 0 1.5px rgba(var(--color-red-rgb), 0.40),
+    0 0 18px 2px rgba(var(--color-red-rgb), 0.18),
+    0 4px 16px rgba(0, 0, 0, 0.10);
+  transition: box-shadow 0.25s, background 0.25s;
+}
+
+.nav-arrow svg {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 4px rgba(var(--color-red-rgb), 0.55));
+  transition: filter 0.2s, transform 0.2s;
+}
+
+.nav-arrow:hover {
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow:
+    0 0 0 1.5px rgba(var(--color-red-rgb), 0.70),
+    0 0 30px 6px rgba(var(--color-red-rgb), 0.30),
+    0 6px 20px rgba(0, 0, 0, 0.14);
+}
+
+.nav-arrow:hover svg {
+  filter: drop-shadow(0 0 9px rgba(var(--color-red-rgb), 1.0));
+}
+
+.nav-arrow--prev:hover svg { transform: translateX(-2px); }
+.nav-arrow--next:hover svg { transform: translateX(2px); }
+
+/* Radial glow layer */
+.nav-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.18) 0%, transparent 70%);
+  pointer-events: none;
+  transition: background 0.25s;
+}
+
+.nav-arrow:hover .nav-glow {
+  background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.35) 0%, transparent 70%);
+}
+
+/* Pulsing outer ring */
+.nav-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(var(--color-red-rgb), 0.35);
+  animation: nav-arrow-pulse 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes nav-arrow-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50%       { opacity: 0.85; transform: scale(1.14); }
+}
+
+/* Dark mode */
+body.dark .nav-arrow {
+  background: rgba(12, 4, 4, 0.82);
+  box-shadow:
+    0 0 0 1.5px rgba(var(--color-red-rgb), 0.45),
+    0 0 20px 3px rgba(var(--color-red-rgb), 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+body.dark .nav-arrow:hover {
+  background: rgba(18, 5, 5, 0.95);
+  box-shadow:
+    0 0 0 1.5px rgba(var(--color-red-rgb), 0.80),
+    0 0 32px 8px rgba(var(--color-red-rgb), 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+body.dark .nav-ring {
+  border-color: rgba(var(--color-red-rgb), 0.35);
+}
+
+/* Deals overrides — larger arrows */
+.deals .nav-arrow {
+  width: 48px;
+  height: 48px;
+  margin: 0 10px;
+}
+
+.deals .nav-arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 768px) {
+  .deals .nav-arrow { width: 40px; height: 40px; margin: 0 6px; }
+  .deals .nav-arrow svg { width: 17px; height: 17px; }
+}
+
+@media (max-width: 480px) {
+  .deals .nav-arrow { width: 36px; height: 36px; margin: 0 4px; }
+  .deals .nav-arrow svg { width: 15px; height: 15px; }
+}

@@ -1,30 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./Showroom.css";
 
 import { getCarsForSale, getCarsForRent } from "../api/showroom.api";
+import { useAuth } from "../context/AuthContext";
 
-// ─── Fallback static cars (shown if API fails) ────────────────────────────────
-const FALLBACK_BUY = [
-  { id: 1, brand: "BYD",    model: "Atto 3",   images: [], img: "/images/ShopCar/bydAtto3.png",        fuel_type: "EV",     transmission: "Auto",   sale_price: 999999,  currency_code: "THB", type: "Electric"     },
-  { id: 2, brand: "Toyota", model: "Fortuner", images: [], img: "/images/ShopCar/toyotaFortuner.webp", fuel_type: "Diesel", transmission: "Manual", sale_price: 999999,  currency_code: "THB", type: "SUV"          },
-  { id: 3, brand: "Isuzu",  model: "D-Max",    images: [], img: "/images/ShopCar/isuzuDmax.webp",      fuel_type: "Diesel", transmission: "Manual", sale_price: 999999,  currency_code: "THB", type: "Pickup Truck" },
-  { id: 4, brand: "Toyota", model: "Yaris",    images: [], img: "/images/ShopCar/toyotaYaris.webp",    fuel_type: "Petrol", transmission: "Auto",   sale_price: 999999,  currency_code: "THB", type: "Hatchback"    },
-];
-
-const FALLBACK_RENT = [
-  { id: 5, brand: "BYD",    model: "Atto 3",      images: [], img: "/images/ShopCar/bydAtto3.png",        fuel_type: "EV",     transmission: "Auto",   rent_price_per_day: 728,  currency_code: "THB", type: "Electric"     },
-  { id: 6, brand: "Honda",  model: "Civic Type R", images: [], img: "/images/ShopCar/hondaCivicFl5.webp", fuel_type: "Petrol", transmission: "Manual", rent_price_per_day: 1100, currency_code: "THB", type: "Sedan"        },
-  { id: 7, brand: "Isuzu",  model: "D-Max",        images: [], img: "/images/ShopCar/isuzuDmax.webp",      fuel_type: "Diesel", transmission: "Manual", rent_price_per_day: 890,  currency_code: "THB", type: "Pickup Truck" },
-  { id: 8, brand: "Toyota", model: "Yaris",        images: [], img: "/images/ShopCar/toyotaYaris.webp",    fuel_type: "Petrol", transmission: "Auto",   rent_price_per_day: 900,  currency_code: "THB", type: "Hatchback"    },
-];
 
 const CATEGORIES = ["All", "Sedan", "Hatchback", "SUV", "Pickup Truck", "Van / Minivan", "Electric"];
 
 export default function Showroom() {
-  const navigate = useNavigate();
+  const navigate    = useNavigate();
+  const [params]    = useSearchParams();
+  const { user }    = useAuth();
+  const isAdmin     = user?.role === "admin" || user?.role === "employee";
 
-  const [mode, setMode]                       = useState("buy");
+  const [mode, setMode] = useState(() => params.get("mode") === "rent" ? "rent" : "buy");
   const [filterOpen, setFilterOpen]           = useState(false);
   const [modeOpen, setModeOpen]               = useState(false);
   const [searchOpen, setSearchOpen]           = useState(false);
@@ -59,17 +49,13 @@ export default function Showroom() {
 
     apiFn()
       .then((res) => {
-        // ✅ FIXED: backend returns { cars: [...], total: n } not { data: [...] }
         const data = res.data.cars ?? [];
-        if (data.length > 0) {
-          setCars(data);
-        } else {
-          setCars(mode === "buy" ? FALLBACK_BUY : FALLBACK_RENT);
-        }
+        console.log("PUBLIC SHOWROOM CARS:", data);
+        setCars(data);
       })
       .catch(() => {
-        console.warn("Showroom API unavailable — using static fallback.");
-        setCars(mode === "buy" ? FALLBACK_BUY : FALLBACK_RENT);
+        console.warn("Showroom API unavailable.");
+        setCars([]);
       })
       .finally(() => setLoading(false));
   }, [mode]);
@@ -109,6 +95,18 @@ export default function Showroom() {
 
         <h2 className="title">Fast, Simple and Easy.</h2>
         <p className="subtitle">Shop Online. Pickup Today. It's Fast, Simple and Easy.</p>
+
+        {/* ── Admin: Add New Car ── */}
+        {isAdmin && (
+          <div className="showroom-admin-bar">
+            <button
+              className="showroom-add-btn"
+              onClick={() => navigate(mode === "buy" ? "/admin/buy/new" : "/admin/rental/new")}
+            >
+              + Add New Car
+            </button>
+          </div>
+        )}
 
         {/* ── Filter Bar ── */}
         <div className="filterBar">
@@ -198,6 +196,18 @@ export default function Showroom() {
                 onClick={() => navigate(`/car/${car.id}`)}
                 style={{ cursor: "pointer" }}
               >
+                {isAdmin && (
+                  <button
+                    className="showroom-edit-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(mode === "buy" ? `/admin/buy/${car.id}` : `/admin/rental/${car.id}`);
+                    }}
+                  >
+                    ✏ Edit
+                  </button>
+                )}
+
                 <div className={`tag ${mode === "buy" ? "sale" : "rent"}`}>
                   {mode === "buy" ? "Sale" : "Rent"}
                 </div>

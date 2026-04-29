@@ -1,17 +1,28 @@
 import { useRef, useState, useEffect } from "react";
 
+const MAX_PHOTOS = 20;
+
 function AdminMediaUploader({ media = [], onChange }) {
   const inputRef = useRef(null);
   const [previewItem, setPreviewItem] = useState(null);
 
   const handleFiles = (fileList) => {
     const files = Array.from(fileList || []);
-
     const validFiles = files.filter((file) => file.type.startsWith("image/"));
-
     if (validFiles.length === 0) return;
 
-    const newItems = validFiles.map((file) => ({
+    const remaining = MAX_PHOTOS - media.length;
+    if (remaining <= 0) {
+      alert(`Maximum ${MAX_PHOTOS} photos per car. Remove some before adding more.`);
+      return;
+    }
+
+    const allowed = validFiles.slice(0, remaining);
+    if (allowed.length < validFiles.length) {
+      alert(`Only ${allowed.length} photo(s) added — maximum is ${MAX_PHOTOS} per car.`);
+    }
+
+    const newItems = allowed.map((file) => ({
       id: `${file.name}-${Date.now()}-${Math.random()}`,
       type: "image",
       file,
@@ -123,13 +134,19 @@ function AdminMediaUploader({ media = [], onChange }) {
           </div>
         )}
 
-        <button
-          type="button"
-          className="admin-media-uploader__upload-btn"
-          onClick={() => inputRef.current?.click()}
-        >
-          Upload Images
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <button
+            type="button"
+            className="admin-media-uploader__upload-btn"
+            onClick={() => inputRef.current?.click()}
+            disabled={media.length >= MAX_PHOTOS}
+          >
+            Upload Images
+          </button>
+          <span style={{ fontSize: "11px", color: media.length >= MAX_PHOTOS ? "#ef2b2d" : "#888" }}>
+            {media.length}/{MAX_PHOTOS}
+          </span>
+        </div>
 
         <input
           ref={inputRef}

@@ -1,4 +1,4 @@
-import api from "../../../services/api";
+import api from "../../../api/api";
 
 export const getUsers = async (filters = {}) => {
   const res = await api.get("/admin/users", { params: filters });

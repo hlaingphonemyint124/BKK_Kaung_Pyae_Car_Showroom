@@ -20,7 +20,7 @@
   margin: 0 0 6px;
   font-size: 20px;
   font-weight: 800;
-  color: #ff2b2b;
+  color: var(--color-red);
 }
 
 .admin-hero-block__subtitle {
@@ -206,7 +206,7 @@
 }
 
 .admin-filter-panel__actions button:last-child {
-  background: linear-gradient(90deg, #ff2a2a, #d11212 55%, #970909);
+  background: linear-gradient(90deg, var(--color-red), var(--color-red-hover) 55%, #970909);
   color: #fff;
 }
 

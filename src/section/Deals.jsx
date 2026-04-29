@@ -5,34 +5,6 @@ import { motion } from "framer-motion";
 
 import { getBestSellers, getMostRented } from "../api/deals.api";
 
-// ─── Fallback static data ─────────────────────────────────────────────────────
-const FALLBACK_BEST_SELLER = [
-  { id: 1, name: "Nissan Juke",          price: "145,000", suffix: "THB",       image: "/images/BestDeals/bd1.png",
-    specs: { year: "2018", engine: "1.6L Turbo",      mileage: "62,000 km",  fuel: "Petrol", transmission: "Auto", color: "White"        }},
-  { id: 2, name: "Mazda 6",              price: "420,000", suffix: "THB",       image: "/images/BestDeals/bd2.png",
-    specs: { year: "2021", engine: "2.5L SKYACTIV",   mileage: "28,000 km",  fuel: "Petrol", transmission: "Auto", color: "Sonic Silver"  }},
-  { id: 3, name: "BMW e90",              price: "165,000", suffix: "THB",       image: "/images/BestDeals/bd3.png",
-    specs: { year: "2010", engine: "2.0L Twin Turbo", mileage: "110,000 km", fuel: "Petrol", transmission: "Auto", color: "Alpine White"  }},
-  { id: 4, name: "Mazda CX5",            price: "560,000", suffix: "THB",       image: "/images/BestDeals/bd4.png",
-    specs: { year: "2022", engine: "2.5L SKYACTIV",   mileage: "15,000 km",  fuel: "Petrol", transmission: "Auto", color: "Soul Red"      }},
-  { id: 5, name: "Mitsubishi Lancer EX", price: "125,000", suffix: "THB",       image: "/images/BestDeals/bd5.png",
-    specs: { year: "2012", engine: "2.0L MIVEC",      mileage: "95,000 km",  fuel: "Petrol", transmission: "CVT",  color: "Rally Red"     }},
-];
-
-const FALLBACK_MOST_RENTED = [
-  { id: 6,  name: "BMW 5 Series F90",   price: "5,500",  suffix: "THB / day", image: "/images/MostRented/mr1.png",
-    specs: { year: "2022", engine: "2.0L TwinPower",  mileage: "18,000 km", fuel: "Petrol", transmission: "Auto",      color: "Black Sapphire" }},
-  { id: 7,  name: "BMW 7 Series 750Li", price: "6,000",  suffix: "THB / day", image: "/images/MostRented/mr2.png",
-    specs: { year: "2021", engine: "4.4L V8 Turbo",   mileage: "22,000 km", fuel: "Petrol", transmission: "Auto",      color: "Carbon Black"   }},
-  { id: 8,  name: "Honda City",         price: "1,000",  suffix: "THB / day", image: "/images/MostRented/mr3.png",
-    specs: { year: "2023", engine: "1.0L VTEC Turbo", mileage: "8,000 km",  fuel: "Petrol", transmission: "CVT",       color: "Lunar Silver"   }},
-  { id: 9,  name: "Honda Accord G8",    price: "1,500",  suffix: "THB / day", image: "/images/MostRented/mr4.png",
-    specs: { year: "2020", engine: "1.5L VTEC Turbo", mileage: "35,000 km", fuel: "Petrol", transmission: "CVT",       color: "Platinum White" }},
-  { id: 10, name: "Mercedes E200",      price: "1,600",  suffix: "THB / day", image: "/images/MostRented/mr5.png",
-    specs: { year: "2021", engine: "2.0L EQ Boost",   mileage: "27,000 km", fuel: "Petrol", transmission: "9G-Tronic", color: "Polar White"    }},
-  { id: 11, name: "Mercedes S300",      price: "5,000",  suffix: "THB / day", image: "/images/MostRented/mr6.png",
-    specs: { year: "2022", engine: "3.0L Inline-6",   mileage: "12,000 km", fuel: "Petrol", transmission: "9G-Tronic", color: "Obsidian Black" }},
-];
 
 // ─── Map API car → card shape ─────────────────────────────────────────────────
 function mapApiCarToCard(car, tab) {
@@ -360,7 +332,7 @@ export default function Deals() {
   const [tab, setTab]       = useState("seller");
   const [flipped, setFlip]  = useState(null);
   const navigateRef         = useRef(null);
-  const [cards, setCards]   = useState(FALLBACK_BEST_SELLER);
+  const [cards, setCards]   = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -371,17 +343,12 @@ export default function Deals() {
 
     apiFn()
       .then((res) => {
-        // ✅ FIXED: backend returns { cars: [...], total: n } not { data: [...] }
         const data = res.data.cars ?? [];
-        if (data.length > 0) {
-          setCards(data.map((car) => mapApiCarToCard(car, tab)));
-        } else {
-          setCards(tab === "seller" ? FALLBACK_BEST_SELLER : FALLBACK_MOST_RENTED);
-        }
+        setCards(data.map((car) => mapApiCarToCard(car, tab)));
       })
       .catch(() => {
-        console.warn("Deals API unavailable — using static fallback.");
-        setCards(tab === "seller" ? FALLBACK_BEST_SELLER : FALLBACK_MOST_RENTED);
+        console.warn("Deals API unavailable.");
+        setCards([]);
       })
       .finally(() => setLoading(false));
   }, [tab]);

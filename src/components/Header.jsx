@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { ThemeContext } from "../App";
 import { useAuth } from "../context/AuthContext";
 
 export default function Header() {
   const { theme, setTheme } = useContext(ThemeContext);
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
+  const [params]  = useSearchParams();
 
   const [menu, setMenu] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -86,15 +87,23 @@ export default function Header() {
   const navItems = [
     { to: "/",                                      label: "Home Page"     },
     ...(isAdmin ? [{ to: "/admin",                  label: "Dashboard"    }] : []),
-    { to: isAdmin ? "/admin/buy"    : "/showroom",  label: "Shop the Cars" },
-    { to: isAdmin ? "/admin/rental" : "/rental",    label: "Car Rental"    },
+    { to: "/showroom",                                    label: "Shop the Cars" },
+    { to: isAdmin ? "/admin/rental" : "/showroom?mode=rent", label: "Car Rental"    },
     { to: "/sold-history",                          label: "Sold History"  },
     { to: "/contact",                               label: "Contact Us"    },
     { to: "/help",                                  label: "Need Help?"    },
   ];
 
-  const isActive = (path) =>
-    path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
+  const isActive = (path) => {
+    if (path === "/") return location.pathname === "/";
+    const [pathname, search] = path.split("?");
+    if (!location.pathname.startsWith(pathname)) return false;
+    if (search) {
+      const linkParams = new URLSearchParams(search);
+      return [...linkParams.entries()].every(([k, v]) => params.get(k) === v);
+    }
+    return !params.has("mode");
+  };
 
   return (
     <>

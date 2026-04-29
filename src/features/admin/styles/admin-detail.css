@@ -298,7 +298,7 @@
 }
 
 .admin-price-badge {
-  background: linear-gradient(135deg, #ff2a2a, #c70000);
+  background: linear-gradient(135deg, var(--color-red), var(--color-red-hover));
   color: #fff;
   border-radius: 10px;
   padding: 0 16px;
@@ -529,7 +529,7 @@
 .admin-confirm {
   width: 100%;
   padding: 13px 20px;
-  background: linear-gradient(90deg, #ff2a2a, #d11212 55%, #970909);
+  background: linear-gradient(90deg, var(--color-red), var(--color-red-hover) 55%, #970909);
   box-shadow: 0 8px 20px rgba(210, 18, 18, 0.3);
   color: #fff;
   border: none;

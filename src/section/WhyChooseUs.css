@@ -1,11 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&display=swap');
-
 /* ================================
    SECTION
 ================================ */
 .whySection {
   padding: 60px 0 60px;
-  background: #f0f2f4;
+  background: var(--bg-page);
   overflow: hidden;
 }
 
@@ -26,11 +24,11 @@ body.dark .whySection {
    TITLE
 ================================ */
 .whyTitle {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: var(--font);
   font-size: clamp(34px, 5vw, 58px);
-  font-weight: 400;
-  letter-spacing: 5px;
-  color: #111;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: var(--text-primary);
   text-align: center;
   margin: 0 0 6px;
   opacity: 0;
@@ -38,15 +36,13 @@ body.dark .whySection {
   animation: fadeDown 0.6s ease 0.1s forwards;
 }
 
-body.dark .whyTitle { color: #fff; }
-
 .whySubline {
   text-align: center;
-  font-family: 'Barlow', sans-serif;
+  font-family: var(--font);
   font-size: 13px;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: #e03030;
+  color: var(--color-red);
   margin: 0 0 28px;
   opacity: 0;
   animation: fadeDown 0.6s ease 0.25s forwards;
@@ -69,11 +65,10 @@ body.dark .whyTitle { color: #fff; }
   position: relative;
   width: 100%;
   height: 220px;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-
+  box-shadow: var(--shadow-lg);
   opacity: 0;
   transform: translateY(36px);
   transition:
@@ -82,10 +77,7 @@ body.dark .whyTitle { color: #fff; }
     box-shadow 0.35s ease;
 }
 
-.whyItem.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+.whyItem.visible { opacity: 1; transform: translateY(0); }
 
 .whyItem:nth-child(1) { transition-delay: 0.05s; }
 .whyItem:nth-child(2) { transition-delay: 0.18s; }
@@ -94,14 +86,12 @@ body.dark .whyTitle { color: #fff; }
 .whyItem:hover {
   box-shadow:
     0 16px 48px rgba(0,0,0,0.30),
-    0 0 0 1px rgba(200,0,0,0.25),
-    0 0 40px rgba(200,0,0,0.18);
+    0 0 0 1px rgba(var(--color-red-rgb), 0.25),
+    0 0 40px rgba(var(--color-red-rgb), 0.18);
   transform: translateY(-5px);
 }
 
-.whyItem.visible:hover {
-  transform: translateY(-5px);
-}
+.whyItem.visible:hover { transform: translateY(-5px); }
 
 /* ================================
    IMAGE
@@ -135,7 +125,7 @@ body.dark .whyTitle { color: #fff; }
   background: radial-gradient(ellipse at center, transparent 25%, rgba(0,0,0,0.38) 100%);
   z-index: 1;
   pointer-events: none;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
 }
 
 /* ================================
@@ -181,9 +171,9 @@ body.dark .whyTitle { color: #fff; }
 /* ── tag chip ── */
 .whyTag {
   display: inline-block;
-  background: #e02020;
+  background: var(--color-red);
   color: #fff;
-  font-family: 'Barlow', sans-serif;
+  font-family: var(--font);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 2px;
@@ -195,22 +185,18 @@ body.dark .whyTitle { color: #fff; }
   transition: opacity 0.4s ease 0.25s, transform 0.4s ease 0.25s;
 }
 
-.whyItem.visible .whyTag {
-  opacity: 1;
-  transform: translateY(0);
-}
+.whyItem.visible .whyTag { opacity: 1; transform: translateY(0); }
 
 /* ── heading ── */
 .whyOverlay h4 {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: var(--font);
   color: #fff;
   font-size: clamp(20px, 2.8vw, 34px);
-  font-weight: 400;
-  letter-spacing: 2.5px;
+  font-weight: 800;
+  letter-spacing: 2px;
   margin: 0;
   line-height: 1.1;
   text-shadow: 0 2px 14px rgba(0,0,0,0.55);
-
   opacity: 0;
   transform: translateY(12px);
   transition:
@@ -219,23 +205,18 @@ body.dark .whyTitle { color: #fff; }
     color    0.3s ease;
 }
 
-.whyItem.visible .whyOverlay h4 {
-  opacity: 1;
-  transform: translateY(0);
-}
-
+.whyItem.visible .whyOverlay h4 { opacity: 1; transform: translateY(0); }
 .whyItem:hover .whyOverlay h4 { color: #ffaaaa; }
 
 /* ── body text ── */
 .whyOverlay p {
-  font-family: 'Barlow', sans-serif;
+  font-family: var(--font);
   color: rgba(225,225,225,0.85);
   font-size: clamp(11px, 1.2vw, 14px);
   line-height: 1.65;
   margin: 0;
   max-width: 320px;
   text-shadow: 0 1px 6px rgba(0,0,0,0.45);
-
   opacity: 0;
   transform: translateY(8px);
   transition:
@@ -244,11 +225,7 @@ body.dark .whyTitle { color: #fff; }
     color    0.3s ease;
 }
 
-.whyItem.visible .whyOverlay p {
-  opacity: 1;
-  transform: translateY(0);
-}
-
+.whyItem.visible .whyOverlay p { opacity: 1; transform: translateY(0); }
 .whyItem:hover .whyOverlay p { color: #fff; }
 .right p { text-align: right; }
 
@@ -258,11 +235,11 @@ body.dark .whyTitle { color: #fff; }
   top: 28%; bottom: 28%;
   width: 4px;
   border-radius: 4px;
-  background: linear-gradient(to bottom, #ff6060, #ff2020, #ff6060);
+  background: linear-gradient(to bottom, #ff6060, var(--color-red), #ff6060);
   box-shadow:
-    0 0 8px  rgba(255,30,30,0.9),
-    0 0 20px rgba(255,30,30,0.6),
-    0 0 40px rgba(255,30,30,0.3);
+    0 0 8px  rgba(var(--color-red-rgb), 0.9),
+    0 0 20px rgba(var(--color-red-rgb), 0.6),
+    0 0 40px rgba(var(--color-red-rgb), 0.3);
   z-index: 3;
   opacity: 0;
   transition: opacity 0.35s ease, top 0.45s cubic-bezier(0.22,1,0.36,1), bottom 0.45s cubic-bezier(0.22,1,0.36,1);
@@ -271,10 +248,7 @@ body.dark .whyTitle { color: #fff; }
 .whyEdgeBar.edgeLeft  { left: 0; }
 .whyEdgeBar.edgeRight { right: 0; }
 
-.whyItem:hover .whyEdgeBar {
-  opacity: 1;
-  top: 8%; bottom: 8%;
-}
+.whyItem:hover .whyEdgeBar { opacity: 1; top: 8%; bottom: 8%; }
 
 /* ================================
    RED GLOW TINT on hover
@@ -283,8 +257,8 @@ body.dark .whyTitle { color: #fff; }
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 20px;
-  background: radial-gradient(ellipse at 20% 80%, rgba(180,0,0,0.18) 0%, transparent 65%);
+  border-radius: var(--radius-xl);
+  background: radial-gradient(ellipse at 20% 80%, rgba(var(--color-red-rgb), 0.18) 0%, transparent 65%);
   opacity: 0;
   z-index: 1;
   pointer-events: none;
@@ -292,7 +266,7 @@ body.dark .whyTitle { color: #fff; }
 }
 
 .whyItem:has(.right)::after {
-  background: radial-gradient(ellipse at 80% 80%, rgba(180,0,0,0.18) 0%, transparent 65%);
+  background: radial-gradient(ellipse at 80% 80%, rgba(var(--color-red-rgb), 0.18) 0%, transparent 65%);
 }
 
 .whyItem:hover::after { opacity: 1; }
@@ -306,7 +280,7 @@ body.dark .whyTitle { color: #fff; }
   left: 50%; top: 50%;
   transform: translate(-50%, -50%);
   width: 600px; height: 300px;
-  background: radial-gradient(ellipse, rgba(160,0,0,0.07) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(var(--color-red-rgb), 0.07) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -322,16 +296,17 @@ body.dark .whyTitle { color: #fff; }
 }
 
 .rentBtn {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  letter-spacing: 2.5px;
-  background: linear-gradient(135deg, #ff2525 0%, #990000 100%);
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, var(--color-red) 0%, #990000 100%);
   color: #fff;
   padding: 15px 48px;
   border-radius: 50px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 6px 26px rgba(220,0,0,0.42);
+  box-shadow: var(--shadow-red);
   position: relative;
   overflow: hidden;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -350,20 +325,18 @@ body.dark .whyTitle { color: #fff; }
 .rentBtn:hover::before { left: 130%; }
 .rentBtn:hover {
   transform: translateY(-3px) scale(1.04);
-  box-shadow: 0 12px 38px rgba(220,0,0,0.58);
+  box-shadow: 0 12px 38px rgba(var(--color-red-rgb), 0.58);
 }
 .rentBtn:active { transform: scale(0.97); }
 
 .whyFeatures {
   margin-top: 14px;
-  font-family: 'Barlow', sans-serif;
-  color: #888;
+  font-family: var(--font);
+  color: var(--text-muted);
   font-size: 12px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
 }
-
-body.dark .whyFeatures { color: #666; }
 
 /* ================================
    KEYFRAMES
@@ -394,7 +367,7 @@ body.dark .whyFeatures { color: #666; }
   .whyContainer  { padding: 0 16px; }
   .whySubline    { margin: 0 0 20px; }
   .whyGrid       { gap: 12px; }
-  .whyItem       { height: 175px; border-radius: 16px; }
+  .whyItem       { height: 175px; border-radius: var(--radius-lg); }
   .whyOverlay    { width: 72%; padding: 0 16px; }
   .whyOverlay h4 { font-size: 16px; }
   .whyOverlay p  { font-size: 11px; }

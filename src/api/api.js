@@ -1,8 +1,20 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000',
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000",// or /api if needed
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-export default API;
+// 🔥 Response interceptor (for debugging)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("API ERROR:", error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
+
+export default api;

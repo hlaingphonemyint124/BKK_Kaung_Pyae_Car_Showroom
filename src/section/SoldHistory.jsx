@@ -5,22 +5,6 @@ import { Link } from "react-router-dom";
 
 
 
-// ─── Fallback static data ─────────────────────────────────────────────────────
-const FALLBACK_CARS = [
-  { id: 1,  brand: "Toyota",     model: "Fortuner",     year: 2021, sale_price: 750000,  currency_code: "THB", mileage_km: 120000, type: "SUV",          sold_at: "2024-03-15", images: [], img: "/images/ShopCar/toyotaFortuner.webp"  },
-  { id: 2,  brand: "BMW",        model: "5 Series",     year: 2020, sale_price: 1250000, currency_code: "THB", mileage_km: 85000,  type: "Sedan",        sold_at: "2024-03-10", images: [], img: "/images/BestDeals/bd3.png"              },
-  { id: 3,  brand: "Mazda",      model: "CX-5",         year: 2022, sale_price: 560000,  currency_code: "THB", mileage_km: 15000,  type: "SUV",          sold_at: "2024-03-08", images: [], img: "/images/BestDeals/bd4.png"              },
-  { id: 4,  brand: "Honda",      model: "Civic Type R", year: 2021, sale_price: 420000,  currency_code: "THB", mileage_km: 42000,  type: "Sedan",        sold_at: "2024-03-05", images: [], img: "/images/ShopCar/hondaCivicFl5.webp"    },
-  { id: 5,  brand: "Mercedes",   model: "E200",         year: 2021, sale_price: 980000,  currency_code: "THB", mileage_km: 27000,  type: "Sedan",        sold_at: "2024-02-28", images: [], img: "/images/MostRented/mr5.png"             },
-  { id: 6,  brand: "Isuzu",      model: "D-Max",        year: 2020, sale_price: 380000,  currency_code: "THB", mileage_km: 95000,  type: "Pickup Truck", sold_at: "2024-02-22", images: [], img: "/images/ShopCar/isuzuDmax.webp"         },
-  { id: 7,  brand: "Nissan",     model: "Juke",         year: 2018, sale_price: 145000,  currency_code: "THB", mileage_km: 62000,  type: "SUV",          sold_at: "2024-02-18", images: [], img: "/images/BestDeals/bd1.png"              },
-  { id: 8,  brand: "Mitsubishi", model: "Lancer EX",    year: 2012, sale_price: 125000,  currency_code: "THB", mileage_km: 95000,  type: "Sedan",        sold_at: "2024-02-14", images: [], img: "/images/BestDeals/bd5.png"              },
-];
-
-const FALLBACK_STATS = {
-  total_sold: 248,
-  this_month: 12,
-};
 
 const FILTERS   = ["All", "Sedan", "SUV", "Pickup Truck", "Hatchback", "Electric"];
 const PAGE_SIZE = 6;
@@ -90,7 +74,7 @@ function SkeletonCards({ count = 6 }) {
 ═══════════════════════════════════════════════════════════════ */
 export default function SoldHistory() {
   const [cars, setCars]       = useState([]);
-  const [stats, setStats]     = useState(FALLBACK_STATS);
+  const [stats, setStats]     = useState({ total_sold: 0, this_month: 0 });
   const [loading, setLoading] = useState(true);
   const [filter, setFilter]   = useState("All");
   const [page, setPage]       = useState(1);
@@ -104,14 +88,14 @@ export default function SoldHistory() {
       getSoldStats(),
     ])
       .then(([carsRes, statsRes]) => {
-        const carsData  = carsRes.data?.cars  ?? carsRes.data  ?? FALLBACK_CARS;
-        const statsData = statsRes.data?.stats ?? statsRes.data ?? FALLBACK_STATS;
-        setCars(Array.isArray(carsData) && carsData.length > 0 ? carsData : FALLBACK_CARS);
+        const carsData  = carsRes.data?.cars  ?? carsRes.data  ?? [];
+        const statsData = statsRes.data?.stats ?? statsRes.data ?? { total_sold: 0, this_month: 0 };
+        setCars(Array.isArray(carsData) ? carsData : []);
         setStats(statsData);
       })
       .catch(() => {
-        setCars(FALLBACK_CARS);
-        setStats(FALLBACK_STATS);
+        setCars([]);
+        setStats({ total_sold: 0, this_month: 0 });
       })
       .finally(() => setLoading(false));
   }, []);

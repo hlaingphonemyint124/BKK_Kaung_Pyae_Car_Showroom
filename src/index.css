@@ -2,19 +2,7 @@
 GLOBAL
 =============================== */
 
-/* LIGHT MODE */
-
-:root{
---red:#e60000;
---red-dark:#c40000;
-
---bg:#f3f4f6;
---card:#ffffff;
---text:#0f172a;
---muted:#6b7280;
-
---section:#f6f6f6;
-}
+@import './styles/tokens.css';
 
 *{
 box-sizing:border-box;
@@ -27,18 +15,18 @@ height:100%;
 }
 
 body{
-font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto;
-background:var(--bg);
-color:var(--text);
+font-family: var(--font);
+background: var(--bg-page);
+color: var(--text-primary);
 line-height:1.6;
 -webkit-font-smoothing:antialiased;
 transition:0.3s;
 }
 
 .container{
-max-width:1100px;
+max-width: var(--container-max);
 margin:auto;
-padding:0 18px;
+padding: 0 var(--container-px);
 }
 
 section{
@@ -54,17 +42,8 @@ DARK MODE (RED THEME)
 ================================= */
 
 body.dark{
-
---bg:#0b0b0b;
---card:#121212;
---text:#ffffff;
---muted:#9ca3af;
-
---section:linear-gradient(180deg,#0b0b0b,#1a0000);
-
-background:#0b0b0b;
-color:#ffffff;
-
+background: var(--bg-page);
+color: var(--text-primary);
 }
 
 /* cards */
@@ -76,24 +55,22 @@ body.dark .easyCard,
 body.dark .testimonial,
 body.dark .team-member,
 body.dark .why-card{
-
-background:#111;
-color:#fff;
-border:1px solid rgba(255,0,0,0.15);
-
+background: var(--bg-surface);
+color: var(--text-primary);
+border: 1px solid rgba(var(--color-red-rgb), 0.15);
 }
 
 /* sections */
 
 body.dark .brandsSection,
 body.dark .carTypes{
-background:linear-gradient(180deg,#0b0b0b,#1a0000);
+background: linear-gradient(180deg, var(--bg-page), #1a0000);
 }
 
 /* footer */
 
 body.dark .site-footer{
-background:#050505;
+background: #050505;
 }
 
 /* buttons glow */
@@ -101,10 +78,8 @@ background:#050505;
 body.dark .btn,
 body.dark .shopBtn,
 body.dark .rentalBtn{
-
-background:linear-gradient(180deg,#ff2a2a,#a80000);
-box-shadow:0 6px 20px rgba(255,0,0,0.35);
-
+background: linear-gradient(180deg, var(--color-red), var(--color-red-hover));
+box-shadow: 0 6px 20px rgba(var(--color-red-rgb), 0.35);
 }
 
 /* ===============================
@@ -232,7 +207,7 @@ box-shadow:0 6px 20px rgba(255,0,0,0.35);
 
 .lang-dropdown__bar {
   height: 2.5px;
-  background: linear-gradient(90deg, #dc1c1c, #ff5555);
+  background: linear-gradient(90deg, var(--color-red), #ff5555);
   width: 100%;
   flex-shrink: 0;
 }
@@ -309,7 +284,7 @@ box-shadow:0 6px 20px rgba(255,0,0,0.35);
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #dc1c1c;
+  background: var(--color-red);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -402,7 +377,7 @@ box-shadow:0 6px 20px rgba(255,0,0,0.35);
   --sidebar-overlay:      rgba(0, 0, 0, 0.45);
 
   --sidebar-profile-bg:   #fff5f5;
-  --sidebar-profile-bdr:  rgba(220, 28, 28, 0.12);
+  --sidebar-profile-bdr:  rgba(var(--color-red-rgb), 0.12);
 
   --sidebar-divider:      rgba(0, 0, 0, 0.07);
 
@@ -410,24 +385,24 @@ box-shadow:0 6px 20px rgba(255,0,0,0.35);
   --sidebar-item-sub:     #888888;
   --sidebar-item-hover-bg:#fff0f0;
   --sidebar-item-hover-c: #111111;
-  --sidebar-item-active-bg:rgba(220, 28, 28, 0.07);
-  --sidebar-item-active-c: #dc1c1c;
+  --sidebar-item-active-bg:rgba(var(--color-red-rgb), 0.07);
+  --sidebar-item-active-c: var(--color-red);
 
-  --sidebar-accent:       #dc1c1c;
-  --sidebar-accent-glow:  rgba(220, 28, 28, 0.25);
-  --sidebar-accent-soft:  rgba(220, 28, 28, 0.10);
+  --sidebar-accent:       var(--color-red);
+  --sidebar-accent-glow:  rgba(var(--color-red-rgb), 0.25);
+  --sidebar-accent-soft:  rgba(var(--color-red-rgb), 0.10);
 
-  --sidebar-login-color:  #dc1c1c;
-  --sidebar-logout-color: #dc1c1c;
+  --sidebar-login-color:  var(--color-red);
+  --sidebar-logout-color: var(--color-red);
 
-  --sidebar-badge-bg:     #dc1c1c;
+  --sidebar-badge-bg:     var(--color-red);
   --sidebar-badge-text:   #ffffff;
 
   --sidebar-footer-text:  #aaaaaa;
   --sidebar-section-label:#bbbbbb;
 
-  --avatar-bg:            rgba(220, 28, 28, 0.08);
-  --avatar-border:        rgba(220, 28, 28, 0.20);
+  --avatar-bg:            rgba(var(--color-red-rgb), 0.08);
+  --avatar-border:        rgba(var(--color-red-rgb), 0.20);
 }
 
 body.dark {
@@ -436,8 +411,8 @@ body.dark {
   --sidebar-shadow:       -20px 0 80px rgba(0, 0, 0, 0.75);
   --sidebar-overlay:      rgba(0, 0, 0, 0.65);
 
-  --sidebar-profile-bg:   rgba(220, 28, 28, 0.06);
-  --sidebar-profile-bdr:  rgba(220, 28, 28, 0.18);
+  --sidebar-profile-bg:   rgba(var(--color-red-rgb), 0.06);
+  --sidebar-profile-bdr:  rgba(var(--color-red-rgb), 0.18);
 
   --sidebar-divider:      rgba(255, 255, 255, 0.06);
 
@@ -445,17 +420,17 @@ body.dark {
   --sidebar-item-sub:     #555555;
   --sidebar-item-hover-bg:rgba(255, 255, 255, 0.05);
   --sidebar-item-hover-c: #ffffff;
-  --sidebar-item-active-bg:rgba(220, 28, 28, 0.12);
+  --sidebar-item-active-bg:rgba(var(--color-red-rgb), 0.12);
   --sidebar-item-active-c: #ff4d4d;
 
-  --sidebar-accent:       #ff3b3b;
+  --sidebar-accent:       var(--color-red);
   --sidebar-accent-glow:  rgba(255, 59, 59, 0.30);
   --sidebar-accent-soft:  rgba(255, 59, 59, 0.08);
 
-  --sidebar-login-color:  #ff3b3b;
-  --sidebar-logout-color: #ff3b3b;
+  --sidebar-login-color:  var(--color-red);
+  --sidebar-logout-color: var(--color-red);
 
-  --sidebar-badge-bg:     #ff3b3b;
+  --sidebar-badge-bg:     var(--color-red);
   --sidebar-badge-text:   #ffffff;
 
   --sidebar-footer-text:  #444444;
@@ -645,6 +620,7 @@ body.dark {
     transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 0.22s ease;
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   cursor: pointer;
 }
@@ -658,6 +634,7 @@ body.dark {
   opacity: 0;
   transition: opacity 0.2s;
   pointer-events: none;
+  z-index: -1;
 }
 .menuItem:hover::before { opacity: 1; }
 
@@ -756,7 +733,7 @@ body.dark {
   letter-spacing: 0.01em;
 }
 .logout:hover {
-  background: rgba(220, 28, 28, 0.14);
+  background: rgba(var(--color-red-rgb), 0.14);
   transform: translateX(3px);
   box-shadow: 0 4px 20px var(--sidebar-accent-glow);
   opacity: 0.88;
@@ -862,14 +839,14 @@ BUTTON
 =============================== */
 
 .btn{
-background:linear-gradient(180deg,#ff2a2a,#c70000);
-color:white;
+background: linear-gradient(180deg, var(--color-red), var(--color-red-hover));
+color: white;
 padding:12px 28px;
 border:none;
 border-radius:28px;
 font-weight:600;
 cursor:pointer;
-box-shadow:0 8px 18px rgba(0,0,0,0.25);
+box-shadow: var(--shadow-md);
 transition:all .25s;
 }
 
@@ -878,8 +855,8 @@ transform:translateY(-2px);
 }
 
 .btn-outline{
-border:2px solid #d1d5db;
-background:white;
+border: 2px solid var(--border);
+background: var(--bg-surface);
 padding:11px 26px;
 border-radius:28px;
 cursor:pointer;
@@ -887,8 +864,8 @@ font-weight:500;
 }
 
 .btn-outline:hover{
-border-color:var(--red);
-color:var(--red);
+border-color: var(--color-red);
+color: var(--color-red);
 }
 
 /* ===============================
@@ -926,7 +903,7 @@ color:var(--red);
 .deal__card{
 display:flex;
 gap:20px;
-background:white;
+background: var(--bg-surface);
 border-radius:16px;
 padding:18px;
 box-shadow:0 12px 28px rgba(0,0,0,0.08);
@@ -954,7 +931,7 @@ BRANDS
 
 .brandsSection{
 padding:40px 18px;
-background:#f6f6f6;
+background: var(--bg-page);
 text-align:center;
 }
 
@@ -972,7 +949,7 @@ font-weight:700;
 
 .viewAll{
 font-size:13px;
-color:#e60000;
+color: var(--color-red);
 cursor:pointer;
 }
 
@@ -983,7 +960,7 @@ gap:12px;
 }
 
 .brandCard{
-background:white;
+background: var(--bg-surface);
 border-radius:12px;
 padding:18px;
 box-shadow:0 8px 20px rgba(0,0,0,0.05);
@@ -1035,7 +1012,7 @@ CAR TYPES
 
 .carTypes{
 padding:40px 18px;
-background:#f6f6f6;
+background: var(--bg-page);
 text-align:center;
 }
 
@@ -1053,7 +1030,7 @@ font-weight:700;
 
 .viewAll{
 font-size:13px;
-color:#e60000;
+color: var(--color-red);
 cursor:pointer;
 }
 
@@ -1064,7 +1041,7 @@ gap:12px;
 }
 
 .typeCard{
-background:white;
+background: var(--bg-surface);
 border-radius:12px;
 padding:18px 10px;
 box-shadow:0 8px 18px rgba(0,0,0,0.05);
@@ -1082,8 +1059,8 @@ transform:translateY(-4px);
 .typeIcon{
 width:36px;
 height:36px;
-background:#f3f4f6;
-border-radius:8px;
+background: var(--bg-surface-2);
+border-radius: var(--radius-sm);
 display:flex;
 align-items:center;
 justify-content:center;
@@ -1103,14 +1080,14 @@ color:#777;
 
 .shopBtn{
 margin-top:12px;
-background:linear-gradient(180deg,#ff2a2a,#c70000);
+background: linear-gradient(180deg, var(--color-red), var(--color-red-hover));
 border:none;
 color:white;
 padding:10px 24px;
 border-radius:26px;
 font-size:13px;
 cursor:pointer;
-box-shadow:0 6px 14px rgba(0,0,0,0.25);
+box-shadow: var(--shadow-md);
 }
 /* ===============================
 GRID SECTIONS
@@ -1129,7 +1106,7 @@ margin-top:20px;
 
 .brand-card,
 .type-card{
-background:white;
+background: var(--bg-surface);
 border-radius:14px;
 padding:18px;
 display:flex;
@@ -1166,12 +1143,12 @@ margin-bottom:5px;
 
 .easyRentalHeader p{
 font-size:14px;
-color:var(--muted);
+color: var(--text-muted);
 margin-bottom:22px;
 }
 
 .easyCard{
-background:white;
+background: var(--bg-surface);
 max-width:520px;
 margin:auto;
 border-radius:16px;
@@ -1204,20 +1181,20 @@ font-size:15px;
 }
 
 .stepBox.active{
-background:var(--red);
+background: var(--color-red);
 color:white;
 }
 
 .rentalBtn{
 margin-left:auto;
-background:linear-gradient(180deg,#ff2a2a,#c70000);
+background: linear-gradient(180deg, var(--color-red), var(--color-red-hover));
 border:none;
 color:white;
 padding:10px 18px;
 border-radius:25px;
 font-size:13px;
 cursor:pointer;
-box-shadow:0 6px 14px rgba(0,0,0,0.25);
+box-shadow: var(--shadow-md);
 }
 
 .loginArea{
@@ -1238,7 +1215,7 @@ margin-bottom:14px;
 
 .signupBtn{
 border:2px solid #d1d5db;
-background:white;
+background: var(--bg-surface);
 padding:10px 22px;
 border-radius:24px;
 cursor:pointer;
@@ -1247,7 +1224,7 @@ cursor:pointer;
 .nextStep{
 margin-top:10px;
 font-size:13px;
-color:var(--red);
+color: var(--color-red);
 cursor:pointer;
 }
 
@@ -1265,7 +1242,7 @@ TESTIMONIAL
 display:flex;
 align-items:center;
 gap:15px;
-background:white;
+background: var(--bg-surface);
 border-radius:14px;
 padding:18px;
 margin-top:18px;
@@ -1280,7 +1257,7 @@ background:#e5e7eb;
 }
 
 .rating{
-color:var(--red);
+color: var(--color-red);
 font-size:14px;
 }
 
@@ -1296,7 +1273,7 @@ margin-top:20px;
 }
 
 .why-card{
-background:white;
+background: var(--bg-surface);
 padding:22px;
 border-radius:16px;
 box-shadow:0 10px 28px rgba(0,0,0,0.05);
@@ -1319,7 +1296,7 @@ flex-wrap:wrap;
 }
 
 .value-pill{
-background:linear-gradient(180deg,#ff2a2a,#c70000);
+background: linear-gradient(180deg, var(--color-red), var(--color-red-hover));
 color:white;
 padding:10px 16px;
 border-radius:10px;
@@ -1338,7 +1315,7 @@ margin-top:28px;
 }
 
 .team-member{
-background:white;
+background: var(--bg-surface);
 border-radius:16px;
 padding:18px;
 text-align:center;
@@ -1358,7 +1335,7 @@ FOOTER
 =============================== */
 
 .site-footer{
-background:#0b0f14;
+background:#111;
 color:white;
 padding:40px 0;
 margin-top:60px;
