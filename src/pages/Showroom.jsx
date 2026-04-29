@@ -4,6 +4,7 @@ import "./Showroom.css";
 
 import { getCarsForSale, getCarsForRent } from "../api/showroom.api";
 import { useAuth } from "../context/AuthContext";
+import { Fuel, Settings2 } from "lucide-react";
 
 
 const CATEGORIES = ["All", "Sedan", "Hatchback", "SUV", "Pickup Truck", "Van / Minivan", "Electric"];
@@ -221,9 +222,16 @@ export default function Showroom() {
                       .filter(Boolean)
                       .join(", ") || "Details available on request"}
                   </p>
-                  <div className="specs">
-                    <div className="fuel">⛽ {car.fuel || car.fuel_type || "—"}</div>
-                    <div className="gear">⚙ {car.transmission || "—"}</div>
+                  <div className="showroom-specs">
+                    <div className="showroom-spec-item">
+                      <Fuel className="showroom-spec-icon showroom-spec-icon--fuel" size={21} strokeWidth={2.2} />
+                      <span>{car.fuel || car.fuel_type || "—"}</span>
+                    </div>
+
+                    <div className="showroom-spec-item">
+                      <Settings2 className="showroom-spec-icon showroom-spec-icon--gear" size={21} strokeWidth={2.2} />
+                      <span>{car.transmission || "—"}</span>
+                    </div>
                   </div>
                   <div className="bottomRow">
                     <div className="price">{displayPrice(car)}</div>

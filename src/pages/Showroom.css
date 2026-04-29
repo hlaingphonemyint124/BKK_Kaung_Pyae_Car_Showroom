@@ -311,21 +311,40 @@
   text-overflow: ellipsis;
 }
 
-.specs {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  font-size: 12px;
+.showroom-specs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 14px 0 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
-.fuel { color: #f4a300; font-weight: 600; }
+.showroom-spec-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
 
-.gear {
-  background: var(--bg-surface-2);
-  padding: 2px 7px;
-  border-radius: 4px;
-  color: var(--text-muted);
+/* SpecGrid */
+.showroom-spec-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.showroom-spec-icon--fuel {
+  color: #2563eb;
+}
+
+.showroom-spec-icon--gear {
+  color: #475569;
 }
 
 .bottomRow {
@@ -388,6 +407,12 @@ body.dark .carCard:hover {
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
 }
 
-body.dark .gear { background: #330000; }
+body.dark .showroom-specs {
+  border-color: #330000;
+}
+
+body.dark .showroom-spec-item {
+  color: var(--text-primary);
+}
 body.dark .carCard--rent .price { color: #60a5fa; }
 body.dark .carCard--rent { border-top-color: #2563eb; }

@@ -1,5 +1,5 @@
 import React from "react";
-import { LuFuel, LuSettings2, } from "react-icons/lu";
+import { Fuel, Settings2 } from "lucide-react";
 import AdminCardMenu from "./AdminCardMenu";
 
 function AdminCarCard({
@@ -23,13 +23,12 @@ function AdminCarCard({
     car.images?.[0]?.storage_path ||
     "/images/placeholder-car.jpg";
 
-  const name = `${car.brand || ""} ${car.model || ""}`.trim();
+  const name = `${car.brand || ""} ${car.model || ""}`.trim() || "Unnamed Car";
 
   const isBuy = car.sale_price != null;
   const isRental = car.rent_price_per_day != null;
 
   const badgeText = isBuy ? "Sale" : isRental ? "Rent" : "";
-
   const badgeClass = isBuy
     ? "admin-product-card-badge--sale"
     : isRental
@@ -46,30 +45,45 @@ function AdminCarCard({
     maintenance: "Maintenance",
   };
 
-  const fuelLabel =
-    car.fuel_type || car.fuel || car.specs?.fuel || "Petrol";
-
+  const fuelLabel = car.fuel || car.fuel_type || car.specs?.fuel || "—";
   const transmissionLabel =
-    car.transmission || car.specs?.transmission || "Auto";
+    car.transmission || car.specs?.transmission || "—";
+  const driveLabel = car.drive || car.drive_type || car.specs?.drive || "";
+  const engineLabel = car.engine || car.specs?.engine || "";
+  const seatsLabel = car.seats ? `${car.seats} seats` : "";
+
+  const description =
+    [fuelLabel, driveLabel, engineLabel, seatsLabel]
+      .filter(Boolean)
+      .join(", ") || "Details available on request";
+
+  const currency = car.currency_code || "THB";
 
   const priceLabel = isBuy
-    ? `${Number(car.sale_price || 0).toLocaleString()} THB`
-    : `${Number(car.rent_price_per_day || 0).toLocaleString()} THB/day`;
+    ? `${Number(car.sale_price || 0).toLocaleString()} ${currency}`
+    : `${Number(car.rent_price_per_day || 0).toLocaleString()} ${currency}/day`;
 
   return (
     <div className="admin-product-card">
-      <div className="admin-product-card__image-wrap" onClick={onToggleMenu}>
-        <img
-          src={imageSrc}
-          alt={name}
-          className="admin-product-card__image"
-        />
+      <div className="admin-product-card__image-wrap">
+        <img src={imageSrc} alt={name} className="admin-product-card__image" />
 
         {badgeText && (
           <div className={`admin-product-card-badge ${badgeClass}`}>
             {badgeText}
           </div>
         )}
+
+        <button
+          className="admin-product-card__edit-btn"
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleMenu();
+          }}
+        >
+          Edit
+        </button>
 
         {showUnavailableOverlay && isUnavailable && (
           <div className="admin-product-card__unavailable">
@@ -80,20 +94,23 @@ function AdminCarCard({
 
       <div className="admin-product-card__body">
         <h3 className="admin-product-card__title">{name}</h3>
+        <p className="admin-product-card__desc">{description}</p>
 
         <div className="admin-product-card__features">
           <div className="admin-product-card__feature">
             <span className="admin-product-card__feature-icon admin-product-card__feature-icon--fuel">
-              <LuFuel />
+              <Fuel size={21} strokeWidth={2.2} />
             </span>
             <span className="admin-product-card__feature-text">{fuelLabel}</span>
           </div>
 
           <div className="admin-product-card__feature">
             <span className="admin-product-card__feature-icon">
-              <LuSettings2 />
+              <Settings2 size={21} strokeWidth={2.2} />
             </span>
-            <span className="admin-product-card__feature-text">{transmissionLabel}</span>
+            <span className="admin-product-card__feature-text">
+              {transmissionLabel}
+            </span>
           </div>
         </div>
 

@@ -1,7 +1,6 @@
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
-import AddCarCard from "../components/AddCarCard";
 import AdminCarCard from "../components/AdminCarCard";
 import AdminFilterBar from "../components/AdminFilterBar";
 import AdminTabs from "../components/AdminTabs";
@@ -39,15 +38,15 @@ function AdminCarPage({ mode }) {
   const tabs =
     mode === "buy"
       ? [
-          { label: "All",       value: "all"       },
-          { label: "Available", value: "available"  },
-          { label: "Reserved",  value: "reserved"   },
-          { label: "Sold",      value: "sold"       },
+          { label: "All", value: "all" },
+          { label: "Available", value: "available" },
+          { label: "Reserved", value: "reserved" },
+          { label: "Sold", value: "sold" },
         ]
       : [
-          { label: "All",           value: "all"           },
-          { label: "Available",     value: "available"     },
-          { label: "Rented",        value: "rented"        },
+          { label: "All", value: "all" },
+          { label: "Available", value: "available" },
+          { label: "Rented", value: "rented" },
           { label: "Not Available", value: "not-available" },
         ];
 
@@ -57,9 +56,19 @@ function AdminCarPage({ mode }) {
 
   const displayCars = useMemo(() => {
     return filteredCars.filter((car) => {
-      const name = `${car.brand || ""} ${car.model || ""}`.trim().toLowerCase();
+      const name = `${car.brand || ""} ${car.model || ""}`
+        .trim()
+        .toLowerCase();
+
       const brand = (car.brand || "").toLowerCase();
-      const fuel = (car.specs?.fuel || car.fuel_type || car.fuel || "").toLowerCase();
+
+      const fuel = (
+        car.specs?.fuel ||
+        car.fuel_type ||
+        car.fuel ||
+        ""
+      ).toLowerCase();
+
       const transmission = (
         car.specs?.transmission ||
         car.transmission ||
@@ -145,11 +154,17 @@ function AdminCarPage({ mode }) {
 
   return (
     <div className="admin-page-section">
-      <div className="admin-hero-block">
-        <h1 className="admin-hero-block__title">Fast, Simple and Easy.</h1>
-        <p className="admin-hero-block__subtitle">Shop Online. Pickup Today.</p>
-      </div>
+      <div className="admin-hero-row">
+        <div className="admin-hero-block">
+          <h1 className="admin-hero-block__title">Fast, Simple and Easy.</h1>
+          <p className="admin-hero-block__subtitle">Shop Online. Pickup Today.</p>
+        </div>
 
+        <button type="button" className="admin-add-button" onClick={handleAddCar}>
+          + Add New Car
+        </button>
+      </div>
+      
       <div className="admin-toolbar-overlay" ref={overlayRef}>
         <AdminFilterBar
           mode={mode === "buy" ? "Buy" : "Rental"}
@@ -157,6 +172,7 @@ function AdminCarPage({ mode }) {
             if (!isFilterOpen) {
               setIsFilterMounted(true);
             }
+
             setIsFilterOpen((prev) => !prev);
             setIsSearchOpen(false);
           }}
@@ -164,6 +180,7 @@ function AdminCarPage({ mode }) {
             if (!isSearchOpen) {
               setIsSearchMounted(true);
             }
+
             setIsSearchOpen((prev) => !prev);
             setIsFilterOpen(false);
           }}
@@ -186,9 +203,9 @@ function AdminCarPage({ mode }) {
                   onChange={(e) => setSelectedBrand(e.target.value)}
                 >
                   <option value="">All Brands</option>
-                  {brands.map((b) => (
-                    <option key={b} value={b}>
-                      {b}
+                  {brands.map((brand) => (
+                    <option key={brand} value={brand}>
+                      {brand}
                     </option>
                   ))}
                 </select>
@@ -227,6 +244,7 @@ function AdminCarPage({ mode }) {
               <button type="button" onClick={handleReset}>
                 Reset
               </button>
+
               <button type="button" onClick={handleApply}>
                 Apply
               </button>
@@ -257,6 +275,7 @@ function AdminCarPage({ mode }) {
       />
 
       {loading && <p className="admin-state-message">Loading cars...</p>}
+
       {error && (
         <p className="admin-state-message admin-state-message--error">
           {error}
@@ -265,8 +284,6 @@ function AdminCarPage({ mode }) {
 
       {!loading && !error && (
         <div className="admin-grid">
-          <AddCarCard onClick={handleAddCar} />
-
           {displayCars.map((car) => (
             <AdminCarCard
               key={car.id}
@@ -286,11 +303,15 @@ function AdminCarPage({ mode }) {
                 clearCar(car.id);
                 setActiveCardId(null);
               }}
-              thirdActionLabel={mode === "buy" ? "Mark as Reserved" : "Mark as Rented"}
+              thirdActionLabel={
+                mode === "buy" ? "Mark as Reserved" : "Mark as Rented"
+              }
               thirdActionHandler={() =>
                 markAsStatus(car.id, mode === "buy" ? "reserved" : "rented")
               }
-              fourthActionLabel={mode === "buy" ? "Mark as Sold" : "Mark as Unavailable"}
+              fourthActionLabel={
+                mode === "buy" ? "Mark as Sold" : "Mark as Unavailable"
+              }
               fourthActionHandler={() =>
                 markAsStatus(car.id, mode === "buy" ? "sold" : "maintenance")
               }

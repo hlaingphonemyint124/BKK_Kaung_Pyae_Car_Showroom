@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Fuel, Settings2, Palette, Gauge, Disc3, Users } from "lucide-react";
 import { getCarById } from "../api/cars.api";
 import "./CarDetail.css";
+import { getCarDocuments, getRentalTerms } from "../features/admin/services/adminCarService";
+
 
 // Fuel value → icon color (same as admin SpecGrid)
 const FUEL_COLORS = {
@@ -22,14 +24,40 @@ export default function CarDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [car, setCar] = useState(null);
+  const [documents, setDocuments] = useState([]);
+  const [rentalTerms, setRentalTerms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeImg, setActiveImg] = useState(0);
 
   useEffect(() => {
     setActiveImg(0);
-    getCarById(id)
-      .then((res) => setCar(res.data))
+    setLoading(true);
+
+    Promise.all([
+      getCarById(id),
+      getCarDocuments(id).catch(() => null),
+      getRentalTerms().catch(() => null),
+    ])
+      .then(([carRes, docsRes, termsRes]) => {
+        setCar(carRes.data);
+
+        // Documents
+        const docs =
+          docsRes?.documents ||
+          docsRes?.data?.documents ||
+          docsRes?.data ||
+          [];
+        setDocuments(docs);
+
+        // Rental Terms
+        const terms =
+          termsRes?.terms ||
+          termsRes?.data?.terms ||
+          termsRes?.data ||
+          [];
+        setRentalTerms(terms);
+      })
       .catch(() => setError("Car not found"))
       .finally(() => setLoading(false));
   }, [id]);
@@ -149,6 +177,35 @@ export default function CarDetail() {
               </div>
             ))}
           </div>
+
+          {documents.length > 0 && (
+            <div className="cd-panel">
+              <p className="cd-section-label">Car Documents</p>
+              {documents.map((doc, i) => (
+                <div key={i} className="cd-info-row">
+                  <span className="cd-info-label">
+                    {doc.field_name || doc.key}
+                  </span>
+                  <span className="cd-info-value">
+                    {doc.field_value || doc.value || "—"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {isRental && rentalTerms.length > 0 && (
+            <div className="cd-panel">
+              <p className="cd-section-label">Rental Terms & Conditions</p>
+              <ul className="cd-terms-list">
+                {rentalTerms.map((term, i) => (
+                  <li key={i}>
+                    {term.description || term.title || term.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Contact */}
           <div className="cd-panel cd-panel--contact">
