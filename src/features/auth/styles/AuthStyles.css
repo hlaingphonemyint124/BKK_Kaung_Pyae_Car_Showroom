@@ -12,6 +12,10 @@
   padding-top: 5px;
 }
 
+.auth-content {
+  padding-top: 0;
+}
+
 /* =========================
    2) MAIN AUTH CARD / BOOK
 ========================= */

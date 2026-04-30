@@ -2,6 +2,14 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { ThemeContext } from "../App";
 import { useAuth } from "../context/AuthContext";
+import {
+  Languages,
+  Sun,
+  Moon,
+  Menu,
+  X,
+  ChevronDown,
+} from "lucide-react";
 
 export default function Header() {
   const { theme, setTheme } = useContext(ThemeContext);
@@ -62,9 +70,11 @@ export default function Header() {
 
   useEffect(() => {
     document.body.style.overflow = menu ? "hidden" : "";
+    document.body.classList.toggle("menu-open", menu);
 
     return () => {
       document.body.style.overflow = "";
+      document.body.classList.remove("menu-open");
     };
   }, [menu]);
 
@@ -94,19 +104,15 @@ export default function Header() {
 
   const navItems = [
     { to: "/", label: "Home Page" },
-
     ...(isAdmin ? [{ to: "/admin", label: "Dashboard" }] : []),
-
     {
       to: isAdmin ? "/admin/buy" : "/showroom?mode=buy",
       label: "Shop the Cars",
     },
-
     {
       to: isAdmin ? "/admin/rental" : "/showroom?mode=rent",
       label: "Car Rental",
     },
-
     { to: "/sold-history", label: "Sold History" },
     { to: "/contact", label: "Contact Us" },
     { to: "/help", label: "Need Help?" },
@@ -142,13 +148,12 @@ export default function Header() {
           <div className="site-nav">
             <div className="lang-wrapper" ref={langRef}>
               <button
-                className={`lang-btn${langOpen ? " lang-btn--open" : ""}`}
+                className={`nav-icon-btn${langOpen ? " active" : ""}`}
                 onClick={() => setLangOpen(!langOpen)}
-                aria-expanded={langOpen}
-                aria-label="Select language"
               >
-                <img src={currentLang.flag} alt={currentLang.code} />
+                <Languages size={18} />
                 <span>{currentLang.code}</span>
+                <ChevronDown size={14} />
               </button>
 
               <div className={`lang-dropdown${langOpen ? " lang-dropdown--open" : ""}`}>
@@ -178,24 +183,17 @@ export default function Header() {
             </div>
 
             <button
-              className="theme-btn"
+              className="nav-icon-btn"
               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              aria-label="Toggle dark mode"
             >
-              <span className="theme-btn__icon">
-                {theme === "dark" ? "☀️" : "🌙"}
-              </span>
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
             <button
-              className={`menu-btn${menu ? " menu-btn--open" : ""}`}
-              onClick={() => setMenu(!menu)}
-              aria-label="Open menu"
-              aria-expanded={menu}
+              className="nav-icon-btn"
+              onClick={() => setMenu((prev) => !prev)}
             >
-              <span></span>
-              <span></span>
-              <span></span>
+              {menu ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>

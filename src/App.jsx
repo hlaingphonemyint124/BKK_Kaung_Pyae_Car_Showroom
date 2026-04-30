@@ -63,7 +63,12 @@ function AppLayout() {
   const location = useLocation();
 
   const isAuthRoute =
-    location.pathname === "/login" || location.pathname === "/signup";
+    location.pathname === "/login" ||
+    location.pathname === "/signup" ||
+    location.pathname === "/verify-email" ||
+    location.pathname === "/forgot-password" ||
+    location.pathname === "/reset-password";
+    
   const isAdminRoute = location.pathname.startsWith("/admin");
 
   const hideHeader = isAuthRoute;
@@ -73,85 +78,94 @@ function AppLayout() {
     <>
       {!hideHeader && <Header />}
 
-      <Routes>
-        <Route path="/"             element={<Home />} />
-        <Route path="/showroom"     element={<Showroom />} />
-        <Route path="/car/:id"      element={<CarDetail />} />
-        <Route path="/sold-history" element={<SoldHistoryPage />} />
-        <Route path="/login"        element={<LoginPage />} />
-        <Route path="/signup"       element={<SignupPage />} />
-        <Route path="/contact"      element={<ContactPage />} />
-        <Route path="/profile"      element={<ProfilePage />} />
-        <Route path="/verify-email"    element={<VerifyEmailPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password"  element={<ResetPasswordPage />} />
+      <main
+        className={
+          !hideHeader || isAdminRoute
+            ? `app-content ${location.pathname === "/" ? "no-padding" : ""}`
+            : "auth-content"
+        }
+      >
 
-        {/* Protected admin routes */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute allowedRoles={ADMIN_ROLES}>
-              <AdminDashboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/buy"
-          element={
-            <ProtectedRoute allowedRoles={ADMIN_ROLES}>
-              <AdminBuyPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/rental"
-          element={
-            <ProtectedRoute allowedRoles={ADMIN_ROLES}>
-              <AdminRentalPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/buy/new"
-          element={
-            <ProtectedRoute allowedRoles={ADMIN_ROLES}>
-              <AdminBuyDetailPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/buy/:id"
-          element={
-            <ProtectedRoute allowedRoles={ADMIN_ROLES}>
-              <AdminBuyDetailPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/rental/new"
-          element={
-            <ProtectedRoute allowedRoles={ADMIN_ROLES}>
-              <AdminRentalDetailPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/rental/:id"
-          element={
-            <ProtectedRoute allowedRoles={ADMIN_ROLES}>
-              <AdminRentalDetailPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/roles"
-          element={
-            <ProtectedRoute allowedRoles={["admin"]}>
-              <AdminRolesPage />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+        <Routes>
+          <Route path="/"             element={<Home />} />
+          <Route path="/showroom"     element={<Showroom />} />
+          <Route path="/car/:id"      element={<CarDetail />} />
+          <Route path="/sold-history" element={<SoldHistoryPage />} />
+          <Route path="/login"        element={<LoginPage />} />
+          <Route path="/signup"       element={<SignupPage />} />
+          <Route path="/contact"      element={<ContactPage />} />
+          <Route path="/profile"      element={<ProfilePage />} />
+          <Route path="/verify-email"    element={<VerifyEmailPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password"  element={<ResetPasswordPage />} />
+
+          {/* Protected admin routes */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute allowedRoles={ADMIN_ROLES}>
+                <AdminDashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/buy"
+            element={
+              <ProtectedRoute allowedRoles={ADMIN_ROLES}>
+                <AdminBuyPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/rental"
+            element={
+              <ProtectedRoute allowedRoles={ADMIN_ROLES}>
+                <AdminRentalPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/buy/new"
+            element={
+              <ProtectedRoute allowedRoles={ADMIN_ROLES}>
+                <AdminBuyDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/buy/:id"
+            element={
+              <ProtectedRoute allowedRoles={ADMIN_ROLES}>
+                <AdminBuyDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/rental/new"
+            element={
+              <ProtectedRoute allowedRoles={ADMIN_ROLES}>
+                <AdminRentalDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/rental/:id"
+            element={
+              <ProtectedRoute allowedRoles={ADMIN_ROLES}>
+                <AdminRentalDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/roles"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminRolesPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </main>
 
       {!hideFooter && <Footer />}
     </>
