@@ -1,15 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { Languages, Sun, Moon, Menu, X, ChevronDown } from "lucide-react";
 import { ThemeContext } from "../App";
 import { useAuth } from "../context/AuthContext";
-import {
-  Languages,
-  Sun,
-  Moon,
-  Menu,
-  X,
-  ChevronDown,
-} from "lucide-react";
 
 export default function Header() {
   const { theme, setTheme } = useContext(ThemeContext);
@@ -37,19 +30,16 @@ export default function Header() {
   }, [setTheme]);
 
   useEffect(() => {
-    if (theme === "dark") {
-      document.body.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.body.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    document.body.classList.toggle("dark", theme === "dark");
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
+    const handleScroll = () => setScrolled(window.scrollY > 12);
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -80,6 +70,7 @@ export default function Header() {
 
   useEffect(() => {
     setMenu(false);
+    setLangOpen(false);
   }, [location.pathname]);
 
   const handleLogout = async () => {
@@ -100,7 +91,7 @@ export default function Header() {
     { code: "TH", flag: "https://flagcdn.com/w20/th.png", label: "ภาษาไทย" },
   ];
 
-  const currentLang = languages.find((l) => l.code === language);
+  const currentLang = languages.find((lang) => lang.code === language);
 
   const navItems = [
     { to: "/", label: "Home Page" },
@@ -138,30 +129,45 @@ export default function Header() {
 
   return (
     <>
-      <header className={`site-header${scrolled ? " site-header--scrolled" : ""}`}>
+      <header
+        className={`site-header${scrolled ? " site-header--scrolled" : ""}`}
+      >
         <div className="site-header__inner">
-          <Link to="/" className="site-logo">
-            <div className="site-logo__main">BKK Kaung Pyae</div>
+          <Link to="/" className="site-logo" aria-label="BKK Kaung Pyae Home">
+            <span className="site-logo__main">BKK Kaung Pyae</span>
             <span className="site-logo__sub">Auto</span>
           </Link>
 
           <div className="site-nav">
             <div className="lang-wrapper" ref={langRef}>
               <button
-                className={`nav-icon-btn${langOpen ? " active" : ""}`}
-                onClick={() => setLangOpen(!langOpen)}
+                type="button"
+                className={`nav-icon-btn nav-icon-btn--lang${
+                  langOpen ? " nav-icon-btn--active" : ""
+                }`}
+                onClick={() => setLangOpen((prev) => !prev)}
+                aria-label="Select language"
+                aria-expanded={langOpen}
               >
                 <Languages size={18} />
-                <span>{currentLang.code}</span>
-                <ChevronDown size={14} />
+                <span>{currentLang?.code || "EN"}</span>
+                <ChevronDown
+                  size={14}
+                  className={`nav-chevron${langOpen ? " nav-chevron--open" : ""}`}
+                />
               </button>
 
-              <div className={`lang-dropdown${langOpen ? " lang-dropdown--open" : ""}`}>
+              <div
+                className={`lang-dropdown${
+                  langOpen ? " lang-dropdown--open" : ""
+                }`}
+              >
                 <div className="lang-dropdown__bar" />
                 <div className="lang-dropdown__title">Language</div>
 
                 {languages.map((lang) => (
                   <button
+                    type="button"
                     key={lang.code}
                     className={`lang-item${
                       lang.code === language ? " lang-item--active" : ""
@@ -173,25 +179,30 @@ export default function Header() {
                   >
                     <img src={lang.flag} alt={lang.code} />
 
-                    <div className="lang-item__text">
+                    <span className="lang-item__text">
                       <span className="lang-item__code">{lang.code}</span>
                       <span className="lang-item__label">{lang.label}</span>
-                    </div>
+                    </span>
                   </button>
                 ))}
               </div>
             </div>
 
             <button
+              type="button"
               className="nav-icon-btn"
               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              aria-label="Toggle theme"
             >
               {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
             <button
-              className="nav-icon-btn"
+              type="button"
+              className="nav-icon-btn nav-icon-btn--menu"
               onClick={() => setMenu((prev) => !prev)}
+              aria-label="Open menu"
+              aria-expanded={menu}
             >
               {menu ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -249,13 +260,13 @@ export default function Header() {
         <div className="sideMenu__section-label">Menu</div>
 
         <div className="menuItems-wrapper">
-          {navItems.map(({ to, label }, i) => (
+          {navItems.map(({ to, label }, index) => (
             <Link
               key={to}
               to={to}
               className={`menuItem${isActive(to) ? " menuItem--active" : ""}`}
               onClick={() => setMenu(false)}
-              style={{ animationDelay: `${i * 0.055}s` }}
+              style={{ animationDelay: `${index * 0.055}s` }}
             >
               <span className="menuItem__dot" aria-hidden="true" />
               <span className="menuItem__label">{label}</span>
@@ -266,10 +277,10 @@ export default function Header() {
         <div className="sideMenu__spacer" />
 
         <div className="sideMenu__footer">
-          <div className="divider" style={{ margin: "0 0 6px" }} />
+          <div className="divider" />
 
           {user ? (
-            <button className="logout" onClick={handleLogout}>
+            <button type="button" className="logout" onClick={handleLogout}>
               Log Out
             </button>
           ) : (

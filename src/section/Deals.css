@@ -587,3 +587,232 @@ body.dark .cta-btn:hover {
   .nav-arrow svg { width: 15px; height: 15px; }
   .slider-inner { padding: 0 36px; gap: 16px; }
 }
+
+
+/* =====================================================
+   PREMIUM DEALS OVERRIDES — cleaner hierarchy + less glow
+===================================================== */
+
+.deals {
+  padding: 72px 0 82px;
+  overflow: hidden;
+}
+
+.deals::before {
+  opacity: 0.65;
+  filter: blur(52px);
+}
+
+.deals-header {
+  margin-bottom: 24px;
+}
+
+.deals-eyebrow {
+  margin-bottom: 14px;
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+}
+
+.deals-title {
+  font-size: clamp(38px, 5.2vw, 68px);
+  letter-spacing: -1.4px;
+  line-height: 1.02;
+  margin-bottom: 10px;
+}
+
+.deals-sub {
+  font-size: 15px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.deals-tabs {
+  margin-bottom: 22px;
+  gap: 10px;
+}
+
+.deals-tabs button {
+  min-width: 160px;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.72);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.85);
+}
+
+.deals-tabs button.active {
+  box-shadow: 0 16px 34px rgba(var(--color-red-rgb),0.25);
+}
+
+.slider-row {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.nav-arrow {
+  width: 42px;
+  height: 42px;
+  margin: 0 14px;
+  background: rgba(255,255,255,0.9);
+  box-shadow:
+    0 0 0 1px rgba(var(--color-red-rgb), 0.22),
+    0 6px 18px rgba(0,0,0,0.10);
+}
+
+.nav-arrow:hover {
+  box-shadow:
+    0 0 0 1px rgba(var(--color-red-rgb), 0.38),
+    0 10px 24px rgba(0,0,0,0.13);
+}
+
+.nav-ring,
+.nav-glow {
+  display: none;
+}
+
+.slider-inner {
+  gap: 18px;
+  padding: 0 42px;
+}
+
+.slider-track {
+  padding: 14px 0 24px;
+}
+
+.car-card {
+  width: 260px;
+}
+
+.card-flipper {
+  height: 382px;
+}
+
+.card-face {
+  border-radius: 20px;
+  padding: 18px 16px 14px;
+}
+
+.card-img-wrap {
+  height: 136px;
+  margin-bottom: 10px;
+}
+
+.card-name {
+  font-size: 18px;
+}
+
+.card-price {
+  font-size: 12px;
+}
+
+.card-cta {
+  border-radius: 12px;
+  padding: 11px 16px;
+}
+
+.deals-cta {
+  margin-top: 24px;
+}
+
+.cta-btn {
+  border-radius: 14px;
+  padding: 15px 46px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  background: linear-gradient(135deg, var(--color-red), var(--color-red-hover));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 16px 34px rgba(var(--color-red-rgb),0.25);
+}
+
+.cta-btn:hover {
+  letter-spacing: 0.15em;
+  transform: translateY(-2px);
+}
+
+/* Dark refinement */
+body.dark .deals-tabs button {
+  background: rgba(255,255,255,0.045);
+  border-color: rgba(255,255,255,0.08);
+}
+
+body.dark .nav-arrow {
+  background: rgba(16, 8, 8, 0.92);
+  box-shadow:
+    0 0 0 1px rgba(var(--color-red-rgb), 0.28),
+    0 8px 22px rgba(0,0,0,0.38);
+}
+
+/* Performance */
+@media (max-width: 768px) {
+  .deals {
+    padding: 54px 0 64px;
+  }
+
+  .deals-noise,
+  .deals-particles,
+  .deals-blob {
+    display: none;
+  }
+
+  .deals-title {
+    font-size: 34px;
+  }
+
+  .deals-tabs {
+    flex-direction: row;
+    padding-inline: 18px;
+  }
+
+  .deals-tabs button {
+    min-width: 0;
+    flex: 1;
+    padding: 11px 12px;
+    font-size: 12px;
+  }
+
+  .nav-arrow {
+    width: 36px;
+    height: 36px;
+    margin: 0 6px;
+  }
+
+  .slider-inner {
+    padding: 0 28px;
+    gap: 14px;
+  }
+
+  .car-card {
+    width: 220px;
+  }
+
+  .card-flipper {
+    height: 356px;
+  }
+
+  .card-img-wrap {
+    height: 116px;
+  }
+
+  .cta-btn {
+    width: min(88vw, 360px);
+    padding: 14px 20px;
+  }
+}
+
+@media (max-width: 420px) {
+  .deals-tabs {
+    flex-direction: column;
+    max-width: 300px;
+    margin-inline: auto;
+  }
+
+  .car-card {
+    width: 208px;
+  }
+
+  .card-flipper {
+    height: 344px;
+  }
+}
