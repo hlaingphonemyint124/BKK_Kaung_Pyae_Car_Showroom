@@ -1,31 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import "./WhyChooseUs.css";
+import { useLanguage } from "../context/LanguageContext";
 
-const items = [
-  {
-    img:  "/images/WhyChooseUs/WCU1.webp",
-    tag:  "Quality",
-    h4:   "Trusted & Well-Maintained Cars",
-    p:    "Every vehicle is carefully inspected, clean, and ready to drive.",
-    side: "left",
-  },
-  {
-    img:  "/images/WhyChooseUs/WCU3.jpg",
-    tag:  "Pricing",
-    h4:   "Transparent Pricing",
-    p:    "Clear price with no hidden fees — what you see is what you pay.",
-    side: "right",
-  },
-  {
-    img:  "/images/WhyChooseUs/WCU2.jpg",
-    tag:  "Booking",
-    h4:   "Fast & Easy Booking",
-    p:    "Rent in minutes with flexible rental options and quick support.",
-    side: "left",
-  },
+const ITEM_IMAGES = [
+  { img: "/images/WhyChooseUs/WCU1.webp", side: "left",  keys: ["wcu_tag1","wcu_h4_1","wcu_p1"] },
+  { img: "/images/WhyChooseUs/WCU3.jpg",  side: "right", keys: ["wcu_tag2","wcu_h4_2","wcu_p2"] },
+  { img: "/images/WhyChooseUs/WCU2.jpg",  side: "left",  keys: ["wcu_tag3","wcu_h4_3","wcu_p3"] },
 ];
 
 export default function WhyChooseUs() {
+  const { t }    = useLanguage();
   const itemsRef = useRef([]);
 
   useEffect(() => {
@@ -56,22 +40,22 @@ export default function WhyChooseUs() {
     <section className="whySection">
       <div className="whyContainer">
 
-        <h2 className="whyTitle">Why Choose Us?</h2>
-        <p className="whySubline">What makes us different</p>
+        <h2 className="whyTitle">{t("wcu_title")}</h2>
+        <p className="whySubline">{t("wcu_sub")}</p>
 
         <div className="whyGrid">
-          {items.map(({ img, tag, h4, p, side }, i) => (
+          {ITEM_IMAGES.map(({ img, side, keys }, i) => (
             <div
               key={i}
               className="whyItem"
               ref={(el) => (itemsRef.current[i] = el)}
             >
-              <img src={img} alt={h4} />
+              <img src={img} alt={t(keys[1])} />
 
               <div className={`whyOverlay ${side}`}>
-                <span className="whyTag">{tag}</span>
-                <h4>{h4}</h4>
-                <p>{p}</p>
+                <span className="whyTag">{t(keys[0])}</span>
+                <h4>{t(keys[1])}</h4>
+                <p>{t(keys[2])}</p>
               </div>
 
               <div className={`whyEdgeBar ${side === "left" ? "edgeLeft" : "edgeRight"}`} />
@@ -80,8 +64,8 @@ export default function WhyChooseUs() {
         </div>
 
         <div className="whyAction">
-          <button className="rentBtn">Buy / Rent a Car →</button>
-          <p className="whyFeatures">• Trust &nbsp;•&nbsp; Fair Price &nbsp;•&nbsp; Simple & Fast Booking</p>
+          <button className="rentBtn">{t("wcu_btn")}</button>
+          <p className="whyFeatures">{t("wcu_features")}</p>
         </div>
 
       </div>

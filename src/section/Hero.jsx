@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Hero.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const SLIDES = [
   process.env.PUBLIC_URL + "/images/SlideShow/ss1.jpg",
@@ -9,6 +10,7 @@ const SLIDES = [
 ];
 
 export default function Hero() {
+  const { t } = useLanguage();
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -35,11 +37,11 @@ export default function Hero() {
 
       <div className="hero__container">
         <div className="hero__left">
-          <p className="hero__eyebrow">Premium cars</p>
-          <h1 className="hero__title">For rent and ownership</h1>
+          <p className="hero__eyebrow">{t("hero_eyebrow")}</p>
+          <h1 className="hero__title">{t("hero_title")}</h1>
           <div className="hero__actions">
             <Link className="btn btn--primary" to="/showroom">
-              Browse Cars →
+              {t("hero_browse")}
             </Link>
           </div>
         </div>
@@ -47,7 +49,7 @@ export default function Hero() {
 
       <div className="hero__bottom">
         <div className="hero__scroll-indicator">
-          <span className="hero__scroll-label">Scroll</span>
+          <span className="hero__scroll-label">{t("hero_scroll")}</span>
           <div className="hero__scroll-line">
             <div className="hero__scroll-thumb"></div>
           </div>

@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./BrandList.css";
 import { applyCardTilt, resetCardTilt, spawnParticles, spawnRipple } from "../utils/cardEffects";
-
-// ✅ FIXED: use brands.api.js instead of raw fetch()
 import { getAllBrands } from "../api/brands.api";
+import { useLanguage } from "../context/LanguageContext";
 
 
 const SCROLL_AMOUNT = 280;
@@ -33,6 +32,7 @@ function NavArrow({ dir, onClick }) {
 }
 
 export default function BrandList() {
+  const { t }  = useLanguage();
   const navigate = useNavigate();
   const rowRef   = useRef(null);
 
@@ -63,15 +63,15 @@ export default function BrandList() {
     <section className="bl-section">
 
       <div className="bl-header">
-        <h2 className="bl-title">Brands</h2>
+        <h2 className="bl-title">{t("brands_title")}</h2>
         <button className="bl-viewall" onClick={() => navigate("/brands")}>
-          View all →
+          {t("view_all")}
         </button>
       </div>
 
       {loading && (
         <div style={{ textAlign: "center", padding: "40px 0", opacity: 0.5 }}>
-          Loading brands...
+          {t("loading_brands")}
         </div>
       )}
 

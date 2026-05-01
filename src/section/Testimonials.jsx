@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./Testimonials.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const data = [
   {
@@ -26,6 +27,7 @@ const data = [
 ];
 
 function TestimonialCard({ t, index }) {
+  const { t: tFn } = useLanguage();
   const cardRef = useRef(null);
   const glowRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -121,7 +123,7 @@ function TestimonialCard({ t, index }) {
         </div>
         <div className="ts-badge">
           <span className="ts-badge-dot" />
-          verified
+          {tFn("test_verified")}
         </div>
       </div>
 
@@ -145,27 +147,28 @@ function TestimonialCard({ t, index }) {
 }
 
 export default function Testimonials() {
+  const { t } = useLanguage();
   const [titleVisible, setTitleVisible] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setTitleVisible(true), 50);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setTitleVisible(true), 50);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <section className="ts-section">
       <h2 className={`ts-title ${titleVisible ? "visible" : ""}`}>
-        What Our
-        <span className="ts-title-sub">Customers Say</span>
+        {t("test_title1")}
+        <span className="ts-title-sub">{t("test_title2")}</span>
       </h2>
 
       <p className={`ts-subtitle ${titleVisible ? "visible" : ""}`}>
-        Real experiences · Real drivers
+        {t("test_sub")}
       </p>
 
       <div className="ts-grid">
-        {data.map((t, i) => (
-          <TestimonialCard key={i} t={t} index={i} />
+        {data.map((item, i) => (
+          <TestimonialCard key={i} t={item} index={i} />
         ))}
       </div>
 
@@ -181,7 +184,7 @@ export default function Testimonials() {
 
       <p className="ts-footer">
         <span className="ts-footer-line" />
-        Premium service built on trust, quality &amp; simplicity
+        {t("test_footer")}
         <span className="ts-footer-line right" />
       </p>
     </section>

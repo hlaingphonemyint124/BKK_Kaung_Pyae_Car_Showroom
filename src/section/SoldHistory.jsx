@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./SoldHistory.css";
 import { getSoldHistory, getSoldStats } from "../api/soldhistory.api";
 import { Link } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 
 
 
@@ -73,6 +74,7 @@ function SkeletonCards({ count = 6 }) {
    MAIN COMPONENT
 ═══════════════════════════════════════════════════════════════ */
 export default function SoldHistory() {
+  const { t }             = useLanguage();
   const [cars, setCars]       = useState([]);
   const [stats, setStats]     = useState({ total_sold: 0, this_month: 0 });
   const [loading, setLoading] = useState(true);
@@ -133,21 +135,21 @@ export default function SoldHistory() {
           <div className="sh-title-block">
             <div className="sh-eyebrow">
               <span className="sh-eyebrow-line" />
-              Sales Record
+              {t("sold_eyebrow")}
             </div>
-            <h2 className="sh-title">SOLD <span>HISTORY</span></h2>
-            <p className="sh-subtitle">Every vehicle that found its new home</p>
+            <h2 className="sh-title">{t("sold_title1")} <span>{t("sold_title2")}</span></h2>
+            <p className="sh-subtitle">{t("sold_sub")}</p>
           </div>
           <Link to="/sold-history" className="sh-viewall-btn">
-  View All Records →
-</Link>
+            {t("sold_view_all")}
+          </Link>
         </div>
 
         {/* ── Stats Row — 2 stats ── */}
         <div className="sh-stats">
           {[
-            { label: "Total Cars Sold", value: stats.total_sold, prefix: "", suffix: "",      red: false },
-            { label: "Sold This Month", value: stats.this_month, prefix: "", suffix: " cars", red: true  },
+            { label: t("sold_total"), value: stats.total_sold, prefix: "", suffix: "",      red: false },
+            { label: t("sold_month"), value: stats.this_month, prefix: "", suffix: " cars", red: true  },
           ].map((s, i) => (
             <div
               key={i}
@@ -186,7 +188,7 @@ export default function SoldHistory() {
           {!loading && paginated.length === 0 && (
             <div className="sh-empty">
               <div className="sh-empty-icon">🚗</div>
-              <div className="sh-empty-text">No sold cars found for this filter.</div>
+              <div className="sh-empty-text">{t("sold_empty")}</div>
             </div>
           )}
 
@@ -204,7 +206,7 @@ export default function SoldHistory() {
                   : <div className="sh-car-card-img-placeholder">🚗</div>
                 }
                 <span className="sh-badge sold">
-                  <span className="sh-badge-dot" />Sold
+                  <span className="sh-badge-dot" />{t("sold_badge")}
                 </span>
               </div>
 
@@ -242,7 +244,7 @@ export default function SoldHistory() {
         {!loading && totalPages > 1 && (
           <div className="sh-pagination">
             <span className="sh-page-info">
-              Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length} records
+              {t("sold_showing")} {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} {t("sold_of")} {filtered.length} {t("sold_records")}
             </span>
             <div className="sh-page-btns">
               <button

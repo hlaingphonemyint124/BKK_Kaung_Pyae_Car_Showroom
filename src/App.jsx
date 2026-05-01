@@ -34,6 +34,7 @@ import AdminRolesPage        from "./features/admin/pages/AdminRolesPage";
 import ProtectedRoute        from "./features/admin/components/ProtectedRoute";
 
 import { AuthProvider } from "./context/AuthContext";
+import { LanguageProvider } from "./context/LanguageContext";
 
 /* ========================= */
 
@@ -176,11 +177,13 @@ function App() {
   const [theme, setTheme] = useState("light");
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
-      <AuthProvider>
-        <BrowserRouter>
-          <AppLayout />
-        </BrowserRouter>
-      </AuthProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <AppLayout />
+          </BrowserRouter>
+        </AuthProvider>
+      </LanguageProvider>
     </ThemeContext.Provider>
   );
 }

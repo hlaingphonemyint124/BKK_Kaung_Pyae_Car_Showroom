@@ -6,6 +6,7 @@ import { GiCarDoor } from "react-icons/gi";
 import { MdElectricCar } from "react-icons/md";
 import "./CarTypes.css";
 import { applyCardTilt, resetCardTilt, spawnParticles, spawnRipple } from "../utils/cardEffects";
+import { useLanguage } from "../context/LanguageContext";
 
 const types = [
   { name: "Pickup",    icon: <FaTruckPickup />, slug: "pickup"    },
@@ -46,6 +47,7 @@ function NavArrow({ dir, onClick }) {
 }
 
 export default function CarTypes() {
+  const { t }  = useLanguage();
   const navigate = useNavigate();
   const rowRef   = useRef(null);
 
@@ -61,9 +63,9 @@ export default function CarTypes() {
     <section className="ct-section">
 
       <div className="ct-header">
-        <h3 className="ct-title">Browse by Car Type</h3>
+        <h3 className="ct-title">{t("car_types_title")}</h3>
         <button className="ct-viewall" onClick={() => navigate("/types")}>
-          View all →
+          {t("view_all")}
         </button>
       </div>
 
@@ -90,10 +92,10 @@ export default function CarTypes() {
         <NavArrow dir="next" onClick={scrollRight} />
       </div>
 
-      <p className="ct-note">+100 cars are ready to be yours</p>
+      <p className="ct-note">{t("cars_ready")}</p>
 
       <button className="ct-shopBtn" onClick={() => navigate("/shop")}>
-        View on Shop →
+        {t("view_on_shop")}
       </button>
 
     </section>

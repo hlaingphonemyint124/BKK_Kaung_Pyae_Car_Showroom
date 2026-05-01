@@ -1,67 +1,47 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./Showroom.css";
 
 import { getCarsForSale, getCarsForRent } from "../api/showroom.api";
 import { useAuth } from "../context/AuthContext";
-import { Fuel, Settings2 } from "lucide-react";
+import { Fuel, Settings2, Search } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 const RED_THEME = "#ef2b2d";
 
 const FUEL_COLORS = {
-  petrol: "#f59e0b",
-  diesel: "#78716c",
-  hybrid: "#14b8a6",
-  electric: "#3b82f6",
+  petrol:           "#f59e0b",
+  diesel:           "#78716c",
+  hybrid:           "#14b8a6",
+  electric:         "#3b82f6",
   "plug-in hybrid": "#8b5cf6",
 };
 
-
-const CATEGORIES = ["All", "Sedan", "Hatchback", "SUV", "Pickup Truck", "Van / Minivan", "Electric"];
-
 export default function Showroom() {
+  const { t }       = useLanguage();
   const navigate    = useNavigate();
   const [params]    = useSearchParams();
   const { user }    = useAuth();
   const isAdmin     = user?.role === "admin" || user?.role === "employee";
 
-  const [mode, setMode] = useState(() => params.get("mode") === "rent" ? "rent" : "buy");
-  const [filterOpen, setFilterOpen]           = useState(false);
-  const [modeOpen, setModeOpen]               = useState(false);
-  const [searchOpen, setSearchOpen]           = useState(false);
-  const [searchQuery, setSearchQuery]         = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [cars, setCars]                       = useState([]);
-  const [loading, setLoading]                 = useState(true);
-  const [error, setError]                     = useState(null);
+  const [mode, setMode]                         = useState(() => params.get("mode") === "rent" ? "rent" : "buy");
+  const [searchQuery, setSearchQuery]           = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [cars, setCars]                         = useState([]);
+  const [loading, setLoading]                   = useState(true);
+  const [error, setError]                       = useState(null);
 
-  const filterRef = useRef();
-  const modeRef   = useRef();
-  const searchRef = useRef();
-
-  // ── Close dropdowns on outside click ──────────────────────────────────────
-  useEffect(() => {
-    function handleClick(e) {
-      if (filterRef.current && !filterRef.current.contains(e.target)) setFilterOpen(false);
-      if (modeRef.current   && !modeRef.current.contains(e.target))   setModeOpen(false);
-      if (searchRef.current && !searchRef.current.contains(e.target)) setSearchOpen(false);
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
-  // ── Fetch cars ─────────────────────────────────────────────────────────────
   useEffect(() => {
     setLoading(true);
     setError(null);
-    setSelectedCategory("All");
+    setSelectedCategory("all");
+    setSearchQuery("");
 
     const apiFn = mode === "buy" ? getCarsForSale : getCarsForRent;
 
     apiFn()
       .then((res) => {
         const data = res.data.cars ?? [];
-        console.log("PUBLIC SHOWROOM CARS:", data);
         setCars(data);
       })
       .catch(() => {
@@ -71,19 +51,29 @@ export default function Showroom() {
       .finally(() => setLoading(false));
   }, [mode]);
 
-  // ── Filter by mode price, category + search ───────────────────────────────
+  const tabs = mode === "buy"
+    ? [{ key: "all", label: t("sr_all") }, { key: "new",    label: t("sr_new_arrival") }]
+    : [{ key: "all", label: t("sr_all") }, { key: "rented", label: t("sr_most_rented") }];
+
+  const isNewArrival = (car) => {
+    if (!car.created_at) return false;
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 30);
+    return new Date(car.created_at) >= cutoff;
+  };
+
+  const isMostRented = (car) => Number(car.rent_count ?? car.total_rented ?? 0) > 0;
+
   const filteredCars = cars.filter((c) => {
-    const hasPrice = mode === "buy" ? c.sale_price != null : c.rent_price_per_day != null;
-    const matchesCategory =
-      selectedCategory === "All" ||
-      (c.type || "").toLowerCase() === selectedCategory.toLowerCase();
-    const matchesSearch =
-      !searchQuery.trim() ||
-      `${c.brand} ${c.model}`.toLowerCase().includes(searchQuery.toLowerCase());
-    return hasPrice && matchesCategory && matchesSearch;
+    const hasPrice      = mode === "buy" ? c.sale_price != null : c.rent_price_per_day != null;
+    const matchesTab    =
+      selectedCategory === "all" ||
+      (selectedCategory === "new"    && isNewArrival(c)) ||
+      (selectedCategory === "rented" && isMostRented(c));
+    const matchesSearch = !searchQuery.trim() || `${c.brand} ${c.model}`.toLowerCase().includes(searchQuery.toLowerCase());
+    return hasPrice && matchesTab && matchesSearch;
   });
 
-  // ── Display price ──────────────────────────────────────────────────────────
   const displayPrice = (car) => {
     if (mode === "buy") {
       return car.sale_price
@@ -95,121 +85,99 @@ export default function Showroom() {
       : "—";
   };
 
-  // ── Image source ───────────────────────────────────────────────────────────
-  // ✅ FIXED: backend image field is storage_path not url
-  const getImage = (car) =>
-    car.images?.[0]?.storage_path || car.img || "/images/placeholder.png";
+  const getImage    = (car) => car.images?.[0]?.storage_path || car.img || "/images/placeholder.png";
+  const getFuelColor = (car) => FUEL_COLORS[String(car.fuel || car.fuel_type || "").toLowerCase()] || RED_THEME;
 
   return (
-    <div className="showroom">
-      <div className="showroomInner">
+    <div className="sr">
+      <div className="sr-inner">
 
-        <h2 className="title">Fast, Simple and Easy.</h2>
-        <p className="subtitle">Shop Online. Pickup Today. It's Fast, Simple and Easy.</p>
-
-        {/* ── Admin: Add New Car ── */}
-        {isAdmin && (
-          <div className="showroom-admin-bar">
+        {/* ── Page Header ── */}
+        <div className="sr-header">
+          <div>
+            <h2 className="sr-title">{t("sr_title")}</h2>
+            <p className="sr-subtitle">{t("sr_subtitle")}</p>
+          </div>
+          {isAdmin && (
             <button
-              className="showroom-add-btn"
+              className="sr-add-btn"
               onClick={() => navigate(mode === "buy" ? "/admin/buy/new" : "/admin/rental/new")}
             >
-              + Add New Car
+              {t("sr_add")}
             </button>
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* ── Filter Bar ── */}
-        <div className="filterBar">
-
-          <div className="filterItem" ref={filterRef}>
-            <div className="filterBtn" onClick={() => setFilterOpen(!filterOpen)}>
-              {selectedCategory === "All" ? "Filter" : selectedCategory} ▾
+        {/* ── Controls ── */}
+        <div className="sr-controls-wrap">
+          <div className="sr-top-row">
+            <div className="sr-mode-toggle">
+              <button
+                className={`sr-mode-btn ${mode === "buy" ? "sr-mode-btn--active" : ""}`}
+                onClick={() => setMode("buy")}
+              >
+                {t("sr_buy")}
+              </button>
+              <button
+                className={`sr-mode-btn ${mode === "rent" ? "sr-mode-btn--active" : ""}`}
+                onClick={() => setMode("rent")}
+              >
+                {t("sr_rental")}
+              </button>
             </div>
-            {filterOpen && (
-              <div className="dropdown">
-                {CATEGORIES.map((cat, i) => (
-                  <div
-                    key={i}
-                    className={`dropdownItem ${selectedCategory === cat ? "active" : ""}`}
-                    onClick={() => { setSelectedCategory(cat); setFilterOpen(false); }}
-                  >
-                    {cat}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
 
-          <div className="filterItem" ref={modeRef}>
-            <div className="filterBtn" onClick={() => setModeOpen(!modeOpen)}>
-              {mode === "buy" ? "Buy" : "Rental"} ▾
+            <div className="sr-search-wrap">
+              <Search size={15} className="sr-search-icon" />
+              <input
+                className="sr-search-input"
+                type="text"
+                placeholder={t("sr_search")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button className="sr-search-clear" onClick={() => setSearchQuery("")}>✕</button>
+              )}
             </div>
-            {modeOpen && (
-              <div className="dropdown">
-                <div className="dropdownItem" onClick={() => { setMode("buy");  setModeOpen(false); }}>Buy</div>
-                <div className="dropdownItem" onClick={() => { setMode("rent"); setModeOpen(false); }}>Rental</div>
-              </div>
-            )}
           </div>
 
-          <div className="filterItem searchItem" ref={searchRef}>
-            {searchOpen ? (
-              <div className="searchInputWrap">
-                <input
-                  className="searchInput"
-                  type="text"
-                  autoFocus
-                  placeholder="Search cars..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+          <div className="sr-cats-row">
+            {tabs.map(({ key, label }, i) => (
+              <React.Fragment key={key}>
+                {i > 0 && <span className="sr-tab-divider">|</span>}
                 <button
-                  className="searchClear"
-                  onClick={() => { setSearchQuery(""); setSearchOpen(false); }}
+                  className={`sr-cat-chip ${selectedCategory === key ? "sr-cat-chip--active" : ""}`}
+                  onClick={() => setSelectedCategory(key)}
                 >
-                  ✕
+                  {label}
                 </button>
-              </div>
-            ) : (
-              <div className="filterBtn" onClick={() => setSearchOpen(true)}>
-                Search 🔍
-              </div>
-            )}
+              </React.Fragment>
+            ))}
+            <span className="sr-count">
+              {filteredCars.length} {filteredCars.length !== 1 ? t("sr_vehicles") : t("sr_vehicle")}
+            </span>
           </div>
-
         </div>
 
         {/* ── States ── */}
-        {loading && (
-          <div style={{ textAlign: "center", padding: "60px 0", opacity: 0.6 }}>
-            Loading cars...
-          </div>
-        )}
-        {!loading && error && (
-          <div style={{ textAlign: "center", padding: "60px 0", color: "red" }}>
-            {error}
-          </div>
-        )}
+        {loading && <div className="sr-state">{t("sr_loading")}</div>}
+        {!loading && error && <div className="sr-state sr-state--error">{error}</div>}
         {!loading && !error && filteredCars.length === 0 && (
-          <div style={{ textAlign: "center", padding: "60px 0", opacity: 0.6 }}>
-            No cars found.
-          </div>
+          <div className="sr-state">{t("sr_no_results")}</div>
         )}
 
-        {/* ── Cars Grid ── */}
+        {/* ── Grid ── */}
         {!loading && !error && filteredCars.length > 0 && (
-          <div className="carsGrid">
+          <div className="sr-grid">
             {filteredCars.map((car) => (
               <div
-                className={`carCard carCard--${mode}`}
+                className={`sr-card sr-card--${mode}`}
                 key={car.id}
                 onClick={() => navigate(`/car/${car.id}`)}
-                style={{ cursor: "pointer" }}
               >
                 {isAdmin && (
                   <button
-                    className="showroom-edit-btn"
+                    className="sr-edit-btn"
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(mode === "buy" ? `/admin/buy/${car.id}` : `/admin/rental/${car.id}`);
@@ -219,47 +187,32 @@ export default function Showroom() {
                   </button>
                 )}
 
-                <div className={`tag ${mode === "buy" ? "sale" : "rent"}`}>
-                  {mode === "buy" ? "Sale" : "Rent"}
+                <div className="sr-card-img-wrap">
+                  <img src={getImage(car)} alt={`${car.brand} ${car.model}`} draggable={false} />
+                  <div className="sr-card-img-overlay" />
+                  <span className={`sr-badge sr-badge--${mode}`}>
+                    {mode === "buy" ? t("sr_for_sale") : t("sr_for_rent")}
+                  </span>
                 </div>
 
-                <img src={getImage(car)} alt={`${car.brand} ${car.model}`} />
+                <div className="sr-card-body">
+                  <p className="sr-card-brand">{car.brand}</p>
+                  <h3 className="sr-card-name">{car.model}</h3>
 
-                <div className="cardBody">
-                  <h3>{car.brand} {car.model}</h3>
-                  <p className="desc">
-                    {[(car.fuel || car.fuel_type), (car.drive || car.drive_type), car.engine, car.seats && `${car.seats} seats`]
-                      .filter(Boolean)
-                      .join(", ") || "Details available on request"}
-                  </p>
-                  <div className="showroom-specs">
-                    <div className="showroom-spec-item">
-                      <Fuel
-                        className="showroom-spec-icon"
-                        size={21}
-                        strokeWidth={2.2}
-                        style={{
-                          color:
-                            FUEL_COLORS[String(car.fuel || car.fuel_type || "").toLowerCase()] ||
-                            RED_THEME,
-                        }}
-                      />
-                      <span>{car.fuel || car.fuel_type || "—"}</span>
-                    </div>
-
-                    <div className="showroom-spec-item">
-                      <Settings2
-                        className="showroom-spec-icon"
-                        size={21}
-                        strokeWidth={2.2}
-                        style={{ color: RED_THEME }}
-                      />
-                      <span>{car.transmission || "—"}</span>
-                    </div>
+                  <div className="sr-card-specs">
+                    <span className="sr-spec-chip">
+                      <Fuel size={12} style={{ color: getFuelColor(car), flexShrink: 0 }} />
+                      {car.fuel || car.fuel_type || "—"}
+                    </span>
+                    <span className="sr-spec-chip">
+                      <Settings2 size={12} style={{ color: RED_THEME, flexShrink: 0 }} />
+                      {car.transmission || "—"}
+                    </span>
                   </div>
-                  <div className="bottomRow">
-                    <div className="price">{displayPrice(car)}</div>
-                    <div className="detail">view detail →</div>
+
+                  <div className="sr-card-footer">
+                    <p className="sr-card-price">{displayPrice(car)}</p>
+                    <span className="sr-card-cta">{t("sr_details")}</span>
                   </div>
                 </div>
               </div>

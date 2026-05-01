@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import { getBestSellers, getMostRented } from "../api/deals.api";
+import { useLanguage } from "../context/LanguageContext";
 
 
 // ─── Map API car → card shape ─────────────────────────────────────────────────
@@ -135,7 +136,7 @@ function SpecRow({ icon, label, value }) {
 /* ─────────────────────────────────────────────────────────────────────────────
    CAR CARD
 ───────────────────────────────────────────────────────────────────────────── */
-function CarCard({ car, index, isFlipped, onFlip }) {
+function CarCard({ car, index, isFlipped, onFlip, t }) {
   const navigate = useNavigate();
   const downPos = useRef({ x: 0, y: 0 });
 
@@ -173,9 +174,9 @@ function CarCard({ car, index, isFlipped, onFlip }) {
             onPointerDown={e => e.stopPropagation()}
             onClick={e => { e.stopPropagation(); navigate(`/car/${car.id}`); }}
           >
-            <span>Shop Now</span><span className="cta-arrow">→</span>
+            <span>{t("deals_shop_now")}</span><span className="cta-arrow">→</span>
           </button>
-          <p className="flip-hint">Tap card to see specs ↺</p>
+          <p className="flip-hint">{t("deals_flip_front")}</p>
         </div>
 
         {/* ══ BACK ══ */}
@@ -184,24 +185,24 @@ function CarCard({ car, index, isFlipped, onFlip }) {
           <div className="card-corner tl" /><div className="card-corner br" />
           <div className="back-head">
             <h3 className="back-name">{car.name}</h3>
-            <span className="back-badge">Specs</span>
+            <span className="back-badge">{t("deals_specs")}</span>
           </div>
           <div className="specs-list">
-            <SpecRow icon="📅" label="Year"         value={car.specs.year} />
-            <SpecRow icon="⚙️" label="Engine"       value={car.specs.engine} />
-            <SpecRow icon="🛣️" label="Mileage"      value={car.specs.mileage} />
-            <SpecRow icon="⛽" label="Fuel"         value={car.specs.fuel} />
-            <SpecRow icon="🔧" label="Transmission" value={car.specs.transmission} />
-            <SpecRow icon="🎨" label="Color"        value={car.specs.color} />
+            <SpecRow icon="📅" label={t("spec_year")}         value={car.specs.year} />
+            <SpecRow icon="⚙️" label={t("spec_engine")}       value={car.specs.engine} />
+            <SpecRow icon="🛣️" label={t("spec_mileage")}      value={car.specs.mileage} />
+            <SpecRow icon="⛽" label={t("spec_fuel")}         value={car.specs.fuel} />
+            <SpecRow icon="🔧" label={t("spec_transmission")} value={car.specs.transmission} />
+            <SpecRow icon="🎨" label={t("spec_color")}        value={car.specs.color} />
           </div>
           <button
             className="card-cta"
             onPointerDown={e => e.stopPropagation()}
             onClick={e => { e.stopPropagation(); navigate(`/car/${car.id}`); }}
           >
-            <span>Shop Now</span><span className="cta-arrow">→</span>
+            <span>{t("deals_shop_now")}</span><span className="cta-arrow">→</span>
           </button>
-          <p className="flip-hint">Tap to go back ↺</p>
+          <p className="flip-hint">{t("deals_flip_back")}</p>
         </div>
 
       </div>
@@ -328,6 +329,7 @@ function Slider({ children, navigateRef }) {
    MAIN DEALS COMPONENT
 ───────────────────────────────────────────────────────────────────────────── */
 export default function Deals() {
+  const { t }               = useLanguage();
   const navigate            = useNavigate();
   const [tab, setTab]       = useState("seller");
   const [flipped, setFlip]  = useState(null);
@@ -367,10 +369,10 @@ export default function Deals() {
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true }}
       >
         <p className="deals-eyebrow">
-          <span className="eyebrow-rule" />Exclusive Collection<span className="eyebrow-rule" />
+          <span className="eyebrow-rule" />{t("deals_eyebrow")}<span className="eyebrow-rule" />
         </p>
-        <h2 className="deals-title">Best Deals For You</h2>
-        <p className="deals-sub">Premium vehicles. Unmatched prices.</p>
+        <h2 className="deals-title">{t("deals_title")}</h2>
+        <p className="deals-sub">{t("deals_sub")}</p>
       </motion.div>
 
       {/* ── Tabs ── */}
@@ -379,17 +381,17 @@ export default function Deals() {
         transition={{ duration: 0.5, delay: 0.15 }} viewport={{ once: true }}
       >
         <button className={tab === "seller" ? "active" : ""} onClick={() => setTab("seller")}>
-          <span className="tab-dot" />New Arrivals
+          <span className="tab-dot" />{t("deals_new")}
         </button>
         <button className={tab === "rented" ? "active" : ""} onClick={() => setTab("rented")}>
-          <span className="tab-dot" />Most Rented
+          <span className="tab-dot" />{t("deals_rented")}
         </button>
       </motion.div>
 
       {/* ── Loading ── */}
       {loading && (
         <div style={{ textAlign: "center", padding: "60px 0", opacity: 0.5 }}>
-          Loading...
+          {t("deals_loading")}
         </div>
       )}
 
@@ -406,6 +408,7 @@ export default function Deals() {
                   index={i}
                   isFlipped={flipped === i}
                   onFlip={idx => setFlip(flipped === idx ? null : idx)}
+                  t={t}
                 />
               ))}
             </Slider>
@@ -423,7 +426,7 @@ export default function Deals() {
           whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}
           onClick={() => navigate("/showroom")}
         >
-          View Full Collection
+          {t("deals_view_all")}
         </motion.button>
       </motion.div>
     </section>

@@ -7,6 +7,7 @@ import {
   getPublicCarDocuments,
   getPublicRentalTerms,
 } from "../api/showroom.api";
+import { useLanguage } from "../context/LanguageContext";
 
 
 // Fuel value → icon color (same as admin SpecGrid)
@@ -24,7 +25,8 @@ const FUEL_COLORS = {
 };
 
 export default function CarDetail() {
-  const { id } = useParams();
+  const { t }    = useLanguage();
+  const { id }   = useParams();
   const navigate = useNavigate();
   const [car, setCar] = useState(null);
   const [documents, setDocuments] = useState([]);
@@ -66,8 +68,8 @@ export default function CarDetail() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <div className="cd-loading">Loading...</div>;
-  if (error || !car) return <div className="cd-loading">{error || "Car not found"}</div>;
+  if (loading) return <div className="cd-loading">{t("cd_loading")}</div>;
+  if (error || !car) return <div className="cd-loading">{error || t("cd_not_found")}</div>;
 
   const images =
     car.images?.length > 0
@@ -79,12 +81,12 @@ export default function CarDetail() {
   const isRental = !!car.rent_price_per_day && !car.sale_price;
 
   const specs = [
-    { key: "fuel",         Icon: Fuel,      color: FUEL_COLORS[fuel] ?? "#ef2b2d", label: "Fuel",         value: fuel  || "—" },
-    { key: "transmission", Icon: Settings2, color: "#ef2b2d",                      label: "Transmission", value: car.transmission || "—" },
-    { key: "color",        Icon: Palette,   color: "#ef2b2d",                      label: "Color",        value: car.color || "—" },
-    { key: "engine",       Icon: Gauge,     color: "#ef2b2d",                      label: "Engine",       value: car.engine || "—" },
-    { key: "drive",        Icon: Disc3,     color: "#ef2b2d",                      label: "Drive",        value: drive || "—" },
-    { key: "seats",        Icon: Users,     color: "#ef2b2d",                      label: "Seats",        value: car.seats ? `${car.seats} Seaters` : "—" },
+    { key: "fuel",         Icon: Fuel,      color: FUEL_COLORS[fuel] ?? "#ef2b2d", label: t("spec_fuel"),         value: fuel  || "—" },
+    { key: "transmission", Icon: Settings2, color: "#ef2b2d",                      label: t("spec_transmission"), value: car.transmission || "—" },
+    { key: "color",        Icon: Palette,   color: "#ef2b2d",                      label: t("spec_color"),        value: car.color || "—" },
+    { key: "engine",       Icon: Gauge,     color: "#ef2b2d",                      label: t("spec_engine"),       value: car.engine || "—" },
+    { key: "drive",        Icon: Disc3,     color: "#ef2b2d",                      label: t("spec_drive"),        value: drive || "—" },
+    { key: "seats",        Icon: Users,     color: "#ef2b2d",                      label: t("spec_seats"),        value: car.seats ? `${car.seats} Seaters` : "—" },
   ];
 
   const dailyPrice = isRental ? Number(car.rent_price_per_day) || 0 : 0;
@@ -95,29 +97,29 @@ export default function CarDetail() {
         ...(dailyPrice
           ? [
               {
-                label: "7-Day Price (5% off)",
+                label: t("cd_7day"),
                 value: `${Math.round(dailyPrice * 7 * 0.95).toLocaleString()} ${currency}`,
                 highlight: true,
               },
               {
-                label: "30-Day Price (10% off)",
+                label: t("cd_30day"),
                 value: `${Math.round(dailyPrice * 30 * 0.9).toLocaleString()} ${currency}`,
                 highlight: true,
               },
             ]
           : []),
-        { label: "Status", value: car.status || "—" },
+        { label: t("cd_status"), value: car.status || "—" },
       ]
     : [
         {
-          label: "Mileage",
+          label: t("spec_mileage"),
           value: car.mileage_km
             ? `${Number(car.mileage_km).toLocaleString()} km`
             : "—",
         },
-        { label: "Model Year", value: car.year || "—" },
-        { label: "Status", value: car.status || "—" },
-        ...(car.vin ? [{ label: "VIN", value: car.vin }] : []),
+        { label: t("cd_model_year"), value: car.year || "—" },
+        { label: t("cd_status"), value: car.status || "—" },
+        ...(car.vin ? [{ label: t("cd_vin"), value: car.vin }] : []),
       ];
 
   return (
@@ -152,7 +154,7 @@ export default function CarDetail() {
 
           {/* Name + Price */}
           <div className="cd-panel">
-            <p className="cd-section-label">{isRental ? "Rental Car" : "For Sale"}</p>
+            <p className="cd-section-label">{isRental ? t("cd_rental_tag") : t("cd_sale_tag")}</p>
             <h1 className="cd-title">{car.year} {car.brand} {car.model}</h1>
             <div className="cd-price-row">
               <span className="cd-price">
@@ -173,7 +175,7 @@ export default function CarDetail() {
 
           {/* Spec grid */}
           <div className="cd-panel">
-            <p className="cd-section-label">Specifications</p>
+            <p className="cd-section-label">{t("cd_specs")}</p>
             <div className="cd-spec-grid">
               {specs.map(({ key, Icon, color, label, value }) => (
                 <div key={key} className="cd-spec-item">
@@ -189,7 +191,7 @@ export default function CarDetail() {
 
           {/* Info rows */}
           <div className="cd-panel">
-            <p className="cd-section-label">Details</p>
+            <p className="cd-section-label">{t("cd_details")}</p>
             {infoRows.map(({ label, value, highlight }) => (
               <div key={label} className="cd-info-row">
                 <span className="cd-info-label">{label}</span>
@@ -200,7 +202,7 @@ export default function CarDetail() {
 
           {documents.length > 0 && (
             <div className="cd-panel">
-              <p className="cd-section-label">Car Documents</p>
+              <p className="cd-section-label">{t("cd_documents")}</p>
               {documents.map((doc, i) => (
                 <div key={i} className="cd-info-row">
                   <span className="cd-info-label">
@@ -216,7 +218,7 @@ export default function CarDetail() {
 
           {rentalTerms.length > 0 && (
             <div className="cd-panel">
-              <p className="cd-section-label">Rental Terms & Conditions</p>
+              <p className="cd-section-label">{t("cd_terms")}</p>
               <div className="cd-terms-grid">
                 {rentalTerms.map((term, i) => (
                   <div key={term.id || i} className="cd-term-item">
@@ -232,9 +234,9 @@ export default function CarDetail() {
 
           {/* Contact */}
           <div className="cd-panel cd-panel--contact">
-            <p className="cd-contact-text">Interested in this car? Get in touch with us.</p>
+            <p className="cd-contact-text">{t("cd_interested")}</p>
             <button className="cd-contact-btn" onClick={() => navigate("/contact")}>
-              Contact Us →
+              {t("cd_contact_btn")}
             </button>
           </div>
 

@@ -3,15 +3,16 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { Languages, Sun, Moon, Menu, X, ChevronDown } from "lucide-react";
 import { ThemeContext } from "../App";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Header() {
   const { theme, setTheme } = useContext(ThemeContext);
   const { user, logout } = useAuth();
+  const { language, changeLanguage, t } = useLanguage();
   const [params] = useSearchParams();
 
   const [menu, setMenu] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-  const [language, setLanguage] = useState("EN");
   const [scrolled, setScrolled] = useState(false);
 
   const location = useLocation();
@@ -94,19 +95,13 @@ export default function Header() {
   const currentLang = languages.find((lang) => lang.code === language);
 
   const navItems = [
-    { to: "/", label: "Home Page" },
-    ...(isAdmin ? [{ to: "/admin", label: "Dashboard" }] : []),
-    {
-      to: isAdmin ? "/admin/buy" : "/showroom?mode=buy",
-      label: "Shop the Cars",
-    },
-    {
-      to: isAdmin ? "/admin/rental" : "/showroom?mode=rent",
-      label: "Car Rental",
-    },
-    { to: "/sold-history", label: "Sold History" },
-    { to: "/contact", label: "Contact Us" },
-    { to: "/help", label: "Need Help?" },
+    { to: "/",                                            label: t("nav_home")      },
+    ...(isAdmin ? [{ to: "/admin",                        label: t("nav_dashboard") }] : []),
+    { to: isAdmin ? "/admin/buy"    : "/showroom?mode=buy",  label: t("nav_shop")   },
+    { to: isAdmin ? "/admin/rental" : "/showroom?mode=rent", label: t("nav_rental") },
+    { to: "/sold-history",                                label: t("nav_sold")      },
+    { to: "/contact",                                     label: t("nav_contact")   },
+    { to: "/help",                                        label: t("nav_help")      },
   ];
 
   const isActive = (path) => {
@@ -163,7 +158,7 @@ export default function Header() {
                 }`}
               >
                 <div className="lang-dropdown__bar" />
-                <div className="lang-dropdown__title">Language</div>
+                <div className="lang-dropdown__title">{t("language")}</div>
 
                 {languages.map((lang) => (
                   <button
@@ -173,7 +168,7 @@ export default function Header() {
                       lang.code === language ? " lang-item--active" : ""
                     }`}
                     onClick={() => {
-                      setLanguage(lang.code);
+                      changeLanguage(lang.code);
                       setLangOpen(false);
                     }}
                   >
@@ -234,7 +229,7 @@ export default function Header() {
               <span className="loginMenuItem">
                 {user.name || user.email || "Admin"}
               </span>
-              <span className="sideMenu__profile-sub">View your profile</span>
+              <span className="sideMenu__profile-sub">{t("view_profile")}</span>
             </div>
           </Link>
         ) : (
@@ -244,7 +239,7 @@ export default function Header() {
               className="sideMenu__auth-btn sideMenu__auth-btn--login"
               onClick={() => setMenu(false)}
             >
-              Log In
+              {t("login")}
             </Link>
 
             <Link
@@ -252,12 +247,12 @@ export default function Header() {
               className="sideMenu__auth-btn sideMenu__auth-btn--signup"
               onClick={() => setMenu(false)}
             >
-              Sign Up
+              {t("signup")}
             </Link>
           </div>
         )}
 
-        <div className="sideMenu__section-label">Menu</div>
+        <div className="sideMenu__section-label">{t("menu")}</div>
 
         <div className="menuItems-wrapper">
           {navItems.map(({ to, label }, index) => (
@@ -281,15 +276,15 @@ export default function Header() {
 
           {user ? (
             <button type="button" className="logout" onClick={handleLogout}>
-              Log Out
+              {t("logout")}
             </button>
           ) : (
             <Link to="/login" className="logout" onClick={() => setMenu(false)}>
-              Log In
+              {t("login")}
             </Link>
           )}
 
-          <p className="sideMenu__copyright">© BKK Kaung Pyae Auto</p>
+          <p className="sideMenu__copyright">{t("copyright")}</p>
         </div>
       </nav>
     </>
