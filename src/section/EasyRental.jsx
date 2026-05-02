@@ -1,13 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./EasyRental.css";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function EasyRental() {
+  const { t }  = useLanguage();
+  const navigate = useNavigate();
+
   return (
     <section className="easyRentalSection">
 
       <div className="easyRentalHeader">
-        <h2>Easy Car Rental</h2>
-        <p>Rent a car in just a few simple steps</p>
+        <h2>{t("er_title")}</h2>
+        <p>{t("er_sub")}</p>
       </div>
 
       <div className="easyCard">
@@ -17,24 +22,27 @@ export default function EasyRental() {
           <div className="stepsGroup">
 
             <div className="stepBox active">
-              <span>Step</span>
+              <span>{t("er_step")} 1</span>
               <strong>1</strong>
+              <em>{t("er_step1_label")}</em>
             </div>
 
             <div className="stepBox">
-              <span>Step</span>
+              <span>{t("er_step")} 2</span>
               <strong>2</strong>
+              <em>{t("er_step2_label")}</em>
             </div>
 
             <div className="stepBox">
-              <span>Step</span>
+              <span>{t("er_step")} 3</span>
               <strong>3</strong>
+              <em>{t("er_step3_label")}</em>
             </div>
 
           </div>
 
-          <button className="rentalBtn">
-            Rental Cars →
+          <button className="btn-primary" onClick={() => navigate("/showroom")}>
+            {t("er_rent_btn")}
           </button>
 
         </div>
@@ -43,22 +51,20 @@ export default function EasyRental() {
 
         <div className="loginArea">
 
-          <h4>Log In or Sign In Account</h4>
+          <h4>{t("er_login_h")}</h4>
 
-          <p>
-            Create account with your Mobile phone number or email.
-          </p>
+          <p>{t("er_login_p")}</p>
 
-          <button className="signupBtn">
-            Click here to sign up
+          <button className="btn-secondary" onClick={() => navigate("/signup")}>
+            {t("er_signup")}
           </button>
 
           <div className="loginHint">
-            If you already logged in, you can continue to next step.
+            {t("er_logged")}
           </div>
 
           <div className="nextStep">
-            Next step →
+            {t("er_next")}
           </div>
 
         </div>
@@ -66,7 +72,7 @@ export default function EasyRental() {
       </div>
 
       <div className="easyFooter">
-        • Insured &nbsp;&nbsp; • Verified &nbsp;&nbsp; • Ready to Go
+        {t("er_badge")}
       </div>
 
     </section>

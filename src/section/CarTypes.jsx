@@ -64,7 +64,7 @@ export default function CarTypes() {
 
       <div className="ct-header">
         <h3 className="ct-title">{t("car_types_title")}</h3>
-        <button className="ct-viewall" onClick={() => navigate("/types")}>
+        <button className="btn-secondary btn--sm" onClick={() => navigate("/types")}>
           {t("view_all")}
         </button>
       </div>
@@ -94,7 +94,7 @@ export default function CarTypes() {
 
       <p className="ct-note">{t("cars_ready")}</p>
 
-      <button className="ct-shopBtn" onClick={() => navigate("/shop")}>
+      <button className="btn-primary" onClick={() => navigate("/shop")}>
         {t("view_on_shop")}
       </button>
 

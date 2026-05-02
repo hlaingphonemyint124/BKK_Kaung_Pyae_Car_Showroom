@@ -12,7 +12,7 @@
 ───────────────────────────────────────────────────────────────*/
 .sh-root {
   background: var(--bg-page);
-  padding: 100px 0 120px;
+  padding: 72px 0 80px;
   position: relative;
   overflow: hidden;
   font-family: var(--font);
@@ -25,7 +25,9 @@
   top: -120px; right: -200px;
   width: 700px; height: 700px;
   background: radial-gradient(ellipse at center, rgba(var(--color-red-rgb), 0.07) 0%, transparent 70%);
+  filter: blur(60px);
   pointer-events: none;
+  transition: opacity 0.4s;
 }
 .sh-root::after {
   content: '';
@@ -33,7 +35,16 @@
   bottom: -100px; left: -150px;
   width: 500px; height: 500px;
   background: radial-gradient(ellipse at center, rgba(var(--color-red-rgb), 0.04) 0%, transparent 70%);
+  filter: blur(50px);
   pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+body.dark .sh-root::before {
+  background: radial-gradient(ellipse at center, rgba(var(--color-red-rgb), 0.18) 0%, transparent 70%);
+}
+body.dark .sh-root::after {
+  background: radial-gradient(ellipse at center, rgba(var(--color-red-rgb), 0.12) 0%, transparent 70%);
 }
 
 /* noise — only visible in dark mode */
@@ -429,30 +440,6 @@ body.dark .sh-noise { opacity: 1; }
 }
 .sh-page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-/* ─────────────────────────────────────────────────────────────
-   VIEW ALL BUTTON
-───────────────────────────────────────────────────────────────*/
-.sh-viewall-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 28px;
-  background: transparent;
-  border: 1px solid rgba(var(--color-red-rgb), 0.30);
-  border-radius: var(--radius-sm);
-  color: var(--color-red);
-  font-family: var(--font);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  letter-spacing: 0.04em;
-}
-.sh-viewall-btn:hover {
-  background: var(--color-red);
-  color: #fff;
-  box-shadow: var(--color-red-glow) 0 0 24px;
-}
 
 /* ─────────────────────────────────────────────────────────────
    RESPONSIVE
@@ -466,7 +453,7 @@ body.dark .sh-noise { opacity: 1; }
 }
 
 @media (max-width: 768px) {
-  .sh-root { padding: 72px 0 90px; }
+  .sh-root { padding: 52px 0 64px; }
   .sh-header { margin-bottom: 40px; }
   .sh-car-card-img-wrap { height: 155px; }
 }

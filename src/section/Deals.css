@@ -32,7 +32,7 @@ body.dark .deals {
 .deals {
   position: relative;
   overflow: hidden;
-  padding: 72px 0 100px;
+  padding: 72px 0 80px;
   background: var(--bg-page);
   text-align: center;
   font-family: var(--font);
@@ -522,45 +522,6 @@ body.dark .spec-row { background: rgba(255,255,255,0.03); border-color: rgba(255
 /* ── CTA section ───────────────────────────────────────────────────────────── */
 .deals-cta { margin-top: 40px; position: relative; z-index: 3; }
 
-.cta-btn {
-  padding: 15px 52px; border-radius: 6px;
-  font-family: var(--font); font-size: 12px; font-weight: 500;
-  letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer;
-  position: relative; overflow: hidden;
-  color: var(--color-red);
-  background: rgba(255,255,255,0.50);
-  border: 1px solid rgba(var(--color-red-rgb), 0.38);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 18px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.85);
-  transition: all 0.35s ease;
-}
-body.dark .cta-btn {
-  background: rgba(255,255,255,0.03);
-  border-color: rgba(var(--color-red-rgb), 0.40);
-  backdrop-filter: none; -webkit-backdrop-filter: none;
-  box-shadow: 0 0 20px rgba(var(--color-red-rgb), 0.18), inset 0 0 18px rgba(var(--color-red-rgb), 0.04);
-}
-.cta-btn::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, var(--color-red), var(--color-red-hover));
-  opacity: 0; transition: opacity 0.35s;
-}
-.cta-btn:hover {
-  color: #fff; border-color: transparent; letter-spacing: 0.20em;
-  box-shadow:
-    0 0 30px rgba(var(--color-red-rgb),0.44),
-    0 0 60px rgba(var(--color-red-rgb),0.20),
-    0 8px 28px rgba(0,0,0,0.12);
-}
-body.dark .cta-btn:hover {
-  box-shadow:
-    0 0 34px rgba(var(--color-red-rgb),0.58),
-    0 0 68px rgba(var(--color-red-rgb),0.26),
-    0 8px 32px rgba(0,0,0,0.50);
-}
-.cta-btn:hover::before { opacity: 1; }
-.cta-btn > * { position: relative; z-index: 1; }
-
 /* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .car-card { width: 256px; }
@@ -594,7 +555,7 @@ body.dark .cta-btn:hover {
 ===================================================== */
 
 .deals {
-  padding: 72px 0 82px;
+  padding: 72px 0 80px;
   overflow: hidden;
 }
 
@@ -713,22 +674,6 @@ body.dark .cta-btn:hover {
 
 .deals-cta {
   margin-top: 24px;
-}
-
-.cta-btn {
-  border-radius: 14px;
-  padding: 15px 46px;
-  font-weight: 800;
-  letter-spacing: 0.13em;
-  background: linear-gradient(135deg, var(--color-red), var(--color-red-hover));
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 16px 34px rgba(var(--color-red-rgb),0.25);
-}
-
-.cta-btn:hover {
-  letter-spacing: 0.15em;
-  transform: translateY(-2px);
 }
 
 /* Dark refinement */

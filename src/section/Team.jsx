@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./Team.css";
 
 const ceo = { name: "Mr. Kaung Pyae Lwin", role: "CEO" };
@@ -11,6 +12,7 @@ const members = [
 ];
 
 export default function Team() {
+  const navigate = useNavigate();
   return (
     <section className="team">
       <span className="team-label">Our People</span>
@@ -45,13 +47,7 @@ export default function Team() {
         ))}
       </div>
 
-      <div className="dots">
-        <span className="dot active" />
-        <span className="dot" />
-        <span className="dot" />
-      </div>
-
-      <button className="contact-btn">
+      <button className="btn-primary btn--lg" onClick={() => navigate("/contact")}>
         CONTACT OUR TEAM <span className="btn-arrow">→</span>
       </button>
     </section>

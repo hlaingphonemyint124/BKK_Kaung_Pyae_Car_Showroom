@@ -64,7 +64,7 @@ export default function BrandList() {
 
       <div className="bl-header">
         <h2 className="bl-title">{t("brands_title")}</h2>
-        <button className="bl-viewall" onClick={() => navigate("/brands")}>
+        <button className="btn-secondary btn--sm" onClick={() => navigate("/brands")}>
           {t("view_all")}
         </button>
       </div>

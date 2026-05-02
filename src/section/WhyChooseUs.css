@@ -2,14 +2,32 @@
    SECTION
 ================================ */
 .whySection {
-  padding: 60px 0 60px;
+  padding: 72px 0 72px;
   background: var(--bg-page);
   overflow: hidden;
+  position: relative;
 }
 
 body.dark .whySection {
-  background: linear-gradient(180deg, #0d0d0d 0%, #1a0000 50%, #0d0d0d 100%);
+  background: var(--bg-page);
 }
+
+/* Deals-style ambient blob — dark only */
+.whySection::before {
+  content: '';
+  position: absolute;
+  top: -80px; left: 50%;
+  transform: translateX(-50%);
+  width: 700px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.16), transparent 70%);
+  filter: blur(120px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  z-index: 0;
+}
+body.dark .whySection::before { opacity: 1; }
 
 /* ================================
    CENTERED CONTAINER
@@ -27,7 +45,7 @@ body.dark .whySection {
   font-family: var(--font);
   font-size: clamp(34px, 5vw, 58px);
   font-weight: 800;
-  letter-spacing: 4px;
+  letter-spacing: -0.5px;
   color: var(--text-primary);
   text-align: center;
   margin: 0 0 6px;
@@ -295,39 +313,6 @@ body.dark .whySection {
   animation: fadeUp 0.6s ease 0.8s forwards;
 }
 
-.rentBtn {
-  font-family: var(--font);
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  background: linear-gradient(135deg, var(--color-red) 0%, #990000 100%);
-  color: #fff;
-  padding: 15px 48px;
-  border-radius: 50px;
-  border: none;
-  cursor: pointer;
-  box-shadow: var(--shadow-red);
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.rentBtn::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -80%;
-  width: 60%; height: 100%;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,0.22), transparent);
-  transform: skewX(-20deg);
-  transition: left 0.55s ease;
-}
-
-.rentBtn:hover::before { left: 130%; }
-.rentBtn:hover {
-  transform: translateY(-3px) scale(1.04);
-  box-shadow: 0 12px 38px rgba(var(--color-red-rgb), 0.58);
-}
-.rentBtn:active { transform: scale(0.97); }
 
 .whyFeatures {
   margin-top: 14px;

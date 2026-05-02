@@ -47,13 +47,13 @@ function Home() {
   return (
     <>
       <Hero />
+      <WhyChooseUs />
       <Deals />
       <BrandList />
       <CarTypes />
       <EasyRental />
-      <Testimonials />
       <SoldHistory />
-      <WhyChooseUs />
+      <Testimonials />
       <AboutUs theme={theme} />
       <Team />
     </>

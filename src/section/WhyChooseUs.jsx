@@ -64,7 +64,7 @@ export default function WhyChooseUs() {
         </div>
 
         <div className="whyAction">
-          <button className="rentBtn">{t("wcu_btn")}</button>
+          <button className="btn-primary btn--lg">{t("wcu_btn")}</button>
           <p className="whyFeatures">{t("wcu_features")}</p>
         </div>
 

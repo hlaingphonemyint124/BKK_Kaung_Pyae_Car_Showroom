@@ -1,4 +1,5 @@
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import AuthHeader from "../../auth/components/AuthHeader";
 import "../../auth/styles/AuthStyles.css";
 import "../styles/UserStyles.css";
@@ -7,10 +8,20 @@ import { FaPhoneAlt, FaFacebookF, FaInstagram } from "react-icons/fa";
 import { SiLine, SiGmail } from "react-icons/si";
 
 function ContactPage() {
+  const [searchParams] = useSearchParams();
+  const carName = searchParams.get("car");
+
   return (
     <AuthHeader>
       <div className="user-content-box">
         <h2 className="user-page-title">Contact Us</h2>
+
+        {carName && (
+          <div className="contact-inquiry-banner">
+            <span className="contact-inquiry-tag">Inquiring about</span>
+            <span className="contact-inquiry-car">{carName}</span>
+          </div>
+        )}
 
         <ContactItem
           label="Phone Number"

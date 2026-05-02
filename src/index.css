@@ -53,7 +53,7 @@ body {
 }
 
 section {
-  padding: 64px 0;
+  padding: 0;
 }
 
 h1,
@@ -94,10 +94,23 @@ body.dark .site-footer {
 }
 
 body.dark .btn,
-body.dark .shopBtn,
-body.dark .rentalBtn {
+body.dark .btn-primary {
   background: linear-gradient(180deg, var(--color-red), var(--color-red-hover));
   box-shadow: 0 6px 20px rgba(var(--color-red-rgb), 0.35);
+}
+
+body.dark .btn-secondary,
+body.dark .btn-ghost,
+body.dark .btn-outline {
+  border-color: rgba(var(--color-red-rgb), 0.40);
+  color: var(--color-red);
+}
+
+body.dark .btn-secondary:hover,
+body.dark .btn-ghost:hover,
+body.dark .btn-outline:hover {
+  background: rgba(var(--color-red-rgb), 0.10);
+  border-color: var(--color-red);
 }
 
 /* ===============================
@@ -731,44 +744,192 @@ HERO
 }
 
 /* ===============================
-BUTTONS
+   DESIGN SYSTEM — SECTION RHYTHM
+   Consistent eyebrow + title pattern
+   used across all home sections
+=============================== */
+
+.sec-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-red);
+  margin-bottom: 14px;
+}
+
+.sec-eyebrow::before,
+.sec-eyebrow::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1.5px;
+  background: var(--color-red);
+  opacity: 0.5;
+  border-radius: 2px;
+}
+
+.sec-title {
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--text-primary);
+}
+
+.sec-sub {
+  font-size: 15px;
+  color: var(--text-muted);
+  font-weight: 400;
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+/* ===============================
+BUTTONS — Unified System
+  .btn-primary  — filled red (main CTA)
+  .btn-ghost    — bordered, no fill
+  .btn-text     — link-style with arrow
 =============================== */
 
 .btn,
 .shopBtn,
-.rentalBtn {
+.rentalBtn,
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   border: none;
   font-family: inherit;
-}
-
-.btn {
-  background: linear-gradient(180deg, var(--color-red), var(--color-red-hover));
-  color: white;
-  padding: 13px 28px;
-  border-radius: 999px;
-  font-weight: 800;
-  cursor: pointer;
-  box-shadow: 0 18px 42px rgba(var(--color-red-rgb), 0.28);
-  transition: transform 0.24s ease, box-shadow 0.24s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 24px 52px rgba(var(--color-red-rgb), 0.34);
-}
-
-.btn-outline {
-  border: 1.5px solid var(--border);
-  background: var(--bg-surface);
-  padding: 12px 26px;
-  border-radius: 999px;
-  cursor: pointer;
+  font-size: 14px;
   font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    transform 0.22s cubic-bezier(0.22,1,0.36,1),
+    box-shadow 0.22s ease,
+    background 0.22s ease,
+    opacity 0.18s ease;
 }
 
-.btn-outline:hover {
-  border-color: var(--color-red);
+/* Primary — red filled */
+.btn,
+.btn-primary {
+  background: var(--color-red);
+  color: #fff;
+  padding: 13px 28px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(var(--color-red-rgb), 0.28);
+  text-decoration: none;
+}
+
+.btn:hover,
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(var(--color-red-rgb), 0.38);
+  background: var(--color-red-hover);
+}
+
+.btn:active,
+.btn-primary:active { transform: scale(0.97); }
+
+/* Secondary — outlined */
+.btn-ghost,
+.btn-outline,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1.5px solid rgba(var(--color-red-rgb), 0.45);
   color: var(--color-red);
+  padding: 11px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s, color 0.2s;
+}
+
+.btn-ghost:hover,
+.btn-outline:hover,
+.btn-secondary:hover {
+  border-color: var(--color-red);
+  background: rgba(var(--color-red-rgb), 0.06);
+  transform: translateY(-1px);
+}
+
+/* Text link with arrow */
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--color-red);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  letter-spacing: 0.01em;
+  transition: gap 0.2s, opacity 0.2s;
+}
+
+.btn-text:hover {
+  gap: 10px;
+  opacity: 0.8;
+}
+
+/* Size variants — work on both primary and secondary */
+.btn--lg, .btn-primary--lg {
+  font-size: 15px;
+  padding: 15px 34px;
+  border-radius: 14px;
+}
+
+.btn--sm {
+  font-size: 12px;
+  padding: 7px 16px;
+  border-radius: 9px;
+  font-weight: 600;
+}
+
+/* Shop / Rental buttons inherit primary */
+.shopBtn {
+  background: var(--color-red);
+  color: white;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(var(--color-red-rgb), 0.25);
+  width: min(430px, 100%);
+  min-height: 52px;
+  margin: 18px auto 0;
+}
+
+.shopBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(var(--color-red-rgb), 0.35);
+}
+
+.rentalBtn {
+  background: var(--color-red);
+  color: white;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(var(--color-red-rgb), 0.22);
+  margin-left: auto;
 }
 
 /* ===============================

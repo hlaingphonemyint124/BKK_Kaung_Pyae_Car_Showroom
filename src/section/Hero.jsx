@@ -40,7 +40,7 @@ export default function Hero() {
           <p className="hero__eyebrow">{t("hero_eyebrow")}</p>
           <h1 className="hero__title">{t("hero_title")}</h1>
           <div className="hero__actions">
-            <Link className="btn btn--primary" to="/showroom">
+            <Link className="btn-primary btn--lg" to="/showroom">
               {t("hero_browse")}
             </Link>
           </div>

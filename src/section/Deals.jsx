@@ -422,12 +422,9 @@ export default function Deals() {
         initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }} viewport={{ once: true }}
       >
-        <motion.button className="cta-btn"
-          whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}
-          onClick={() => navigate("/showroom")}
-        >
+        <button className="btn-primary btn--lg" onClick={() => navigate("/showroom")}>
           {t("deals_view_all")}
-        </motion.button>
+        </button>
       </motion.div>
     </section>
   );

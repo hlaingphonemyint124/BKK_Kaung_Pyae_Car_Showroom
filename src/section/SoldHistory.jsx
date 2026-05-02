@@ -140,7 +140,7 @@ export default function SoldHistory() {
             <h2 className="sh-title">{t("sold_title1")} <span>{t("sold_title2")}</span></h2>
             <p className="sh-subtitle">{t("sold_sub")}</p>
           </div>
-          <Link to="/sold-history" className="sh-viewall-btn">
+          <Link to="/sold-history" className="btn-secondary">
             {t("sold_view_all")}
           </Link>
         </div>
