@@ -6,9 +6,36 @@
   padding: 36px 24px 72px;
   background: var(--bg-page);
   min-height: 100vh;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Red radiant glow — dark mode only */
+body.dark .sr::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 40% at 15% 10%, rgba(239,43,45,0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 35% at 85% 80%, rgba(239,43,45,0.10) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Particle canvas */
+.sr-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Lift inner content above particles */
 .sr-inner {
+  position: relative;
+  z-index: 1;
   max-width: 1280px;
   margin: 0 auto;
 }

@@ -331,9 +331,9 @@
 ===================================================== */
 
 .hero {
-  height: 82vh;
-  min-height: 560px;
-  max-height: 760px;
+  height: 70vh;
+  min-height: 480px;
+  max-height: none;
   padding-top: 76px;
   isolation: isolate;
 }
@@ -418,8 +418,8 @@
 /* Tablet */
 @media (max-width: 1024px) {
   .hero {
-    height: 68vh;
-    min-height: 480px;
+    height: 65vh;
+    min-height: 420px;
   }
 
   .hero__container {
@@ -436,8 +436,8 @@
   .hero {
     width: 100%;
     margin-left: 0;
-    height: 50svh;
-    min-height: 240px;
+    height: 25svh;
+    min-height: 200px;
     max-height: none;
     padding-top: 68px;
   }
@@ -477,8 +477,8 @@
 
 @media (max-width: 420px) {
   .hero {
-    height: 50svh;
-    min-height: 220px;
+    height: 25svh;
+    min-height: 200px;
   }
 
   .hero__container {

@@ -1,5 +1,5 @@
 .admin-page {
-  background: #111;
+  background: var(--bg-page);
   min-height: 100vh;
   display: flex;
   justify-content: center;

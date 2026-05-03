@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Fuel, Settings2, Palette, Gauge, Disc3, Users, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { getCarById } from "../api/cars.api";
@@ -10,6 +10,55 @@ import {
 } from "../api/showroom.api";
 import "./CarDetail.css";
 import { useLanguage } from "../context/LanguageContext";
+
+function CarDetailParticles() {
+  const canvasRef = useRef(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    let raf;
+    const resize = () => { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; };
+    resize();
+    window.addEventListener("resize", resize);
+    const COLS = [
+      "rgba(220,30,30,", "rgba(200,20,20,",
+      "rgba(240,60,60,", "rgba(180,10,10,",
+      "rgba(255,80,50,",
+    ];
+    const pts = Array.from({ length: 160 }, () => ({
+      x:   Math.random() * canvas.width,
+      y:   canvas.height + Math.random() * canvas.height,
+      r0:  Math.random() * 4 + 1,
+      col: COLS[Math.floor(Math.random() * COLS.length)],
+      a:   Math.random() * 0.5 + 0.4,
+      vx:  (Math.random() - 0.5) * 0.3,
+      vy:  -Math.random() * 0.5 - 0.12,
+      fl:  Math.random() * 0.015 + 0.004,
+    }));
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pts.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        p.a += Math.sin(Date.now() * p.fl) * 0.006;
+        p.a = Math.max(0.3, Math.min(0.9, p.a));
+        if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+        if (p.x < -10)             p.x = canvas.width + 10;
+        if (p.x > canvas.width+10) p.x = -10;
+        const pct = Math.max(0, Math.min(1, p.y / canvas.height));
+        const r = Math.max(0.3, p.r0 * pct);
+        const a = p.a * (0.3 + pct * 0.7);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = `${p.col}${a.toFixed(2)})`;
+        ctx.fill();
+      });
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
+  }, []);
+  return <canvas ref={canvasRef} className="cd-particles" />;
+}
 
 const FUEL_COLORS = {
   petrol:           "#f59e0b",
@@ -61,7 +110,6 @@ export default function CarDetail() {
           (Array.isArray(termsRes) ? termsRes : []);
         setRentalTerms(terms);
 
-        // Fetch sibling list for prev/next and similar cars
         const isRentalCar = !!carData.rent_price_per_day && !carData.sale_price;
         const listFn = isRentalCar ? getCarsForRent : getCarsForSale;
         listFn().then(res => setAllCars(res.data.cars ?? [])).catch(() => {});
@@ -70,7 +118,6 @@ export default function CarDetail() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // Escape key closes lightbox
   useEffect(() => {
     if (!lightboxOpen) return;
     const handler = (e) => { if (e.key === "Escape") setLightboxOpen(false); };
@@ -90,12 +137,10 @@ export default function CarDetail() {
   const drive   = car.drive || car.drive_type || "";
   const isRental = !!car.rent_price_per_day && !car.sale_price;
 
-  // Prev / Next navigation
   const currentIdx = allCars.findIndex(c => String(c.id) === String(id));
   const prevCar = currentIdx > 0 ? allCars[currentIdx - 1] : null;
   const nextCar = currentIdx !== -1 && currentIdx < allCars.length - 1 ? allCars[currentIdx + 1] : null;
 
-  // Similar cars — same brand first, then closest price
   const myPrice = isRental ? Number(car.rent_price_per_day || 0) : Number(car.sale_price || 0);
   const similarCars = allCars
     .filter(c => String(c.id) !== String(id))
@@ -147,8 +192,9 @@ export default function CarDetail() {
 
   return (
     <div className="cd-wrapper">
+      <CarDetailParticles />
 
-      {/* ── Breadcrumb + Back + Prev/Next ── */}
+      {/* ── Breadcrumb + Back ── */}
       <div className="cd-nav">
         <nav className="cd-breadcrumb" aria-label="breadcrumb">
           <Link to="/" className="cd-breadcrumb-link">Home</Link>
@@ -174,39 +220,38 @@ export default function CarDetail() {
         </div>
       </div>
 
-      <div className="cd-shell">
+      {/* ── Product Showcase ── */}
+      <div className="cd-showcase">
 
-        {/* ── LEFT COLUMN ── */}
-        <div className="cd-left">
-
-          {/* Media gallery */}
-          <div className="cd-panel cd-panel--media">
-            <div className="cd-main-img cd-main-img--clickable" onClick={() => openLightbox(activeImg)}>
-              <img src={images[activeImg]} alt={`${car.brand} ${car.model}`} />
-              {(car.status === "sold" || car.status === "rented") && (
-                <div className="cd-status-badge">{car.status}</div>
-              )}
-              <div className="cd-zoom-hint">⊕</div>
-            </div>
+        {/* Card: image + name/price bar */}
+        <div className="cd-showcase__card">
+          <div className="cd-showcase__stage" onClick={() => openLightbox(activeImg)}>
+            <img src={images[activeImg]} alt={`${car.brand} ${car.model}`} className="cd-showcase__img" />
+            <div className="cd-showcase__veil" />
+            {(car.status === "sold" || car.status === "rented") && (
+              <div className="cd-status-badge">{car.status}</div>
+            )}
             {images.length > 1 && (
-              <div className="cd-thumbs">
+              <div className="cd-thumbs cd-showcase__thumbs">
                 {images.map((src, i) => (
                   <button
                     key={i}
                     className={`cd-thumb${i === activeImg ? " cd-thumb--active" : ""}`}
-                    onClick={() => setActiveImg(i)}
+                    onClick={(e) => { e.stopPropagation(); setActiveImg(i); }}
                   >
                     <img src={src} alt="" />
                   </button>
                 ))}
               </div>
             )}
+            <div className="cd-zoom-hint">⊕</div>
           </div>
 
-          {/* Name + Price */}
-          <div className="cd-panel">
-            <p className="cd-section-label">{isRental ? t("cd_rental_tag") : t("cd_sale_tag")}</p>
-            <h1 className="cd-title">{car.year} {car.brand} {car.model}</h1>
+          <div className="cd-showcase__bar">
+            <div className="cd-showcase__bar-left">
+              <p className="cd-section-label">{isRental ? t("cd_rental_tag") : t("cd_sale_tag")}</p>
+              <h1 className="cd-title">{car.year} {car.brand} {car.model}</h1>
+            </div>
             <div className="cd-price-row">
               <span className="cd-price">
                 {car.sale_price
@@ -218,26 +263,30 @@ export default function CarDetail() {
               </span>
             </div>
           </div>
-
         </div>
 
-        {/* ── RIGHT COLUMN ── */}
-        <div className="cd-right">
+      </div>
 
-          {/* Spec grid */}
-          <div className="cd-panel">
-            <p className="cd-section-label">{t("cd_specs")}</p>
-            <div className="cd-spec-grid">
-              {specs.map(({ key, Icon, color, label, value }) => (
-                <div key={key} className="cd-spec-item">
-                  <div className="cd-spec-icon" style={{ color }}><Icon size={22} strokeWidth={2} /></div>
-                  <div className="cd-spec-value">{value}</div>
-                  <div className="cd-spec-label">{label}</div>
-                </div>
-              ))}
-            </div>
+      {/* ── Spec row (full-width) ── */}
+      <div className="cd-specs-row">
+        <div className="cd-panel">
+          <p className="cd-section-label">{t("cd_specs")}</p>
+          <div className="cd-spec-grid">
+            {specs.map(({ key, Icon, color, label, value }) => (
+              <div key={key} className="cd-spec-item">
+                <div className="cd-spec-icon" style={{ color }}><Icon size={22} strokeWidth={2} /></div>
+                <div className="cd-spec-value">{value}</div>
+                <div className="cd-spec-label">{label}</div>
+              </div>
+            ))}
           </div>
+        </div>
+      </div>
 
+      {/* ── Details shell ── */}
+      <div className="cd-shell">
+
+        <div className="cd-shell__right">
           {/* Info rows */}
           <div className="cd-panel">
             <p className="cd-section-label">{t("cd_details")}</p>
@@ -285,8 +334,8 @@ export default function CarDetail() {
               {t("cd_contact_btn")}
             </button>
           </div>
-
         </div>
+
       </div>
 
       {/* ── Similar Cars ── */}
