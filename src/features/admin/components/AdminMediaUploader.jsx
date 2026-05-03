@@ -6,18 +6,23 @@ function AdminMediaUploader({ media = [], onChange }) {
   const inputRef = useRef(null);
   const [previewItem, setPreviewItem] = useState(null);
 
+  const getImageSrc = (item) =>
+    item.preview || item.url || item.secure_url || item.storage_path || "";
+
   const handleFiles = (fileList) => {
     const files = Array.from(fileList || []);
     const validFiles = files.filter((file) => file.type.startsWith("image/"));
     if (validFiles.length === 0) return;
 
     const remaining = MAX_PHOTOS - media.length;
+
     if (remaining <= 0) {
       alert(`Maximum ${MAX_PHOTOS} photos per car. Remove some before adding more.`);
       return;
     }
 
     const allowed = validFiles.slice(0, remaining);
+
     if (allowed.length < validFiles.length) {
       alert(`Only ${allowed.length} photo(s) added — maximum is ${MAX_PHOTOS} per car.`);
     }
@@ -28,6 +33,7 @@ function AdminMediaUploader({ media = [], onChange }) {
       file,
       preview: URL.createObjectURL(file),
       isNew: true,
+      isExisting: false,
     }));
 
     onChange([...media, ...newItems]);
@@ -66,7 +72,7 @@ function AdminMediaUploader({ media = [], onChange }) {
   const handleRemove = (id) => {
     const target = media.find((item) => item.id === id);
 
-    if (target?.preview) {
+    if (target?.isNew && target?.preview) {
       URL.revokeObjectURL(target.preview);
     }
 
@@ -80,12 +86,12 @@ function AdminMediaUploader({ media = [], onChange }) {
   useEffect(() => {
     return () => {
       media.forEach((item) => {
-        if (item.preview && item.isNew) {
+        if (item.isNew && item.preview) {
           URL.revokeObjectURL(item.preview);
         }
       });
     };
-    // cleanup only when component unmounts
+    // cleanup only on unmount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -106,7 +112,7 @@ function AdminMediaUploader({ media = [], onChange }) {
         ) : (
           <div className="admin-media-uploader__grid">
             {media.map((item) => {
-              const src = item.preview || item.url || item.storage_path;
+              const src = getImageSrc(item);
 
               return (
                 <div
@@ -145,7 +151,13 @@ function AdminMediaUploader({ media = [], onChange }) {
           >
             Upload Images
           </button>
-          <span style={{ fontSize: "11px", color: media.length >= MAX_PHOTOS ? "#ef2b2d" : "#888" }}>
+
+          <span
+            style={{
+              fontSize: "11px",
+              color: media.length >= MAX_PHOTOS ? "#ef2b2d" : "#888",
+            }}
+          >
             {media.length}/{MAX_PHOTOS}
           </span>
         </div>
@@ -178,7 +190,7 @@ function AdminMediaUploader({ media = [], onChange }) {
             </button>
 
             <img
-              src={previewItem.preview || previewItem.url || previewItem.storage_path}
+              src={getImageSrc(previewItem)}
               alt="full preview"
               className="admin-media-preview-modal__media"
             />

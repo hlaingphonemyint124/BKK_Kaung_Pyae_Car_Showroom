@@ -4,7 +4,7 @@
    Desktop: dark bg, two-column side by side
 ========================= */
 .admin-detail-shell {
-  background: #f0f0f0;
+  background: var(--bg-page, #f0f0f0);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -39,7 +39,6 @@
     justify-content: center;
     gap: 24px;
     padding: 40px 32px;
-    background: #f0f0f0;
   }
 
   .admin-detail-page__left {
@@ -566,4 +565,173 @@
 
 .admin-state-message--error {
   color: #ef2b2d;
+}
+
+/* =========================
+   DARK MODE — PANELS
+========================= */
+body.dark .admin-detail-panel {
+  background: var(--bg-surface);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+}
+
+body.dark .admin-section-title {
+  color: var(--text-primary);
+}
+
+body.dark .admin-detail-field__label {
+  color: var(--text-muted);
+}
+
+body.dark .admin-detail-input {
+  background: var(--bg-surface-2);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+body.dark .admin-spec-item {
+  background: var(--bg-surface-2);
+}
+
+body.dark .admin-spec-item__select,
+body.dark .admin-spec-item__input {
+  background: var(--bg-surface);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+body.dark .admin-spec-item__label {
+  color: var(--text-muted);
+}
+
+body.dark .admin-info-stack {
+  background: var(--bg-surface);
+}
+
+body.dark .admin-document-section {
+  background: var(--bg-surface-2);
+  border-color: var(--border);
+}
+
+body.dark .admin-document-section__header {
+  background: var(--bg-surface-2);
+  color: var(--text-primary);
+  border-bottom-color: var(--border);
+}
+
+body.dark .admin-document-section__row {
+  border-bottom-color: var(--border);
+}
+
+body.dark .admin-document-section__row.header {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+body.dark .admin-document-section__row .input {
+  color: var(--text-primary);
+}
+
+body.dark .admin-document-section__add {
+  background: var(--bg-surface);
+}
+
+body.dark .admin-document-section__add:hover {
+  background: var(--bg-surface-2);
+}
+
+/* =========================
+   CARDETAIL-STYLE LAYOUT (ad-*)
+========================= */
+.ad-wrapper {
+  background: var(--bg-page);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* Full-bleed media block */
+.ad-media-block {
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+}
+
+.ad-media-block .admin-media-uploader {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  height: clamp(260px, 55vw, 420px);
+}
+
+@media (min-width: 768px) {
+  .ad-media-block .admin-media-uploader {
+    height: clamp(400px, 40vw, 560px);
+    border-radius: 0;
+    padding: 20px 28px;
+  }
+}
+
+/* Name + price bar */
+.ad-name-bar {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 16px 0;
+}
+
+@media (min-width: 768px) {
+  .ad-name-bar { padding: 24px 28px 0; }
+}
+
+/* Specs row */
+.ad-specs-row {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 16px 0;
+}
+
+@media (min-width: 768px) {
+  .ad-specs-row { padding: 20px 28px 0; }
+}
+
+.ad-specs-row .admin-spec-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (min-width: 768px) {
+  .ad-specs-row .admin-spec-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Bottom shell */
+.ad-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ad-shell__main,
+.ad-shell__side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .ad-shell {
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 20px 28px;
+    gap: 24px;
+  }
+
+  .ad-shell__main { flex: 1; }
+
+  .ad-shell__side {
+    width: 360px;
+    flex-shrink: 0;
+  }
 }

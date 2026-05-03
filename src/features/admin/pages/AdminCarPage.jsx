@@ -1,9 +1,8 @@
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import "../styles/admin.css";
 import AdminCarCard from "../components/AdminCarCard";
-import AdminFilterBar from "../components/AdminFilterBar";
-import AdminTabs from "../components/AdminTabs";
 import useAdminCars from "../hooks/useAdminCars";
 
 const PANEL_ANIMATION_MS = 250;
@@ -25,10 +24,7 @@ function AdminCarPage({ mode }) {
   } = useAdminCars(mode);
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-
   const [isFilterMounted, setIsFilterMounted] = useState(false);
-  const [isSearchMounted, setIsSearchMounted] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
@@ -108,24 +104,9 @@ function AdminCarPage({ mode }) {
   }, [isFilterOpen, isFilterMounted]);
 
   useEffect(() => {
-    let timeoutId;
-
-    if (isSearchOpen) {
-      setIsSearchMounted(true);
-    } else if (isSearchMounted) {
-      timeoutId = setTimeout(() => {
-        setIsSearchMounted(false);
-      }, PANEL_ANIMATION_MS);
-    }
-
-    return () => clearTimeout(timeoutId);
-  }, [isSearchOpen, isSearchMounted]);
-
-  useEffect(() => {
     const handleClickOutside = (e) => {
       if (overlayRef.current && !overlayRef.current.contains(e.target)) {
         setIsFilterOpen(false);
-        setIsSearchOpen(false);
       }
     };
 
@@ -165,59 +146,62 @@ function AdminCarPage({ mode }) {
         </button>
       </div>
       
-      <div className="admin-toolbar-overlay" ref={overlayRef}>
-        <AdminFilterBar
-          mode={mode === "buy" ? "Buy" : "Rental"}
-          onFilterClick={() => {
-            if (!isFilterOpen) {
-              setIsFilterMounted(true);
-            }
+      <div className="ac-controls" ref={overlayRef}>
 
-            setIsFilterOpen((prev) => !prev);
-            setIsSearchOpen(false);
-          }}
-          onSearchClick={() => {
-            if (!isSearchOpen) {
-              setIsSearchMounted(true);
-            }
+        {/* ── Row 1: mode toggle + search + filter ── */}
+        <div className="ac-top-row">
+          <div className="ac-mode-toggle">
+            <button
+              type="button"
+              className={`ac-mode-btn${mode === "buy" ? " ac-mode-btn--active" : ""}`}
+              onClick={() => mode !== "buy" && handleModeClick()}
+            >Buy</button>
+            <button
+              type="button"
+              className={`ac-mode-btn${mode === "rental" ? " ac-mode-btn--active" : ""}`}
+              onClick={() => mode !== "rental" && handleModeClick()}
+            >Rental</button>
+          </div>
 
-            setIsSearchOpen((prev) => !prev);
-            setIsFilterOpen(false);
-          }}
-          onModeClick={handleModeClick}
-          isFilterOpen={isFilterOpen}
-          isSearchOpen={isSearchOpen}
-        />
+          <div className="ac-search-wrap">
+            <Search size={15} className="ac-search-icon" />
+            <input
+              className="ac-search-input"
+              type="text"
+              placeholder="Search brand or model..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button className="ac-search-clear" onClick={() => setSearchTerm("")}><X size={13} /></button>
+            )}
+          </div>
 
-        {isFilterMounted && (
-          <div
-            className={`admin-filter-panel admin-overlay-panel ${
-              isFilterOpen ? "admin-overlay-panel--visible" : ""
-            }`}
+          <button
+            type="button"
+            className={`ac-filter-btn${isFilterOpen ? " ac-filter-btn--open" : ""}`}
+            onClick={() => { setIsFilterMounted(true); setIsFilterOpen(o => !o); }}
           >
-            <div className="admin-filter-panel__grid">
-              <div className="admin-filter-panel__group">
+            <SlidersHorizontal size={14} />
+            Filters
+          </button>
+        </div>
+
+        {/* ── Filter dropdown ── */}
+        {isFilterMounted && (
+          <div className={`ac-filter-panel${isFilterOpen ? " ac-filter-panel--open" : ""}`}>
+            <div className="ac-filter-grid">
+              <div className="ac-filter-group">
                 <label>Brand</label>
-                <select
-                  value={selectedBrand}
-                  onChange={(e) => setSelectedBrand(e.target.value)}
-                >
+                <select value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)}>
                   <option value="">All Brands</option>
-                  {brands.map((brand) => (
-                    <option key={brand} value={brand}>
-                      {brand}
-                    </option>
-                  ))}
+                  {brands.map((brand) => <option key={brand} value={brand}>{brand}</option>)}
                 </select>
               </div>
-
-              <div className="admin-filter-panel__group">
+              <div className="ac-filter-group">
                 <label>Fuel</label>
-                <select
-                  value={selectedFuel}
-                  onChange={(e) => setSelectedFuel(e.target.value)}
-                >
-                  <option value="">All Fuel</option>
+                <select value={selectedFuel} onChange={(e) => setSelectedFuel(e.target.value)}>
+                  <option value="">All</option>
                   <option value="petrol">Petrol</option>
                   <option value="diesel">Diesel</option>
                   <option value="hybrid">Hybrid</option>
@@ -225,54 +209,39 @@ function AdminCarPage({ mode }) {
                   <option value="plug-in hybrid">Plug-in Hybrid</option>
                 </select>
               </div>
-
-              <div className="admin-filter-panel__group">
+              <div className="ac-filter-group">
                 <label>Transmission</label>
-                <select
-                  value={selectedTransmission}
-                  onChange={(e) => setSelectedTransmission(e.target.value)}
-                >
-                  <option value="">All Transmission</option>
+                <select value={selectedTransmission} onChange={(e) => setSelectedTransmission(e.target.value)}>
+                  <option value="">All</option>
                   <option value="manual">Manual</option>
                   <option value="automatic">Automatic</option>
                   <option value="cvt">CVT</option>
                 </select>
               </div>
             </div>
-
-            <div className="admin-filter-panel__actions">
-              <button type="button" onClick={handleReset}>
-                Reset
-              </button>
-
-              <button type="button" onClick={handleApply}>
-                Apply
-              </button>
+            <div className="ac-filter-actions">
+              <button type="button" className="ac-filter-reset" onClick={handleReset}>Reset</button>
+              <button type="button" className="ac-filter-apply" onClick={handleApply}>Apply</button>
             </div>
           </div>
         )}
 
-        {isSearchMounted && (
-          <div
-            className={`admin-search-panel admin-overlay-panel ${
-              isSearchOpen ? "admin-overlay-panel--visible" : ""
-            }`}
-          >
-            <input
-              type="text"
-              placeholder="Search by name or brand..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+        {/* ── Row 2: tabs + count ── */}
+        <div className="ac-tabs-row">
+          <div className="ac-tabs">
+            {tabs.map((tab) => (
+              <button
+                key={tab.value}
+                type="button"
+                className={`ac-tab${activeTab === tab.value ? " ac-tab--active" : ""}`}
+                onClick={() => setActiveTab(tab.value)}
+              >{tab.label}</button>
+            ))}
           </div>
-        )}
-      </div>
+          <span className="ac-count">{displayCars.length} vehicle{displayCars.length !== 1 ? "s" : ""}</span>
+        </div>
 
-      <AdminTabs
-        tabs={tabs}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
+      </div>
 
       {loading && <p className="admin-state-message">Loading cars...</p>}
 

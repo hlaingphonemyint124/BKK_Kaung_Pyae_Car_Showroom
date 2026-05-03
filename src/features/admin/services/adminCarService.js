@@ -9,7 +9,7 @@ export const getAdminCars = async (params = {}) => {
 export const getAdminCarById = async (id) => {
   const res = await api.get(`/admin/cars/${id}`);
   const d = res.data;
-  // Unwrap envelope: { car: {...} } | { data: {...} } | {...}
+
   return d?.car ?? d?.data?.car ?? d?.data ?? d;
 };
 
@@ -33,24 +33,34 @@ export const updateAdminCarPublishStatus = async (id, is_published) => {
   return res.data;
 };
 
+// ─── CAR IMAGES ──────────────────────────────────────────
 export const addAdminCarImage = async (
   id,
   file,
   { isPrimary = false, sortOrder = 0 } = {}
 ) => {
   const formData = new FormData();
+
   formData.append("image", file);
-  formData.append("is_primary", String(isPrimary));
+  formData.append("is_primary", isPrimary ? "true" : "false");
   formData.append("sort_order", String(sortOrder));
 
-  const res = await api.post(`/admin/cars/${id}/images`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const res = await api.post(`/admin/cars/${id}/images`, formData);
+
   return res.data;
 };
 
-// ─── CAR DOCUMENTS (migration 014) ───────────────────────
-// GET /admin/cars/:id/documents → [{ id, field_name, field_value, sort_order }]
+export const updateAdminCarImage = async (carId, imageId, payload) => {
+  const res = await api.patch(`/admin/cars/${carId}/images/${imageId}`, payload);
+  return res.data;
+};
+
+export const deleteAdminCarImage = async (carId, imageId) => {
+  const res = await api.delete(`/admin/cars/${carId}/images/${imageId}`);
+  return res.data;
+};
+
+// ─── CAR DOCUMENTS ───────────────────────────────────────
 export const getCarDocuments = async (carId) => {
   const res = await api.get(`/admin/cars/${carId}/documents`);
   return res.data;
@@ -62,7 +72,10 @@ export const createCarDocument = async (carId, payload) => {
 };
 
 export const updateCarDocument = async (carId, documentId, payload) => {
-  const res = await api.patch(`/admin/cars/${carId}/documents/${documentId}`, payload);
+  const res = await api.patch(
+    `/admin/cars/${carId}/documents/${documentId}`,
+    payload
+  );
   return res.data;
 };
 
@@ -71,27 +84,22 @@ export const deleteCarDocument = async (carId, documentId) => {
   return res.data;
 };
 
-// ─── RENTAL TERMS (migration 013) ────────────────────────
-// GET /admin/rental-terms → [{ id, title, description, sort_order, is_active }]
+// ─── RENTAL TERMS ────────────────────────────────────────
 export const getRentalTerms = async () => {
   const res = await api.get("/admin/rental-terms");
   return res.data;
 };
 
-// POST /admin/rental-terms
-// body: { title, description, sort_order }
 export const createRentalTerm = async (payload) => {
   const res = await api.post("/admin/rental-terms", payload);
   return res.data;
 };
 
-// PATCH /admin/rental-terms/:id
 export const updateRentalTerm = async (id, payload) => {
   const res = await api.patch(`/admin/rental-terms/${id}`, payload);
   return res.data;
 };
 
-// DELETE /admin/rental-terms/:id
 export const deleteRentalTerm = async (id) => {
   const res = await api.delete(`/admin/rental-terms/${id}`);
   return res.data;
