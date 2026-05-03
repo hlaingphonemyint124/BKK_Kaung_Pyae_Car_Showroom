@@ -16,6 +16,10 @@ body,
   min-height: 100%;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 :root {
   --navbar-height: 72px;
   --page-max: 1180px;
@@ -25,7 +29,16 @@ body,
 
 body {
   font-family: var(--font);
-  background: var(--bg-page);
+  background: linear-gradient(
+    180deg,
+    #ebebed 0%,
+    #f7f7f9 15%,
+    #f1f1f3 30%,
+    #f8f8fa 46%,
+    #f2f2f4 62%,
+    #f7f7f9 78%,
+    #f0f0f2 100%
+  );
   color: var(--text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -68,7 +81,16 @@ DARK MODE
 =============================== */
 
 body.dark {
-  background: var(--bg-page);
+  background: linear-gradient(
+    180deg,
+    #090909 0%,
+    #0e0e0e 14%,
+    #0b0b0b 28%,
+    #0d0d0d 44%,
+    #0a0a0a 60%,
+    #0c0c0c 76%,
+    #090909 100%
+  );
   color: var(--text-primary);
 }
 
@@ -82,11 +104,6 @@ body.dark .why-card {
   background: var(--bg-surface);
   color: var(--text-primary);
   border: 1px solid rgba(var(--color-red-rgb), 0.15);
-}
-
-body.dark .brandsSection,
-body.dark .carTypes {
-  background: linear-gradient(180deg, var(--bg-page), #1a0000);
 }
 
 body.dark .site-footer {
@@ -111,6 +128,95 @@ body.dark .btn-ghost:hover,
 body.dark .btn-outline:hover {
   background: rgba(var(--color-red-rgb), 0.10);
   border-color: var(--color-red);
+}
+
+/* ===============================
+   SHARED SECTION AMBIENT BLOBS
+   Dark-mode animated glow system (same as Deals section)
+=============================== */
+
+.sec-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(130px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+body.dark .sec-blob {
+  animation: secBlobBreathe 7s ease-in-out infinite;
+}
+@keyframes secBlobBreathe {
+  0%, 100% { opacity: 0.82; }
+  50%       { opacity: 1;    }
+}
+
+/* Sizes */
+.sec-blob--lg {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.20), transparent 70%);
+}
+.sec-blob--md {
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.13), transparent 70%);
+}
+.sec-blob--sm {
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.09), transparent 70%);
+}
+
+/* Positions */
+.sec-blob--tc { top: -150px; left: 50%; transform: translateX(-50%); }
+.sec-blob--bl { bottom: -80px; left: -80px; }
+.sec-blob--mr { top: 40%; right: -60px; }
+.sec-blob--tr { top: -80px; right: -80px; }
+.sec-blob--bc { bottom: -150px; left: 50%; transform: translateX(-50%); }
+.sec-blob--ml { top: 40%; left: -60px; }
+.sec-blob--tl { top: -80px; left: -80px; }
+.sec-blob--br { bottom: -80px; right: -80px; }
+
+/* Shared noise texture — dark only */
+.sec-noise {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+body.dark .sec-noise { opacity: 0.028; }
+
+/* ── Section separators — gradient glow lines between sections ─── */
+body.dark section + section {
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(var(--color-red-rgb), 0.12) 25%,
+    rgba(var(--color-red-rgb), 0.20) 50%,
+    rgba(var(--color-red-rgb), 0.12) 75%,
+    transparent 100%
+  ) 1;
+}
+body:not(.dark) section + section {
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0,0,0,0.07) 25%,
+    rgba(0,0,0,0.11) 50%,
+    rgba(0,0,0,0.07) 75%,
+    transparent 100%
+  ) 1;
+}
+
+/* ── Blob color mood variants — warm (Team/Testimonials) + cool (Brands/Types) */
+.sec-blob--warm {
+  background: radial-gradient(circle, rgba(255, 80, 30, 0.17), transparent 70%) !important;
+}
+.sec-blob--cool {
+  background: radial-gradient(circle, rgba(150, 190, 255, 0.11), transparent 70%) !important;
 }
 
 /* ===============================
@@ -705,7 +811,7 @@ HERO
 =============================== */
 
 .hero {
-  min-height: 620px;
+  min-height: 100vh;
   background-size: cover;
   background-position: center;
   display: flex;
@@ -1041,7 +1147,6 @@ HOME SECTION BASE
 
 .brandsSection,
 .carTypes,
-.easyRentalSection,
 .grid-section,
 .why-grid,
 .about,
@@ -1532,9 +1637,6 @@ RESPONSIVE
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .hero {
-    min-height: 540px;
-  }
 }
 
 @media (max-width: 768px) {
@@ -1569,9 +1671,7 @@ RESPONSIVE
     width: min(340px, 88vw);
   }
 
-  .hero {
-    min-height: 480px;
-  }
+
 
   .hero h1 {
     font-size: 38px;

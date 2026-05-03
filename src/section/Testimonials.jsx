@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import "./Testimonials.css";
 import { useLanguage } from "../context/LanguageContext";
+import ParticleBackground from "../components/ParticleBackground";
 
 const data = [
   {
@@ -157,6 +158,12 @@ export default function Testimonials() {
 
   return (
     <section className="ts-section">
+      <ParticleBackground />
+      <div className="sec-blob sec-blob--lg sec-blob--tc sec-blob--warm" />
+      <div className="sec-blob sec-blob--md sec-blob--br" />
+      <div className="sec-blob sec-blob--sm sec-blob--ml" />
+      <div className="sec-noise" />
+
       <h2 className={`ts-title ${titleVisible ? "visible" : ""}`}>
         {t("test_title1")}
         <span className="ts-title-sub">{t("test_title2")}</span>

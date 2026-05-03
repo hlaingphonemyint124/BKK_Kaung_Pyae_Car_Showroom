@@ -5,7 +5,7 @@
 /* ---- Section ---- */
 .bl-section {
   padding: 16px;
-  background: var(--bg-page);
+  background: transparent;
   transition: background 0.3s;
   position: relative;
 }
@@ -310,20 +310,20 @@ body.dark .bl-section {
   background: var(--bg-page) !important;
 }
 
-/* Deals-style ambient blob — dark only */
-.bl-section::before {
+/* Dark mode: central red radiant glow */
+body.dark .bl-section::before {
   content: '';
-  position: absolute;
-  top: -40px; right: 8%;
-  width: 380px; height: 380px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.13), transparent 70%);
-  filter: blur(100px);
+  position: absolute !important;
+  z-index: 0 !important;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(var(--color-red-rgb), 0.13) 0%, transparent 62%);
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s;
 }
-body.dark .bl-section::before { opacity: 1; }
+
+/* Blob animation stagger + content above blobs */
+body.dark .bl-section .sec-blob:nth-child(1) { animation-delay: -1s;   }
+body.dark .bl-section .sec-blob:nth-child(2) { animation-delay: -3s;   }
+.bl-section > :not(.sec-blob):not(.sec-noise) { position: relative; z-index: 1; }
 
 .bl-header {
   max-width: 1440px;

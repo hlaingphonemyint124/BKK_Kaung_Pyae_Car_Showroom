@@ -50,6 +50,11 @@ export default function AboutUs({ theme = "dark" }) {
 
   return (
     <section ref={sectionRef} className={`about-section ${theme}`}>
+      <div className="sec-blob sec-blob--lg sec-blob--tl" />
+      <div className="sec-blob sec-blob--md sec-blob--mr" />
+      <div className="sec-blob sec-blob--sm sec-blob--bc" />
+      <div className="sec-noise" />
+
       <div className="about-inner">
 
         {/* Left column — copy */}

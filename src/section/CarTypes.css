@@ -5,7 +5,7 @@
 /* ---- Section ---- */
 .ct-section {
   padding: 16px;
-  background: var(--bg-page);
+  background: transparent;
   transition: background 0.3s;
   position: relative;
 }
@@ -435,6 +435,21 @@ body.dark .ct-arrow:hover {
   .ct-card { width: 116px; height: 116px; }
   .ct-icon { width: 44px; height: 44px; font-size: 22px; }
 }
+
+/* Dark mode: central red radiant glow */
+body.dark .ct-section::before {
+  content: '';
+  position: absolute !important;
+  z-index: 0 !important;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(var(--color-red-rgb), 0.13) 0%, transparent 62%);
+  pointer-events: none;
+}
+
+/* Blob animation stagger + content above blobs */
+body.dark .ct-section .sec-blob:nth-child(1) { animation-delay: -2s;   }
+body.dark .ct-section .sec-blob:nth-child(2) { animation-delay: -4s;   }
+.ct-section > :not(.sec-blob):not(.sec-noise) { position: relative; z-index: 1; }
 
 @media (max-width: 768px) {
   .ct-section { padding: 28px 16px 40px; }

@@ -61,6 +61,9 @@ export default function BrandList() {
 
   return (
     <section className="bl-section">
+      <div className="sec-blob sec-blob--lg sec-blob--tc" />
+      <div className="sec-blob sec-blob--md sec-blob--bl" />
+      <div className="sec-noise" />
 
       <div className="bl-header">
         <h2 className="bl-title">{t("brands_title")}</h2>

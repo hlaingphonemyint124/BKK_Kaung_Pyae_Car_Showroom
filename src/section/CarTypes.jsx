@@ -61,6 +61,9 @@ export default function CarTypes() {
 
   return (
     <section className="ct-section">
+      <div className="sec-blob sec-blob--lg sec-blob--tc" />
+      <div className="sec-blob sec-blob--md sec-blob--br" />
+      <div className="sec-noise" />
 
       <div className="ct-header">
         <h3 className="ct-title">{t("car_types_title")}</h3>

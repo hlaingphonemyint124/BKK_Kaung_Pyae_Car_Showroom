@@ -3,31 +3,20 @@
 ================================ */
 .whySection {
   padding: 72px 0 72px;
-  background: var(--bg-page);
+  background: transparent;
   overflow: hidden;
   position: relative;
 }
 
 body.dark .whySection {
-  background: var(--bg-page);
+  background: transparent;
 }
 
-/* Deals-style ambient blob — dark only */
-.whySection::before {
-  content: '';
-  position: absolute;
-  top: -80px; left: 50%;
-  transform: translateX(-50%);
-  width: 700px; height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.16), transparent 70%);
-  filter: blur(120px);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s;
-  z-index: 0;
-}
-body.dark .whySection::before { opacity: 1; }
+/* Blob animation stagger + content above blobs */
+body.dark .whySection .sec-blob:nth-child(1) { animation-delay:  0s;   }
+body.dark .whySection .sec-blob:nth-child(2) { animation-delay: -2s;   }
+body.dark .whySection .sec-blob:nth-child(3) { animation-delay: -4s;   }
+.whySection > :not(.sec-blob):not(.sec-noise) { position: relative; z-index: 1; }
 
 /* ================================
    CENTERED CONTAINER

@@ -2,7 +2,7 @@
 .about-section {
   padding: 72px 40px;
   font-family: var(--font);
-  background: var(--bg-page);
+  background: transparent;
   position: relative;
   overflow: hidden;
   opacity: 0;
@@ -17,7 +17,7 @@
 
 /* Dark variant */
 .about-section.dark {
-  background: var(--bg-page);
+  background: transparent;
   color: #ffffff;
 }
 
@@ -36,7 +36,7 @@
 
 /* Light variant */
 .about-section.light {
-  background: var(--bg-page);
+  background: transparent;
   color: var(--text-primary);
 }
 
@@ -206,6 +206,11 @@
 .about-section.dark .about-value-card__desc {
   color: rgba(255, 255, 255, 0.5);
 }
+
+/* Blob animation stagger (.about-inner already has position: relative; z-index: 1) */
+body.dark .about-section .sec-blob:nth-child(1) { animation-delay: -1.2s; }
+body.dark .about-section .sec-blob:nth-child(2) { animation-delay: -3.2s; }
+body.dark .about-section .sec-blob:nth-child(3) { animation-delay: -5.2s; }
 
 /* ── Responsive: 1 column at ≤900px ── */
 @media (max-width: 900px) {

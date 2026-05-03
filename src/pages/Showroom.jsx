@@ -349,7 +349,7 @@ export default function Showroom() {
 
                   <div className="sr-card-footer">
                     <p className="sr-card-price">{displayPrice(car)}</p>
-                    <span className="sr-card-cta">{t("sr_details")}</span>
+                    <span className="sr-card-cta">→</span>
                   </div>
                 </div>
               </div>

@@ -3,13 +3,13 @@
   font-family: var(--font);
   padding: 64px 24px 72px;
   text-align: center;
-  background: var(--bg-page);
+  background: transparent;
   position: relative;
   overflow: hidden;
   transition: background 0.3s;
 }
 body.dark .team {
-  background: var(--bg-page);
+  background: transparent;
 }
 .team::before {
   content: '';
@@ -199,6 +199,12 @@ body.dark .member-avatar {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* Blob animation stagger + content above blobs */
+body.dark .team .sec-blob:nth-child(1) { animation-delay: -0.3s; }
+body.dark .team .sec-blob:nth-child(2) { animation-delay: -2.3s; }
+body.dark .team .sec-blob:nth-child(3) { animation-delay: -4.3s; }
+.team > :not(.sec-blob):not(.sec-noise):not(.sec-particles) { position: relative; z-index: 1; }
 
 /* RESPONSIVE */
 @media (max-width: 480px) {

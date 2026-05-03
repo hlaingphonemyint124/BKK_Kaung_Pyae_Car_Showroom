@@ -11,7 +11,7 @@
    SECTION WRAPPER
 ───────────────────────────────────────────────────────────────*/
 .sh-root {
-  background: var(--bg-page);
+  background: transparent;
   padding: 72px 0 80px;
   position: relative;
   overflow: hidden;
@@ -46,6 +46,11 @@ body.dark .sh-root::before {
 body.dark .sh-root::after {
   background: radial-gradient(ellipse at center, rgba(var(--color-red-rgb), 0.12) 0%, transparent 70%);
 }
+
+/* Blob animation stagger (sh-inner already has z-index: 1) */
+body.dark .sh-root .sec-blob:nth-child(1) { animation-delay: -1.5s; }
+body.dark .sh-root .sec-blob:nth-child(2) { animation-delay: -3.5s; }
+body.dark .sh-root .sec-blob:nth-child(3) { animation-delay: -5.5s; }
 
 /* noise — only visible in dark mode */
 .sh-noise {

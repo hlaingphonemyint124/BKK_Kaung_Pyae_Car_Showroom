@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Team.css";
+import ParticleBackground from "../components/ParticleBackground";
 
 const ceo = { name: "Mr. Kaung Pyae Lwin", role: "CEO" };
 
@@ -15,6 +16,11 @@ export default function Team() {
   const navigate = useNavigate();
   return (
     <section className="team">
+      <ParticleBackground />
+      <div className="sec-blob sec-blob--lg sec-blob--tc sec-blob--warm" />
+      <div className="sec-blob sec-blob--md sec-blob--bl" />
+      <div className="sec-blob sec-blob--sm sec-blob--mr" />
+      <div className="sec-noise" />
       <span className="team-label">Our People</span>
       <h2 className="team-title">Meet Our <span>Team</span></h2>
       <p className="team-sub">The people behind every great experience</p>

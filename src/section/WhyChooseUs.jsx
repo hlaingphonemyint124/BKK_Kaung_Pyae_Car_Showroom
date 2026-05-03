@@ -38,6 +38,11 @@ export default function WhyChooseUs() {
 
   return (
     <section className="whySection">
+      <div className="sec-blob sec-blob--lg sec-blob--tc" />
+      <div className="sec-blob sec-blob--md sec-blob--bl" />
+      <div className="sec-blob sec-blob--sm sec-blob--mr" />
+      <div className="sec-noise" />
+
       <div className="whyContainer">
 
         <h2 className="whyTitle">{t("wcu_title")}</h2>
@@ -64,7 +69,6 @@ export default function WhyChooseUs() {
         </div>
 
         <div className="whyAction">
-          <button className="btn-primary btn--lg">{t("wcu_btn")}</button>
           <p className="whyFeatures">{t("wcu_features")}</p>
         </div>
 

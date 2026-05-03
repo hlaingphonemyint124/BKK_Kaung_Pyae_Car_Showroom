@@ -127,6 +127,9 @@ export default function SoldHistory() {
 
   return (
     <section className="sh-root">
+      <div className="sec-blob sec-blob--lg sec-blob--tr" />
+      <div className="sec-blob sec-blob--md sec-blob--bc" />
+      <div className="sec-blob sec-blob--sm sec-blob--ml" />
       <div className="sh-noise" />
       <div className="sh-inner">
 
