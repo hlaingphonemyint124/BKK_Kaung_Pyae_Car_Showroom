@@ -1,4 +1,12 @@
-import API from './api';
+import API from "./api";
 
-export const getBestSellers = () => API.get('/cars/best-sellers');
-export const getMostRented  = () => API.get('/cars/most-rented');
+export const getNewArrivals = () =>
+  API.get("/cars", {
+    params: {
+      price_min: 1,
+      sort: "newest",
+      limit: 10,
+    },
+  });
+
+export const getMostRented = () => API.get("/cars/most-rented");

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-import { getBestSellers, getMostRented } from "../api/deals.api";
+import { getNewArrivals, getMostRented } from "../api/deals.api";
 import { useLanguage } from "../context/LanguageContext";
 
 
@@ -20,12 +20,22 @@ function mapApiCarToCard(car, tab) {
               ? `${car.currency_code || "THB"} / day`
               : car.currency_code || "THB",
     // ✅ FIXED: backend image field is storage_path not url
-    image:  car.images?.[0]?.storage_path || car.img || "/images/placeholder.png",
+    image:
+      car.primary_image ||
+      car.image ||
+      car.images?.find((img) => img.is_primary)?.storage_path ||
+      car.images?.find((img) => img.is_primary)?.secure_url ||
+      car.images?.[0]?.storage_path ||
+      car.images?.[0]?.secure_url ||
+      car.img ||
+      "/images/placeholder.png",
+
+    fuel: car.fuel || car.fuel_type || "—",
     specs: {
       year:         String(car.year),
       engine:       car.engine       || "—",
       mileage:      car.mileage_km   ? `${Number(car.mileage_km).toLocaleString()} km` : "—",
-      fuel:         car.fuel_type    || "—",
+      fuel: car.fuel || car.fuel_type || "—",
       transmission: car.transmission || "—",
       color:        car.color        || "—",
     },
@@ -332,10 +342,22 @@ function Slider({ children, navigateRef }) {
 /* ─────────────────────────────────────────────────────────────────────────────
    MAIN DEALS COMPONENT
 ───────────────────────────────────────────────────────────────────────────── */
+const normalizeCarsResponse = (res) => {
+  const data =
+    res?.data?.cars ||
+    res?.data?.data?.cars ||
+    res?.data?.data ||
+    res?.cars ||
+    res?.data ||
+    [];
+
+  return Array.isArray(data) ? data : [];
+};
+
 export default function Deals() {
   const { t }               = useLanguage();
   const navigate            = useNavigate();
-  const [tab, setTab]       = useState("seller");
+  const [tab, setTab]       = useState("new");
   const [flipped, setFlip]  = useState(null);
   const navigateRef         = useRef(null);
   const [cards, setCards]   = useState([]);
@@ -345,11 +367,11 @@ export default function Deals() {
     setFlip(null);
     setLoading(true);
 
-    const apiFn = tab === "seller" ? getBestSellers : getMostRented;
+    const apiFn = tab === "new" ? getNewArrivals : getMostRented;
 
     apiFn()
       .then((res) => {
-        const data = res.data.cars ?? [];
+        const data = normalizeCarsResponse(res);
         setCards(data.map((car) => mapApiCarToCard(car, tab)));
       })
       .catch(() => {
@@ -384,7 +406,7 @@ export default function Deals() {
         initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.15 }} viewport={{ once: true }}
       >
-        <button className={tab === "seller" ? "active" : ""} onClick={() => setTab("seller")}>
+        <button className={tab === "new" ? "active" : ""} onClick={() => setTab("new")}>
           <span className="tab-dot" />{t("deals_new")}
         </button>
         <button className={tab === "rented" ? "active" : ""} onClick={() => setTab("rented")}>
