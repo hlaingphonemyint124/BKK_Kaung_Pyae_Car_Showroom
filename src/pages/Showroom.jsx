@@ -589,6 +589,12 @@ export default function Showroom() {
                   <span className={`sr-badge sr-badge--${mode}`}>
                     {mode === "buy" ? t("sr_for_sale") : t("sr_for_rent")}
                   </span>
+
+                  {car.status && car.status !== "available" && (
+                    <div className="sr-card-status-overlay">
+                      {car.status.charAt(0).toUpperCase() + car.status.slice(1)}
+                    </div>
+                  )}
                 </div>
 
                 <div className="sr-card-body">

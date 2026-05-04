@@ -33,7 +33,7 @@ body.dark .deals {
   position: relative;
   overflow: hidden;
   padding: 72px 0 80px;
-  background: transparent;
+  background: #0e0a0a;
   text-align: center;
   font-family: var(--font);
   transition: background 0.4s;
@@ -83,9 +83,14 @@ body.dark .deals-noise { opacity: 0.022; }
 .deals-particles {
   position: absolute; inset: 0; width: 100%; height: 100%;
   pointer-events: none; z-index: 0;
-  opacity: 0.75; transition: opacity 0.5s;
+  opacity: 0.55; transition: opacity 0.5s;
 }
 body.dark .deals-particles { opacity: 1; }
+
+@media (max-width: 768px) {
+  .deals-particles { opacity: 0.80; }
+  body.dark .deals-particles { opacity: 1; }
+}
 
 /* ── Header ────────────────────────────────────────────────────────────────── */
 .deals-header {

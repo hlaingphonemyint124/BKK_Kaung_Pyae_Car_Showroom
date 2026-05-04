@@ -105,7 +105,7 @@ export default function Header() {
   ];
 
   const isActive = (path) => {
-    if (path === "/") return location.pathname === "/";
+    if (path === "/" || path === "/admin") return location.pathname === path;
 
     const [pathname, search] = path.split("?");
 

@@ -516,6 +516,32 @@ body.dark .sr::before {
   color: #fff;
 }
 
+/* Status overlay (sold / reserved / rented) */
+.sr-card-status-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 8, 12, 0.72);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  border-radius: inherit;
+}
+
+.sr-card-status-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(239, 43, 45, 0.55);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
 /* Admin edit overlay */
 .sr-edit-btn {
   position: absolute;
