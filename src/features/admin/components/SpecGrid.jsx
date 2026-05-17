@@ -10,7 +10,6 @@ import {
 
 const RED_THEME = "#ef2b2d";
 
-// Fuel value → distinct icon color
 const FUEL_COLORS = {
   petrol: "#f59e0b",
   diesel: "#78716c",
@@ -19,23 +18,22 @@ const FUEL_COLORS = {
   "plug-in hybrid": "#8b5cf6",
 };
 
-// Values match DB CHECK constraints
 const SPEC_ITEMS = [
   {
-    key: "type",
+    key: "body_type",
     label: "Type",
     icon: Car,
     color: RED_THEME,
     type: "select",
     options: [
-      { value: "Sedan", label: "Sedan" },
-      { value: "Hatchback", label: "Hatchback" },
-      { value: "SUV", label: "SUV" },
-      { value: "Pickup Truck", label: "Pickup Truck" },
-      { value: "Van / Minivan", label: "Van / Minivan" },
-      { value: "Electric", label: "Electric" },
-      { value: "Coupe", label: "Coupe" },
-      { value: "Convertible", label: "Convertible" },
+      { value: "sedan", label: "Sedan" },
+      { value: "hatchback", label: "Hatchback" },
+      { value: "suv", label: "SUV" },
+      { value: "pickup_truck", label: "Pickup Truck" },
+      { value: "van_minivan", label: "Van / Minivan" },
+      { value: "electric", label: "Electric" },
+      { value: "coupe", label: "Coupe" },
+      { value: "convertible", label: "Convertible" },
     ],
   },
   {
@@ -115,7 +113,6 @@ function SpecGrid({ specs, onChange }) {
       {SPEC_ITEMS.map((item) => {
         const Icon = item.icon;
         const value = specs[item.key] ?? "";
-
         const normalizedValue = String(value).toLowerCase();
 
         const iconColor =

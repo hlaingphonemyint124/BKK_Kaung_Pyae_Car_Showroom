@@ -731,7 +731,7 @@ body.dark .admin-document-section__add:hover {
   .ad-shell__main { flex: 1; }
 
   .ad-shell__side {
-    width: 360px;
+    width: 560px;
     flex-shrink: 0;
   }
 }

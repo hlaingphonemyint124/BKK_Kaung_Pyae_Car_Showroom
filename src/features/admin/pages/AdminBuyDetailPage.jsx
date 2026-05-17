@@ -35,7 +35,7 @@ const getEmptyForm = () => ({
   price: "",
   media: [],
   specs: {
-    type: "",
+    body_type: "",
     fuel: "",
     transmission: "",
     color: "",
@@ -153,7 +153,7 @@ function AdminBuyDetailPage() {
           price: car.sale_price ?? "",
           media,
           specs: {
-            type: car.type || "",
+            body_type: car.body_type || "",
             fuel: car.fuel || car.fuel_type || "",
             transmission: car.transmission || "",
             color: car.color || "",
@@ -361,6 +361,7 @@ function AdminBuyDetailPage() {
       currency_code: form.info.currencyCode,
       status: form.info.status,
       is_published: form.info.isPublished,
+      ...(form.specs.body_type ? { body_type: form.specs.body_type } : {}),
       ...(form.specs.fuel ? { fuel: form.specs.fuel } : {}),
       ...(form.specs.transmission
         ? { transmission: form.specs.transmission }
