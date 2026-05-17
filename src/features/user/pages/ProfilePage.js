@@ -1,32 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AuthHeader from "../../auth/components/AuthHeader";
 import "../../auth/styles/AuthStyles.css";
 import "../styles/UserStyles.css";
+import { getProfile, updateProfile } from "../service/profileService";
 
 import ProfileItem from "../components/ProfileItem";
-import {
-  FaUser,
-  FaPhoneAlt,
-  FaSave,
-  FaTimes,
-  FaCity,
-} from "react-icons/fa";
-import { SiGmail } from "react-icons/si";
-import { FaLocationDot, FaGlobe } from "react-icons/fa6";
+
+import { FaUser, FaPhoneAlt, FaSave, FaTimes } from "react-icons/fa";
+import { SiGmail, SiLine } from "react-icons/si";
 
 function ProfilePage() {
   const [editingField, setEditingField] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [profile, setProfile] = useState({
-    full_name: "Kyaw Kyaw",
-    email: "kyawkyaw123@gmail.com",
-    phone: "+66 9xxxxxxx",
-    address_line: "Bangkok",
-    city: "Bangkok",
-    country: "Thailand",
+    full_name: "",
+    email: "",
+    phone: "",
+    line_contact: "",
   });
 
   const [backupProfile, setBackupProfile] = useState(profile);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const data = await getProfile();
+
+        setProfile({
+          full_name: data.full_name || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          line_contact: data.line_contact || "",
+        });
+      } catch (error) {
+        console.error("Failed to load profile:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, []);
 
   const handleChange = (name, value) => {
     setProfile((prev) => ({
@@ -47,25 +62,34 @@ function ProfilePage() {
 
   const handleSave = async () => {
     try {
-      const payload = {
+      const updatedProfile = await updateProfile({
         full_name: profile.full_name,
-        email: profile.email,
-        phone: profile.phone,
-        address_line: profile.address_line,
-        city: profile.city,
-        country: profile.country,
-      };
+        phone: profile.phone || null,
+        line_contact: profile.line_contact || null,
+      });
 
-      console.log("Send to backend:", payload);
-
-      // Later connect backend:
-      // await updateMyCustomerProfile(payload);
+      setProfile((prev) => ({
+        ...prev,
+        ...updatedProfile,
+      }));
 
       setEditingField(null);
+      alert("Profile updated successfully");
     } catch (error) {
       console.error("Failed to update profile:", error);
+      alert("Failed to update profile");
     }
   };
+
+  if (loading) {
+    return (
+      <AuthHeader>
+        <div className="user-content-box">
+          <p>Loading profile...</p>
+        </div>
+      </AuthHeader>
+    );
+  }
 
   return (
     <AuthHeader>
@@ -91,9 +115,9 @@ function ProfilePage() {
           name="email"
           icon={<SiGmail className="icon gmail-icon" />}
           value={profile.email}
-          editing={editingField === "email"}
+          editing={false}
           onChange={handleChange}
-          onEditClick={() => handleEdit("email")}
+          onEditClick={null}
         />
 
         <ProfileItem
@@ -107,33 +131,13 @@ function ProfilePage() {
         />
 
         <ProfileItem
-          label="Address"
-          name="address_line"
-          icon={<FaLocationDot className="icon red-icon" />}
-          value={profile.address_line}
-          editing={editingField === "address_line"}
+          label="Line"
+          name="line_contact"
+          icon={<SiLine className="icon red-icon" />}
+          value={profile.line_contact}
+          editing={editingField === "line_contact"}
           onChange={handleChange}
-          onEditClick={() => handleEdit("address_line")}
-        />
-
-        <ProfileItem
-          label="City"
-          name="city"
-          icon={<FaCity className="icon red-icon" />}
-          value={profile.city}
-          editing={editingField === "city"}
-          onChange={handleChange}
-          onEditClick={() => handleEdit("city")}
-        />
-
-        <ProfileItem
-          label="Country"
-          name="country"
-          icon={<FaGlobe className="icon red-icon" />}
-          value={profile.country}
-          editing={editingField === "country"}
-          onChange={handleChange}
-          onEditClick={() => handleEdit("country")}
+          onEditClick={() => handleEdit("line_contact")}
         />
 
         {editingField && (
