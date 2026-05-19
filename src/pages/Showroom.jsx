@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./Showroom.css";
 import { getCarsForSale, getCarsForRent } from "../api/showroom.api";
@@ -110,6 +110,9 @@ export default function Showroom() {
   );
   const [searchQuery, setSearchQuery] = useState(() => params.get("q") || "");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [bodyTypeFilter, setBodyTypeFilter] = useState(
+    () => params.get("body_type") || "all"
+  );
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -126,10 +129,7 @@ export default function Showroom() {
   });
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const normalizeCarsResponse = (res) =>
-    res?.data?.cars || res?.cars || res?.data || [];
-
-  const fetchCars = async (currentMode) => {
+  const fetchCars = useCallback(async (currentMode) => {
     const apiFn = currentMode === "buy" ? getCarsForSale : getCarsForRent;
 
     try {
@@ -137,7 +137,10 @@ export default function Showroom() {
       setError(null);
 
       const res = await apiFn();
-      setCars(normalizeCarsResponse(res));
+      const normalizedCars =
+        res?.data?.cars || res?.cars || res?.data || [];
+
+      setCars(normalizedCars);
     } catch (err) {
       console.error("Showroom API unavailable:", err);
       setCars([]);
@@ -145,7 +148,7 @@ export default function Showroom() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (isFirstMount.current) {
@@ -162,7 +165,7 @@ export default function Showroom() {
     setFiltersOpen(false);
 
     fetchCars(mode);
-  }, [mode]);
+  }, [mode, fetchCars]);
 
   useEffect(() => {
     const p = new URLSearchParams();
@@ -172,9 +175,12 @@ export default function Showroom() {
     if (sortOrder !== "default") p.set("sort", sortOrder);
     if (fuelFilter !== "all") p.set("fuel", fuelFilter);
     if (transFilter !== "all") p.set("trans", transFilter);
+    if (bodyTypeFilter !== "all") {
+      p.set("body_type", bodyTypeFilter);
+    }
 
     setSearchParams(p, { replace: true });
-  }, [mode, searchQuery, sortOrder, fuelFilter, transFilter, setSearchParams]);
+  }, [mode, searchQuery, sortOrder, fuelFilter, transFilter, bodyTypeFilter, setSearchParams]);
 
   const tabs =
     mode === "buy"
@@ -252,12 +258,17 @@ export default function Showroom() {
         transFilter === "all" ||
         (car.transmission || "").toLowerCase() === transFilter;
 
+      const matchesBodyType =
+        bodyTypeFilter === "all" ||
+        (car.body_type || "").toLowerCase() === bodyTypeFilter;
+
       return (
         hasPrice &&
         matchesTab &&
         matchesSearch &&
         matchesFuel &&
-        matchesTrans
+        matchesTrans &&
+        matchesBodyType
       );
     });
 
@@ -283,6 +294,7 @@ export default function Showroom() {
     searchQuery,
     fuelFilter,
     transFilter,
+    bodyTypeFilter,
     sortOrder,
   ]);
 
@@ -297,6 +309,7 @@ export default function Showroom() {
     setSelectedCategory("all");
     setFuelFilter("all");
     setTransFilter("all");
+    setBodyTypeFilter("all");
     setSortOrder("default");
   };
 
@@ -498,6 +511,7 @@ export default function Showroom() {
                   onClick={() => {
                     setFuelFilter("all");
                     setTransFilter("all");
+                    setBodyTypeFilter("all");
                     setSortOrder("default");
                   }}
                 >

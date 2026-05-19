@@ -9,9 +9,9 @@ import { applyCardTilt, resetCardTilt, spawnParticles, spawnRipple } from "../ut
 import { useLanguage } from "../context/LanguageContext";
 
 const types = [
-  { name: "Pickup",    icon: <FaTruckPickup />, slug: "pickup"    },
+  { name: "Pickup",    icon: <FaTruckPickup />, slug: "pickup_truck"    },
   { name: "SUV",       icon: <FaCarSide />,     slug: "suv"       },
-  { name: "Van",       icon: <FaShuttleVan />,  slug: "van"       },
+  { name: "Van",       icon: <FaShuttleVan />,  slug: "van_minivan"       },
   { name: "Sedan",     icon: <GiCarDoor />,     slug: "sedan"     },
   { name: "Hatchback", icon: <BsCarFront />,    slug: "hatchback" },
   { name: "Electric",  icon: <MdElectricCar />, slug: "electric"  },
@@ -56,7 +56,9 @@ export default function CarTypes() {
 
   const handleCardClick = (e, type) => {
     spawnRipple(e, e.currentTarget, "ct-ripple");
-    setTimeout(() => navigate(`/types/${type.slug}`), 180);
+    setTimeout(() => {
+      navigate(`/showroom?body_type=${type.slug}`);
+    }, 180);
   };
 
   return (
