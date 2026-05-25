@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Car, Flag, AlertTriangle, Trophy, Plus, Star, Key, Users,
-  Settings, Clock, Phone, MessageCircle, Globe, Camera, Mail,
+  Clock,
   ChevronRight, ShoppingBag, TrendingUp,
 } from "lucide-react";
 
 import AdminMobileShell from "../components/AdminMobileShell";
+import BusinessSettingsSection from "../dashboard/components/BusinessSettingsSection";
 import { useAuth } from "../../../context/AuthContext";
 import { getAdminCars } from "../services/adminCarService";
 import { getUsers } from "../services/adminUsersService";
@@ -14,33 +15,6 @@ import "../styles/admin.css";
 
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const ORDINALS = ["1st","2nd","3rd","4th","5th"];
-const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-
-const HOURS = Array.from({ length: 17 }, (_, i) => {
-  const h = i + 6;
-  return h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`;
-});
-
-const DEFAULT_SETTINGS = {
-  openFrom: "Monday",
-  openTo: "Sunday",
-  openHour: "8 AM",
-  closeHour: "6 PM",
-  status: "Auto (Open)",
-  phone: "",
-  lineId: "",
-  facebook: "",
-  instagram: "",
-  gmail: "",
-};
-
-const CONTACT_FIELDS = [
-  { key: "phone", label: "Phone Number", Icon: Phone, color: "#ef2b2d", placeholder: "+66 xx xxx xxxx" },
-  { key: "lineId", label: "Line ID", Icon: MessageCircle, color: "#06c755", placeholder: "@lineid" },
-  { key: "facebook", label: "Facebook", Icon: Globe, color: "#1877f2", placeholder: "facebook.com/…" },
-  { key: "instagram", label: "Instagram", Icon: Camera, color: "#e4405f", placeholder: "@instagram" },
-  { key: "gmail", label: "Gmail", Icon: Mail, color: "#ea4335", placeholder: "email@gmail.com" },
-];
 
 function useDashboardStats() {
   const [stats, setStats] = useState(null);
@@ -341,111 +315,6 @@ function RolesSection({ user }) {
   );
 }
 
-function SettingSection() {
-  const [form, setForm] = useState(() => {
-    try {
-      return {
-        ...DEFAULT_SETTINGS,
-        ...JSON.parse(localStorage.getItem("bizSettings") || "{}"),
-      };
-    } catch {
-      return DEFAULT_SETTINGS;
-    }
-  });
-
-  const [saved, setSaved] = useState(false);
-
-  const update = (key, value) => {
-    const next = { ...form, [key]: value };
-    setForm(next);
-    localStorage.setItem("bizSettings", JSON.stringify(next));
-    setSaved(true);
-    setTimeout(() => setSaved(false), 1500);
-  };
-
-  return (
-    <div className="dash-panel dash-setting-panel">
-      <div className="dash-panel__head">
-        <div className="dash-panel__head-icon" style={{ color: "#6b7280" }}>
-          <Settings size={16} strokeWidth={2.2} />
-        </div>
-
-        <span className="dash-panel__head-label">Business Settings</span>
-        {saved && <span className="dash-saved-badge">Saved ✓</span>}
-      </div>
-
-      <div className="dash-setting-name">BKK Kaung Pyae</div>
-
-      <div className="dash-setting-body">
-        <div className="dash-setting-col">
-          <div className="dash-setting-group">
-            <label className="dash-field__label">Open Days</label>
-            <div className="dash-days-row">
-              <select value={form.openFrom} onChange={(event) => update("openFrom", event.target.value)}>
-                {DAYS.map((day) => <option key={day}>{day}</option>)}
-              </select>
-
-              <span className="dash-days-sep">→</span>
-
-              <select value={form.openTo} onChange={(event) => update("openTo", event.target.value)}>
-                {DAYS.map((day) => <option key={day}>{day}</option>)}
-              </select>
-            </div>
-          </div>
-
-          <div className="dash-setting-group">
-            <label className="dash-field__label">Open Hours</label>
-            <div className="dash-days-row">
-              <select value={form.openHour} onChange={(event) => update("openHour", event.target.value)}>
-                {HOURS.map((hour) => <option key={hour}>{hour}</option>)}
-              </select>
-
-              <span className="dash-days-sep">→</span>
-
-              <select value={form.closeHour} onChange={(event) => update("closeHour", event.target.value)}>
-                {HOURS.map((hour) => <option key={hour}>{hour}</option>)}
-              </select>
-            </div>
-          </div>
-
-          <div className="dash-setting-group">
-            <label className="dash-field__label">Status</label>
-            <select value={form.status} onChange={(event) => update("status", event.target.value)}>
-              <option>Auto (Open)</option>
-              <option>Open</option>
-              <option>Closed</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="dash-setting-divider-v" />
-
-        <div className="dash-setting-col">
-          <div className="dash-field__label" style={{ marginBottom: 12 }}>
-            Contact Info
-          </div>
-
-          {CONTACT_FIELDS.map(({ key, Icon, color, placeholder }) => (
-            <div key={key} className="dash-contact-row">
-              <div className="dash-contact-icon" style={{ background: `${color}22`, color }}>
-                <Icon size={14} strokeWidth={2} />
-              </div>
-
-              <input
-                type="text"
-                value={form[key]}
-                placeholder={placeholder}
-                onChange={(event) => update(key, event.target.value)}
-                className="dash-contact-input"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function AdminDashboardPage() {
   const { stats, loading } = useDashboardStats();
   const { user } = useAuth();
@@ -567,7 +436,7 @@ export default function AdminDashboardPage() {
 
         <DashSectionHead label="Business Settings" />
 
-        <SettingSection />
+        <BusinessSettingsSection />
       </div>
     </AdminMobileShell>
   );
