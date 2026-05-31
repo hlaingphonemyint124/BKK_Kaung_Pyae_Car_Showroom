@@ -18,77 +18,11 @@ import {
 } from "../dashboard/constants/dashboardConstants";
 import useDashboardStats from "../dashboard/hooks/useDashboardStats";
 import useEmployeesPreview from "../dashboard/hooks/useEmployeesPreview";
+import getInitials from "../dashboard/utils/getInitials";
+import StatCard from "../dashboard/components/StatCard";
+import DashSectionHead from "../dashboard/components/DashSectionHead";
+import PanelHead from "../dashboard/components/PanelHead";
 
-
-function getInitials(name, fallback = "A") {
-  if (!name) return fallback;
-
-  return name
-    .split(" ")
-    .map((word) => word[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-}
-
-function StatCard({ icon: Icon, iconBg, accent, label, value, sub1, sub2, valueIsText, progress }) {
-  return (
-    <div className="dash-stat-card" style={{ "--card-accent": accent }}>
-      <div className="dash-stat-card__top">
-        <div className="dash-stat-card__icon" style={{ background: iconBg }}>
-          <Icon size={16} strokeWidth={2.2} color="#fff" />
-        </div>
-        <TrendingUp size={13} className="dash-stat-card__trend" />
-      </div>
-
-      <p className={valueIsText ? "dash-stat-card__val--text" : "dash-stat-card__val"}>
-        {value}
-      </p>
-
-      <p className="dash-stat-card__label">{label}</p>
-
-      {progress !== undefined && (
-        <div className="dash-stat-card__progress">
-          <div
-            className="dash-stat-card__progress-fill"
-            style={{
-              width: `${Math.min(progress, 100)}%`,
-              background: accent || iconBg,
-            }}
-          />
-        </div>
-      )}
-
-      {(sub1 || sub2) && (
-        <div className="dash-stat-card__subs">
-          {sub1 && <span className="dash-stat-card__sub">{sub1}</span>}
-          {sub2 && <span className="dash-stat-card__sub">{sub2}</span>}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function DashSectionHead({ label }) {
-  return (
-    <div className="dash-section-head">
-      <div className="dash-section-head__bar" />
-      <span className="dash-section-head__label">{label}</span>
-      <div className="dash-section-head__rule" />
-    </div>
-  );
-}
-
-function PanelHead({ icon: Icon, label, accent }) {
-  return (
-    <div className="dash-panel__head">
-      <div className="dash-panel__head-icon" style={{ color: accent || "#ef2b2d" }}>
-        <Icon size={16} strokeWidth={2.2} />
-      </div>
-      <span className="dash-panel__head-label">{label}</span>
-    </div>
-  );
-}
 
 function AddCarsSection() {
   const navigate = useNavigate();
