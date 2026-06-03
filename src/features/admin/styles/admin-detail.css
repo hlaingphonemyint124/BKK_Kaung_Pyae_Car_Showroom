@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    SHELL WRAPPER
    Mobile: dark bg, single column (360px card)
    Desktop: dark bg, two-column side by side
@@ -74,7 +74,7 @@
 }
 
 .admin-section-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #344054;
   margin: 0 0 12px;
@@ -113,7 +113,7 @@
   color: #888;
   text-align: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .admin-media-uploader__grid {
@@ -161,18 +161,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 13px;
   z-index: 2;
 }
 
 .admin-media-uploader__upload-btn {
   align-self: flex-start;
-  background: #ef2b2d;
+  background: var(--color-red);
   color: #fff;
   border: none;
   padding: 8px 14px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.15s;
@@ -221,7 +221,7 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.16);
   color: #fff;
-  font-size: 18px;
+  font-size: 19px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -244,7 +244,7 @@
 }
 
 .admin-detail-field__label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: #777;
   text-transform: uppercase;
@@ -256,7 +256,7 @@
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid #e0e0e0;
-  font-size: 14px;
+  font-size: 15px;
   background: #fff;
   color: #111;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -265,19 +265,19 @@
 
 .admin-detail-input:focus {
   outline: none;
-  border-color: #ef2b2d;
+  border-color: var(--color-red);
   box-shadow: 0 0 0 3px rgba(239, 43, 45, 0.12);
 }
 
 .admin-detail-input.title {
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .admin-detail-input.price {
   font-weight: 700;
-  font-size: 18px;
-  color: #ef2b2d;
+  font-size: 19px;
+  color: var(--color-red);
 }
 
 /* Remove number input arrows */
@@ -302,7 +302,7 @@
   border-radius: 10px;
   padding: 0 16px;
   font-weight: 800;
-  font-size: 12px;
+  font-size: 13px;
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -334,12 +334,12 @@
 }
 
 .admin-spec-item:hover {
-  border-color: #ef2b2d;
+  border-color: var(--color-red);
   transform: translateY(-2px);
 }
 
 .admin-spec-item__icon {
-  color: #ef2b2d;
+  color: var(--color-red);
   display: flex;
   align-items: center;
 }
@@ -358,7 +358,7 @@
   border-radius: 8px;
   background: #fff;
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #222;
   outline: none;
@@ -368,12 +368,12 @@
 
 .admin-spec-item__select:focus,
 .admin-spec-item__input:focus {
-  border-color: #ef2b2d;
+  border-color: var(--color-red);
   box-shadow: 0 0 0 2px rgba(239, 43, 45, 0.1);
 }
 
 .admin-spec-item__label {
-  font-size: 10px;
+  font-size: 11px;
   color: #888;
   font-weight: 600;
   text-transform: uppercase;
@@ -404,7 +404,7 @@
 .admin-document-section__header {
   padding: 12px 14px;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14px;
   color: #333;
   border-bottom: 1px solid #e8e8e8;
   background: #f8f8f8;
@@ -453,7 +453,7 @@
 .admin-document-section__row.header {
   background: #f0f0f0;
   font-weight: 700;
-  font-size: 11px;
+  font-size: 12px;
   color: #666;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -461,7 +461,7 @@
 
 .admin-document-section__row .cell {
   padding: 9px 10px;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .admin-document-section__row .input {
@@ -469,7 +469,7 @@
   background: transparent;
   outline: none;
   width: 100%;
-  font-size: 12px;
+  font-size: 13px;
   color: #222;
 }
 
@@ -477,8 +477,8 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #ef2b2d;
-  font-size: 13px;
+  color: var(--color-red);
+  font-size: 14px;
   padding: 4px;
   display: flex;
   align-items: center;
@@ -490,9 +490,9 @@
   padding: 10px;
   border: none;
   background: #fff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: #ef2b2d;
+  color: var(--color-red);
   cursor: pointer;
   transition: background 0.15s;
 }
@@ -505,9 +505,9 @@
    RENTAL NOTE
 ========================= */
 .admin-rental-note {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
-  color: #ef2b2d;
+  color: var(--color-red);
   text-align: center;
   padding: 8px 0 4px;
 }
@@ -520,7 +520,7 @@
 }
 
 .admin-confirm-wrap__note {
-  font-size: 12px;
+  font-size: 13px;
   color: #888;
   margin: 0 0 8px;
 }
@@ -534,7 +534,7 @@
   border: none;
   border-radius: 14px;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -560,11 +560,11 @@
   text-align: center;
   padding: 60px 20px;
   color: #888;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .admin-state-message--error {
-  color: #ef2b2d;
+  color: var(--color-red);
 }
 
 /* =========================

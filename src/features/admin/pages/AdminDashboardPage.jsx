@@ -1,55 +1,144 @@
-
 import { useNavigate } from "react-router-dom";
 import {
-  Car, Flag, AlertTriangle, Trophy, Plus, Star, Key, Users,
-  Clock,
-  ChevronRight, ShoppingBag, TrendingUp,
+  ShoppingBag, Key, Users, Clock, Plus,
+  ChevronRight, CheckCircle2, XCircle, TrendingUp,
+  Car, Settings,
 } from "lucide-react";
 
 import AdminMobileShell from "../components/AdminMobileShell";
 import BusinessSettingsSection from "../dashboard/components/BusinessSettingsSection";
 import { useAuth } from "../../../context/AuthContext";
-
-
 import "../styles/admin.css";
-import {
-  MONTHS,
-  ORDINALS,
-} from "../dashboard/constants/dashboardConstants";
+import { MONTHS } from "../dashboard/constants/dashboardConstants";
 import useDashboardStats from "../dashboard/hooks/useDashboardStats";
 import useEmployeesPreview from "../dashboard/hooks/useEmployeesPreview";
 import getInitials from "../dashboard/utils/getInitials";
-import StatCard from "../dashboard/components/StatCard";
 import DashSectionHead from "../dashboard/components/DashSectionHead";
-import PanelHead from "../dashboard/components/PanelHead";
 
+/* ─── Availability Card ─────────────────────────────────── */
+function AvailCard({ icon: Icon, label, value, accent, sub, loading }) {
+  return (
+    <div className="dash-avail-card" style={{ "--avail-accent": accent }}>
+      <div className="dash-avail-card__val">
+        {loading ? <span className="dash-skeleton dash-skeleton--num" /> : value ?? 0}
+      </div>
+      <div className="dash-avail-card__label">{label}</div>
+      {sub && <div className="dash-avail-card__sub">{sub}</div>}
+      <div className="dash-avail-card__icon">
+        <Icon size={18} strokeWidth={2} />
+      </div>
+    </div>
+  );
+}
 
-function AddCarsSection() {
+/* ─── Performance Card ──────────────────────────────────── */
+function PerfCard({ icon: Icon, label, value, accent, description, loading }) {
+  return (
+    <div className="dash-perf-card" style={{ "--perf-accent": accent }}>
+      <div className="dash-perf-card__left">
+        <div className="dash-perf-card__icon">
+          <Icon size={22} strokeWidth={2} />
+        </div>
+        <div>
+          <div className="dash-perf-card__label">{label}</div>
+          <div className="dash-perf-card__desc">{description}</div>
+        </div>
+      </div>
+      <div className="dash-perf-card__val">
+        {loading ? <span className="dash-skeleton dash-skeleton--num" /> : value ?? 0}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Activity List ─────────────────────────────────────── */
+function ActivityList({ title, icon: Icon, accent, cars, loading, onItemClick, badge, priceKey }) {
+  return (
+    <div className="dash-panel dash-activity-panel">
+      <div className="dash-activity-head">
+        <div className="dash-activity-head__icon" style={{ background: `${accent}18`, color: accent }}>
+          <Icon size={15} strokeWidth={2.2} />
+        </div>
+        <span className="dash-activity-head__title">{title}</span>
+        <span className="dash-activity-head__count"
+          style={{ background: `${accent}14`, color: accent }}>
+          {loading ? "…" : cars.length}
+        </span>
+      </div>
+
+      {loading ? (
+        <div className="dash-activity-loading">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="dash-activity-row dash-activity-row--skeleton">
+              <span className="dash-skeleton dash-skeleton--thumb" />
+              <div className="dash-activity-info">
+                <span className="dash-skeleton dash-skeleton--line" />
+                <span className="dash-skeleton dash-skeleton--line dash-skeleton--short" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : cars.length === 0 ? (
+        <div className="dash-activity-empty">No records yet</div>
+      ) : (
+        <div className="dash-activity-list">
+          {cars.map((car) => (
+            <button
+              key={car.id}
+              type="button"
+              className="dash-activity-row"
+              onClick={() => onItemClick(car.id)}
+            >
+              <div className="dash-activity-thumb">
+                {car.image
+                  ? <img src={car.image} alt={`${car.brand} ${car.model}`} />
+                  : <Car size={18} />}
+              </div>
+              <div className="dash-activity-info">
+                <span className="dash-activity-name">{car.brand} {car.model}</span>
+                <span className="dash-activity-meta">
+                  {car.year ? `${car.year} · ` : ""}
+                  {car[priceKey]
+                    ? `${Number(car[priceKey]).toLocaleString()} THB${priceKey === "rent_price_per_day" ? "/day" : ""}`
+                    : "—"}
+                </span>
+              </div>
+              <span className="dash-activity-badge" style={{ background: `${accent}14`, color: accent }}>
+                {badge}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Quick Actions ─────────────────────────────────────── */
+function QuickActions() {
   const navigate = useNavigate();
-
   return (
     <div className="dash-panel">
-      <PanelHead icon={Plus} label="Quick Actions" />
-
+      <div className="dash-panel__head">
+        <div className="dash-panel__head-icon"><Plus size={15} /></div>
+        <span className="dash-panel__head-label">Quick Actions</span>
+      </div>
       <div className="dash-add-grid">
-        <button className="dash-add-card dash-add-card--sale" onClick={() => navigate("/admin/buy/new")}>
-          <div className="dash-add-card__icon">
-            <ShoppingBag size={20} />
-          </div>
+        <button className="dash-add-card dash-add-card--sale" type="button"
+          onClick={() => navigate("/admin/buy/new")}>
+          <div className="dash-add-card__icon"><ShoppingBag size={20} /></div>
           <div className="dash-add-card__text">
             <span className="dash-add-card__title">Add For Sale</span>
-            <span className="dash-add-card__sub">List a sale car</span>
+            <span className="dash-add-card__sub">List a sale vehicle</span>
           </div>
           <ChevronRight size={16} className="dash-add-card__arrow" />
         </button>
-
-        <button className="dash-add-card dash-add-card--rent" onClick={() => navigate("/admin/rental/new")}>
-          <div className="dash-add-card__icon">
-            <Key size={20} />
-          </div>
+        <button className="dash-add-card dash-add-card--rent" type="button"
+          onClick={() => navigate("/admin/rental/new")}>
+          <div className="dash-add-card__icon"><Key size={20} /></div>
           <div className="dash-add-card__text">
             <span className="dash-add-card__title">Add For Rental</span>
-            <span className="dash-add-card__sub">List a rental car</span>
+            <span className="dash-add-card__sub">List a rental vehicle</span>
           </div>
           <ChevronRight size={16} className="dash-add-card__arrow" />
         </button>
@@ -58,140 +147,61 @@ function AddCarsSection() {
   );
 }
 
-function SoldSection({ cars, loading }) {
-  const navigate = useNavigate();
-
-  return (
-    <div className="dash-panel dash-panel--list">
-      <PanelHead icon={Star} label="Recently Sold" accent="#f59e0b" />
-
-      {loading ? (
-        <div className="dash-list-empty">Loading…</div>
-      ) : cars.length === 0 ? (
-        <div className="dash-list-empty">No sold cars yet.</div>
-      ) : (
-        <div className="dash-rank-list">
-          {cars.map((car, index) => (
-            <div key={car.id} className="dash-rank-row" onClick={() => navigate(`/admin/buy/${car.id}`)}>
-              <span className="dash-rank-num" data-pos={index}>
-                {ORDINALS[index]}
-              </span>
-
-              <div className="dash-rank-info">
-                <span className="dash-rank-name">{car.brand} {car.model}</span>
-                <span className="dash-rank-meta">{car.year || "—"}</span>
-              </div>
-
-              <span className="dash-rank-badge sold">Sold</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function RentedSection({ cars, loading }) {
-  const navigate = useNavigate();
-
-  return (
-    <div className="dash-panel dash-panel--list">
-      <PanelHead icon={Key} label="Currently Rented" accent="#3b82f6" />
-
-      {loading ? (
-        <div className="dash-list-empty">Loading…</div>
-      ) : cars.length === 0 ? (
-        <div className="dash-list-empty">No rented cars yet.</div>
-      ) : (
-        <div className="dash-rank-list">
-          {cars.map((car, index) => (
-            <div key={car.id} className="dash-rank-row" onClick={() => navigate(`/admin/rental/${car.id}`)}>
-              <span className="dash-rank-num" data-pos={index}>
-                {ORDINALS[index]}
-              </span>
-
-              <div className="dash-rank-info">
-                <span className="dash-rank-name">{car.brand} {car.model}</span>
-                <span className="dash-rank-meta">
-                  {car.rent_price_per_day
-                    ? `${Number(car.rent_price_per_day).toLocaleString()} THB/day`
-                    : "—"}
-                </span>
-              </div>
-
-              <span className="dash-rank-badge rent">Active</span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function RolesSection({ user }) {
+/* ─── Team Section ──────────────────────────────────────── */
+function TeamSection({ user }) {
   const navigate = useNavigate();
   const employees = useEmployeesPreview();
-
   const adminInitials = getInitials(user?.name || user?.email, "A");
-
-  const previewEmployees = employees.slice(0, 4);
-  const emptySlots = Math.max(0, 4 - previewEmployees.length);
+  const preview = employees.slice(0, 4);
+  const emptySlots = Math.max(0, 4 - preview.length);
 
   return (
     <div className="dash-panel">
-      <PanelHead icon={Users} label="Team & Roles" accent="#8b5cf6" />
-
-      <div className="dash-admin-row">
-        <div className="dash-avatar">
-          <span>{adminInitials}</span>
+      <div className="dash-panel__head">
+        <div className="dash-panel__head-icon" style={{ color: "#8b5cf6" }}>
+          <Users size={15} />
         </div>
+        <span className="dash-panel__head-label">Team & Roles</span>
+        <button className="dash-team-manage-btn" type="button"
+          onClick={() => navigate("/admin/roles")}>
+          Manage
+        </button>
+      </div>
 
+      {/* Admin profile */}
+      <div className="dash-admin-row">
+        <div className="dash-avatar"><span>{adminInitials}</span></div>
         <div className="dash-admin-info">
           <div className="dash-admin-name">{user?.name || user?.email || "Admin"}</div>
           {user?.email && <div className="dash-admin-email">{user.email}</div>}
         </div>
-
         <span className="dash-role-badge dash-role-badge--admin">Admin</span>
       </div>
 
+      {/* Employees */}
       <div className="dash-roles-sub">
         <span>Employees</span>
-        <button className="dash-roles-add" onClick={() => navigate("/admin/roles")}>
+        <button className="dash-roles-add" type="button" onClick={() => navigate("/admin/roles")}>
           <Plus size={12} /> Add
         </button>
       </div>
 
       <div className="dash-emp-grid">
-        {previewEmployees.map((employee) => {
-          const initials = getInitials(employee.full_name || employee.email, "E");
-          const displayName = employee.full_name?.split(" ")[0] || "Staff";
-
-          return (
-            <button
-              key={employee.id}
-              className="dash-emp-cell"
-              type="button"
-              onClick={() => navigate("/admin/roles")}
-              title={employee.full_name || employee.email}
-            >
-              <div className="dash-emp-avatar dash-emp-avatar--filled">
-                {initials}
-              </div>
-              <span className="dash-emp-name">{displayName}</span>
-            </button>
-          );
-        })}
-
-        {Array.from({ length: emptySlots }).map((_, index) => (
-          <button
-            key={`empty-${index}`}
-            className="dash-emp-cell"
-            type="button"
-            onClick={() => navigate("/admin/roles")}
-          >
-            <div className="dash-emp-avatar">
-              <Plus size={14} />
+        {preview.map((emp) => (
+          <button key={emp.id} className="dash-emp-cell" type="button"
+            onClick={() => navigate("/admin/roles")} title={emp.full_name || emp.email}>
+            <div className="dash-emp-avatar dash-emp-avatar--filled">
+              {getInitials(emp.full_name || emp.email, "E")}
             </div>
+            <span className="dash-emp-name">
+              {emp.full_name?.split(" ")[0] || "Staff"}
+            </span>
+          </button>
+        ))}
+        {Array.from({ length: emptySlots }).map((_, i) => (
+          <button key={`e-${i}`} className="dash-emp-cell" type="button"
+            onClick={() => navigate("/admin/roles")}>
+            <div className="dash-emp-avatar"><Plus size={14} /></div>
             <span>Add</span>
           </button>
         ))}
@@ -200,79 +210,61 @@ function RolesSection({ user }) {
   );
 }
 
+/* ─── Page ──────────────────────────────────────────────── */
 export default function AdminDashboardPage() {
+  const navigate = useNavigate();
   const { stats, loading } = useDashboardStats();
   const { user } = useAuth();
 
-  const now = new Date();
-  const hour = now.getHours();
+  const now   = new Date();
+  const hour  = now.getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const monthLabel = `${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+  const dateStr = now.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
-  const greeting =
-    hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const v = (n) => (loading ? null : n ?? 0);
 
-  const monthLabel = `${MONTHS[now.getMonth()]}. ${now.getFullYear()}`;
-
-  const dateStr = now.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-  const val = (number) => (loading ? "—" : number ?? 0);
-
-  const availPct =
-    stats?.total > 0 ? Math.round((stats.available / stats.total) * 100) : 0;
-
-  const statCards = [
+  const availCards = [
     {
-      icon: Car,
-      iconBg: "linear-gradient(135deg,#ef2b2d,#b91c1c)",
-      accent: "#ef2b2d",
-      label: "Total Fleet",
-      value: val(stats?.total),
-      sub1: `Sale ${val(stats?.sale)}`,
-      sub2: `Rental ${val(stats?.rental)}`,
+      icon: CheckCircle2,
+      label: "Available · Sale",
+      value: v(stats?.availableSale),
+      accent: "#e60000",
+      sub: "Ready to sell",
     },
     {
-      icon: Flag,
-      iconBg: "linear-gradient(135deg,#22c55e,#15803d)",
-      accent: "#22c55e",
-      label: "Available Now",
-      value: val(stats?.available),
-      sub1: `Sale ${val(stats?.availableSale)}`,
-      sub2: `Rental ${val(stats?.availableRental)}`,
-      progress: availPct,
+      icon: CheckCircle2,
+      label: "Available · Rental",
+      value: v(stats?.availableRental),
+      accent: "#3b82f6",
+      sub: "Ready to rent",
     },
     {
-      icon: AlertTriangle,
-      iconBg: "linear-gradient(135deg,#f59e0b,#b45309)",
+      icon: XCircle,
+      label: "Unavailable · Sale",
+      value: v(stats?.unavailableSale),
       accent: "#f59e0b",
-      label: "Unavailable",
-      value: val(stats?.unavailable),
-      sub1: `Sale ${val(stats?.unavailableSale)}`,
-      sub2: `Rental ${val(stats?.unavailableRental)}`,
+      sub: "Sold / reserved",
     },
     {
-      icon: Trophy,
-      iconBg: "linear-gradient(135deg,#8b5cf6,#6d28d9)",
-      accent: "#8b5cf6",
-      label: "This Month",
-      value: monthLabel,
-      valueIsText: true,
-      sub1: `Sold ${val(stats?.soldOut)}`,
-      sub2: `Rented ${val(stats?.rentCount)}`,
+      icon: XCircle,
+      label: "Unavailable · Rental",
+      value: v(stats?.unavailableRental),
+      accent: "#f97316",
+      sub: "Rented / maintenance",
     },
   ];
 
   return (
     <AdminMobileShell pageClass="dash-page" containerClass="dash-container">
       <div className="dash-content">
+
+        {/* ── Header ── */}
         <div className="dash-header">
           <div className="dash-header__left">
             <div className="dash-header__avatar">
               {(user?.name || user?.email || "A")[0].toUpperCase()}
             </div>
-
             <div>
               <p className="dash-header__greeting">{greeting},</p>
               <h1 className="dash-header__name">
@@ -280,13 +272,11 @@ export default function AdminDashboardPage() {
               </h1>
             </div>
           </div>
-
           <div className="dash-header__right">
             <div className="dash-date-chip">
               <Clock size={12} />
               <span>{dateStr}</span>
             </div>
-
             <div className="dash-status-chip">
               <span className="dash-status-dot" />
               Online
@@ -294,34 +284,71 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        <DashSectionHead label="Performance Overview" />
-
-        <div className="dash-stats-grid">
-          {statCards.map((card) => (
-            <StatCard key={card.label} {...card} />
+        {/* ── Availability Overview ── */}
+        <DashSectionHead label="Fleet Availability" />
+        <div className="dash-avail-grid">
+          {availCards.map((c) => (
+            <AvailCard key={c.label} {...c} loading={loading} />
           ))}
         </div>
 
-        <DashSectionHead label="Fleet Management" />
-
-        <div className="dash-main-grid">
-          <div className="dash-col-main">
-            <AddCarsSection />
-
-            <div className="dash-lists-row">
-              <SoldSection cars={stats?.soldCars ?? []} loading={loading} />
-              <RentedSection cars={stats?.rentedCars ?? []} loading={loading} />
-            </div>
-          </div>
-
-          <div className="dash-col-side">
-            <RolesSection user={user} />
-          </div>
+        {/* ── Monthly Performance ── */}
+        <DashSectionHead label={`Performance · ${monthLabel}`} />
+        <div className="dash-perf-grid">
+          <PerfCard
+            icon={TrendingUp}
+            label="Total Sold"
+            value={v(stats?.soldTotal)}
+            accent="#e60000"
+            description="Cars with sold status"
+            loading={loading}
+          />
+          <PerfCard
+            icon={Key}
+            label="Active Rentals"
+            value={v(stats?.rentedTotal)}
+            accent="#3b82f6"
+            description="Currently rented out"
+            loading={loading}
+          />
         </div>
 
-        <DashSectionHead label="Business Settings" />
+        {/* ── Activity + Quick Actions ── */}
+        <DashSectionHead label="Activity" />
+        <div className="dash-activity-grid">
+          <ActivityList
+            title="Sold Cars"
+            icon={ShoppingBag}
+            accent="#e60000"
+            cars={stats?.soldCars ?? []}
+            loading={loading}
+            badge="Sold"
+            priceKey="sale_price"
+            onItemClick={(id) => navigate(`/admin/buy/${id}`)}
+          />
+          <ActivityList
+            title="Rented Cars"
+            icon={Key}
+            accent="#3b82f6"
+            cars={stats?.rentedCars ?? []}
+            loading={loading}
+            badge="Rented"
+            priceKey="rent_price_per_day"
+            onItemClick={(id) => navigate(`/admin/rental/${id}`)}
+          />
+        </div>
 
+        {/* ── Quick Actions + Team side by side ── */}
+        <DashSectionHead label="Management" />
+        <div className="dash-mgmt-grid">
+          <QuickActions />
+          <TeamSection user={user} />
+        </div>
+
+        {/* ── Business Settings ── */}
+        <DashSectionHead label="Business Settings" />
         <BusinessSettingsSection />
+
       </div>
     </AdminMobileShell>
   );

@@ -227,7 +227,7 @@ export default function Header() {
 
             <div className="sideMenu__profile-info">
               <span className="loginMenuItem">
-                {user.name || user.email || "Admin"}
+                {user.full_name || user.name || user.email?.split("@")[0] || "Admin"}
               </span>
               <span className="sideMenu__profile-sub">{t("view_profile")}</span>
             </div>

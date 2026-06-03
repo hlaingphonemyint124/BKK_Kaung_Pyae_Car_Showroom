@@ -1,4 +1,4 @@
-/* =====================================================
+﻿/* =====================================================
    BrandList — scoped with bl- prefix to avoid leaks
    ===================================================== */
 
@@ -19,7 +19,7 @@
 }
 
 .bl-title {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   margin: 0;
   color: var(--text-primary);
@@ -71,7 +71,7 @@
     0 0 0 1.5px rgba(var(--color-red-rgb), 0.40),
     0 0 18px 2px rgba(var(--color-red-rgb), 0.18),
     0 4px 16px rgba(0, 0, 0, 0.10);
-  transition: box-shadow 0.25s, background 0.25s;
+  transition: box-shadow var(--duration-normal), background var(--duration-normal);
 }
 
 .bl-arrow svg {
@@ -80,7 +80,7 @@
   position: relative;
   z-index: 2;
   filter: drop-shadow(0 0 4px rgba(var(--color-red-rgb), 0.55));
-  transition: filter 0.2s, transform 0.2s;
+  transition: filter var(--duration-fast), transform var(--duration-fast);
 }
 
 .bl-arrow:hover {
@@ -103,7 +103,7 @@
   border-radius: 50%;
   background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.18) 0%, transparent 70%);
   pointer-events: none;
-  transition: background 0.25s;
+  transition: background var(--duration-normal);
 }
 .bl-arrow:hover .bl-nav-glow {
   background: radial-gradient(circle, rgba(var(--color-red-rgb), 0.35) 0%, transparent 70%);
@@ -144,8 +144,8 @@
   transform-style: preserve-3d;
   will-change: transform;
   transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
+    transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
     border-color 0.2s ease;
   animation: blCardIn 0.35s ease both;
   -webkit-tap-highlight-color: transparent;
@@ -182,7 +182,7 @@
     transparent 60%
   );
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity var(--duration-fast);
   pointer-events: none;
 }
 .bl-card:hover::before { opacity: 1; }
@@ -214,7 +214,7 @@
 
 /* ---- Label ---- */
 .bl-label {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
@@ -225,7 +225,7 @@
   width: 100%;
   padding: 0 2px;
   flex-shrink: 0;
-  transition: color 0.2s ease, transform 0.15s ease;
+  transition: color 0.2s ease, transform var(--duration-fast) var(--ease-standard);
 }
 .bl-card:hover .bl-label { color: var(--color-red); transform: translateY(-1px); }
 
@@ -293,7 +293,7 @@ body.dark .bl-card:hover {
     inset 0 0 18px rgba(var(--color-red-rgb), 0.06) !important;
 }
 body.dark .bl-label               { color: var(--text-primary) !important; }
-body.dark .bl-card:hover .bl-label { color: #ff6b6b !important; }
+body.dark .bl-card:hover .bl-label { color: var(--color-red) !important; }
 
 
 /* =====================================================
@@ -341,13 +341,13 @@ body.dark .bl-section .sec-blob:nth-child(2) { animation-delay: -3s;   }
 }
 
 .bl-viewall {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--color-red);
   padding: 6px 16px;
   border: 1.5px solid rgba(var(--color-red-rgb), 0.3);
   border-radius: 20px;
-  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+  transition: background var(--duration-fast), border-color var(--duration-fast), opacity var(--duration-fast);
 }
 
 .bl-viewall:hover {
@@ -401,7 +401,7 @@ body.dark .bl-section .sec-blob:nth-child(2) { animation-delay: -3s;   }
 }
 
 .bl-label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.1px;
 }
@@ -460,10 +460,10 @@ body.dark .bl-arrow:hover {
 
 @media (max-width: 768px) {
   .bl-section { padding: 28px 16px 24px; }
-  .bl-title { font-size: 18px; padding-left: 10px; }
+  .bl-title { font-size: 19px; padding-left: 10px; }
   .bl-card { width: 104px; height: 104px; padding: 14px 8px 12px; }
   .bl-logo { width: 44px; height: 44px; border-radius: 10px; }
   .bl-logo img { width: 36px; height: 36px; }
-  .bl-label { font-size: 11px; }
+  .bl-label { font-size: 12px; }
   .bl-arrow { width: 36px; height: 36px; margin: 0 4px; }
 }

@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import AuthHeader from "../../auth/components/AuthHeader";
 import "../../auth/styles/AuthStyles.css";
 import "../styles/UserStyles.css";
+import Spinner from "../../../components/Spinner";
 
 import {
   FaPhoneAlt,
@@ -47,7 +48,7 @@ function ContactPage() {
     return (
       <AuthHeader>
         <div className="user-content-box contact-page-box">
-          <p className="contact-loading">Loading contact...</p>
+          <Spinner size="lg" />
         </div>
       </AuthHeader>
     );
@@ -91,9 +92,6 @@ function ContactPage() {
               {contact?.open_time_from || "09:00"} -{" "}
               {contact?.open_time_to || "18:00"}
             </span>
-            <small className={`contact-status ${contact?.status || ""}`}>
-              {contact?.status || "open"}
-            </small>
           </div>
 
           <div className="contact-info-card">

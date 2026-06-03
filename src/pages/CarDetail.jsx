@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   Fuel,
@@ -20,6 +20,7 @@ import {
 } from "../api/showroom.api";
 import "./CarDetail.css";
 import { useLanguage } from "../context/LanguageContext";
+import Spinner from "../components/Spinner";
 
 function CarDetailParticles() {
   const canvasRef = useRef(null);
@@ -99,16 +100,14 @@ function CarDetailParticles() {
   return <canvas ref={canvasRef} className="cd-particles" />;
 }
 
-const FUEL_COLORS = {
-  petrol: "#f59e0b",
-  diesel: "#78716c",
-  hybrid: "#14b8a6",
-  electric: "#3b82f6",
-  "plug-in hybrid": "#8b5cf6",
-  Petrol: "#f59e0b",
-  Diesel: "#78716c",
-  Hybrid: "#14b8a6",
-  EV: "#3b82f6",
+const FUEL_CLASS = (f) => {
+  const key = (f || "").toLowerCase();
+  if (key === "petrol")          return "fuel--petrol";
+  if (key === "diesel")          return "fuel--diesel";
+  if (key === "hybrid")          return "fuel--hybrid";
+  if (key === "electric" || key === "ev") return "fuel--electric";
+  if (key === "plug-in hybrid")  return "fuel--plugin";
+  return "fuel--default";
 };
 
 const getImageSrc = (img) =>
@@ -198,10 +197,17 @@ export default function CarDetail() {
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxOpen]);
 
-  if (loading) return <div className="cd-loading">{t("cd_loading")}</div>;
+  if (loading) return <div className="cd-loading"><Spinner size="lg" /></div>;
 
   if (error || !car) {
-    return <div className="cd-loading">{error || t("cd_not_found")}</div>;
+    return (
+      <div className="cd-loading">
+        <p>{error || t("cd_not_found")}</p>
+        <button className="btn-ghost" onClick={() => window.location.reload()}>
+          Try Again
+        </button>
+      </div>
+    );
   }
 
   const images =
@@ -252,42 +258,37 @@ export default function CarDetail() {
     {
       key: "fuel",
       Icon: Fuel,
-      color: FUEL_COLORS[fuel] ?? "#ef2b2d",
+      fuelClass: FUEL_CLASS(fuel),
       label: t("spec_fuel"),
       value: fuel || "—",
     },
     {
       key: "transmission",
       Icon: Settings2,
-      color: "#ef2b2d",
       label: t("spec_transmission"),
       value: car.transmission || "—",
     },
     {
       key: "color",
       Icon: Palette,
-      color: "#ef2b2d",
       label: t("spec_color"),
       value: car.color || "—",
     },
     {
       key: "engine",
       Icon: Gauge,
-      color: "#ef2b2d",
       label: t("spec_engine"),
       value: car.engine || "—",
     },
     {
       key: "drive",
       Icon: Disc3,
-      color: "#ef2b2d",
       label: t("spec_drive"),
       value: drive || "—",
     },
     {
       key: "seats",
       Icon: Users,
-      color: "#ef2b2d",
       label: t("spec_seats"),
       value: car.seats ? `${car.seats} Seaters` : "—",
     },
@@ -482,9 +483,9 @@ export default function CarDetail() {
           <p className="cd-section-label">{t("cd_specs")}</p>
 
           <div className="cd-spec-grid">
-            {specs.map(({ key, Icon, color, label, value }) => (
+            {specs.map(({ key, Icon, fuelClass, label, value }) => (
               <div key={key} className="cd-spec-item">
-                <div className="cd-spec-icon" style={{ color }}>
+                <div className={`cd-spec-icon${fuelClass ? ` ${fuelClass}` : ""}`}>
                   <Icon size={22} strokeWidth={2} />
                 </div>
                 <div className="cd-spec-value">{value}</div>

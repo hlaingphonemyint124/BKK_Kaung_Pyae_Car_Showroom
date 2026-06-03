@@ -1,4 +1,4 @@
-/* menu layer inside clicked card */
+﻿/* menu layer inside clicked card */
 .admin-product-card__menu-overlay {
   position: absolute;
   inset: 0;
@@ -37,7 +37,7 @@
   border-radius: 50%;
   background: #fff;
   color: #111;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -59,7 +59,7 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -74,11 +74,11 @@
 }
 
 .admin-card-menu-panel__icon-box--edit {
-  background: #28d20f;
+  background: var(--color-success);
 }
 
 .admin-card-menu-panel__icon-box--clear {
-  background: #f11212;
+  background: var(--color-red);
 }
 
 .admin-card-menu-panel__divider {
@@ -97,7 +97,7 @@
   border: none;
   background: transparent;
   color: #fff;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   text-align: left;
   display: flex;
@@ -116,7 +116,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 700;
   flex-shrink: 0;
 }

@@ -1,4 +1,4 @@
-/* =============================================
+﻿/* =============================================
    ADMIN DASHBOARD — Professional Dark Theme
    BKK Kaung Pyae Car Showroom
 ============================================= */
@@ -13,7 +13,7 @@
   --dash-border-hover: rgba(0,0,0,0.18);
   --dash-text:         #0f172a;
   --dash-text-muted:   rgba(15,23,42,0.45);
-  --dash-red:          #ef2b2d;
+  --dash-red:          var(--color-red);
   --dash-red-glow:     rgba(239,43,45,0.12);
   --dash-radius:       16px;
   --dash-radius-lg:    20px;
@@ -37,7 +37,7 @@ body.dark .dash-page {
   --dash-border-hover: rgba(239,43,45,0.35);
   --dash-text:         #f0f2f8;
   --dash-text-muted:   rgba(220,224,240,0.50);
-  --dash-red:          #ef2b2d;
+  --dash-red:          var(--color-red);
   --dash-red-glow:     rgba(239,43,45,0.22);
   --dash-radius:       16px;
   --dash-radius-lg:    20px;
@@ -157,11 +157,11 @@ body.dark .dash-content {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ef2b2d, #b91c1c);
+  background: linear-gradient(135deg, var(--color-red), #b91c1c);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 800;
   color: #fff;
   flex-shrink: 0;
@@ -169,7 +169,7 @@ body.dark .dash-content {
 }
 
 .dash-header__greeting {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--dash-text-muted);
   margin: 0 0 2px;
   font-weight: 500;
@@ -200,7 +200,7 @@ body.dark .dash-content {
   border: 1px solid var(--dash-border);
   border-radius: 99px;
   padding: 7px 14px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--dash-text-muted);
   font-weight: 500;
 }
@@ -213,7 +213,7 @@ body.dark .dash-content {
   border: 1px solid rgba(34,197,94,0.2);
   border-radius: 99px;
   padding: 7px 14px;
-  font-size: 12px;
+  font-size: 13px;
   color: #4ade80;
   font-weight: 600;
 }
@@ -233,7 +233,7 @@ body.dark .dash-content {
 }
 
 @media (min-width: 768px) {
-  .dash-header__avatar { width: 54px; height: 54px; font-size: 20px; }
+  .dash-header__avatar { width: 54px; height: 54px; font-size: 21px; }
   .dash-header__name   { font-size: 26px; }
 }
 
@@ -316,7 +316,7 @@ body.dark .dash-content {
 }
 
 .dash-stat-card__val--text {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 800;
   color: var(--dash-text);
   margin: 0 0 4px;
@@ -325,7 +325,7 @@ body.dark .dash-content {
 }
 
 .dash-stat-card__label {
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 600;
   color: var(--dash-text-muted);
   text-transform: uppercase;
@@ -354,7 +354,7 @@ body.dark .dash-content {
 }
 
 .dash-stat-card__sub {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--dash-text-muted);
   font-weight: 600;
   background: var(--dash-sub-bg);
@@ -364,7 +364,7 @@ body.dark .dash-content {
 
 @media (min-width: 768px) {
   .dash-stat-card__val      { font-size: 34px; }
-  .dash-stat-card__val--text { font-size: 18px; }
+  .dash-stat-card__val--text { font-size: 19px; }
   .dash-stat-card { padding: 22px 20px 18px; }
   .dash-stat-card__icon { width: 44px; height: 44px; border-radius: 12px; }
 }
@@ -392,7 +392,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-section-head__label {
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 700;
   color: var(--dash-text-muted);
   text-transform: uppercase;
@@ -497,7 +497,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-panel__head-label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--dash-text);
   flex: 1;
@@ -571,7 +571,7 @@ body.dark .dash-stat-card:hover {
 
 .dash-add-card--sale .dash-add-card__icon {
   background: rgba(239,43,45,0.12);
-  color: #ef2b2d;
+  color: var(--color-red);
 }
 
 .dash-add-card--rent .dash-add-card__icon {
@@ -587,14 +587,14 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-add-card__title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   color: var(--dash-text);
   letter-spacing: -0.01em;
 }
 
 .dash-add-card__sub {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--dash-text-muted);
   margin-top: 1px;
 }
@@ -634,7 +634,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-rank-num {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   color: var(--dash-text-muted);
   width: 28px;
@@ -657,7 +657,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-rank-name {
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--dash-text);
   white-space: nowrap;
@@ -667,13 +667,13 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-rank-meta {
-  font-size: 10.5px;
+  font-size: 11.5px;
   color: var(--dash-text-muted);
   font-weight: 500;
 }
 
 .dash-rank-badge {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   padding: 3px 9px;
   border-radius: 99px;
@@ -695,7 +695,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-list-empty {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--dash-text-muted);
   text-align: center;
   padding: 24px 0;
@@ -723,9 +723,9 @@ body.dark .dash-stat-card:hover {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
-  color: #ef2b2d;
+  color: var(--color-red);
 }
 
 .dash-admin-info {
@@ -734,7 +734,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-admin-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--dash-text);
   white-space: nowrap;
@@ -743,7 +743,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-admin-email {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--dash-text-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -752,7 +752,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-role-badge {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   padding: 3px 10px;
   border-radius: 99px;
@@ -771,7 +771,7 @@ body.dark .dash-stat-card:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--dash-text-muted);
   text-transform: uppercase;
@@ -788,7 +788,7 @@ body.dark .dash-stat-card:hover {
   border: 1px solid rgba(239,43,45,0.2);
   border-radius: 99px;
   padding: 4px 10px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.15s;
@@ -826,7 +826,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-emp-cell span {
-  font-size: 9px;
+  font-size: 10px;
   color: var(--dash-text-muted);
   font-weight: 600;
   text-transform: uppercase;
@@ -835,7 +835,7 @@ body.dark .dash-stat-card:hover {
 
 .dash-emp-cell:hover .dash-emp-avatar {
   border-color: rgba(239,43,45,0.4);
-  color: #ef2b2d;
+  color: var(--color-red);
   background: rgba(239,43,45,0.06);
 }
 
@@ -847,7 +847,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-setting-name {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
   color: var(--dash-text);
   margin-bottom: 20px;
@@ -905,7 +905,7 @@ body.dark .dash-stat-card:hover {
 
 .dash-field__label {
   display: block;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--dash-text-muted);
   text-transform: uppercase;
@@ -920,7 +920,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-days-sep {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--dash-text-muted);
   flex-shrink: 0;
 }
@@ -932,7 +932,7 @@ body.dark .dash-stat-card:hover {
   background: var(--dash-surface-2);
   border: 1px solid var(--dash-border);
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--dash-text);
   outline: none;
   cursor: pointer;
@@ -975,7 +975,7 @@ body.dark .dash-stat-card:hover {
   background: var(--dash-surface-2);
   border: 1px solid var(--dash-border);
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--dash-text);
   outline: none;
   transition: border-color 0.2s;
@@ -992,7 +992,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .dash-saved-badge {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: #4ade80;
   background: rgba(34,197,94,0.1);
@@ -1056,7 +1056,7 @@ body.dark .dash-stat-card:hover {
   border: none;
   border-radius: 10px;
   padding: 10px 16px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.15s, transform 0.15s;
@@ -1089,7 +1089,7 @@ body.dark .dash-stat-card:hover {
   border-radius: 10px;
   border: 1.5px solid var(--dash-border);
   background: var(--dash-surface);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--dash-text-muted);
   cursor: pointer;
@@ -1106,7 +1106,7 @@ body.dark .dash-stat-card:hover {
 .roles-tab__count {
   background: var(--dash-tag-bg);
   color: var(--dash-text-muted);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   padding: 1px 6px;
   border-radius: 20px;
@@ -1148,7 +1148,7 @@ body.dark .dash-stat-card:hover {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
   color: var(--dash-text-muted);
 }
@@ -1159,7 +1159,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .roles-user-name {
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 800;
   color: var(--dash-text);
   white-space: nowrap;
@@ -1168,7 +1168,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .roles-user-email {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--dash-text-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -1186,7 +1186,7 @@ body.dark .dash-stat-card:hover {
 
 .roles-status-badge,
 .roles-role-badge {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   padding: 3px 8px;
   border-radius: 999px;
@@ -1228,7 +1228,7 @@ body.dark .dash-stat-card:hover {
   padding: 7px 12px;
   border-radius: 9px;
   border: none;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   cursor: pointer;
   transition: opacity 0.15s, background 0.15s, transform 0.15s;
@@ -1306,7 +1306,7 @@ body.dark .dash-stat-card:hover {
   gap: 8px;
   padding: 16px 18px;
   border-bottom: 1px solid var(--dash-border-2);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   color: var(--dash-text);
 }
@@ -1315,7 +1315,7 @@ body.dark .dash-stat-card:hover {
   margin-left: auto;
   background: none;
   border: none;
-  font-size: 16px;
+  font-size: 17px;
   color: var(--dash-text-muted);
   cursor: pointer;
   padding: 0 4px;
@@ -1340,7 +1340,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .roles-modal__label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   color: var(--dash-text-muted);
   text-transform: uppercase;
@@ -1352,7 +1352,7 @@ body.dark .dash-stat-card:hover {
   padding: 10px 12px;
   border: 1px solid var(--dash-border);
   border-radius: 10px;
-  font-size: 13px;
+  font-size: 14px;
   background: var(--dash-input-bg);
   color: var(--dash-text);
   outline: none;
@@ -1370,7 +1370,7 @@ body.dark .dash-stat-card:hover {
 }
 
 .roles-modal__error {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--dash-red);
   margin: 0;
 }
@@ -1382,7 +1382,7 @@ body.dark .dash-stat-card:hover {
   color: #fff;
   border: none;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
   margin-top: 4px;
@@ -1404,14 +1404,14 @@ body.dark .dash-stat-card:hover {
 }
 
 .roles-confirm-message {
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.55;
   color: var(--dash-text);
   margin: 0 0 10px;
 }
 
 .roles-confirm-danger {
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.5;
   color: var(--dash-red);
   background: rgba(239, 43, 45, 0.08);
@@ -1433,7 +1433,7 @@ body.dark .dash-stat-card:hover {
   border: none;
   border-radius: 10px;
   padding: 10px 14px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -1510,7 +1510,7 @@ body.dark .roles-btn--hard:hover:not(:disabled) {
   border-style: solid;
   border-color: rgba(239, 43, 45, 0.25);
   background: rgba(239, 43, 45, 0.08);
-  color: #ef2b2d;
+  color: var(--color-red);
   font-weight: 800;
 }
 
@@ -1539,11 +1539,11 @@ body.dark .dash-emp-avatar--filled {
   padding: 13px 20px;
   background: linear-gradient(
     135deg,
-    #ef2b2d,
+    var(--color-red),
     #c91517
   );
   color: white;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
   cursor: pointer;
   transition: 0.22s ease;
@@ -1561,3 +1561,403 @@ body.dark .dash-emp-avatar--filled {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* ==============================================
+   AVAILABILITY GRID  (4 cards)
+============================================== */
+.dash-avail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+@media (min-width: 900px) {
+  .dash-avail-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+.dash-avail-card {
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+  padding: 20px 18px 18px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.dash-avail-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--avail-accent);
+  border-radius: 3px 3px 0 0;
+}
+
+.dash-avail-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; right: -20px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--avail-accent);
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.dash-avail-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--dash-shadow);
+}
+
+.dash-avail-card__val {
+  font-size: 44px;
+  font-weight: 900;
+  color: var(--dash-text);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+
+.dash-avail-card__label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dash-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.dash-avail-card__sub {
+  font-size: 12px;
+  color: var(--avail-accent);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.dash-avail-card__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--avail-accent) 12%, transparent);
+  color: var(--avail-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .dash-avail-card { padding: 24px 20px 20px; }
+  .dash-avail-card__val { font-size: 42px; }
+}
+
+body.dark .dash-avail-card:hover {
+  box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+}
+
+/* ==============================================
+   PERFORMANCE GRID  (2 cards)
+============================================== */
+.dash-perf-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+@media (min-width: 640px) {
+  .dash-perf-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+.dash-perf-card {
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.dash-perf-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--perf-accent) 8%, transparent) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.dash-perf-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--dash-shadow);
+}
+
+.dash-perf-card__left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+}
+
+.dash-perf-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--perf-accent) 14%, transparent);
+  color: var(--perf-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dash-perf-card__label {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--dash-text);
+  margin-bottom: 3px;
+  letter-spacing: -0.01em;
+}
+
+.dash-perf-card__desc {
+  font-size: 12px;
+  color: var(--dash-text-muted);
+  font-weight: 500;
+}
+
+.dash-perf-card__val {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--perf-accent);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .dash-perf-card__val { font-size: 56px; }
+}
+
+/* ==============================================
+   ACTIVITY GRID  (2 panels side by side)
+============================================== */
+.dash-activity-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+@media (min-width: 700px) {
+  .dash-activity-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+.dash-activity-panel {
+  padding: 18px 16px;
+  min-height: 200px;
+}
+
+.dash-activity-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--dash-border-2);
+}
+
+.dash-activity-head__icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dash-activity-head__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dash-text);
+  flex: 1;
+}
+
+.dash-activity-head__count {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.dash-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dash-activity-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.14s;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+
+.dash-activity-row:hover {
+  background: var(--dash-section-bg);
+}
+
+.dash-activity-row--skeleton {
+  pointer-events: none;
+}
+
+.dash-activity-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--dash-surface-2);
+  border: 1px solid var(--dash-border);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dash-text-muted);
+}
+
+.dash-activity-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dash-activity-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dash-activity-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--dash-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.dash-activity-meta {
+  font-size: 11.5px;
+  color: var(--dash-text-muted);
+  font-weight: 500;
+}
+
+.dash-activity-badge {
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 99px;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.dash-activity-empty {
+  font-size: 13px;
+  color: var(--dash-text-muted);
+  text-align: center;
+  padding: 28px 0;
+}
+
+.dash-activity-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+/* ==============================================
+   MANAGEMENT GRID  (actions + team)
+============================================== */
+.dash-mgmt-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+@media (min-width: 900px) {
+  .dash-mgmt-grid {
+    grid-template-columns: 1fr 340px;
+    align-items: start;
+  }
+}
+
+/* Team manage button */
+.dash-team-manage-btn {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dash-text-muted);
+  background: var(--dash-sub-bg);
+  border: 1px solid var(--dash-border);
+  border-radius: 7px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: color 0.14s, border-color 0.14s;
+}
+
+.dash-team-manage-btn:hover {
+  color: var(--dash-red);
+  border-color: rgba(239,43,45,0.3);
+}
+
+/* ==============================================
+   SKELETON LOADERS
+============================================== */
+.dash-skeleton {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--dash-surface-2) 25%,
+    var(--dash-border)    50%,
+    var(--dash-surface-2) 75%
+  );
+  background-size: 200% 100%;
+  animation: dashShimmer 1.4s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+@keyframes dashShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.dash-skeleton--num   { width: 56px; height: 36px; border-radius: 8px; }
+.dash-skeleton--thumb { width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0; }
+.dash-skeleton--line  { width: 100%; height: 12px; display: block; margin-bottom: 4px; }
+.dash-skeleton--short { width: 60%; }

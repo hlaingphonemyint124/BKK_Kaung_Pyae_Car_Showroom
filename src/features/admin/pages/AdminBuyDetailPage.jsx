@@ -351,6 +351,7 @@ function AdminBuyDetailPage() {
     }
 
     const payload = {
+      listing_type: "sale",
       brand,
       model,
       ...(form.info.year ? { year: Number(form.info.year) } : {}),

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./EasyRental.css";
 import { useLanguage } from "../context/LanguageContext";
 import ParticleBackground from "../components/ParticleBackground";
+import { getCarsForRent } from "../api/showroom.api";
 
 const STEPS = [
   { num: "01", key: "er_step1_label", desc: "Explore our curated premium fleet online" },
@@ -10,15 +11,32 @@ const STEPS = [
   { num: "03", key: "er_step3_label", desc: "Confirm your booking and hit the road"    },
 ];
 
-const FLEET = [
-  { img: "/images/ShopCar/toyotaCamry.webp",    name: "Toyota Camry",    type: "Sedan", price: "฿1,200" },
-  { img: "/images/ShopCar/toyotaFortuner.webp", name: "Toyota Fortuner", type: "SUV",   price: "฿1,800" },
-  { img: "/images/ShopCar/hondaCivicFl5.webp",  name: "Honda Civic",     type: "Sedan", price: "฿900"   },
-];
+const getImg = (car) =>
+  car?.primary_image ||
+  car?.image ||
+  car?.images?.find((i) => i.is_primary)?.storage_path ||
+  car?.images?.[0]?.storage_path ||
+  null;
 
 export default function EasyRental() {
   const { t }    = useLanguage();
   const navigate = useNavigate();
+  const [fleet, setFleet] = useState([]);
+
+  useEffect(() => {
+    getCarsForRent()
+      .then((res) => {
+        const raw = res?.data?.cars || res?.data || [];
+        const available = raw
+          .filter((c) =>
+            c.status === "available" &&
+            (c.listing_type === "rental" || (c.listing_type == null && c.rent_price_per_day != null))
+          )
+          .slice(0, 3);
+        setFleet(available);
+      })
+      .catch(() => setFleet([]));
+  }, []);
 
   return (
     <section className="easyRentalSection">
@@ -55,7 +73,7 @@ export default function EasyRental() {
             ))}
           </div>
 
-          <button className="btn-primary btn--lg er-cta" onClick={() => navigate("/showroom")}>
+          <button className="btn-primary btn--lg er-cta" onClick={() => navigate("/showroom?mode=rent")}>
             {t("er_rent_btn")}
           </button>
 
@@ -79,21 +97,30 @@ export default function EasyRental() {
             </div>
 
             <div className="er-fleet">
-              {FLEET.map((car, i) => (
-                <div key={i} className="er-fleet-row" style={{ animationDelay: `${i * 0.1}s` }}>
-                  <div className="er-fleet-row__img-wrap">
-                    <img src={car.img} alt={car.name} className="er-fleet-row__img" />
+              {fleet.length === 0 ? (
+                <div className="er-fleet-empty">No rental cars available right now.</div>
+              ) : fleet.map((car, i) => {
+                const img = getImg(car);
+                const price = `฿${Number(car.rent_price_per_day).toLocaleString()}`;
+                const name = `${car.brand || ""} ${car.model || ""}`.trim();
+                return (
+                  <div key={car.id} className="er-fleet-row" style={{ animationDelay: `${i * 0.1}s` }}>
+                    <div className="er-fleet-row__img-wrap">
+                      {img
+                        ? <img src={img} alt={name} className="er-fleet-row__img" />
+                        : <div className="er-fleet-row__img-placeholder">🚗</div>}
+                    </div>
+                    <div className="er-fleet-row__info">
+                      <span className="er-fleet-row__name">{name}</span>
+                      <span className="er-fleet-row__type">{car.body_type || car.fuel_type || "Rental"}</span>
+                    </div>
+                    <div className="er-fleet-row__price">
+                      <span className="er-fleet-row__amount">{price}</span>
+                      <span className="er-fleet-row__unit">/day</span>
+                    </div>
                   </div>
-                  <div className="er-fleet-row__info">
-                    <span className="er-fleet-row__name">{car.name}</span>
-                    <span className="er-fleet-row__type">{car.type}</span>
-                  </div>
-                  <div className="er-fleet-row__price">
-                    <span className="er-fleet-row__amount">{car.price}</span>
-                    <span className="er-fleet-row__unit">/day</span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="er-panel__footer">
@@ -110,7 +137,7 @@ export default function EasyRental() {
                   <strong>5★</strong><span>Rating</span>
                 </div>
               </div>
-              <button className="er-panel__cta" onClick={() => navigate("/showroom")}>
+              <button className="er-panel__cta" onClick={() => navigate("/showroom?mode=rent")}>
                 View All →
               </button>
             </div>

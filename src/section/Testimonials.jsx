@@ -147,6 +147,98 @@ function TestimonialCard({ t, index }) {
   );
 }
 
+function FeedbackForm() {
+  const [rating, setRating]       = useState(0);
+  const [hover, setHover]         = useState(0);
+  const [name, setName]           = useState("");
+  const [text, setText]           = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const active = hover || rating;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (rating === 0 || !text.trim()) return;
+    setSubmitted(true);
+    setTimeout(() => {
+      setSubmitted(false);
+      setRating(0);
+      setHover(0);
+      setName("");
+      setText("");
+    }, 3000);
+  };
+
+  if (submitted) {
+    return (
+      <div className="ts-feedback ts-feedback--success">
+        <div className="ts-feedback__success-icon">✓</div>
+        <p className="ts-feedback__success-title">Thank you for your review!</p>
+        <p className="ts-feedback__success-sub">Your feedback helps us serve you better.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form className="ts-feedback" onSubmit={handleSubmit}>
+      <div className="ts-feedback__head">
+        <h3 className="ts-feedback__title">Share Your Experience</h3>
+        <p className="ts-feedback__sub">How was your experience with us?</p>
+      </div>
+
+      <div className="ts-feedback__stars">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            type="button"
+            className={`ts-feedback__star ${active >= star ? "ts-feedback__star--on" : ""}`}
+            onClick={() => setRating(star)}
+            onMouseEnter={() => setHover(star)}
+            onMouseLeave={() => setHover(0)}
+            aria-label={`Rate ${star} stars`}
+          >
+            ★
+          </button>
+        ))}
+        {rating > 0 && (
+          <span className="ts-feedback__rating-label">
+            {["", "Poor", "Fair", "Good", "Great", "Excellent"][rating]}
+          </span>
+        )}
+      </div>
+
+      <input
+        className="ts-feedback__input"
+        type="text"
+        placeholder="Your name (optional)"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        maxLength={60}
+      />
+
+      <textarea
+        className="ts-feedback__textarea"
+        placeholder="Tell us about your experience..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        rows={4}
+        maxLength={400}
+      />
+
+      <div className="ts-feedback__footer">
+        <span className="ts-feedback__chars">{text.length}/400</span>
+        <button
+          type="submit"
+          className="ts-feedback__submit"
+          disabled={rating === 0 || !text.trim()}
+        >
+          Submit Review
+        </button>
+      </div>
+    </form>
+  );
+}
+
 export default function Testimonials() {
   const { t } = useLanguage();
   const [titleVisible, setTitleVisible] = useState(false);
@@ -188,6 +280,8 @@ export default function Testimonials() {
           />
         ))}
       </div>
+
+      <FeedbackForm />
 
       <p className="ts-footer">
         <span className="ts-footer-line" />

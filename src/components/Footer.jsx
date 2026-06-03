@@ -64,7 +64,7 @@ export default function Footer() {
             <ul className="footer-links">
               {QUICK_LINKS.map(({ label, path }) => (
                 <li key={path}>
-                  <span onClick={() => navigate(path)}>{label}</span>
+                  <button type="button" onClick={() => navigate(path)}>{label}</button>
                 </li>
               ))}
             </ul>

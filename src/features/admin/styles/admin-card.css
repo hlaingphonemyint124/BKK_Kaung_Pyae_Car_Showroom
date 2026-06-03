@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    ADD CARD
 ========================= */
 .admin-add-card {
@@ -6,13 +6,15 @@
   min-height: 220px;
   border-radius: 12px;
   overflow: hidden;
-  background: linear-gradient(135deg, #f0f0f0, #d9d9d9);
+  background: linear-gradient(135deg, var(--bg-surface-2), var(--border));
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  border: none;
+  width: 100%;
 }
 
 .admin-add-card__circle {
@@ -30,7 +32,7 @@
 }
 
 .admin-add-card__text {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: #888;
   margin: 0;
@@ -49,7 +51,7 @@
   display: flex;
   flex-direction: column;
    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  border-top: 3px solid #ef1d25;
+  border-top: 3px solid var(--color-red);
 }
 
 .admin-product-card:hover {
@@ -79,14 +81,14 @@
   left: 10px;
   padding: 5px 10px;
   border-radius: 6px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   color: #fff;
   z-index: 4;
 }
 
 .admin-product-card-badge--sale {
-  background: #ef1d25;
+  background: var(--color-red);
 }
 
 .admin-product-card-badge--rent {
@@ -105,13 +107,13 @@
   border: none;
   border-radius: 8px;
   padding: 5px 11px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
 }
 
 .admin-product-card__edit-btn:hover {
-  background: #ef1d25;
+  background: var(--color-red);
 }
 
 /* Status Overlay */
@@ -125,7 +127,7 @@
   justify-content: center;
   text-align: center;
   padding: 14px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 900;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -152,7 +154,7 @@
 
 .admin-product-card__title {
   margin: 0 0 4px;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 800;
   color: #0f172a;
   letter-spacing: -0.02em;
@@ -163,7 +165,7 @@
 
 .admin-product-card__desc {
   color: #64748b;
-  font-size: 13px;
+  font-size: 14px;
   margin: 0 0 10px;
   white-space: nowrap;
   overflow: hidden;
@@ -195,7 +197,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ef2b2d;
+  color: var(--color-red);
   line-height: 1;
 }
 
@@ -204,7 +206,7 @@
 }
 
 .admin-product-card__feature-text {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: #0f172a;
   text-transform: capitalize;
@@ -220,15 +222,15 @@
 }
 
 .admin-product-card__price {
-  color: #ef1d25;
+  color: var(--color-red);
   font-weight: 900;
-  font-size: 15px;
+  font-size: 16px;
   white-space: nowrap;
   letter-spacing: -0.01em;
 }
 
 .admin-product-card__detail {
-  font-size: 12px;
+  font-size: 13px;
   color: #64748b;
   background: none;
   border: none;
@@ -288,11 +290,11 @@ body.dark .admin-product-card__image-wrap { background: #1a1a1a; }
   }
 
   .admin-product-card__title {
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .admin-product-card__desc {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .admin-product-card__features {
@@ -302,14 +304,14 @@ body.dark .admin-product-card__image-wrap { background: #1a1a1a; }
   }
 
   .admin-product-card__feature-text {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .admin-product-card__price {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .admin-product-card__detail {
-    font-size: 11px;
+    font-size: 12px;
   }
 }

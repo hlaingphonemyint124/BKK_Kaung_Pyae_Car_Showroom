@@ -1,19 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Team.css";
 import ParticleBackground from "../components/ParticleBackground";
+import { getUsers } from "../features/admin/services/adminUsersService";
 
-const ceo = { name: "Mr. Kaung Pyae Lwin", role: "CEO" };
+const getInitials = (name) => {
+  if (!name) return "?";
+  return name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+};
 
-const members = [
-  { name: "Ms. Hsu Phyo",  role: "Customer Support", initials: "HP" },
-  { name: "Mr. Kyaw Kyaw", role: "Manager",           initials: "KK" },
-  { name: "Mr. Myo Kyaw",  role: "Customer Support",  initials: "MK" },
-  { name: "Ms. Thae Thae", role: "Customer Support",  initials: "TT" },
-];
+const FALLBACK_CEO = { name: "Mr. Kaung Pyae Lwin", initials: "KP" };
 
 export default function Team() {
   const navigate = useNavigate();
+  const [ceo, setCeo]           = useState(null);
+  const [members, setMembers]   = useState([]);
+
+  useEffect(() => {
+    getUsers()
+      .then((data) => {
+        const list = data?.users || data || [];
+        const adminUser = list.find((u) => u.role === "admin");
+        const employees = list.filter((u) => u.role === "employee" && u.is_active !== false);
+
+        setCeo(adminUser
+          ? { name: adminUser.full_name || adminUser.email, initials: getInitials(adminUser.full_name || adminUser.email) }
+          : FALLBACK_CEO
+        );
+
+        setMembers(employees.map((u) => ({
+          id:       u.id,
+          name:     u.full_name || u.email,
+          role:     "Employee",
+          initials: getInitials(u.full_name || u.email),
+        })));
+      })
+      .catch(() => {
+        setCeo(FALLBACK_CEO);
+        setMembers([]);
+      });
+  }, []);
+
+  const displayCeo = ceo || FALLBACK_CEO;
+
   return (
     <section className="team">
       <ParticleBackground />
@@ -29,29 +58,33 @@ export default function Team() {
         <div className="ceo-card">
           <div className="ceo-avatar-wrap">
             <div className="ceo-ring" />
-            <div className="ceo-avatar">KP</div>
+            <div className="ceo-avatar">{displayCeo.initials}</div>
             <span className="ceo-badge">CEO</span>
           </div>
-          <h4 className="ceo-name">{ceo.name}</h4>
-          <p className="ceo-role-tag"><span />{`Chief Executive Officer`}<span /></p>
+          <h4 className="ceo-name">{displayCeo.name}</h4>
+          <p className="ceo-role-tag"><span />Chief Executive Officer<span /></p>
         </div>
       </div>
 
-      <div className="divider">
-        <div className="divider-line" />
-        <div className="divider-dot" />
-        <div className="divider-line" />
-      </div>
-
-      <div className="members-row">
-        {members.map((m, i) => (
-          <div className="member-item" key={i}>
-            <div className="member-avatar">{m.initials}</div>
-            <h5 className="member-name">{m.name}</h5>
-            <p className="member-role">{m.role}</p>
+      {members.length > 0 && (
+        <>
+          <div className="divider">
+            <div className="divider-line" />
+            <div className="divider-dot" />
+            <div className="divider-line" />
           </div>
-        ))}
-      </div>
+
+          <div className="members-row">
+            {members.map((m) => (
+              <div className="member-item" key={m.id}>
+                <div className="member-avatar">{m.initials}</div>
+                <h5 className="member-name">{m.name}</h5>
+                <p className="member-role">{m.role}</p>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       <button className="btn-primary btn--lg" onClick={() => navigate("/contact")}>
         CONTACT OUR TEAM <span className="btn-arrow">→</span>

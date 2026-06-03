@@ -56,7 +56,7 @@ export default function BrandList() {
 
   const handleCardClick = (e, brand) => {
     spawnRipple(e, e.currentTarget, "bl-ripple");
-    setTimeout(() => navigate(`/brands/${brand.slug}`), 180);
+    setTimeout(() => navigate(`/showroom?mode=buy&q=${encodeURIComponent(brand.name)}`), 180);
   };
 
   return (
@@ -67,7 +67,7 @@ export default function BrandList() {
 
       <div className="bl-header">
         <h2 className="bl-title">{t("brands_title")}</h2>
-        <button className="btn-secondary btn--sm" onClick={() => navigate("/brands")}>
+        <button className="btn-secondary btn--sm" onClick={() => navigate("/showroom?mode=buy")}>
           {t("view_all")}
         </button>
       </div>
@@ -95,7 +95,7 @@ export default function BrandList() {
                 role="button"
                 tabIndex={0}
                 aria-label={`Browse ${brand.name} cars`}
-                onKeyDown={(e) => e.key === "Enter" && navigate(`/brands/${brand.slug}`)}
+                onKeyDown={(e) => e.key === "Enter" && navigate(`/showroom?mode=buy&q=${encodeURIComponent(brand.name)}`)}
               >
                 <div className="bl-logo">
                   <img

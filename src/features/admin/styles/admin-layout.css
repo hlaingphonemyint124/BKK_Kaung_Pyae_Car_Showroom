@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    PAGE CONTAINER
 ========================= */
 .admin-page-section {
@@ -36,7 +36,7 @@
 
 .admin-hero-block__subtitle {
   margin: 6px 0 0;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-muted);
 }
@@ -48,7 +48,7 @@
   border-radius: 10px;
   background: #e60000;
   color: #ffffff;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.02em;
   padding: 13px 18px;
@@ -94,7 +94,7 @@
   border-radius: 999px;
   border: none;
   background: transparent;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-muted);
   cursor: pointer;
@@ -131,7 +131,7 @@
   border: 1px solid var(--border);
   background: var(--bg-surface);
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: 14px;
   outline: none;
   font-family: var(--font);
   transition: border-color 0.18s, box-shadow 0.18s;
@@ -167,7 +167,7 @@
   border: 1px solid var(--border);
   background: var(--bg-surface);
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -207,7 +207,7 @@
 }
 
 .ac-filter-group label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -221,7 +221,7 @@
   border: 1px solid var(--border);
   background: var(--bg-surface-2);
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: 14px;
   outline: none;
   font-family: var(--font);
   cursor: pointer;
@@ -244,7 +244,7 @@
   border: 1px solid var(--border);
   background: var(--bg-surface-2);
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   font-family: var(--font);
@@ -257,7 +257,7 @@
   border: none;
   background: var(--color-red);
   color: #fff;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   font-family: var(--font);
@@ -284,7 +284,7 @@
   border: 1px solid var(--border);
   background: transparent;
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.18s, color 0.18s, border-color 0.18s;
@@ -299,7 +299,7 @@
 }
 
 .ac-count {
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: var(--text-muted);
   font-weight: 500;
   white-space: nowrap;
@@ -326,7 +326,7 @@
 
 .admin-filterbar__item {
   min-height: 46px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #fff;
   display: flex;
@@ -365,7 +365,7 @@
 }
 
 .admin-filterbar__mode-hint {
-  font-size: 10px;
+  font-size: 11px;
   opacity: 0.9;
 }
 
@@ -374,12 +374,12 @@
 }
 
 .admin-filterbar__icon {
-  font-size: 11px;
+  font-size: 12px;
   flex-shrink: 0;
 }
 
 .admin-filterbar__icon--mode {
-  font-size: 11px;
+  font-size: 12px;
 }
 
 /* =========================
@@ -437,7 +437,7 @@
 }
 
 .admin-filter-panel__group label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: #444;
 }
@@ -450,7 +450,7 @@
   border-radius: 10px;
   border: 1px solid #d5d5d5;
   background: #fff;
-  font-size: 13px;
+  font-size: 14px;
   color: #222;
   box-sizing: border-box;
   outline: none;
@@ -458,7 +458,7 @@
 
 .admin-filter-panel__group select:focus,
 .admin-search-panel input:focus {
-  border-color: #ef2b2d;
+  border-color: var(--color-red);
   box-shadow: 0 0 0 2px rgba(239, 43, 45, 0.1);
 }
 
@@ -503,14 +503,14 @@
 }
 
 .admin-tabs-bar__item {
-  font-size: 14px;
+  font-size: 15px;
   background: none;
   border: none;
   cursor: pointer;
 }
 
 .admin-tabs-bar__item--active {
-  color: #ef2b2d;
+  color: var(--color-red);
   font-weight: 700;
 }
 
@@ -546,7 +546,7 @@
   }
 
   .admin-hero-block__subtitle {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .admin-add-button {
@@ -561,7 +561,7 @@
 
   .admin-filterbar__item {
     min-height: 60px;
-    font-size: 14px;
+    font-size: 15px;
     gap: 8px;
     padding: 0 16px;
   }
@@ -575,12 +575,12 @@
   }
 
   .admin-filterbar__mode-hint {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .admin-filterbar__icon,
   .admin-filterbar__icon--mode {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .admin-filter-panel,
@@ -595,7 +595,7 @@
   }
 
   .admin-filter-panel__group label {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .admin-filter-panel__group select,
@@ -603,7 +603,7 @@
     min-height: 54px;
     padding: 0 16px;
     border-radius: 14px;
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .admin-filter-panel__actions {
@@ -627,5 +627,17 @@
   .admin-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-filterbar {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-filterbar {
+    grid-template-columns: 1fr;
   }
 }

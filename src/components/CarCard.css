@@ -8,13 +8,24 @@
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   position: relative;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform var(--duration-normal) var(--ease-standard),
+              box-shadow var(--duration-normal) var(--ease-standard);
   cursor: pointer;
+  border: none;
+  padding: 0;
+  text-align: left;
+  display: block;
+  width: 100%;
 }
 
 .carCard:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
+}
+
+.carCard:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
 
 .carCard img {
@@ -41,7 +52,7 @@
   top: 10px;
   left: 10px;
   color: white;
-  font-size: 11px;
+  font-size: 12px;
   padding: 4px 9px;
   border-radius: 6px;
   font-weight: 700;
@@ -49,11 +60,11 @@
 }
 
 .carCard .sale { background: var(--color-red); }
-.carCard .rent { background: #2563eb; }
+.carCard .rent { background: var(--color-blue); }
 
 .carCard.carCard--buy  { border-top: 3px solid var(--color-red); }
-.carCard.carCard--rent { border-top: 3px solid #2563eb; }
-.carCard.carCard--rent .price { color: #2563eb; }
+.carCard.carCard--rent { border-top: 3px solid var(--color-blue); }
+.carCard.carCard--rent .price { color: var(--color-blue); }
 
 /* ===================== */
 /* CARD BODY             */
@@ -63,7 +74,7 @@
 
 .carCard .cardBody h3 {
   margin: 0 0 4px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
@@ -72,7 +83,7 @@
 
 .carCard .desc {
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 12px;
   margin: 0 0 10px;
   white-space: nowrap;
   overflow: hidden;
@@ -84,10 +95,10 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  font-size: 12px;
+  font-size: 13px;
 }
 
-.carCard .fuel { color: #f4a300; font-weight: 600; }
+.carCard .fuel { color: var(--color-warning); font-weight: 600; }
 
 .carCard .gear {
   background: var(--bg-surface-2);
@@ -106,17 +117,35 @@
 .carCard .price {
   color: var(--color-red);
   font-weight: 800;
-  font-size: 14px;
+  font-size: 15px;
   white-space: nowrap;
 }
 
 .carCard .detail {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
   white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease-standard),
+              gap var(--duration-fast) var(--ease-standard);
+}
+
+.carCard .detail::after {
+  content: ' →';
+  display: inline-block;
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.carCard:hover .detail::after {
+  transform: translateX(4px);
 }
 
 .carCard .detail:hover { color: var(--text-primary); }
+
+.carCard .detail:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: 4px;
+}
 
 /* ========================= */
 /* DARK MODE                 */
@@ -125,13 +154,13 @@
 body.dark .carCard {
   background: var(--bg-surface);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-  border: 1px solid #330000;
+  border: 1px solid var(--border);
 }
 
 body.dark .carCard:hover {
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
 }
 
-body.dark .carCard .gear        { background: #330000; }
+body.dark .carCard .gear { background: var(--bg-surface-2); }
 body.dark .carCard.carCard--rent .price { color: #60a5fa; }
-body.dark .carCard.carCard--rent { border-top-color: #2563eb; }
+body.dark .carCard.carCard--rent { border-top-color: var(--color-blue); }

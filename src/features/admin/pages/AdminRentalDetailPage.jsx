@@ -380,6 +380,7 @@ function AdminRentalDetailPage() {
     }
 
     const payload = {
+      listing_type: "rent",
       brand,
       model,
       year: Number(form.info.year) || new Date().getFullYear(),

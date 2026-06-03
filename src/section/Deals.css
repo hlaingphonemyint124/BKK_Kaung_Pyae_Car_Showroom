@@ -1,4 +1,4 @@
-/* ── Deals-scoped card variables ────────────────────────────────────────────── */
+﻿/* ── Deals-scoped card variables ────────────────────────────────────────────── */
 .deals {
   --dc-card-front:   rgba(255, 255, 255, 0.62);
   --dc-card-back:    rgba(255, 255, 255, 0.75);
@@ -103,7 +103,7 @@ body.dark .deals-particles { opacity: 1; }
 
 .deals-eyebrow {
   display: inline-flex; align-items: center; gap: 12px;
-  font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
+  font-size: 12px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
   color: var(--color-red); margin: 0 0 18px;
 }
 .eyebrow-rule {
@@ -123,7 +123,7 @@ body.dark .deals-particles { opacity: 1; }
 }
 
 .deals-sub {
-  font-size: 15px; color: var(--text-muted);
+  font-size: 16px; color: var(--text-muted);
   letter-spacing: 0.03em; margin: 0;
 }
 
@@ -137,7 +137,7 @@ body.dark .deals-particles { opacity: 1; }
 
 .deals-tabs button {
   display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--font); font-size: 13px; font-weight: 500;
+  font-family: var(--font); font-size: 14px; font-weight: 500;
   letter-spacing: 0.06em; color: var(--text-muted);
   cursor: pointer; padding: 11px 28px; border-radius: 6px;
   transition: all 0.28s ease;
@@ -434,12 +434,12 @@ body.dark .card-sep {
 .card-info { flex-shrink: 0; margin-bottom: 12px; }
 .card-name {
   font-family: var(--font);
-  font-size: 20px; font-weight: 700; color: var(--text-primary);
+  font-size: 21px; font-weight: 700; color: var(--text-primary);
   margin: 0 0 5px; letter-spacing: 0.01em; line-height: 1.18;
 }
 .card-price {
   font-family: var(--font);
-  font-size: 13px; font-weight: 600; color: var(--color-red);
+  font-size: 14px; font-weight: 600; color: var(--color-red);
   letter-spacing: 0.05em; margin: 0;
 }
 
@@ -447,7 +447,7 @@ body.dark .card-sep {
 .card-cta {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   width: 100%; padding: 10px 18px; border-radius: 10px; flex-shrink: 0;
-  font-family: var(--font); font-size: 12px; font-weight: 500;
+  font-family: var(--font); font-size: 13px; font-weight: 500;
   letter-spacing: 0.09em; text-transform: uppercase;
   cursor: pointer; position: relative; overflow: hidden;
   color: var(--color-red);
@@ -483,12 +483,12 @@ body.dark .card-cta:hover {
 }
 .card-cta:hover::before { opacity: 1; }
 .card-cta span { position: relative; z-index: 1; }
-.cta-arrow { font-size: 15px; transition: transform 0.25s; }
+.cta-arrow { font-size: 16px; transition: transform 0.25s; }
 .card-cta:hover .cta-arrow { transform: translateX(4px); }
 
 /* ── Flip hint ── */
 .flip-hint {
-  font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
   color: var(--text-muted); text-align: center;
   margin: 8px 0 0; opacity: 0.55; flex-shrink: 0;
 }
@@ -500,12 +500,12 @@ body.dark .card-cta:hover {
 }
 .back-name {
   font-family: var(--font);
-  font-size: 19px; font-weight: 700; color: var(--text-primary);
+  font-size: 20px; font-weight: 700; color: var(--text-primary);
   margin: 0; line-height: 1.2;
 }
 .back-badge {
   font-family: var(--font);
-  font-size: 10px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase;
   color: var(--color-red);
   background: rgba(var(--color-red-rgb), 0.10);
   border: 1px solid rgba(var(--color-red-rgb), 0.22);
@@ -525,9 +525,9 @@ body.dark .card-cta:hover {
 }
 body.dark .spec-row { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.05); }
 .spec-row:hover { background: rgba(var(--color-red-rgb),0.07); border-color: rgba(var(--color-red-rgb),0.18); }
-.spec-icon { font-size: 13px; flex-shrink: 0; width: 20px; text-align: center; }
-.spec-label { font-size: 11.5px; font-weight: 500; color: var(--text-muted); flex: 1; letter-spacing: 0.02em; }
-.spec-value { font-size: 11.5px; font-weight: 600; color: var(--text-primary); text-align: right; }
+.spec-icon { font-size: 14px; flex-shrink: 0; width: 20px; text-align: center; }
+.spec-label { font-size: 12.5px; font-weight: 500; color: var(--text-muted); flex: 1; letter-spacing: 0.02em; }
+.spec-value { font-size: 12.5px; font-weight: 600; color: var(--text-primary); text-align: right; }
 
 /* ── CTA section ───────────────────────────────────────────────────────────── */
 .deals-cta { margin-top: 40px; position: relative; z-index: 3; }
@@ -580,7 +580,7 @@ body.dark .spec-row { background: rgba(255,255,255,0.03); border-color: rgba(255
 
 .deals-eyebrow {
   margin-bottom: 14px;
-  font-size: 10.5px;
+  font-size: 11.5px;
   letter-spacing: 0.24em;
 }
 
@@ -592,7 +592,7 @@ body.dark .spec-row { background: rgba(255,255,255,0.03); border-color: rgba(255
 }
 
 .deals-sub {
-  font-size: 15px;
+  font-size: 16px;
   max-width: 520px;
   margin: 0 auto;
 }
@@ -670,11 +670,11 @@ body.dark .spec-row { background: rgba(255,255,255,0.03); border-color: rgba(255
 }
 
 .card-name {
-  font-size: 18px;
+  font-size: 19px;
 }
 
 .card-price {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .card-cta {
@@ -724,7 +724,7 @@ body.dark .nav-arrow {
     min-width: 0;
     flex: 1;
     padding: 11px 12px;
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .nav-arrow {

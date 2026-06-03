@@ -9,8 +9,8 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.15.0",
     "framer-motion": "^12.35.1",
-    "lucide-react": "^1.7.0",
     "gsap": "^3.14.2",
+    "lucide-react": "^1.7.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-icons": "^4.12.0",
@@ -42,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0"
   }
 }

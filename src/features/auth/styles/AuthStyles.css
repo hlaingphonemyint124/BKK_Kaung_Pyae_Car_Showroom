@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    1) PAGE BACKGROUND
 ========================= */
 .auth-page {
@@ -23,7 +23,7 @@
   width: 100%;
   max-width: 420px;
   min-height: calc(100vh - 10px);
-  background: #ffffff;
+  background: var(--bg-surface);
   overflow: visible;
   box-shadow:
     0 14px 40px rgba(0, 0, 0, 0.35),
@@ -57,7 +57,7 @@
 
 .auth-brand-content p {
   margin-top: 10px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.95);
 }
@@ -74,14 +74,14 @@
    4) RIGHT FORM PANEL
 ========================= */
 .auth-book-right {
-  background: #ffffff;
+  background: var(--bg-surface);
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
 .auth-body {
-  background: #ffffff;
+  background: var(--bg-surface);
   margin-top: -20px;
   border-top-left-radius: 28px;
   border-top-right-radius: 28px;
@@ -116,9 +116,9 @@
 .auth-input-group label {
   display: block;
   margin-bottom: 7px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
 }
 
 /* =========================
@@ -135,7 +135,7 @@
   box-shadow:
     inset 0 1px 2px rgba(255, 255, 255, 0.65),
     0 2px 6px rgba(0, 0, 0, 0.08);
-  font-size: 14px;
+  font-size: 15px;
   outline: none;
 }
 
@@ -147,7 +147,7 @@
 }
 
 .auth-input.input-error {
-  border: 1px solid #d93025;
+  border: 1px solid var(--color-red);
 }
 
 /* =========================
@@ -160,7 +160,7 @@
 }
 
 .password-wrapper.input-error {
-  border: 1px solid #d93025;
+  border: 1px solid var(--color-red);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -187,7 +187,7 @@
   box-shadow: none;
   border-radius: 999px;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 21px;
   color: #9a9a9a;
   display: flex;
   align-items: center;
@@ -212,14 +212,14 @@
 .input-error-text {
   min-height: 18px;
   margin-top: 6px;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.4;
   color: transparent;
   visibility: hidden;
 }
 
 .input-error-text.show {
-  color: #d93025;
+  color: var(--color-red);
   visibility: visible;
 }
 
@@ -231,8 +231,8 @@
   align-items: center;
   gap: 8px;
   margin: 6px 0 8px;
-  font-size: 13px;
-  color: #111;
+  font-size: 14px;
+  color: var(--text-primary);
 }
 
 .terms-error {
@@ -255,7 +255,7 @@
   border-radius: 999px;
   background: linear-gradient(90deg, var(--color-red), var(--color-red-hover) 55%, #970909);
   color: white;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   box-shadow:
@@ -287,7 +287,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.85);
   color: #222;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   box-shadow:
@@ -318,13 +318,13 @@
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .auth-or {
   text-align: center;
-  font-size: 13px;
-  color: #333;
+  font-size: 14px;
+  color: var(--text-muted);
   margin-bottom: 16px;
   padding: 10px;
 }
@@ -337,7 +337,7 @@
   padding: 10px 14px;
   border-radius: 14px;
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -370,7 +370,7 @@
   border: 1px solid #d0d5dd;
   border-radius: 12px;
   color: #344054;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s ease;
@@ -391,15 +391,15 @@
 .auth-link-center {
   text-align: center;
   margin-top: 28px;
-  font-size: 12px;
-  color: #111;
+  font-size: 13px;
+  color: var(--text-primary);
 }
 
 .auth-link-bottom {
   text-align: center;
   margin-top: 24px;
-  font-size: 12px;
-  color: #111;
+  font-size: 13px;
+  color: var(--text-primary);
   padding-bottom: 4px;
 }
 
@@ -421,8 +421,8 @@
 ========================= */
 .auth-policy-text {
   text-align: center;
-  font-size: 12px;
-  color: #111;
+  font-size: 13px;
+  color: var(--text-primary);
   margin-top: 16px;
   line-height: 1.6;
 }
@@ -433,7 +433,7 @@
 .auth-message {
   margin-top: 10px;
   margin-bottom: 10px;
-  font-size: 14px;
+  font-size: 15px;
   text-align: center;
 }
 
@@ -486,7 +486,7 @@
 
   .auth-brand-content p {
     margin-top: 18px;
-    font-size: 18px;
+    font-size: 19px;
     line-height: 1.5;
   }
 
@@ -500,7 +500,7 @@
     align-items: stretch;
     justify-content: center;
     padding: 52px 48px;
-    background: #fbfbfb;
+    background: var(--bg-surface);
   }
 
   .auth-body {
@@ -527,13 +527,13 @@
 
   .auth-input-group label {
     margin-bottom: 9px;
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .auth-input {
     height: 58px;
     padding: 0 20px;
-    font-size: 15px;
+    font-size: 16px;
     box-shadow:
       inset 0 1px 2px rgba(255, 255, 255, 0.65),
       0 6px 18px rgba(0, 0, 0, 0.06);
@@ -546,7 +546,7 @@
   .eye-button {
     width: 50px;
     height: 50px;
-    font-size: 20px;
+    font-size: 21px;
     right: 6px;
   }
 
@@ -556,13 +556,13 @@
   }
 
   .remember-row {
-    font-size: 14px;
+    font-size: 15px;
     margin: 12px 0 10px;
   }
 
   .auth-button {
     height: 56px;
-    font-size: 18px;
+    font-size: 19px;
     box-shadow:
       0 10px 24px rgba(var(--color-red-rgb), 0.28),
       inset 0 1px 0 rgba(255, 255, 255, 0.15);
@@ -570,7 +570,7 @@
 
   .google-signin-btn {
     height: 54px;
-    font-size: 14px;
+    font-size: 15px;
     box-shadow:
       inset 0 1px 2px rgba(255, 255, 255, 0.65),
       0 6px 18px rgba(0, 0, 0, 0.06);
@@ -579,18 +579,18 @@
   .google-icon {
     width: 22px;
     height: 22px;
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .auth-or {
-    font-size: 13px;
+    font-size: 14px;
     margin-bottom: 22px;
   }
 
   .auth-link-center,
   .auth-link-bottom,
   .auth-policy-text {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .auth-link-center {
@@ -609,16 +609,16 @@
 
   .input-error-text {
     min-height: 18px;
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .auth-submit-message {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .resend-btn {
     height: 44px;
-    font-size: 14px;
+    font-size: 15px;
   }
 }
 
@@ -632,14 +632,14 @@ body.dark .auth-page {
 }
 
 body.dark .auth-book {
-  background: #111111;
+  background: var(--bg-surface);
   box-shadow:
     0 30px 90px rgba(0, 0, 0, 0.70),
     0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
 body.dark .auth-book-right {
-  background: #111111;
+  background: var(--bg-surface);
 }
 
 body.dark .auth-body {
@@ -652,7 +652,7 @@ body.dark .auth-input-group label {
 }
 
 body.dark .auth-input {
-  background: #1e1e1e;
+  background: var(--bg-surface-2);
   border-color: rgba(255, 255, 255, 0.10);
   color: #f0f0f0;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.40);
@@ -663,7 +663,7 @@ body.dark .auth-input::placeholder {
 }
 
 body.dark .password-input {
-  background: #1e1e1e;
+  background: var(--bg-surface-2);
 }
 
 body.dark .eye-button {
@@ -689,7 +689,7 @@ body.dark .auth-policy-text a {
 }
 
 body.dark .google-signin-btn {
-  background: #1e1e1e;
+  background: var(--bg-surface-2);
   border-color: rgba(255, 255, 255, 0.12);
   color: #f0f0f0;
   box-shadow: none;
@@ -703,4 +703,20 @@ body.dark .resend-btn {
 
 body.dark .resend-btn:hover {
   background: rgba(255, 255, 255, 0.05);
+}
+
+/* =========================
+   MOBILE ≤640px
+========================= */
+@media (max-width: 640px) {
+  .auth-book {
+    max-width: 100%;
+    min-height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .auth-book-left {
+    display: none;
+  }
 }

@@ -5,6 +5,7 @@ import { getCarsForSale, getCarsForRent } from "../api/showroom.api";
 import { useAuth } from "../context/AuthContext";
 import { Fuel, Settings2, Search, SlidersHorizontal, X } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
+import Spinner from "../components/Spinner";
 
 function ShowroomParticles() {
   const canvasRef = useRef(null);
@@ -137,8 +138,7 @@ export default function Showroom() {
       setError(null);
 
       const res = await apiFn();
-      const normalizedCars =
-        res?.data?.cars || res?.cars || res?.data || [];
+      const normalizedCars = res?.data?.cars || res?.cars || res?.data || [];
 
       setCars(normalizedCars);
     } catch (err) {
@@ -234,10 +234,12 @@ export default function Showroom() {
         : Number(car.rent_price_per_day || 0);
 
     const base = cars.filter((car) => {
-      const hasPrice =
-        mode === "buy"
-          ? car.sale_price != null
-          : car.rent_price_per_day != null;
+      // Availability: admins see everything; customers see only available cars
+      // with matching listing_type (falls back to price check for older data)
+      const expectedType = mode === "buy" ? "sale" : "rent";
+      const matchesListing = car.listing_type === expectedType;
+
+      const isAvailable = car.status === "available";
 
       const matchesTab =
         selectedCategory === "all" ||
@@ -263,7 +265,8 @@ export default function Showroom() {
         (car.body_type || "").toLowerCase() === bodyTypeFilter;
 
       return (
-        hasPrice &&
+        matchesListing &&
+        isAvailable &&
         matchesTab &&
         matchesSearch &&
         matchesFuel &&
@@ -544,7 +547,7 @@ export default function Showroom() {
           </div>
         </div>
 
-        {loading && <div className="sr-state">{t("sr_loading")}</div>}
+        {loading && <Spinner size="lg" />}
 
         {!loading && error && (
           <div className="sr-state sr-state--error">{error}</div>

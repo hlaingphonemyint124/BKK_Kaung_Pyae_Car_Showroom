@@ -85,21 +85,23 @@ export default function SoldHistory() {
   // ── Fetch data ──────────────────────────────────────────────
   useEffect(() => {
     setLoading(true);
-    Promise.all([
-      getSoldHistory({ limit: 50 }),
-      getSoldStats(),
-    ])
-      .then(([carsRes, statsRes]) => {
-        const carsData  = carsRes.data?.cars  ?? carsRes.data  ?? [];
-        const statsData = statsRes.data?.stats ?? statsRes.data ?? { total_sold: 0, this_month: 0 };
-        setCars(Array.isArray(carsData) ? carsData : []);
+
+    const carsPromise = getSoldHistory()
+      .then((res) => {
+        const raw = res?.data?.cars ?? res?.data ?? [];
+        const sold = (Array.isArray(raw) ? raw : []).filter((c) => c.status === "sold");
+        setCars(sold);
+      })
+      .catch(() => setCars([]));
+
+    const statsPromise = getSoldStats()
+      .then((res) => {
+        const statsData = res.data?.stats ?? res.data ?? { total_sold: 0, this_month: 0 };
         setStats(statsData);
       })
-      .catch(() => {
-        setCars([]);
-        setStats({ total_sold: 0, this_month: 0 });
-      })
-      .finally(() => setLoading(false));
+      .catch(() => setStats({ total_sold: 0, this_month: 0 }));
+
+    Promise.all([carsPromise, statsPromise]).finally(() => setLoading(false));
   }, []);
 
   // ── Trigger stat bar animations ─────────────────────────────

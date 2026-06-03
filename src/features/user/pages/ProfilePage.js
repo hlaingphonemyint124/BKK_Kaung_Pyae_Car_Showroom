@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import AuthHeader from "../../auth/components/AuthHeader";
 import "../../auth/styles/AuthStyles.css";
 import "../styles/UserStyles.css";
 import { getProfile, updateProfile } from "../service/profileService";
 
 import ProfileItem from "../components/ProfileItem";
+import Toast from "../../../components/Toast";
+import Spinner from "../../../components/Spinner";
 
 import { FaUser, FaPhoneAlt, FaSave, FaTimes } from "react-icons/fa";
 import { SiGmail, SiLine } from "react-icons/si";
@@ -12,6 +14,9 @@ import { SiGmail, SiLine } from "react-icons/si";
 function ProfilePage() {
   const [editingField, setEditingField] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState(null);
+
+  const closeToast = useCallback(() => setToast(null), []);
 
   const [profile, setProfile] = useState({
     full_name: "",
@@ -74,10 +79,10 @@ function ProfilePage() {
       }));
 
       setEditingField(null);
-      alert("Profile updated successfully");
+      setToast({ message: "Profile updated successfully", type: "success" });
     } catch (error) {
       console.error("Failed to update profile:", error);
-      alert("Failed to update profile");
+      setToast({ message: "Failed to update profile", type: "error" });
     }
   };
 
@@ -85,7 +90,7 @@ function ProfilePage() {
     return (
       <AuthHeader>
         <div className="user-content-box">
-          <p>Loading profile...</p>
+          <Spinner size="lg" />
         </div>
       </AuthHeader>
     );
@@ -93,6 +98,7 @@ function ProfilePage() {
 
   return (
     <AuthHeader>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={closeToast} />}
       <div className="user-content-box">
         <div className="profile-avatar">
           <FaUser />

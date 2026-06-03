@@ -50,5 +50,5 @@ export default function ParticleBackground() {
     draw();
     return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
   }, []);
-  return <canvas ref={canvasRef} className="sec-particles" />;
+  return <canvas ref={canvasRef} className="sec-particles" aria-hidden="true" />;
 }

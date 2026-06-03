@@ -1,4 +1,4 @@
-/* ── Testimonials-scoped card variables ── */
+﻿/* ── Testimonials-scoped card variables ── */
 .ts-section {
   --ts-card-shadow:
     0 1px 3px rgba(0,0,0,0.06),
@@ -111,7 +111,7 @@ body.dark .ts-section {
 
 /* ── Subtitle ── */
 .ts-subtitle {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -316,7 +316,7 @@ body.dark .ts-section {
 }
 
 .ts-initials {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
   color: var(--text-primary);
   letter-spacing: 0.5px;
@@ -369,7 +369,7 @@ body.dark .ts-section {
 }
 
 .ts-name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: 0.2px;
@@ -377,7 +377,7 @@ body.dark .ts-section {
 }
 
 .ts-car {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
   margin-top: 2px;
   display: flex;
@@ -387,14 +387,14 @@ body.dark .ts-section {
 }
 
 .ts-car-icon {
-  font-size: 9px;
+  font-size: 10px;
   color: var(--color-red);
   opacity: 0.7;
 }
 
 .ts-stars {
   color: var(--color-red);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 2px;
   line-height: 1;
   filter: drop-shadow(0 0 4px rgba(var(--color-red-rgb), 0.5));
@@ -420,7 +420,7 @@ body.dark .ts-section {
 .ts-card:hover .ts-divider-fill { width: 100%; }
 
 .ts-text {
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.65;
   color: var(--text-muted);
   font-weight: 400;
@@ -463,7 +463,7 @@ body.dark .ts-section {
 .ts-footer {
   text-align: center;
   margin-top: 18px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
   max-width: 290px;
   line-height: 1.7;
@@ -496,6 +496,191 @@ body.dark .ts-section .sec-blob:nth-child(2) { animation-delay: -2.8s; }
 body.dark .ts-section .sec-blob:nth-child(3) { animation-delay: -4.8s; }
 .ts-section > :not(.sec-blob):not(.sec-noise):not(.sec-particles) { position: relative; z-index: 1; }
 
+/* ── Feedback Form ── */
+.ts-feedback {
+  width: 100%;
+  max-width: 430px;
+  margin-top: 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 22px 22px 18px;
+  position: relative;
+  z-index: 2;
+  box-shadow: var(--ts-card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.ts-feedback:focus-within {
+  border-color: rgba(var(--color-red-rgb), 0.35);
+  box-shadow: var(--ts-card-shadow-hover);
+}
+
+.ts-feedback__head {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ts-feedback__title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.2px;
+}
+
+.ts-feedback__sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+}
+
+/* ── Stars ── */
+.ts-feedback__stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ts-feedback__star {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--border);
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.ts-feedback__star--on {
+  color: var(--color-red);
+  filter: drop-shadow(0 0 5px rgba(var(--color-red-rgb), 0.55));
+}
+
+.ts-feedback__star:hover {
+  transform: scale(1.2);
+}
+
+.ts-feedback__rating-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-red);
+  margin-left: 6px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ── Inputs ── */
+.ts-feedback__input,
+.ts-feedback__textarea {
+  width: 100%;
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  resize: none;
+}
+
+.ts-feedback__input::placeholder,
+.ts-feedback__textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.ts-feedback__input:focus,
+.ts-feedback__textarea:focus {
+  border-color: rgba(var(--color-red-rgb), 0.45);
+  box-shadow: 0 0 0 3px rgba(var(--color-red-rgb), 0.08);
+}
+
+/* ── Footer row ── */
+.ts-feedback__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ts-feedback__chars {
+  font-size: 12px;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.ts-feedback__submit {
+  background: var(--color-red);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(var(--color-red-rgb), 0.28);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+.ts-feedback__submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(var(--color-red-rgb), 0.38);
+}
+
+.ts-feedback__submit:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+/* ── Success state ── */
+.ts-feedback--success {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 22px;
+  gap: 10px;
+  border-color: rgba(var(--color-red-rgb), 0.3);
+}
+
+.ts-feedback__success-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(var(--color-red-rgb), 0.1);
+  border: 1.5px solid rgba(var(--color-red-rgb), 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  color: var(--color-red);
+  font-weight: 900;
+  animation: successPop 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+
+@keyframes successPop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.ts-feedback__success-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.ts-feedback__success-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
 /* ── Mobile ── */
 @media (max-width: 480px) {
   .ts-section  { padding: 44px 16px 36px; }
@@ -504,4 +689,6 @@ body.dark .ts-section .sec-blob:nth-child(3) { animation-delay: -4.8s; }
   .ts-subtitle { margin-bottom: 20px; }
   .ts-dots     { margin-top: 16px; }
   .ts-footer   { margin-top: 14px; }
+  .ts-feedback { padding: 18px 16px; }
+  .ts-feedback__star { font-size: 24px; }
 }

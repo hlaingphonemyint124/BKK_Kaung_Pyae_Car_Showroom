@@ -372,7 +372,12 @@ export default function Deals() {
     apiFn()
       .then((res) => {
         const data = normalizeCarsResponse(res);
-        setCards(data.map((car) => mapApiCarToCard(car, tab)));
+        const expectedType = tab === "new" ? "sale" : "rental";
+        const filtered = data.filter((car) =>
+          car.status === "available" &&
+          (car.listing_type === expectedType || car.listing_type == null)
+        );
+        setCards(filtered.map((car) => mapApiCarToCard(car, tab)));
       })
       .catch(() => {
         console.warn("Deals API unavailable.");

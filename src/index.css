@@ -1,4 +1,4 @@
-/* ===============================
+﻿/* ===============================
 GLOBAL
 =============================== */
 
@@ -10,6 +10,12 @@ GLOBAL
   padding: 0;
 }
 
+*:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
 html,
 body,
 #root {
@@ -18,11 +24,11 @@ body,
 
 html {
   overflow-x: hidden;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 @media (max-width: 480px) {
-  html { font-size: 15px; }
+  html { font-size: 16px; }
 }
 
 :root {
@@ -149,7 +155,7 @@ body.dark .btn-outline:hover {
   transition: opacity 0.4s;
 }
 body.dark .sec-blob {
-  animation: secBlobBreathe 7s ease-in-out infinite;
+  animation: secBlobBreathe 7s var(--ease-standard) infinite;
 }
 @keyframes secBlobBreathe {
   0%, 100% { opacity: 0.82; }
@@ -282,19 +288,19 @@ HEADER
 }
 
 .site-logo__main {
-  font-size: 15.5px;
+  font-size: 16.5px;
   font-weight: 800;
   letter-spacing: 0.01em;
-  background: linear-gradient(135deg, #ff6b6b 0%, #ef2b2d 55%, #b91c1c 100%);
+  background: linear-gradient(135deg, var(--color-red) 0%, var(--color-red-hover) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .site-logo__sub {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
-  color: #a4a4a8;
+  color: var(--text-muted);
   letter-spacing: 0.08em;
 }
 
@@ -325,10 +331,10 @@ PREMIUM NAV BUTTONS
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   transition:
-    background 0.24s ease,
-    border-color 0.24s ease,
-    transform 0.24s ease,
-    box-shadow 0.24s ease;
+    background var(--duration-normal) var(--ease-standard),
+    border-color var(--duration-normal) var(--ease-standard),
+    transform var(--duration-normal) var(--ease-standard),
+    box-shadow var(--duration-normal) var(--ease-standard);
   position: relative;
   z-index: 3100;
 }
@@ -399,7 +405,7 @@ LANGUAGE DROPDOWN
 
 .lang-dropdown__title {
   padding: 11px 14px 6px;
-  font-size: 9.5px;
+  font-size: 10.5px;
   font-weight: 800;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -416,7 +422,7 @@ LANGUAGE DROPDOWN
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.055);
   color: #aaa;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   text-align: left;
@@ -443,12 +449,12 @@ LANGUAGE DROPDOWN
 }
 
 .lang-item__code {
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 700;
 }
 
 .lang-item__label {
-  font-size: 10.5px;
+  font-size: 11.5px;
   color: #707070;
 }
 
@@ -516,10 +522,7 @@ OVERLAY + SIDE MENU
 
 .menu-overlay {
   position: fixed;
-  top: var(--navbar-height);
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0);
   z-index: 2500;
   pointer-events: none;
@@ -546,7 +549,7 @@ OVERLAY + SIDE MENU
   border-left: 1px solid var(--sidebar-border);
   box-shadow: var(--sidebar-shadow);
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: visible;
   z-index: 3000;
   display: flex;
   flex-direction: column;
@@ -597,14 +600,13 @@ OVERLAY + SIDE MENU
   display: flex;
   align-items: center;
   gap: 13px;
-  margin: 16px 16px 4px;
-  padding: 14px 16px;
+  margin: 10px 14px 4px;
+  padding: 12px 14px;
   background: var(--sidebar-profile-bg);
   border: 1px solid var(--sidebar-profile-bdr);
-  border-radius: 16px;
+  border-radius: 14px;
   text-decoration: none;
   position: relative;
-  overflow: hidden;
 }
 
 .avatar {
@@ -629,14 +631,14 @@ OVERLAY + SIDE MENU
 .loginMenuItem {
   color: var(--sidebar-login-color) !important;
   font-weight: 700;
-  font-size: 14.5px;
+  font-size: 15.5px;
   text-decoration: none;
   letter-spacing: 0.01em;
   line-height: 1.2;
 }
 
 .sideMenu__profile-sub {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--sidebar-item-sub);
 }
 
@@ -650,7 +652,7 @@ OVERLAY + SIDE MENU
   flex: 1;
   padding: 11px 0;
   border-radius: 13px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   text-align: center;
   text-decoration: none;
@@ -677,7 +679,7 @@ OVERLAY + SIDE MENU
 
 .sideMenu__section-label {
   padding: 18px 20px 8px;
-  font-size: 9.5px;
+  font-size: 10.5px;
   font-weight: 800;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -704,17 +706,17 @@ OVERLAY + SIDE MENU
   padding: 13px 14px;
   color: var(--sidebar-item-color);
   text-decoration: none;
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-weight: 500;
   border-radius: 13px;
   border: 1px solid transparent;
   position: relative;
   overflow: hidden;
   transition:
-    color 0.22s ease,
-    background 0.22s ease,
-    border-color 0.22s ease,
-    transform 0.25s ease;
+    color var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-normal) var(--ease-standard);
 }
 
 .menuItem:hover {
@@ -739,7 +741,7 @@ OVERLAY + SIDE MENU
   flex-shrink: 0;
   opacity: 0;
   transform: scale(0);
-  transition: opacity 0.2s ease, transform 0.25s ease;
+  transition: opacity 0.2s ease, transform var(--duration-normal) var(--ease-standard);
   margin-right: 8px;
 }
 
@@ -788,14 +790,14 @@ OVERLAY + SIDE MENU
   border-radius: 13px;
   color: var(--sidebar-logout-color);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   background: var(--sidebar-accent-soft);
   border: 1px solid var(--sidebar-profile-bdr);
   cursor: pointer;
   transition:
-    background 0.22s ease,
-    transform 0.25s ease,
-    box-shadow 0.22s ease,
+    background var(--duration-fast) var(--ease-standard),
+    transform var(--duration-normal) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
     opacity 0.2s ease;
 }
 
@@ -808,7 +810,7 @@ OVERLAY + SIDE MENU
 
 .sideMenu__copyright {
   text-align: center;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--sidebar-footer-text);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -854,7 +856,7 @@ HERO
 .hero p {
   color: rgba(255, 255, 255, 0.86);
   margin: 14px 0 28px;
-  font-size: 17px;
+  font-size: 18px;
 }
 
 /* ===============================
@@ -867,7 +869,7 @@ HERO
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -895,7 +897,7 @@ HERO
 }
 
 .sec-sub {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text-muted);
   font-weight: 400;
   line-height: 1.6;
@@ -919,15 +921,15 @@ BUTTONS — Unified System
   gap: 8px;
   border: none;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.01em;
   cursor: pointer;
   text-decoration: none;
   transition:
     transform 0.22s cubic-bezier(0.22,1,0.36,1),
-    box-shadow 0.22s ease,
-    background 0.22s ease,
+    box-shadow var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard),
     opacity 0.18s ease;
 }
 
@@ -964,7 +966,7 @@ BUTTONS — Unified System
   color: var(--color-red);
   padding: 11px 24px;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
@@ -988,7 +990,7 @@ BUTTONS — Unified System
   background: none;
   border: none;
   color: var(--color-red);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
@@ -1004,13 +1006,13 @@ BUTTONS — Unified System
 
 /* Size variants — work on both primary and secondary */
 .btn--lg, .btn-primary--lg {
-  font-size: 15px;
+  font-size: 16px;
   padding: 15px 34px;
   border-radius: 14px;
 }
 
 .btn--sm {
-  font-size: 12px;
+  font-size: 13px;
   padding: 7px 16px;
   border-radius: 9px;
   font-weight: 600;
@@ -1022,7 +1024,7 @@ BUTTONS — Unified System
   color: white;
   padding: 14px 28px;
   border-radius: 12px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   box-shadow: 0 8px 24px rgba(var(--color-red-rgb), 0.25);
   width: min(430px, 100%);
@@ -1040,7 +1042,7 @@ BUTTONS — Unified System
   color: white;
   padding: 12px 22px;
   border-radius: 12px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   box-shadow: 0 8px 20px rgba(var(--color-red-rgb), 0.22);
   margin-left: auto;
@@ -1064,7 +1066,7 @@ BEST DEAL
   align-items: center;
   gap: 12px;
   color: var(--color-red);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.32em;
   margin-bottom: 18px;
@@ -1074,14 +1076,14 @@ BEST DEAL
   font-size: clamp(38px, 5vw, 72px);
   line-height: 0.95;
   letter-spacing: -0.06em;
-  color: #071026;
+  color: var(--text-primary);
   margin-bottom: 14px;
 }
 
 .best-deal > p,
 .best-deal__subtitle {
-  color: #697386;
-  font-size: 17px;
+  color: var(--text-muted);
+  font-size: 18px;
   margin-bottom: 28px;
 }
 
@@ -1106,16 +1108,17 @@ BEST DEAL
   border: none;
   font-weight: 800;
   cursor: pointer;
-  color: #697386;
+  color: var(--text-muted);
   transition:
-    background 0.22s ease,
-    color 0.22s ease,
-    box-shadow 0.22s ease,
-    transform 0.22s ease;
+    background var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
 }
 
 .best-deal__tabs button.active {
   color: white;
+  font-weight: 700;
   background: linear-gradient(180deg, var(--color-red), var(--color-red-hover));
   box-shadow: 0 16px 34px rgba(var(--color-red-rgb), 0.34);
 }
@@ -1139,14 +1142,14 @@ BEST DEAL
 }
 
 .deal__name {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 800;
   margin-bottom: 4px;
 }
 
 .deal__price {
   font-weight: 900;
-  color: #111;
+  color: var(--text-primary);
 }
 
 /* ===============================
@@ -1188,11 +1191,11 @@ BRANDS + CAR TYPES
   font-size: clamp(24px, 2.4vw, 34px);
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: #071026;
+  color: var(--text-primary);
 }
 
 .viewAll {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   color: var(--color-red);
   cursor: pointer;
@@ -1214,8 +1217,8 @@ BRANDS + CAR TYPES
 
 .brandCard,
 .typeCard {
-  background: #ffffff;
-  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: 20px;
   padding: 22px 14px;
   min-height: 118px;
@@ -1228,9 +1231,9 @@ BRANDS + CAR TYPES
   justify-content: center;
   gap: 11px;
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease;
+    transform var(--duration-normal) var(--ease-standard),
+    box-shadow var(--duration-normal) var(--ease-standard),
+    border-color var(--duration-normal) var(--ease-standard);
 }
 
 .brandCard:hover,
@@ -1249,27 +1252,27 @@ BRANDS + CAR TYPES
 .typeIcon {
   width: 44px;
   height: 44px;
-  background: #f1f2f5;
+  background: var(--bg-surface-2);
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 21px;
   color: var(--color-red);
 }
 
 .brandCard p,
 .typeCard p {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .typesNote {
   margin-top: 28px;
   text-align: center;
-  font-size: 14px;
-  color: #6b7280;
+  font-size: 15px;
+  color: var(--text-muted);
 }
 
 .shopBtn {
@@ -1283,14 +1286,14 @@ BRANDS + CAR TYPES
   color: white;
   padding: 15px 28px;
   border-radius: 16px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 900;
   cursor: pointer;
   box-shadow: 0 18px 40px rgba(var(--color-red-rgb), 0.25);
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    filter 0.25s ease;
+    transform var(--duration-normal) var(--ease-standard),
+    box-shadow var(--duration-normal) var(--ease-standard),
+    filter var(--duration-normal) var(--ease-standard);
 }
 
 .shopBtn:hover {
@@ -1328,9 +1331,9 @@ ARROWS / CAROUSEL BUTTONS
   -webkit-backdrop-filter: blur(12px);
   cursor: pointer;
   transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease,
-    background 0.22s ease;
+    transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard);
 }
 
 .arrowBtn:hover,
@@ -1386,7 +1389,7 @@ GRID SECTIONS
   justify-content: center;
   gap: 8px;
   box-shadow: 0 12px 34px rgba(0, 0, 0, 0.06);
-  transition: 0.25s;
+  transition: var(--duration-normal);
 }
 
 .brand-card:hover,
@@ -1417,7 +1420,7 @@ EASY RENTAL
 }
 
 .easyRentalHeader p {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text-muted);
   margin-bottom: 28px;
 }
@@ -1444,7 +1447,7 @@ EASY RENTAL
   background: #f1f2f5;
   padding: 11px 14px;
   border-radius: 14px;
-  font-size: 12px;
+  font-size: 13px;
   color: #555;
   display: flex;
   flex-direction: column;
@@ -1453,7 +1456,7 @@ EASY RENTAL
 }
 
 .stepBox strong {
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .stepBox.active {
@@ -1467,7 +1470,7 @@ EASY RENTAL
   color: white;
   padding: 12px 20px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 14px 32px rgba(var(--color-red-rgb), 0.24);
@@ -1479,12 +1482,12 @@ EASY RENTAL
 }
 
 .loginArea h4 {
-  font-size: 16px;
+  font-size: 17px;
   margin-bottom: 6px;
 }
 
 .loginArea p {
-  font-size: 13px;
+  font-size: 14px;
   color: #777;
   margin-bottom: 14px;
 }
@@ -1500,13 +1503,13 @@ EASY RENTAL
 
 .nextStep {
   margin-top: 10px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-red);
   cursor: pointer;
 }
 
 .easyFooter {
-  font-size: 12px;
+  font-size: 13px;
   color: #777;
   margin-top: 14px;
 }
@@ -1535,7 +1538,7 @@ TESTIMONIAL
 
 .rating {
   color: var(--color-red);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 /* ===============================
@@ -1578,7 +1581,7 @@ ABOUT
   color: white;
   padding: 11px 17px;
   border-radius: 13px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -1658,21 +1661,22 @@ RESPONSIVE
   }
 
   .site-logo__main {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .site-logo__sub {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .nav-icon-btn {
-    height: 38px;
-    min-width: 38px;
-    padding: 0 10px;
+    height: 36px;
+    min-width: 36px;
+    padding: 0 9px;
+    font-size: 13px;
   }
 
   .nav-icon-btn--lang {
-    min-width: 82px;
+    min-width: 72px;
   }
 
   .sideMenu {
@@ -1773,26 +1777,36 @@ RESPONSIVE
   }
 
   .deal__name {
-    font-size: 15px;
+    font-size: 16px;
     margin-bottom: 2px;
   }
 
   .deal__price {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .deal__card .shopBtn,
   .deal__card button {
     min-height: 34px;
     padding: 8px 14px;
-    font-size: 11px;
+    font-size: 12px;
     border-radius: 10px;
   }
 }
 
 @media (max-width: 480px) {
   .sideMenu {
-    width: 100%;
+    width: min(300px, 82vw);
+  }
+
+  .nav-icon-btn {
+    height: 34px;
+    min-width: 34px;
+    padding: 0 8px;
+  }
+
+  .nav-icon-btn--lang {
+    min-width: 62px;
   }
 
   .nav-icon-btn--lang span {
