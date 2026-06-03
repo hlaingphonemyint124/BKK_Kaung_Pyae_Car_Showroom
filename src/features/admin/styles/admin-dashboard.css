@@ -1572,9 +1572,15 @@ body.dark .dash-emp-avatar--filled {
   margin-bottom: 28px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 640px) {
   .dash-avail-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .dash-avail-grid {
     gap: 16px;
   }
 }

@@ -1,5 +1,9 @@
 import API from './api';
 
-export const getSoldHistory  = () => API.get('/cars', { params: { price_min: 1, limit: 200 } });
+// Fetch all sale-type cars (filter status client-side)
+export const getSoldHistory = () =>
+  API.get('/cars', { params: { listing_type: 'sale', limit: 200 } });
 
-export const getSoldStats = () => API.get('/cars/sold/stats');
+// Fetch all rent-type cars (filter status client-side)
+export const getRentalHistory = () =>
+  API.get('/cars', { params: { listing_type: 'rent', limit: 200 } });

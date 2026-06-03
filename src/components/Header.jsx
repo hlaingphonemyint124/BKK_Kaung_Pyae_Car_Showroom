@@ -99,8 +99,9 @@ export default function Header() {
     ...(isAdmin ? [{ to: "/admin",                        label: t("nav_dashboard") }] : []),
     { to: isAdmin ? "/admin/buy"    : "/showroom?mode=buy",  label: t("nav_shop")   },
     { to: isAdmin ? "/admin/rental" : "/showroom?mode=rent", label: t("nav_rental") },
-    { to: "/sold-history",                                label: t("nav_sold")      },
-    { to: "/contact",                                     label: t("nav_contact")   },
+    { to: "/sold-history",                                label: t("nav_sold")          },
+    { to: "/rental-history",                              label: "Rental History"       },
+    { to: "/contact",                                     label: t("nav_contact")       },
     { to: "/help",                                        label: t("nav_help")      },
   ];
 

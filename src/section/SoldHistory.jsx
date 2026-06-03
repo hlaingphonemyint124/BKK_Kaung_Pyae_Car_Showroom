@@ -1,24 +1,36 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import "./SoldHistory.css";
-import { getSoldHistory, getSoldStats } from "../api/soldhistory.api";
+import { getSoldHistory } from "../api/soldhistory.api";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 
-
-
-
 const FILTERS   = ["All", "Sedan", "SUV", "Pickup Truck", "Hatchback", "Electric"];
 const PAGE_SIZE = 6;
+const MONTH_NAMES = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December",
+];
 
-// ─── Format date ──────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 function formatDate(str) {
   if (!str) return "—";
   const d = new Date(str);
   return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
 
+function getImg(car) {
+  return car.primary_image ||
+    car.images?.find((i) => i.is_primary)?.storage_path ||
+    car.images?.[0]?.storage_path ||
+    null;
+}
+
+function soldDate(car) {
+  return car.sold_at || car.updated_at || null;
+}
+
 // ─── Animated counter ─────────────────────────────────────────────────────────
-function Counter({ target, prefix = "", suffix = "" }) {
+function Counter({ target, suffix = "" }) {
   const [val, setVal]         = useState(0);
   const [started, setStarted] = useState(false);
   const ref = useRef(null);
@@ -36,7 +48,7 @@ function Counter({ target, prefix = "", suffix = "" }) {
 
   useEffect(() => {
     if (!started) return;
-    const num = parseInt(String(target).replace(/[^0-9]/g, ""), 10);
+    const num = parseInt(String(target), 10);
     if (!num) return;
     let cur = 0;
     const steps = 60;
@@ -49,11 +61,7 @@ function Counter({ target, prefix = "", suffix = "" }) {
     return () => clearInterval(id);
   }, [started, target]);
 
-  return (
-    <span ref={ref}>
-      {prefix}{val.toLocaleString()}{suffix}
-    </span>
-  );
+  return <span ref={ref}>{val.toLocaleString()}{suffix}</span>;
 }
 
 // ─── Skeleton cards ───────────────────────────────────────────────────────────
@@ -75,57 +83,70 @@ function SkeletonCards({ count = 6 }) {
 ═══════════════════════════════════════════════════════════════ */
 export default function SoldHistory() {
   const { t }             = useLanguage();
-  const [cars, setCars]       = useState([]);
-  const [stats, setStats]     = useState({ total_sold: 0, this_month: 0 });
+  const [cars, setCars]   = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter]   = useState("All");
   const [page, setPage]       = useState(1);
   const statsRef              = useRef([]);
 
-  // ── Fetch data ──────────────────────────────────────────────
+  // ── Fetch — compute stats client-side ──────────────────────
   useEffect(() => {
     setLoading(true);
-
-    const carsPromise = getSoldHistory()
+    getSoldHistory()
       .then((res) => {
         const raw = res?.data?.cars ?? res?.data ?? [];
-        const sold = (Array.isArray(raw) ? raw : []).filter((c) => c.status === "sold");
+        const sold = (Array.isArray(raw) ? raw : []).filter(
+          (c) => c.listing_type === "sale" && c.status === "sold"
+        );
         setCars(sold);
       })
-      .catch(() => setCars([]));
-
-    const statsPromise = getSoldStats()
-      .then((res) => {
-        const statsData = res.data?.stats ?? res.data ?? { total_sold: 0, this_month: 0 };
-        setStats(statsData);
-      })
-      .catch(() => setStats({ total_sold: 0, this_month: 0 }));
-
-    Promise.all([carsPromise, statsPromise]).finally(() => setLoading(false));
+      .catch(() => setCars([]))
+      .finally(() => setLoading(false));
   }, []);
+
+  // ── Derived stats (client-side) ─────────────────────────────
+  const stats = useMemo(() => {
+    const now    = new Date();
+    const month  = now.getMonth();
+    const year   = now.getFullYear();
+
+    const total_sold  = cars.length;
+    const this_month  = cars.filter((c) => {
+      const d = new Date(soldDate(c) || 0);
+      return d.getMonth() === month && d.getFullYear() === year;
+    }).length;
+
+    // Monthly breakdown for current year
+    const monthly = MONTH_NAMES.map((name, i) => ({
+      name,
+      count: cars.filter((c) => {
+        const d = new Date(soldDate(c) || 0);
+        return d.getMonth() === i && d.getFullYear() === year;
+      }).length,
+    })).filter((m) => m.count > 0);
+
+    return { total_sold, this_month, monthly };
+  }, [cars]);
 
   // ── Trigger stat bar animations ─────────────────────────────
   useEffect(() => {
     if (loading) return;
-    const timeout = setTimeout(() => {
-      statsRef.current.forEach(el => el?.classList.add("animated"));
+    const t = setTimeout(() => {
+      statsRef.current.forEach((el) => el?.classList.add("animated"));
     }, 300);
-    return () => clearTimeout(timeout);
+    return () => clearTimeout(t);
   }, [loading]);
 
   // ── Filter + paginate ───────────────────────────────────────
   const filtered = filter === "All"
     ? cars
-    : cars.filter(c => (c.type || "").toLowerCase() === filter.toLowerCase());
+    : cars.filter((c) =>
+        (c.body_type || c.type || "").toLowerCase() === filter.toLowerCase()
+      );
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated  = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
   const handleFilter = (f) => { setFilter(f); setPage(1); };
-
-  // ── Image helper ────────────────────────────────────────────
-  const getImg = (car) =>
-    car.images?.[0]?.storage_path || car.img || null;
 
   return (
     <section className="sh-root">
@@ -150,21 +171,30 @@ export default function SoldHistory() {
           </Link>
         </div>
 
-        {/* ── Stats Row — 2 stats ── */}
+        {/* ── Stats Row: Total + one cell per month ── */}
         <div className="sh-stats">
-          {[
-            { label: t("sold_total"), value: stats.total_sold, prefix: "", suffix: "",      red: false },
-            { label: t("sold_month"), value: stats.this_month, prefix: "", suffix: " cars", red: true  },
-          ].map((s, i) => (
-            <div
-              key={i}
-              className="sh-stat"
-              ref={el => statsRef.current[i] = el}
-            >
-              <div className={`sh-stat-value ${s.red ? "red" : ""}`}>
-                <Counter target={s.value} prefix={s.prefix} suffix={s.suffix} />
+          <div className="sh-stat" ref={(el) => (statsRef.current[0] = el)}>
+            <div className="sh-stat-value">
+              <Counter target={stats.total_sold} />
+            </div>
+            <div className="sh-stat-label">{t("sold_total")}</div>
+            <div className="sh-stat-bar" />
+          </div>
+
+          {stats.monthly.length === 0 && !loading && (
+            <div className="sh-stat">
+              <div className="sh-stat-value red">0</div>
+              <div className="sh-stat-label">No sales yet</div>
+              <div className="sh-stat-bar" />
+            </div>
+          )}
+
+          {stats.monthly.map((m, i) => (
+            <div key={m.name} className="sh-stat" ref={(el) => (statsRef.current[i + 1] = el)}>
+              <div className="sh-stat-value red">
+                <Counter target={m.count} />
               </div>
-              <div className="sh-stat-label">{s.label}</div>
+              <div className="sh-stat-label">{m.name}</div>
               <div className="sh-stat-bar" />
             </div>
           ))}
@@ -172,7 +202,7 @@ export default function SoldHistory() {
 
         {/* ── Filter Tabs ── */}
         <div className="sh-filters">
-          {FILTERS.map(f => (
+          {FILTERS.map((f) => (
             <button
               key={f}
               className={`sh-filter-btn ${filter === f ? "active" : ""}`}
@@ -185,11 +215,8 @@ export default function SoldHistory() {
 
         {/* ── Product Grid ── */}
         <div className="sh-grid">
-
-          {/* Loading */}
           {loading && <SkeletonCards count={6} />}
 
-          {/* Empty */}
           {!loading && paginated.length === 0 && (
             <div className="sh-empty">
               <div className="sh-empty-icon">🚗</div>
@@ -197,38 +224,30 @@ export default function SoldHistory() {
             </div>
           )}
 
-          {/* Cards */}
           {!loading && paginated.map((car, i) => (
-            <div
-              key={car.id}
-              className="sh-car-card"
-              style={{ animationDelay: `${i * 0.06}s` }}
-            >
-              {/* Image */}
+            <div key={car.id} className="sh-car-card" style={{ animationDelay: `${i * 0.06}s` }}>
               <div className="sh-car-card-img-wrap">
                 {getImg(car)
                   ? <img className="sh-car-card-img" src={getImg(car)} alt={car.model} />
-                  : <div className="sh-car-card-img-placeholder">🚗</div>
-                }
+                  : <div className="sh-car-card-img-placeholder">🚗</div>}
                 <span className="sh-badge sold">
                   <span className="sh-badge-dot" />{t("sold_badge")}
                 </span>
               </div>
 
-              {/* Body */}
               <div className="sh-car-card-body">
                 <div className="sh-car-card-header">
                   <div>
                     <div className="sh-car-name">{car.brand} {car.model}</div>
                     <div className="sh-car-year">{car.year}</div>
                   </div>
-                  <div className="sh-price">฿{Number(car.sale_price).toLocaleString()}</div>
+                  <div className="sh-price">฿{Number(car.sale_price || 0).toLocaleString()}</div>
                 </div>
 
                 <div className="sh-car-card-meta">
                   <div className="sh-meta-item">
                     <span className="sh-meta-icon">🏷️</span>
-                    <span>{car.type || "—"}</span>
+                    <span>{car.body_type || car.type || "—"}</span>
                   </div>
                   <div className="sh-meta-item">
                     <span className="sh-meta-icon">🛣️</span>
@@ -236,13 +255,12 @@ export default function SoldHistory() {
                   </div>
                   <div className="sh-meta-item">
                     <span className="sh-meta-icon">📅</span>
-                    <span>{formatDate(car.sold_at)}</span>
+                    <span>{formatDate(soldDate(car))}</span>
                   </div>
                 </div>
               </div>
             </div>
           ))}
-
         </div>
 
         {/* ── Pagination ── */}
@@ -252,11 +270,7 @@ export default function SoldHistory() {
               {t("sold_showing")} {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} {t("sold_of")} {filtered.length} {t("sold_records")}
             </span>
             <div className="sh-page-btns">
-              <button
-                className="sh-page-btn"
-                onClick={() => setPage(p => p - 1)}
-                disabled={page === 1}
-              >‹</button>
+              <button className="sh-page-btn" onClick={() => setPage((p) => p - 1)} disabled={page === 1}>‹</button>
               {Array.from({ length: totalPages }).map((_, i) => (
                 <button
                   key={i}
@@ -266,11 +280,7 @@ export default function SoldHistory() {
                   {i + 1}
                 </button>
               ))}
-              <button
-                className="sh-page-btn"
-                onClick={() => setPage(p => p + 1)}
-                disabled={page === totalPages}
-              >›</button>
+              <button className="sh-page-btn" onClick={() => setPage((p) => p + 1)} disabled={page === totalPages}>›</button>
             </div>
           </div>
         )}

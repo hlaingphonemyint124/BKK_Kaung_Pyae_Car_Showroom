@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import {
   ShoppingBag, Key, Users, Clock, Plus,
   ChevronRight, CheckCircle2, XCircle, TrendingUp,
-  Car, Settings,
+  Car, Bookmark, Wrench,
 } from "lucide-react";
 
 import AdminMobileShell from "../components/AdminMobileShell";
@@ -60,8 +60,7 @@ function ActivityList({ title, icon: Icon, accent, cars, loading, onItemClick, b
           <Icon size={15} strokeWidth={2.2} />
         </div>
         <span className="dash-activity-head__title">{title}</span>
-        <span className="dash-activity-head__count"
-          style={{ background: `${accent}14`, color: accent }}>
+        <span className="dash-activity-head__count" style={{ background: `${accent}14`, color: accent }}>
           {loading ? "…" : cars.length}
         </span>
       </div>
@@ -151,7 +150,7 @@ function QuickActions() {
 function TeamSection({ user }) {
   const navigate = useNavigate();
   const employees = useEmployeesPreview();
-  const adminInitials = getInitials(user?.name || user?.email, "A");
+  const adminInitials = getInitials(user?.full_name || user?.name || user?.email, "A");
   const preview = employees.slice(0, 4);
   const emptySlots = Math.max(0, 4 - preview.length);
 
@@ -168,17 +167,17 @@ function TeamSection({ user }) {
         </button>
       </div>
 
-      {/* Admin profile */}
       <div className="dash-admin-row">
         <div className="dash-avatar"><span>{adminInitials}</span></div>
         <div className="dash-admin-info">
-          <div className="dash-admin-name">{user?.name || user?.email || "Admin"}</div>
+          <div className="dash-admin-name">
+            {user?.full_name || user?.name || user?.email?.split("@")[0] || "Admin"}
+          </div>
           {user?.email && <div className="dash-admin-email">{user.email}</div>}
         </div>
         <span className="dash-role-badge dash-role-badge--admin">Admin</span>
       </div>
 
-      {/* Employees */}
       <div className="dash-roles-sub">
         <span>Employees</span>
         <button className="dash-roles-add" type="button" onClick={() => navigate("/admin/roles")}>
@@ -216,42 +215,58 @@ export default function AdminDashboardPage() {
   const { stats, loading } = useDashboardStats();
   const { user } = useAuth();
 
-  const now   = new Date();
-  const hour  = now.getHours();
+  const now      = new Date();
+  const hour     = now.getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
   const monthLabel = `${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
-  const dateStr = now.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const dateStr  = now.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
   const v = (n) => (loading ? null : n ?? 0);
 
+  // ── Row 1: Sale (listing_type === "sale") ─────────────────
+  // ── Row 2: Rental (listing_type === "rent") ───────────────
   const availCards = [
     {
       icon: CheckCircle2,
-      label: "Available · Sale",
+      label: "Available Sale",
       value: v(stats?.availableSale),
       accent: "#e60000",
       sub: "Ready to sell",
     },
     {
+      icon: Bookmark,
+      label: "Reserved Sale",
+      value: v(stats?.reservedSale),
+      accent: "#f59e0b",
+      sub: "On hold",
+    },
+    {
+      icon: XCircle,
+      label: "Sold",
+      value: v(stats?.soldSale),
+      accent: "#6b7280",
+      sub: "Completed sales",
+    },
+    {
       icon: CheckCircle2,
-      label: "Available · Rental",
+      label: "Available Rental",
       value: v(stats?.availableRental),
       accent: "#3b82f6",
       sub: "Ready to rent",
     },
     {
-      icon: XCircle,
-      label: "Unavailable · Sale",
-      value: v(stats?.unavailableSale),
-      accent: "#f59e0b",
-      sub: "Sold / reserved",
+      icon: Wrench,
+      label: "Maintenance",
+      value: v(stats?.maintenanceRental),
+      accent: "#f97316",
+      sub: "In service",
     },
     {
-      icon: XCircle,
-      label: "Unavailable · Rental",
-      value: v(stats?.unavailableRental),
-      accent: "#f97316",
-      sub: "Rented / maintenance",
+      icon: Key,
+      label: "Rented",
+      value: v(stats?.rentedRental),
+      accent: "#8b5cf6",
+      sub: "Currently rented",
     },
   ];
 
@@ -263,12 +278,12 @@ export default function AdminDashboardPage() {
         <div className="dash-header">
           <div className="dash-header__left">
             <div className="dash-header__avatar">
-              {(user?.name || user?.email || "A")[0].toUpperCase()}
+              {(user?.full_name || user?.name || user?.email || "A")[0].toUpperCase()}
             </div>
             <div>
               <p className="dash-header__greeting">{greeting},</p>
               <h1 className="dash-header__name">
-                {user?.name || user?.email?.split("@")[0] || "Admin"}
+                {user?.full_name || user?.name || user?.email?.split("@")[0] || "Admin"}
               </h1>
             </div>
           </div>
@@ -284,15 +299,15 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* ── Availability Overview ── */}
-        <DashSectionHead label="Fleet Availability" />
+        {/* ── Fleet Overview — 6 cards (3 sale + 3 rental) ── */}
+        <DashSectionHead label="Fleet Overview" />
         <div className="dash-avail-grid">
           {availCards.map((c) => (
             <AvailCard key={c.label} {...c} loading={loading} />
           ))}
         </div>
 
-        {/* ── Monthly Performance ── */}
+        {/* ── Performance ── */}
         <DashSectionHead label={`Performance · ${monthLabel}`} />
         <div className="dash-perf-grid">
           <PerfCard
@@ -300,7 +315,7 @@ export default function AdminDashboardPage() {
             label="Total Sold"
             value={v(stats?.soldTotal)}
             accent="#e60000"
-            description="Cars with sold status"
+            description="listing_type = sale · status = sold"
             loading={loading}
           />
           <PerfCard
@@ -308,12 +323,12 @@ export default function AdminDashboardPage() {
             label="Active Rentals"
             value={v(stats?.rentedTotal)}
             accent="#3b82f6"
-            description="Currently rented out"
+            description="listing_type = rent · status = rented"
             loading={loading}
           />
         </div>
 
-        {/* ── Activity + Quick Actions ── */}
+        {/* ── Activity Lists ── */}
         <DashSectionHead label="Activity" />
         <div className="dash-activity-grid">
           <ActivityList
@@ -338,7 +353,7 @@ export default function AdminDashboardPage() {
           />
         </div>
 
-        {/* ── Quick Actions + Team side by side ── */}
+        {/* ── Management ── */}
         <DashSectionHead label="Management" />
         <div className="dash-mgmt-grid">
           <QuickActions />

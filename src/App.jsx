@@ -16,7 +16,8 @@ import Footer       from "./components/Footer";
 
 import Showroom        from "./pages/Showroom";
 import CarDetail       from "./pages/CarDetail";
-import SoldHistoryPage from "./pages/SoldHistoryPage";
+import SoldHistoryPage    from "./pages/SoldHistoryPage";
+import RentalHistoryPage  from "./pages/RentalHistoryPage";
 import LoginPage          from "./features/auth/pages/LoginPage";
 import SignupPage         from "./features/auth/pages/SignupPage";
 import VerifyEmailPage    from "./features/auth/pages/VerifyEmailPage";
@@ -90,7 +91,8 @@ function AppLayout() {
           <Route path="/"             element={<Home />} />
           <Route path="/showroom"     element={<Showroom />} />
           <Route path="/car/:id"      element={<CarDetail />} />
-          <Route path="/sold-history" element={<SoldHistoryPage />} />
+          <Route path="/sold-history"   element={<SoldHistoryPage />} />
+          <Route path="/rental-history" element={<RentalHistoryPage />} />
           <Route path="/login"        element={<LoginPage />} />
           <Route path="/signup"       element={<SignupPage />} />
           <Route path="/contact"      element={<ContactPage />} />
