@@ -266,12 +266,17 @@ function FeedbackForm() {
 }
 
 function mapFeedbackToCard(f) {
-  const name = f.customer_name || "Anonymous";
+  const name = f.customer_name || f.name || "Anonymous";
+
   return {
     name,
-    car: [f.car_brand, f.car_model].filter(Boolean).join(" ") || "General feedback",
+    car:
+      [f.car_brand, f.car_model]
+        .filter(Boolean)
+        .join(" ") || "General feedback",
+
     text: f.message,
-    rating: Number(f.rating) || 5,
+    rating: Number(f.stars) || 5,
     initials: name.slice(0, 2).toUpperCase(),
   };
 }
@@ -289,14 +294,19 @@ export default function Testimonials() {
   useEffect(() => {
     getApprovedFeedbacks()
       .then((res) => {
-        const list = res?.data?.feedbacks ?? res?.data ?? [];
+        const list =
+          res?.data?.feedback ||
+          res?.data?.feedbacks ||
+          res?.data ||
+          [];
+
         if (Array.isArray(list) && list.length > 0) {
           setApprovedCards(list.map(mapFeedbackToCard));
         }
       })
       .catch(() => {});
   }, []);
-
+  
   return (
     <section className="ts-section">
       <ParticleBackground />
