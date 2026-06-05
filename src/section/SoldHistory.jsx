@@ -4,7 +4,7 @@ import { getSoldHistory } from "../api/soldhistory.api";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 
-const FILTERS   = ["All", "Sedan", "SUV", "Pickup Truck", "Hatchback", "Electric"];
+const FILTERS = ["All", "Reserved", "Sold"];
 const PAGE_SIZE = 6;
 const MONTH_NAMES = [
   "January","February","March","April","May","June",
@@ -96,7 +96,7 @@ export default function SoldHistory() {
       .then((res) => {
         const raw = res?.data?.cars ?? res?.data ?? [];
         const sold = (Array.isArray(raw) ? raw : []).filter(
-          (c) => c.listing_type === "sale" && c.status === "sold"
+          (c) => c.listing_type === "sale" && (c.status === "sold" || c.status === "reserved")
         );
         setCars(sold);
       })
@@ -104,22 +104,26 @@ export default function SoldHistory() {
       .finally(() => setLoading(false));
   }, []);
 
-  // ── Derived stats (client-side) ─────────────────────────────
+  // ── Derived stats — only count status==="sold", not reserved ──
   const stats = useMemo(() => {
-    const now    = new Date();
-    const month  = now.getMonth();
-    const year   = now.getFullYear();
+    const now   = new Date();
+    const month = now.getMonth();
+    const year  = now.getFullYear();
 
-    const total_sold  = cars.length;
-    const this_month  = cars.filter((c) => {
+    // Stats operate only on sold cars; reserved cars appear in the list but not stats
+    const soldOnly = cars.filter((c) => c.status === "sold");
+
+    const total_sold = soldOnly.length;
+
+    const this_month = soldOnly.filter((c) => {
       const d = new Date(soldDate(c) || 0);
       return d.getMonth() === month && d.getFullYear() === year;
     }).length;
 
-    // Monthly breakdown for current year
+    // Monthly sold count for current year
     const monthly = MONTH_NAMES.map((name, i) => ({
       name,
-      count: cars.filter((c) => {
+      count: soldOnly.filter((c) => {
         const d = new Date(soldDate(c) || 0);
         return d.getMonth() === i && d.getFullYear() === year;
       }).length,
@@ -138,11 +142,11 @@ export default function SoldHistory() {
   }, [loading]);
 
   // ── Filter + paginate ───────────────────────────────────────
-  const filtered = filter === "All"
-    ? cars
-    : cars.filter((c) =>
-        (c.body_type || c.type || "").toLowerCase() === filter.toLowerCase()
-      );
+  const filtered =
+    filter === "All"      ? cars :
+    filter === "Sold"     ? cars.filter((c) => c.status === "sold") :
+    filter === "Reserved" ? cars.filter((c) => c.status === "reserved") :
+    cars;
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated  = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -171,13 +175,21 @@ export default function SoldHistory() {
           </Link>
         </div>
 
-        {/* ── Stats Row: Total + one cell per month ── */}
+        {/* ── Stats Row: Total Sold | Sold This Month | Jan | Feb … ── */}
         <div className="sh-stats">
           <div className="sh-stat" ref={(el) => (statsRef.current[0] = el)}>
             <div className="sh-stat-value">
               <Counter target={stats.total_sold} />
             </div>
-            <div className="sh-stat-label">{t("sold_total")}</div>
+            <div className="sh-stat-label">Total Cars Sold</div>
+            <div className="sh-stat-bar" />
+          </div>
+
+          <div className="sh-stat" ref={(el) => (statsRef.current[1] = el)}>
+            <div className="sh-stat-value red">
+              <Counter target={stats.this_month} />
+            </div>
+            <div className="sh-stat-label">Sold This Month</div>
             <div className="sh-stat-bar" />
           </div>
 
@@ -190,7 +202,7 @@ export default function SoldHistory() {
           )}
 
           {stats.monthly.map((m, i) => (
-            <div key={m.name} className="sh-stat" ref={(el) => (statsRef.current[i + 1] = el)}>
+            <div key={m.name} className="sh-stat" ref={(el) => (statsRef.current[i + 2] = el)}>
               <div className="sh-stat-value red">
                 <Counter target={m.count} />
               </div>

@@ -1,9 +1,13 @@
 import API from './api';
 
-// Fetch all sale-type cars (filter status client-side)
+// Sale cars (for sold history)
 export const getSoldHistory = () =>
   API.get('/cars', { params: { listing_type: 'sale', limit: 200 } });
 
-// Fetch all rent-type cars (filter status client-side)
+// Rental transaction records (admin-only)
+export const getAdminRentals = () =>
+  API.get('/admin/rentals', { params: { limit: 500 } });
+
+// Rent-type cars (for car-level data: images, maintenance status)
 export const getRentalHistory = () =>
   API.get('/cars', { params: { listing_type: 'rent', limit: 200 } });

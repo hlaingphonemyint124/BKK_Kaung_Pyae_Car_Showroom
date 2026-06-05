@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   getAdminCars,
+  getAdminCarById,
   deleteAdminCar,
+  deleteAdminCarImage,
   updateAdminCar,
 } from "../services/adminCarService";
 
@@ -98,7 +100,8 @@ function useAdminCars(type) {
       (c) => c.status === "maintenance" || c.status === "reserved"
     );
 
-    return typedCars;
+    // "all" tab — never show sold cars in the main listing
+    return typedCars.filter((c) => c.status !== "sold");
   }, [cars, type, activeTab]);
 
   const clearCar = async (id) => {
@@ -115,6 +118,20 @@ function useAdminCars(type) {
   const markAsStatus = async (id, newStatus) => {
     try {
       await updateAdminCar(id, { status: newStatus });
+
+      // When marking as sold: keep only 1 image (primary or first), delete the rest
+      if (newStatus === "sold") {
+        try {
+          const carData = await getAdminCarById(id);
+          const images  = carData?.images || [];
+          const keep    = images.find((img) => img.is_primary) || images[0];
+          const toDelete = images.filter((img) => img.id !== keep?.id);
+          await Promise.allSettled(toDelete.map((img) => deleteAdminCarImage(id, img.id)));
+        } catch (imgErr) {
+          console.warn("Image cleanup failed (non-critical):", imgErr);
+        }
+      }
+
       setCars((prev) =>
         prev.map((car) =>
           car.id === id
