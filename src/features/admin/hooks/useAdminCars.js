@@ -33,7 +33,8 @@ function useAdminCars(type) {
         })();
 
         const mappedCars = carList.map((car) => ({
-          id: car.id,
+          id: car.id ?? car._id,
+          _id: car._id,
           brand: car.brand || "",
           model: car.model || "",
           name: `${car.brand || ""} ${car.model || ""}`.trim(),
@@ -51,6 +52,7 @@ function useAdminCars(type) {
 
           sale_price: car.sale_price,
           rent_price_per_day: car.rent_price_per_day,
+          rent_count: car.rent_count,
 
           specs: {
             fuel: car.fuel_type || car.fuel || "Petrol",

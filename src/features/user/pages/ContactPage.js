@@ -17,6 +17,12 @@ import { SiLine, SiGmail } from "react-icons/si";
 
 import { getDealerContact } from "../service/contactService";
 
+const logSettingsDebug = (...args) => {
+  if (process.env.NODE_ENV === "development") {
+    console.log(...args);
+  }
+};
+
 function ContactPage() {
   const [searchParams] = useSearchParams();
   const carName = searchParams.get("car");
@@ -28,6 +34,7 @@ function ContactPage() {
     const loadContact = async () => {
       try {
         const data = await getDealerContact();
+        logSettingsDebug("PUBLIC_SETTINGS_RESPONSE", data);
         setContact(data.contact || data);
       } catch (error) {
         console.error("Failed to load dealer contact:", error);
@@ -99,7 +106,7 @@ function ContactPage() {
               <FaMapMarkerAlt />
             </div>
             <h3>Search Store</h3>
-            <p>Find our showroom location</p>
+            <p>{contact?.address || "Find our showroom location"}</p>
             <button
               type="button"
               className="contact-map-btn"

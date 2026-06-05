@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Footer.css";
 import {
@@ -10,10 +10,37 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import { useLanguage } from "../context/LanguageContext";
+import { getDealerContact } from "../features/user/service/contactService";
+
+const FALLBACK_CONTACT = {
+  phone_number: "+66 XX XXX XXXX",
+  gmail: "support@bkkkaungpyae.com",
+  address: "Bangkok, Thailand",
+  open_day_from: "Monday",
+  open_day_to: "Sunday",
+  open_time_from: "8 AM",
+  open_time_to: "6 PM",
+};
+
+const logSettingsDebug = (...args) => {
+  if (process.env.NODE_ENV === "development") {
+    console.log(...args);
+  }
+};
 
 export default function Footer() {
   const { t }    = useLanguage();
   const navigate = useNavigate();
+  const [contact, setContact] = useState(FALLBACK_CONTACT);
+
+  useEffect(() => {
+    getDealerContact()
+      .then((data) => {
+        logSettingsDebug("PUBLIC_SETTINGS_RESPONSE", data);
+        setContact({ ...FALLBACK_CONTACT, ...(data.contact || data) });
+      })
+      .catch(() => setContact(FALLBACK_CONTACT));
+  }, []);
 
   const QUICK_LINKS = [
     { label: t("footer_home"),   path: "/"       },
@@ -39,20 +66,24 @@ export default function Footer() {
 
             <div className="footer-hours">
               <span className="footer-hours-dot" />
-              {t("footer_hours")}
+              {contact.open_day_from} - {contact.open_day_to}, {contact.open_time_from} - {contact.open_time_to}
             </div>
 
             <div className="footer-social">
-              <button className="footer-social-btn whatsapp" aria-label="WhatsApp">
+              <button className="footer-social-btn whatsapp" aria-label="WhatsApp"
+                onClick={() => contact.whatsapp_contact && window.open(contact.whatsapp_contact, "_blank", "noopener,noreferrer")}>
                 <FaWhatsapp />
               </button>
-              <button className="footer-social-btn facebook" aria-label="Facebook">
+              <button className="footer-social-btn facebook" aria-label="Facebook"
+                onClick={() => contact.facebook_url && window.open(contact.facebook_url, "_blank", "noopener,noreferrer")}>
                 <FaFacebook />
               </button>
-              <button className="footer-social-btn instagram" aria-label="Instagram">
+              <button className="footer-social-btn instagram" aria-label="Instagram"
+                onClick={() => contact.instagram_url && window.open(contact.instagram_url, "_blank", "noopener,noreferrer")}>
                 <FaInstagram />
               </button>
-              <button className="footer-social-btn location" aria-label="Location">
+              <button className="footer-social-btn location" aria-label="Location"
+                onClick={() => contact.map_url && window.open(contact.map_url, "_blank", "noopener,noreferrer")}>
                 <FaMapMarkerAlt />
               </button>
             </div>
@@ -76,15 +107,15 @@ export default function Footer() {
             <div className="footer-contact-list">
               <div className="footer-contact-item">
                 <span className="footer-contact-icon"><FaPhoneAlt /></span>
-                <span>+66 XX XXX XXXX</span>
+                <span>{contact.phone_number || FALLBACK_CONTACT.phone_number}</span>
               </div>
               <div className="footer-contact-item">
                 <span className="footer-contact-icon"><FaEnvelope /></span>
-                <span>support@bkkkaungpyae.com</span>
+                <span>{contact.gmail || FALLBACK_CONTACT.gmail}</span>
               </div>
               <div className="footer-contact-item">
                 <span className="footer-contact-icon"><FaMapMarkerAlt /></span>
-                <span>Bangkok, Thailand</span>
+                <span>{contact.address || FALLBACK_CONTACT.address}</span>
               </div>
             </div>
           </div>

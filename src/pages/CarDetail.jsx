@@ -18,6 +18,7 @@ import {
   getPublicCarDocuments,
   getPublicRentalTerms,
 } from "../api/showroom.api";
+import { getApprovedFeedbacks } from "../api/feedbacks.api";
 import "./CarDetail.css";
 import { useLanguage } from "../context/LanguageContext";
 import Spinner from "../components/Spinner";
@@ -134,6 +135,7 @@ export default function CarDetail() {
   const [allCars, setAllCars] = useState([]);
   const [documents, setDocuments] = useState([]);
   const [rentalTerms, setRentalTerms] = useState([]);
+  const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -148,13 +150,15 @@ export default function CarDetail() {
     setAllCars([]);
     setDocuments([]);
     setRentalTerms([]);
+    setFeedbacks([]);
 
     Promise.all([
       getCarById(id),
       getPublicCarDocuments(id).catch(() => null),
       getPublicRentalTerms().catch(() => null),
+      getApprovedFeedbacks({ car_id: id }).catch(() => null),
     ])
-      .then(([carRes, docsRes, termsRes]) => {
+      .then(([carRes, docsRes, termsRes, feedbackRes]) => {
         const carData = carRes?.data?.car || carRes?.data?.data || carRes?.data;
 
         if (!carData?.id) {
@@ -171,6 +175,10 @@ export default function CarDetail() {
 
         const terms = normalizeArray(termsRes, "terms");
         setRentalTerms(terms);
+
+        const approvedFeedbacks = normalizeArray(feedbackRes?.data ?? feedbackRes, "feedbacks")
+          .filter((item) => item.status === "approved");
+        setFeedbacks(approvedFeedbacks);
 
         const isRentalCar = !!carData.rent_price_per_day && !carData.sale_price;
         const listFn = isRentalCar ? getCarsForRent : getCarsForSale;
@@ -569,6 +577,24 @@ export default function CarDetail() {
               {t("cd_contact_btn")}
             </button>
           </div>
+
+          {feedbacks.length > 0 && (
+            <div className="cd-panel cd-feedback-panel">
+              <p className="cd-section-label">Customer Reviews</p>
+
+              <div className="cd-feedback-list">
+                {feedbacks.map((item) => (
+                  <div key={item.id} className="cd-feedback-item">
+                    <div className="cd-feedback-head">
+                      <span className="cd-feedback-name">{item.customer_name || "Anonymous"}</span>
+                      <span className="cd-feedback-stars">{"★".repeat(Number(item.rating) || 0)}</span>
+                    </div>
+                    <p className="cd-feedback-comment">{item.comment}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

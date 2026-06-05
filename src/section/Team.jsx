@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Team.css";
 import ParticleBackground from "../components/ParticleBackground";
-import { getUsers } from "../features/admin/services/adminUsersService";
+import { getPublicTeam } from "../api/team.api";
 
 const getInitials = (name) => {
   if (!name) return "?";
@@ -10,6 +10,11 @@ const getInitials = (name) => {
 };
 
 const FALLBACK_CEO = { name: "Mr. Kaung Pyae Lwin", initials: "KP" };
+const logTeamDebug = (...args) => {
+  if (process.env.NODE_ENV === "development") {
+    console.log(...args);
+  }
+};
 
 export default function Team() {
   const navigate = useNavigate();
@@ -17,11 +22,14 @@ export default function Team() {
   const [members, setMembers]   = useState([]);
 
   useEffect(() => {
-    getUsers()
-      .then((data) => {
-        const list = data?.users || data || [];
+    logTeamDebug("TEAM_SECTION_MOUNTED");
+    getPublicTeam()
+      .then((response) => {
+        logTeamDebug("HOME_EMPLOYEES_RESPONSE", response.data);
+        const list = response.data?.users || response.data?.data?.users || response.data?.data || response.data || [];
         const adminUser = list.find((u) => u.role === "admin");
         const employees = list.filter((u) => u.role === "employee" && u.is_active !== false);
+        logTeamDebug("HOME_EMPLOYEES_NORMALIZED", employees);
 
         setCeo(adminUser
           ? { name: adminUser.full_name || adminUser.email, initials: getInitials(adminUser.full_name || adminUser.email) }
@@ -31,7 +39,7 @@ export default function Team() {
         setMembers(employees.map((u) => ({
           id:       u.id,
           name:     u.full_name || u.email,
-          role:     "Employee",
+          role:     u.position || "Team Member",
           initials: getInitials(u.full_name || u.email),
         })));
       })
@@ -40,6 +48,10 @@ export default function Team() {
         setMembers([]);
       });
   }, []);
+
+  useEffect(() => {
+    logTeamDebug("HOME_EMPLOYEES_RENDERED", members.map((employee) => employee.name));
+  }, [members]);
 
   const displayCeo = ceo || FALLBACK_CEO;
 

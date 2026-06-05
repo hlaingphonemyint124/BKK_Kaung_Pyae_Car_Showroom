@@ -9,7 +9,8 @@ const getImg = (car) =>
   null;
 
 const normalize = (car) => ({
-  id:                 car.id,
+  id:                 car.id ?? car._id,
+  _id:                car._id,
   brand:              car.brand || "",
   model:              car.model || "",
   year:               car.year  || null,
@@ -17,8 +18,18 @@ const normalize = (car) => ({
   listing_type:       car.listing_type,
   sale_price:         car.sale_price,
   rent_price_per_day: car.rent_price_per_day,
+  rent_count:         car.rent_count,
   image:              getImg(car),
 });
+
+const isRentalCar = (car) =>
+  car?.listing_type === "rent" ||
+  car?.listing_type === "rental" ||
+  (car?.listing_type == null && car?.rent_price_per_day != null);
+
+const isSaleCar = (car) =>
+  car?.listing_type === "sale" ||
+  (car?.listing_type == null && car?.sale_price != null);
 
 function useDashboardStats() {
   const [stats, setStats] = useState(null);
@@ -29,8 +40,8 @@ function useDashboardStats() {
       .then((data) => {
         const cars = data?.cars || data?.data?.cars || data?.data || data?.rows || [];
 
-        const sale = cars.filter((c) => c.listing_type === "sale");
-        const rent = cars.filter((c) => c.listing_type === "rent");
+        const sale = cars.filter(isSaleCar);
+        const rent = cars.filter(isRentalCar);
 
         setStats({
           // ── Sale stats ──────────────────────────────────

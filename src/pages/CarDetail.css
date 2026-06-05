@@ -771,3 +771,42 @@ body.dark .cd-similar-card {
 body.dark .cd-similar-card:hover {
   border-color: rgba(var(--color-red-rgb), 0.28);
 }
+.cd-feedback-panel {
+  margin-top: 18px;
+}
+
+.cd-feedback-list {
+  display: grid;
+  gap: 12px;
+}
+
+.cd-feedback-item {
+  padding: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.cd-feedback-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.cd-feedback-name {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.cd-feedback-stars {
+  color: #f59e0b;
+  white-space: nowrap;
+}
+
+.cd-feedback-comment {
+  margin: 0;
+  color: #475569;
+  line-height: 1.55;
+}

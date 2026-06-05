@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import "./Testimonials.css";
 import { useLanguage } from "../context/LanguageContext";
 import ParticleBackground from "../components/ParticleBackground";
+import { submitFeedback, getApprovedFeedbacks } from "../api/feedbacks.api";
 
 const data = [
   {
@@ -153,20 +154,44 @@ function FeedbackForm() {
   const [name, setName]           = useState("");
   const [text, setText]           = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const active = hover || rating;
+  const logFeedbackDebug = (...args) => {
+    if (process.env.NODE_ENV === "development") {
+      console.log(...args);
+    }
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (rating === 0 || !text.trim()) return;
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setRating(0);
-      setHover(0);
-      setName("");
-      setText("");
-    }, 3000);
+
+    setSubmitting(true);
+    setError("");
+
+    try {
+      const payload = {
+        customer_name: name.trim() || "Anonymous",
+        stars: Number(rating),
+        message: text.trim(),
+      };
+      logFeedbackDebug("FEEDBACK_SUBMIT_PAYLOAD", payload);
+      await submitFeedback(payload);
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setRating(0);
+        setHover(0);
+        setName("");
+        setText("");
+      }, 3000);
+    } catch (err) {
+      setError(err?.response?.data?.error || "Failed to submit review.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -174,7 +199,7 @@ function FeedbackForm() {
       <div className="ts-feedback ts-feedback--success">
         <div className="ts-feedback__success-icon">✓</div>
         <p className="ts-feedback__success-title">Thank you for your review!</p>
-        <p className="ts-feedback__success-sub">Your feedback helps us serve you better.</p>
+        <p className="ts-feedback__success-sub">Your feedback is pending admin approval.</p>
       </div>
     );
   }
@@ -230,22 +255,46 @@ function FeedbackForm() {
         <button
           type="submit"
           className="ts-feedback__submit"
-          disabled={rating === 0 || !text.trim()}
+          disabled={submitting || rating === 0 || !text.trim()}
         >
-          Submit Review
+          {submitting ? "Submitting..." : "Submit Review"}
         </button>
       </div>
+      {error && <p className="ts-feedback__error">{error}</p>}
     </form>
   );
+}
+
+function mapFeedbackToCard(f) {
+  const name = f.customer_name || "Anonymous";
+  return {
+    name,
+    car: [f.car_brand, f.car_model].filter(Boolean).join(" ") || "General feedback",
+    text: f.message,
+    rating: Number(f.rating) || 5,
+    initials: name.slice(0, 2).toUpperCase(),
+  };
 }
 
 export default function Testimonials() {
   const { t } = useLanguage();
   const [titleVisible, setTitleVisible] = useState(false);
+  const [approvedCards, setApprovedCards] = useState([]);
 
   useEffect(() => {
     const timer = setTimeout(() => setTitleVisible(true), 50);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    getApprovedFeedbacks()
+      .then((res) => {
+        const list = res?.data?.feedbacks ?? res?.data ?? [];
+        if (Array.isArray(list) && list.length > 0) {
+          setApprovedCards(list.map(mapFeedbackToCard));
+        }
+      })
+      .catch(() => {});
   }, []);
 
   return (
@@ -266,7 +315,7 @@ export default function Testimonials() {
       </p>
 
       <div className="ts-grid">
-        {data.map((item, i) => (
+        {(approvedCards.length > 0 ? approvedCards : data).map((item, i) => (
           <TestimonialCard key={i} t={item} index={i} />
         ))}
       </div>

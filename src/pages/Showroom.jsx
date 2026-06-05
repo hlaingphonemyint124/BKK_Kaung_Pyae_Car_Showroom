@@ -225,7 +225,7 @@ export default function Showroom() {
   };
 
   const isMostRented = (car) =>
-    Number(car.rent_count ?? car.total_rented ?? 0) > 0;
+    Number(car.rent_count ?? 0) > 0;
 
   const filteredCars = useMemo(() => {
     const getPrice = (car) =>

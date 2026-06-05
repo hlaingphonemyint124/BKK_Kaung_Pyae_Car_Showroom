@@ -8,7 +8,7 @@ import {
   Mail,
   MapPin,
 } from "lucide-react";
-import { FaViber } from "react-icons/fa";
+import { FaTelegramPlane, FaViber, FaWhatsapp } from "react-icons/fa";
 import {
   getAdminDealerContact,
   updateAdminDealerContact,
@@ -43,6 +43,9 @@ const DEFAULT_FORM = {
   gmail: "",
   viber_contact: "",
   wechat_contact: "",
+  whatsapp_contact: "",
+  telegram_contact: "",
+  address: "",
   map_url: "",
 };
 
@@ -90,6 +93,27 @@ const CONTACT_FIELDS = [
     placeholder: "Viber phone/link",
   },
   {
+    key: "whatsapp_contact",
+    label: "WhatsApp",
+    Icon: FaWhatsapp,
+    color: "#25d366",
+    placeholder: "WhatsApp phone/link",
+  },
+  {
+    key: "telegram_contact",
+    label: "Telegram",
+    Icon: FaTelegramPlane,
+    color: "#229ed9",
+    placeholder: "Telegram username/link",
+  },
+  {
+    key: "address",
+    label: "Address",
+    Icon: MapPin,
+    color: "#ef2b2d",
+    placeholder: "Showroom address",
+  },
+  {
     key: "map_url",
     label: "Google Map",
     Icon: MapPin,
@@ -97,6 +121,12 @@ const CONTACT_FIELDS = [
     placeholder: "https://maps.google.com/...",
   },
 ];
+
+const logSettingsDebug = (...args) => {
+  if (process.env.NODE_ENV === "development") {
+    console.log(...args);
+  }
+};
 
 function BusinessSettingsSection() {
   const [form, setForm] = useState(DEFAULT_FORM);
@@ -109,6 +139,7 @@ function BusinessSettingsSection() {
     const loadSettings = async () => {
       try {
         const data = await getAdminDealerContact();
+        logSettingsDebug("PUBLIC_SETTINGS_RESPONSE", data);
         const contact = data.contact || data;
 
         setForm({
@@ -138,7 +169,9 @@ function BusinessSettingsSection() {
       setSaving(true);
       setMessage("");
 
-      await updateAdminDealerContact(form);
+      logSettingsDebug("BUSINESS_SETTINGS_SAVE_PAYLOAD", form);
+      const response = await updateAdminDealerContact(form);
+      logSettingsDebug("BUSINESS_SETTINGS_SAVE_RESPONSE", response);
 
       setMessage("Business settings updated successfully.");
     } catch (error) {

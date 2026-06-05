@@ -692,3 +692,9 @@ body.dark .ts-section .sec-blob:nth-child(3) { animation-delay: -4.8s; }
   .ts-feedback { padding: 18px 16px; }
   .ts-feedback__star { font-size: 24px; }
 }
+.ts-feedback__error {
+  margin: 10px 0 0;
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 700;
+}

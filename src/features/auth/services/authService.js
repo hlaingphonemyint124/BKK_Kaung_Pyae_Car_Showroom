@@ -2,13 +2,35 @@ import api from "../../../api/api";
 
 // LOGIN
 export const loginUser = async (userData) => {
-  const { data } = await api.post("/auth/login", userData);
-  return data;
+  const payload = {
+    ...userData,
+    email: String(userData.email || "").trim().toLowerCase(),
+  };
+  if (process.env.NODE_ENV === "development") {
+    console.log("LOGIN_PAYLOAD_SAFE", { email: payload.email });
+  }
+
+  try {
+    const response = await api.post("/auth/login", payload);
+    if (process.env.NODE_ENV === "development") {
+      console.log("LOGIN_RESPONSE_STATUS", response.status);
+    }
+    return response.data;
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.log("LOGIN_RESPONSE_STATUS", error.response?.status);
+      console.log("LOGIN_ERROR", error.response?.data?.error || error.response?.data?.message || error.message);
+    }
+    throw error;
+  }
 };
 
 // SIGN UP
 export const signupUser = async (payload) => {
-  const { data } = await api.post("/auth/register", payload);
+  const { data } = await api.post("/auth/register", {
+    ...payload,
+    email: String(payload.email || "").trim().toLowerCase(),
+  });
   return data;
 };
 

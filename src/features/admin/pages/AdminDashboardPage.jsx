@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import {
   ShoppingBag, Key, Users, Clock, Plus,
   ChevronRight, CheckCircle2, XCircle, TrendingUp,
-  Car, Bookmark, Wrench,
+  Car, Bookmark, Wrench, MessageSquare,
 } from "lucide-react";
 
 import AdminMobileShell from "../components/AdminMobileShell";
@@ -138,6 +138,15 @@ function QuickActions() {
           <div className="dash-add-card__text">
             <span className="dash-add-card__title">Add For Rental</span>
             <span className="dash-add-card__sub">List a rental vehicle</span>
+          </div>
+          <ChevronRight size={16} className="dash-add-card__arrow" />
+        </button>
+        <button className="dash-add-card dash-add-card--feedback" type="button"
+          onClick={() => navigate("/admin/feedback")}>
+          <div className="dash-add-card__icon"><MessageSquare size={20} /></div>
+          <div className="dash-add-card__text">
+            <span className="dash-add-card__title">Review Feedback</span>
+            <span className="dash-add-card__sub">Approve customer reviews</span>
           </div>
           <ChevronRight size={16} className="dash-add-card__arrow" />
         </button>
