@@ -133,9 +133,11 @@ function TestimonialCard({ t, index }) {
         <div className="ts-header">
           <div>
             <div className="ts-name">{t.name}</div>
-            <div className="ts-car">
-              <span className="ts-car-icon">⬡</span> {t.car}
-            </div>
+            {t.car && (
+              <div className="ts-car">
+                <span className="ts-car-icon">⬡</span> {t.car}
+              </div>
+            )}
           </div>
           <div className="ts-stars">{"★".repeat(t.rating)}</div>
         </div>
@@ -174,8 +176,8 @@ function FeedbackForm() {
     try {
       const payload = {
         customer_name: name.trim() || "Anonymous",
-        stars: Number(rating),
-        message: text.trim(),
+        rating: Number(rating),
+        comment: text.trim(),
       };
       logFeedbackDebug("FEEDBACK_SUBMIT_PAYLOAD", payload);
       await submitFeedback(payload);
@@ -270,13 +272,9 @@ function mapFeedbackToCard(f) {
 
   return {
     name,
-    car:
-      [f.car_brand, f.car_model]
-        .filter(Boolean)
-        .join(" ") || "General feedback",
-
-    text: f.message,
-    rating: Number(f.stars) || 5,
+    car: [f.car_brand, f.car_model].filter(Boolean).join(" ") || null,
+    text: f.comment,
+    rating: Number(f.rating) || 5,
     initials: name.slice(0, 2).toUpperCase(),
   };
 }
@@ -295,8 +293,8 @@ export default function Testimonials() {
     getApprovedFeedbacks()
       .then((res) => {
         const list =
-          res?.data?.feedback ||
           res?.data?.feedbacks ||
+          res?.data?.feedback ||
           res?.data ||
           [];
 

@@ -15,11 +15,7 @@ const FILTERS = [
   { label: "Rejected", value: "rejected" },
 ];
 
-const getFeedbackStatus = (item) => {
-  if (item.is_approved === true) return "approved";
-  if (item.is_approved === false) return "rejected";
-  return "pending";
-};
+const getFeedbackStatus = (item) => item.status || "pending";
 
 const formatDate = (value) => {
   if (!value) return "-";
@@ -190,9 +186,9 @@ export default function AdminFeedbacksPage() {
                         <td>{item.customer_name || item.name || "Anonymous"}</td>
                         <td>{getCarName(item)}</td>
                         <td>
-                          <span className="feedback-rating">{"★".repeat(Number(item.stars) || 0)}</span>
+                          <span className="feedback-rating">{"★".repeat(Number(item.rating) || 0)}</span>
                         </td>
-                        <td className="feedback-comment">{item.message}</td>
+                        <td className="feedback-comment">{item.comment}</td>
                         <td><FeedbackStatusBadge status={getFeedbackStatus(item)} /></td>
                         <td>{formatDate(item.created_at)}</td>
                         <td>

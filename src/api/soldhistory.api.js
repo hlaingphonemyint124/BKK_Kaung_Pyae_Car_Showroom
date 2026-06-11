@@ -4,6 +4,10 @@ import API from './api';
 export const getSoldHistory = () =>
   API.get('/cars', { params: { listing_type: 'sale', limit: 200 } });
 
+// Backend-authoritative sold stats (counts all cars, incl. unpublished)
+export const getSoldStats = () =>
+  API.get('/cars/sold/stats');
+
 // Rental transaction records (admin-only)
 export const getAdminRentals = () =>
   API.get('/admin/rentals', { params: { limit: 500 } });

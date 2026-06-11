@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import "./SoldHistory.css";
-import { getSoldHistory } from "../api/soldhistory.api";
+import { getSoldHistory, getSoldStats } from "../api/soldhistory.api";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -84,14 +84,26 @@ function SkeletonCards({ count = 6 }) {
 export default function SoldHistory() {
   const { t }             = useLanguage();
   const [cars, setCars]   = useState([]);
+  const [backendStats, setBackendStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter]   = useState("All");
   const [page, setPage]       = useState(1);
   const statsRef              = useRef([]);
 
-  // ── Fetch — compute stats client-side ──────────────────────
+  // ── Fetch cars + backend stats in parallel ──────────────────
   useEffect(() => {
     setLoading(true);
+
+    getSoldStats()
+      .then((res) => {
+        const d = res?.data?.data ?? res?.data ?? {};
+        setBackendStats({
+          total_sold: Number(d.total_sold) || 0,
+          this_month: Number(d.this_month) || 0,
+        });
+      })
+      .catch(() => {}); // non-fatal; client-side fallback used if this fails
+
     getSoldHistory()
       .then((res) => {
         const raw = res?.data?.cars ?? res?.data ?? [];
@@ -104,23 +116,21 @@ export default function SoldHistory() {
       .finally(() => setLoading(false));
   }, []);
 
-  // ── Derived stats — only count status==="sold", not reserved ──
+  // ── Derived stats — backend totals take priority; monthly from cars ──
   const stats = useMemo(() => {
     const now   = new Date();
     const month = now.getMonth();
     const year  = now.getFullYear();
 
-    // Stats operate only on sold cars; reserved cars appear in the list but not stats
     const soldOnly = cars.filter((c) => c.status === "sold");
 
-    const total_sold = soldOnly.length;
-
-    const this_month = soldOnly.filter((c) => {
+    // Use backend stats when available (counts all cars incl. unpublished)
+    const total_sold = backendStats?.total_sold ?? soldOnly.length;
+    const this_month = backendStats?.this_month ?? soldOnly.filter((c) => {
       const d = new Date(soldDate(c) || 0);
       return d.getMonth() === month && d.getFullYear() === year;
     }).length;
 
-    // Monthly sold count for current year
     const monthly = MONTH_NAMES.map((name, i) => ({
       name,
       count: soldOnly.filter((c) => {
@@ -130,7 +140,7 @@ export default function SoldHistory() {
     })).filter((m) => m.count > 0);
 
     return { total_sold, this_month, monthly };
-  }, [cars]);
+  }, [cars, backendStats]);
 
   // ── Trigger stat bar animations ─────────────────────────────
   useEffect(() => {

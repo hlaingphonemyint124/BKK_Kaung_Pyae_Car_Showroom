@@ -39,7 +39,7 @@ export default function Team() {
         setMembers(employees.map((u) => ({
           id:       u.id,
           name:     u.full_name || u.email,
-          role:     u.position || "Team Member",
+          role:     u.role === "admin" ? "Chief Executive Officer" : "Sales Consultant",
           initials: getInitials(u.full_name || u.email),
         })));
       })
