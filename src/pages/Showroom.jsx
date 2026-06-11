@@ -234,10 +234,10 @@ export default function Showroom() {
         : Number(car.rent_price_per_day || 0);
 
     const base = cars.filter((car) => {
-      // Availability: admins see everything; customers see only available cars
-      // with matching listing_type (falls back to price check for older data)
-      const expectedType = mode === "buy" ? "sale" : "rent";
-      const matchesListing = car.listing_type === expectedType;
+      const matchesListing =
+        mode === "buy"
+          ? Number(car.sale_price) > 0
+          : Number(car.rent_price_per_day) > 0;
 
       const isAvailable = car.status === "available";
 
