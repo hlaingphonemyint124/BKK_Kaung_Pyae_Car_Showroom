@@ -31,6 +31,7 @@ import AdminBuyPage          from "./features/admin/pages/AdminBuyPage";
 import AdminRentalPage       from "./features/admin/pages/AdminRentalPage";
 import AdminBuyDetailPage    from "./features/admin/pages/AdminBuyDetailPage";
 import AdminRentalDetailPage from "./features/admin/pages/AdminRentalDetailPage";
+import AdminRentalRecordPage from "./features/admin/pages/AdminRentalRecordPage";
 import AdminRolesPage        from "./features/admin/pages/AdminRolesPage";
 import AdminFeedbacksPage    from "./features/admin/pages/AdminFeedbacksPage";
 import ProtectedRoute        from "./features/admin/components/ProtectedRoute";
@@ -148,6 +149,14 @@ function AppLayout() {
             element={
               <ProtectedRoute allowedRoles={ADMIN_ROLES}>
                 <AdminRentalDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/rentals/new"
+            element={
+              <ProtectedRoute allowedRoles={ADMIN_ROLES}>
+                <AdminRentalRecordPage />
               </ProtectedRoute>
             }
           />

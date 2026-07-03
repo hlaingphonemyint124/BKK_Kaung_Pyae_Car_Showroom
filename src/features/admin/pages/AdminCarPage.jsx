@@ -273,11 +273,17 @@ function AdminCarPage({ mode }) {
                 setActiveCardId(null);
               }}
               thirdActionLabel={
-                mode === "buy" ? "Mark as Reserved" : "Mark as Rented"
+                mode === "buy" ? "Mark as Reserved" : "Create Rental Record"
               }
-              thirdActionHandler={() =>
-                markAsStatus(car.id, mode === "buy" ? "reserved" : "rented")
-              }
+              thirdActionHandler={() => {
+                if (mode === "buy") {
+                  markAsStatus(car.id, "reserved");
+                  return;
+                }
+
+                setActiveCardId(null);
+                navigate(`/admin/rentals/new?car_id=${encodeURIComponent(car.id)}`);
+              }}
               fourthActionLabel={
                 mode === "buy" ? "Mark as Sold" : "Mark as Unavailable"
               }

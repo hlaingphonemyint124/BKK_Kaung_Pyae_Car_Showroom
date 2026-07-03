@@ -276,14 +276,15 @@ export default function RentalHistoryPage() {
       .slice(0, 10);
 
     const mostRented       = perCarList[0] || null;
+    const currentlyRentedCount = historyCars.filter((c) => c.status === "rented").length;
     const maintenanceCount = historyCars.filter((c) => c.status === "maintenance").length;
 
     logRentDebug("[RentalHistory] final stats:", {
-      totalRentalCount, thisMonth, maintenanceCount,
+      totalRentalCount, thisMonth, currentlyRentedCount, maintenanceCount,
       perCarList: perCarList.map(p => `${p.brand} ${p.model}: ${p.count}`),
     });
 
-    return { totalRentalCount, thisMonth, monthly, perCarList, mostRented, maintenanceCount, rentCountByCarId };
+    return { totalRentalCount, thisMonth, monthly, perCarList, mostRented, currentlyRentedCount, maintenanceCount, rentCountByCarId };
   }, [transactions, cars, historyCars]);
 
   /* ── Stat bar animations ─────────────────────────────────── */
@@ -329,7 +330,7 @@ export default function RentalHistoryPage() {
           <div className="sh-stats">
             <div className="sh-stat" ref={(el) => (statsRef.current[0] = el)}>
               <div className="sh-stat-value blue"><Counter target={stats.totalRentalCount} /></div>
-              <div className="sh-stat-label">Total Rental Count</div>
+              <div className="sh-stat-label">Rental Transactions</div>
               <div className="sh-stat-bar" />
             </div>
 
@@ -340,12 +341,10 @@ export default function RentalHistoryPage() {
             </div>
 
             <div className="sh-stat" ref={(el) => (statsRef.current[2] = el)}>
-              <div className="sh-stat-value blue" style={{ fontSize: 16 }}>
-                {loading ? "—" : stats.mostRented
-                  ? `${stats.mostRented.brand} ${stats.mostRented.model}`
-                  : "—"}
+              <div className="sh-stat-value blue">
+                <Counter target={stats.currentlyRentedCount} />
               </div>
-              <div className="sh-stat-label">Most Rented Car</div>
+              <div className="sh-stat-label">Currently Rented Cars</div>
               <div className="sh-stat-bar" />
             </div>
 

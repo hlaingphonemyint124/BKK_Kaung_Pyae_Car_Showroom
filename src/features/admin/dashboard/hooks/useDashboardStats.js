@@ -27,6 +27,10 @@ const isRentalCar = (car) =>
   car?.listing_type === "rental" ||
   (car?.listing_type == null && car?.rent_price_per_day != null);
 
+const hasRentalListingType = (car) =>
+  car?.listing_type === "rent" ||
+  car?.listing_type === "rental";
+
 const isSaleCar = (car) =>
   car?.listing_type === "sale" ||
   (car?.listing_type == null && car?.sale_price != null);
@@ -42,6 +46,12 @@ function useDashboardStats() {
 
         const sale = cars.filter(isSaleCar);
         const rent = cars.filter(isRentalCar);
+        const availableRental = rent.filter((c) => c.status === "available").length;
+        const unavailableRental = cars.filter(
+          (c) =>
+            hasRentalListingType(c) &&
+            (c.status === "rented" || c.status === "maintenance")
+        ).length;
 
         setStats({
           // ── Sale stats ──────────────────────────────────
@@ -50,7 +60,9 @@ function useDashboardStats() {
           soldSale:       sale.filter((c) => c.status === "sold").length,
 
           // ── Rental stats ─────────────────────────────────
-          availableRental:   rent.filter((c) => c.status === "available").length,
+          availableRental,
+          unavailableRental,
+          totalRental:       availableRental + unavailableRental,
           rentedRental:      rent.filter((c) => c.status === "rented").length,
           maintenanceRental: rent.filter((c) => c.status === "maintenance").length,
 

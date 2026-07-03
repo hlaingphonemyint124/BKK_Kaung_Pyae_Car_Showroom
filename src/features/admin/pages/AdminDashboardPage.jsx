@@ -265,17 +265,17 @@ export default function AdminDashboardPage() {
     },
     {
       icon: Wrench,
-      label: "Maintenance",
-      value: v(stats?.maintenanceRental),
+      label: "Unavailable Rental",
+      value: v(stats?.unavailableRental),
       accent: "#f97316",
-      sub: "In service",
+      sub: "Rented or maintenance",
     },
     {
       icon: Key,
-      label: "Rented",
-      value: v(stats?.rentedRental),
+      label: "Total Rental Cars",
+      value: v(stats?.totalRental),
       accent: "#8b5cf6",
-      sub: "Currently rented",
+      sub: "All rental vehicles",
     },
   ];
 
