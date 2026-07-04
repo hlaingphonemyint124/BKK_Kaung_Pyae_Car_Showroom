@@ -18,9 +18,7 @@ export const promoteToEmployee = async (id) => {
 };
 
 export const demoteToClient = async (id) => {
-  const res = await API.patch(`/admin/users/${id}/role`, {
-    role: "client",
-  });
+  const res = await API.patch(`/admin/users/${id}/role/demote`, {});
   return res.data;
 };
 
