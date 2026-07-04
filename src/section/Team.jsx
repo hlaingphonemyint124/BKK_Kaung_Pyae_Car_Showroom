@@ -38,9 +38,9 @@ export default function Team() {
 
         setMembers(employees.map((u) => ({
           id:       u.id,
-          name:     u.full_name || u.email,
+          name:     u.name || u.full_name || u.email,
           role:     u.role === "admin" ? "Chief Executive Officer" : "Sales Consultant",
-          initials: getInitials(u.full_name || u.email),
+          initials: getInitials(u.name || u.full_name || u.email),
         })));
       })
       .catch(() => {
