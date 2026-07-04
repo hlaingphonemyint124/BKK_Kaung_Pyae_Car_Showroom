@@ -1,6 +1,10 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import "../section/SoldHistory.css";
-import { getAdminRentals, getRentalHistory } from "../api/soldhistory.api";
+import { getRentalHistory } from "../api/soldhistory.api";
+import {
+  getAdminRentals,
+  updateAdminRentalStatus,
+} from "../features/admin/services/adminRentalService";
 
 const FILTERS     = ["All", "Rented", "Maintenance"];
 const PAGE_SIZE   = 6;
@@ -54,7 +58,7 @@ const logRentDebug = (...args) => {
 
 /* ─── Response normalizers ────────────────────────────────────── */
 function normalizeRentals(res) {
-  const d = res?.data;
+  const d = res?.data ?? res;
   if (Array.isArray(d))                return d;
   if (Array.isArray(d?.rentals))       return d.rentals;
   if (Array.isArray(d?.data?.rentals)) return d.data.rentals;
@@ -66,7 +70,7 @@ function normalizeRentals(res) {
 }
 
 function normalizeCars(res) {
-  const data = res?.data?.cars ?? res?.data ?? [];
+  const data = res?.data?.cars ?? res?.cars ?? res?.data ?? [];
   return Array.isArray(data) ? data : [];
 }
 
@@ -84,6 +88,48 @@ function getImg(car) {
     car?.images?.[0]?.storage_path ||
     null;
 }
+
+function getRentalId(tx) {
+  return tx.id ?? tx._id ?? tx.rental_id;
+}
+
+function getRecordCarName(tx) {
+  const brand = tx.car_brand || tx.car?.brand || tx.vehicle?.brand || "";
+  const model = tx.car_model || tx.car?.model || tx.vehicle?.model || "";
+  return `${brand} ${model}`.trim() || "—";
+}
+
+function getRecordCustomerName(tx) {
+  return tx.customer_name || tx.customer?.full_name || tx.customer?.name || "—";
+}
+
+function formatMoney(value) {
+  if (value == null || value === "") return "—";
+  const num = Number(value);
+  return Number.isNaN(num) ? "—" : `${num.toLocaleString()} THB`;
+}
+
+const rentalActionsFor = (status) => {
+  switch (normalizeStatus(status)) {
+    case "pending":
+      return [
+        { label: "Confirm", payload: { status: "confirmed" } },
+        { label: "Cancel", payload: { status: "cancelled", cancelled_reason: "Cancelled by admin" } },
+      ];
+    case "confirmed":
+      return [
+        { label: "Activate", payload: { status: "active" } },
+        { label: "Cancel", payload: { status: "cancelled", cancelled_reason: "Cancelled by admin" } },
+      ];
+    case "active":
+      return [
+        { label: "Complete", payload: { status: "completed" } },
+        { label: "Cancel", payload: { status: "cancelled", cancelled_reason: "Cancelled by admin" } },
+      ];
+    default:
+      return [];
+  }
+};
 
 function statusLabel(status) {
   switch (normalizeStatus(status)) {
@@ -158,45 +204,67 @@ export default function RentalHistoryPage() {
   const [loading, setLoading]           = useState(true);
   const [filter, setFilter]             = useState("All");
   const [page, setPage]                 = useState(1);
+  const [updatingRentalId, setUpdatingRentalId] = useState(null);
+  const [actionError, setActionError]   = useState("");
   const statsRef                        = useRef([]);
+
+  const fetchRentalRecords = useCallback(async () => {
+    try {
+      const res = await getAdminRentals();
+      const list = normalizeRentals(res);
+      logRentDebug("rentals sample", list.slice(0, 5));
+      logRentDebug(list.map(tx => ({
+        rentalId: tx.id,
+        status: tx.status,
+        normalizedCarId: getRentalCarId(tx),
+      })));
+      setTransactions(list);
+      return list;
+    } catch (err) {
+      console.warn("[RentalHistory] /admin/rentals failed:", err?.response?.status, err?.message);
+      setTransactions([]);
+      return [];
+    }
+  }, []);
+
+  const fetchRentalCars = useCallback(async () => {
+    try {
+      const res = await getRentalHistory();
+      const list = normalizeCars(res).filter(isRentalCar);
+      logRentDebug("cars sample", list.slice(0, 5));
+      setCars(list);
+      return list;
+    } catch (err) {
+      console.warn("[RentalHistory] /cars failed:", err?.message);
+      setCars([]);
+      return [];
+    }
+  }, []);
+
+  const handleRentalStatus = async (tx, payload) => {
+    const rentalId = getRentalId(tx);
+    if (!rentalId || updatingRentalId) return;
+
+    try {
+      setUpdatingRentalId(rentalId);
+      setActionError("");
+      await updateAdminRentalStatus(rentalId, payload);
+      await Promise.allSettled([fetchRentalRecords(), fetchRentalCars()]);
+    } catch (err) {
+      console.error("Failed to update rental status:", err);
+      setActionError(err.response?.data?.error || err.message || "Failed to update rental status.");
+    } finally {
+      setUpdatingRentalId(null);
+    }
+  };
 
   /* ── Fetch both sources in parallel ──────────────────────── */
   useEffect(() => {
     setLoading(true);
 
-    const txPromise = getAdminRentals()
-      .then((res) => {
-        const list = normalizeRentals(res);
-        logRentDebug("rentals sample", list.slice(0, 5));
-        logRentDebug(list.map(tx => ({
-          rentalId: tx.id,
-          status: tx.status,
-          normalizedCarId: getRentalCarId(tx),
-        })));
-        setTransactions(list);
-        return list;
-      })
-      .catch((err) => {
-        console.warn("[RentalHistory] /admin/rentals failed:", err?.response?.status, err?.message);
-        setTransactions([]);
-        return [];
-      });
-
-    const carsPromise = getRentalHistory()
-      .then((res) => {
-        const list = normalizeCars(res).filter(isRentalCar);
-        logRentDebug("cars sample", list.slice(0, 5));
-        setCars(list);
-        return list;
-      })
-      .catch((err) => {
-        console.warn("[RentalHistory] /cars failed:", err?.message);
-        setCars([]);
-        return [];
-      });
-
-    Promise.allSettled([txPromise, carsPromise]).finally(() => setLoading(false));
-  }, []);
+    Promise.allSettled([fetchRentalRecords(), fetchRentalCars()])
+      .finally(() => setLoading(false));
+  }, [fetchRentalRecords, fetchRentalCars]);
 
   /* ── Cars visible in the history grid ───────────────────── */
   const historyCars = useMemo(() =>
@@ -365,7 +433,85 @@ export default function RentalHistoryPage() {
             ))}
           </div>
 
-          {/* ── Per-car rental count ── */}
+          {/* Rental Records */}
+          {!loading && (
+            <div className="sh-monthly">
+              <div className="sh-monthly-title">Rental Records</div>
+
+              {actionError && (
+                <div style={{
+                  marginBottom: 12,
+                  color: "#dc2626",
+                  fontSize: 14,
+                  fontWeight: 600,
+                }}>
+                  {actionError}
+                </div>
+              )}
+
+              {transactions.length === 0 ? (
+                <div className="sh-empty">
+                  <div className="sh-empty-text">No rental records yet.</div>
+                </div>
+              ) : (
+                <div className="sh-monthly-grid">
+                  {transactions.map((tx) => {
+                    const rentalId = getRentalId(tx);
+                    const actions = rentalActionsFor(tx.status);
+                    const isUpdating = updatingRentalId === rentalId;
+                    const status = normalizeStatus(tx.status) || "-";
+
+                    return (
+                      <div key={rentalId || `${getRentalCarId(tx)}-${tx.start_date}-${tx.end_date}`}
+                        className="sh-monthly-item sh-monthly-item--car">
+                        <div className="sh-monthly-month" style={{ textTransform: "none" }}>
+                          {getRecordCarName(tx)}
+                        </div>
+                        <div style={{ fontSize: 14, fontWeight: 700, color: "#111827", marginTop: 6 }}>
+                          {getRecordCustomerName(tx)}
+                        </div>
+                        <div className="sh-monthly-label" style={{ marginTop: 8 }}>
+                          {formatDate(tx.start_date)} - {formatDate(tx.end_date)}
+                        </div>
+                        <div className="sh-monthly-label" style={{ marginTop: 8 }}>
+                          Status: <strong>{status}</strong>
+                        </div>
+                        <div className="sh-monthly-label">
+                          Deposit: {formatMoney(tx.deposit_amount)}
+                        </div>
+                        <div className="sh-monthly-label">
+                          Total: {formatMoney(tx.total_price)}
+                        </div>
+
+                        {actions.length > 0 && (
+                          <div style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 8,
+                            justifyContent: "center",
+                            marginTop: 12,
+                          }}>
+                            {actions.map((action) => (
+                              <button
+                                key={action.label}
+                                type="button"
+                                className="sh-filter-btn"
+                                disabled={isUpdating}
+                                onClick={() => handleRentalStatus(tx, action.payload)}
+                              >
+                                {isUpdating ? "Updating..." : action.label}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
           {!loading && stats.perCarList.length > 0 && (
             <div className="sh-monthly">
               <div className="sh-monthly-title">Rental Count Per Car</div>
