@@ -15,7 +15,10 @@ const FILTERS = [
   { label: "Rejected", value: "rejected" },
 ];
 
-const getFeedbackStatus = (item) => item.status || "pending";
+const getFeedbackStatus = (item) => {
+  if (item.status) return item.status;
+  return item.is_approved === true ? "approved" : "pending";
+};
 
 const formatDate = (value) => {
   if (!value) return "-";
@@ -186,16 +189,16 @@ export default function AdminFeedbacksPage() {
                         <td>{item.customer_name || item.name || "Anonymous"}</td>
                         <td>{getCarName(item)}</td>
                         <td>
-                          <span className="feedback-rating">{"★".repeat(Number(item.rating) || 0)}</span>
+                          <span className="feedback-rating">{"★".repeat(Number(item.stars) || 0)}</span>
                         </td>
-                        <td className="feedback-comment">{item.comment}</td>
+                        <td className="feedback-comment">{item.message}</td>
                         <td><FeedbackStatusBadge status={getFeedbackStatus(item)} /></td>
                         <td>{formatDate(item.created_at)}</td>
                         <td>
                           <div className="feedback-actions">
                             <button
                               className="roles-btn roles-btn--promote"
-                              onClick={() => runAction(item.id, () => updateFeedbackStatus(item.id, "approved"))}
+                              onClick={() => runAction(item.id, () => updateFeedbackStatus(item.id, true))}
                               disabled={isBusy || getFeedbackStatus(item) === "approved"}
                             >
                               <CheckCircle2 size={14} />
@@ -203,7 +206,7 @@ export default function AdminFeedbacksPage() {
                             </button>
                             <button
                               className="roles-btn roles-btn--warning"
-                              onClick={() => runAction(item.id, () => updateFeedbackStatus(item.id, "rejected"))}
+                              onClick={() => runAction(item.id, () => updateFeedbackStatus(item.id, false))}
                               disabled={isBusy || getFeedbackStatus(item) === "rejected"}
                             >
                               <XCircle size={14} />

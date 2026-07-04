@@ -175,9 +175,9 @@ function FeedbackForm() {
 
     try {
       const payload = {
-        customer_name: name.trim() || "Anonymous",
-        rating: Number(rating),
-        comment: text.trim(),
+        name: name.trim(),
+        stars: Number(rating),
+        message: text.trim(),
       };
       logFeedbackDebug("FEEDBACK_SUBMIT_PAYLOAD", payload);
       await submitFeedback(payload);
@@ -268,13 +268,13 @@ function FeedbackForm() {
 }
 
 function mapFeedbackToCard(f) {
-  const name = f.customer_name || f.name || "Anonymous";
+  const name = f.name || "Anonymous";
 
   return {
     name,
     car: [f.car_brand, f.car_model].filter(Boolean).join(" ") || null,
-    text: f.comment,
-    rating: Number(f.rating) || 5,
+    text: f.message,
+    rating: Number(f.stars) || 5,
     initials: name.slice(0, 2).toUpperCase(),
   };
 }
