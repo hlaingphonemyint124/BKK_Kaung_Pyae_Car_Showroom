@@ -5,6 +5,7 @@ import {
   getAdminRentals,
   updateAdminRentalStatus,
 } from "../features/admin/services/adminRentalService";
+import { useAuth } from "../context/AuthContext";
 
 const FILTERS     = ["All", "Rented", "Maintenance"];
 const PAGE_SIZE   = 6;
@@ -199,6 +200,9 @@ function SkeletonCards({ count = 6 }) {
    RENTAL HISTORY PAGE
 ═══════════════════════════════════════════════════════════════ */
 export default function RentalHistoryPage() {
+  const { user } = useAuth() || {};
+  const isAdminUser = user?.role === "admin" || user?.role === "employee";
+  const currentMonthName = MONTH_NAMES[new Date().getMonth()];
   const [transactions, setTransactions] = useState([]);
   const [cars, setCars]                 = useState([]);
   const [loading, setLoading]           = useState(true);
@@ -396,17 +400,13 @@ export default function RentalHistoryPage() {
 
           {/* ── Stats Row ── */}
           <div className="sh-stats">
-            <div className="sh-stat" ref={(el) => (statsRef.current[0] = el)}>
-              <div className="sh-stat-value blue"><Counter target={stats.totalRentalCount} /></div>
-              <div className="sh-stat-label">Rental Transactions</div>
-              <div className="sh-stat-bar" />
-            </div>
-
-            <div className="sh-stat" ref={(el) => (statsRef.current[1] = el)}>
-              <div className="sh-stat-value blue"><Counter target={stats.thisMonth} /></div>
-              <div className="sh-stat-label">Rentals This Month</div>
-              <div className="sh-stat-bar" />
-            </div>
+            {isAdminUser && (
+              <div className="sh-stat" ref={(el) => (statsRef.current[0] = el)}>
+                <div className="sh-stat-value blue"><Counter target={stats.totalRentalCount} /></div>
+                <div className="sh-stat-label">Rental Transactions</div>
+                <div className="sh-stat-bar" />
+              </div>
+            )}
 
             <div className="sh-stat" ref={(el) => (statsRef.current[2] = el)}>
               <div className="sh-stat-value blue">
@@ -424,7 +424,9 @@ export default function RentalHistoryPage() {
               <div className="sh-stat-bar" />
             </div>
 
-            {stats.monthly.map((m, i) => (
+            {isAdminUser && stats.monthly
+              .filter((m) => m.name === currentMonthName)
+              .map((m, i) => (
               <div key={m.name} className="sh-stat" ref={(el) => (statsRef.current[i + 4] = el)}>
                 <div className="sh-stat-value blue"><Counter target={m.count} /></div>
                 <div className="sh-stat-label">{m.name}</div>
