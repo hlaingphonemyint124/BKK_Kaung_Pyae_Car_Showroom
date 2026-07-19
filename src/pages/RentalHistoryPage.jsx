@@ -48,7 +48,6 @@ const isCounted = (tx) => {
 
 const isRentalCar = (car) =>
   car?.listing_type === "rent" ||
-  car?.listing_type === "rental" ||
   (car?.listing_type == null && car?.rent_price_per_day != null);
 
 const logRentDebug = (...args) => {

@@ -53,6 +53,7 @@ function useAdminCars(type) {
           sale_price: car.sale_price,
           rent_price_per_day: car.rent_price_per_day,
           rent_count: car.rent_count,
+          listing_type: car.listing_type ?? null,
 
           specs: {
             fuel: car.fuel_type || car.fuel || "Petrol",
@@ -89,8 +90,16 @@ function useAdminCars(type) {
 
   const filteredCars = useMemo(() => {
     const typedCars = cars.filter((car) => {
-      if (type === "buy") return car.sale_price != null;
-      if (type === "rental") return car.rent_price_per_day != null;
+      if (type === "buy")
+        return (
+          car.listing_type === "sale" ||
+          (car.listing_type == null && car.sale_price != null)
+        );
+      if (type === "rental")
+        return (
+          car.listing_type === "rent" ||
+          (car.listing_type == null && car.rent_price_per_day != null)
+        );
       return true;
     });
 

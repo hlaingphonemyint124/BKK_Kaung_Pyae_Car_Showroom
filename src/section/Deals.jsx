@@ -372,7 +372,7 @@ export default function Deals() {
     apiFn()
       .then((res) => {
         const data = normalizeCarsResponse(res);
-        const expectedType = tab === "new" ? "sale" : "rental";
+        const expectedType = tab === "new" ? "sale" : "rent";
         const filtered = data.filter((car) =>
           car.status === "available" &&
           (car.listing_type === expectedType || car.listing_type == null)

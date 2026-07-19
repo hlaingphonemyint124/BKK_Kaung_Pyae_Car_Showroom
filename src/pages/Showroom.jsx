@@ -236,8 +236,10 @@ export default function Showroom() {
     const base = cars.filter((car) => {
       const matchesListing =
         mode === "buy"
-          ? Number(car.sale_price) > 0
-          : Number(car.rent_price_per_day) > 0;
+          ? car.listing_type === "sale" ||
+            (car.listing_type == null && Number(car.sale_price) > 0)
+          : car.listing_type === "rent" ||
+            (car.listing_type == null && Number(car.rent_price_per_day) > 0);
 
       const isAvailable = car.status === "available";
 

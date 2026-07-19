@@ -30,7 +30,7 @@ export default function EasyRental() {
         const available = raw
           .filter((c) =>
             c.status === "available" &&
-            (c.listing_type === "rental" || (c.listing_type == null && c.rent_price_per_day != null))
+            (c.listing_type === "rent" || (c.listing_type == null && c.rent_price_per_day != null))
           )
           .slice(0, 3);
         setFleet(available);

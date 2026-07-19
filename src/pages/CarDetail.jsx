@@ -180,7 +180,11 @@ export default function CarDetail() {
           .filter((item) => item.status === "approved");
         setFeedbacks(approvedFeedbacks);
 
-        const isRentalCar = !!carData.rent_price_per_day && !carData.sale_price;
+        const isRentalCar =
+          carData.listing_type === "rent" ||
+          (carData.listing_type == null &&
+            !!carData.rent_price_per_day &&
+            !carData.sale_price);
         const listFn = isRentalCar ? getCarsForRent : getCarsForSale;
 
         listFn()
