@@ -6,6 +6,7 @@ import AuthInput from "../components/AuthInput";
 import PasswordInput from "../components/PasswordInput";
 import AuthButton from "../components/AuthButton";
 import { signupUser } from "../services/authService";
+import { API_URL } from "../../../api/api";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -150,7 +151,12 @@ function SignupPage() {
   };
 
   const handleGoogleSignup = () => {
-    window.location.href = "http://localhost:5000/auth/google";
+    if (!API_URL) {
+      setServerError("Authentication service is not configured.");
+      return;
+    }
+
+    window.location.href = `${API_URL}/auth/google`;
   };
 
   return (
