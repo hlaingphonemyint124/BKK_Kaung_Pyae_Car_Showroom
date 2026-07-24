@@ -8,7 +8,6 @@ import BrandList    from "./section/BrandList";
 import CarTypes     from "./section/CarTypes";
 import EasyRental   from "./section/EasyRental";
 import Testimonials from "./section/Testimonials";
-import SoldHistory  from "./section/SoldHistory";
 import WhyChooseUs  from "./section/WhyChooseUs";
 import AboutUs      from "./section/AboutUs";
 import Team         from "./section/Team";
