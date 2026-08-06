@@ -6,7 +6,6 @@ import AuthInput from "../components/AuthInput";
 import PasswordInput from "../components/PasswordInput";
 import AuthButton from "../components/AuthButton";
 import { signupUser } from "../services/authService";
-import { API_URL } from "../../../api/api";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -150,30 +149,10 @@ function SignupPage() {
     }
   };
 
-  const handleGoogleSignup = () => {
-    if (!API_URL) {
-      setServerError("Authentication service is not configured.");
-      return;
-    }
-
-    window.location.href = `${API_URL}/auth/google`;
-  };
-
   return (
     <AuthHeader>
       <div className="auth-body">
         <form onSubmit={handleSubmit}>
-          <button
-            type="button"
-            className="google-signin-btn"
-            onClick={handleGoogleSignup}
-          >
-            <div className="google-icon">G</div>
-            Sign up with Google
-          </button>
-
-          <div className="auth-or">Or</div>
-
           <AuthInput
             label="Username"
             name="username"
