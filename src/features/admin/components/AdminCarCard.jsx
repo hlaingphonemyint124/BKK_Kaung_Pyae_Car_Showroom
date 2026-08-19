@@ -35,8 +35,12 @@ function AdminCarCard({
 
   const name = `${car.brand || ""} ${car.model || ""}`.trim() || "Unnamed Car";
 
-  const isBuy = car.sale_price != null;
-  const isRental = car.rent_price_per_day != null;
+  const isBuy =
+    car.listing_type === "sale" ||
+    (car.listing_type == null && car.sale_price != null);
+  const isRental =
+    car.listing_type === "rent" ||
+    (car.listing_type == null && car.rent_price_per_day != null);
 
   const badgeText = isBuy ? "Sale" : isRental ? "Rent" : "";
   const badgeClass = isBuy
