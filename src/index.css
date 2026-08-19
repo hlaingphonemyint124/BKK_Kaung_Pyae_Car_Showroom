@@ -817,49 +817,6 @@ OVERLAY + SIDE MENU
 }
 
 /* ===============================
-HERO
-=============================== */
-
-.hero {
-  min-height: 100vh;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.2)),
-    rgba(0, 0, 0, 0.2);
-}
-
-.hero__container {
-  position: relative;
-  z-index: 2;
-}
-
-.hero h1 {
-  font-size: clamp(38px, 5vw, 72px);
-  color: white;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 1.02;
-  max-width: 680px;
-}
-
-.hero p {
-  color: rgba(255, 255, 255, 0.86);
-  margin: 14px 0 28px;
-  font-size: 18px;
-}
-
-/* ===============================
    DESIGN SYSTEM — SECTION RHYTHM
    Consistent eyebrow + title pattern
    used across all home sections
@@ -1684,10 +1641,6 @@ RESPONSIVE
   }
 
 
-
-  .hero h1 {
-    font-size: 38px;
-  }
 
   .best-deal {
     padding-top: 62px;
