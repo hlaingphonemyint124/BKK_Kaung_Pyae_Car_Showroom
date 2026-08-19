@@ -22,7 +22,6 @@
 .auth-book {
   width: 100%;
   max-width: 420px;
-  min-height: calc(100vh - 10px);
   background: var(--bg-surface);
   overflow: visible;
   box-shadow:
@@ -630,14 +629,37 @@ body.dark .resend-btn:hover {
    MOBILE ≤640px
 ========================= */
 @media (max-width: 640px) {
+  .auth-page {
+    min-height: 0;
+    padding-bottom: 20px;
+  }
+
   .auth-book {
     max-width: 100%;
-    min-height: 100vh;
     border-radius: 0;
     box-shadow: none;
   }
 
   .auth-book-left {
-    display: none;
+    background: none;
+    color: inherit;
+    padding: 22px 20px 30px;
+  }
+
+  .auth-brand-content h1 {
+    font-size: 26px;
+  }
+
+  .auth-brand-content p {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .auth-brand-line {
+    width: 44px;
+    height: 2px;
+    margin: 12px auto 0;
+    background: rgba(var(--color-red-rgb), 0.35);
   }
 }
